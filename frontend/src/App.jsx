@@ -2,13 +2,16 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import Web3 from 'web3'
 
 function App() {
   const [count, setCount] = useState(0)
+  var web3 = Web3.version;
 
   return (
     <div className="App">
       <div>
+        web3 version: {JSON.stringify(web3)}
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
