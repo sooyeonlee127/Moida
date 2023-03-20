@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Web3 from 'web3'
+import LoginPage from './pages/LoginPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -10,6 +11,7 @@ function App() {
 
   return (
     <div className="App">
+      <LoginPage/>
       <div>
         web3 version: {JSON.stringify(web3)}
         <a href="https://vitejs.dev" target="_blank">
