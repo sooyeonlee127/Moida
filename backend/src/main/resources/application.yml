@@ -1,9 +1,9 @@
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
     password: root
     username: root
-    url: jdbc:mysql://localhost/moida
+    url: jdbc:mysql://localhost:3307/moida
+    driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
       max-file-size: 10MB
@@ -19,6 +19,7 @@ spring:
   http:
     multipart:
       maxFileSize: 100MB
+
 logging:
   level:
     org:
@@ -29,4 +30,23 @@ logging:
         util:
           EC2MetadataUtils: ERROR
 server:
-  port: 5000
+  port: '5000'
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    display-request-duration: true
+    tags-sorter: alpha
+    operations-sorter: alpha
+    doc-expansion: none
+    syntax-highlight:
+      theme: nord
+    urls-primary-name: TEST API
+    persist-authorization: true
+    query-config-enabled: true
+  pre-loading-enabled: true
+  packages-to-scan: com.ssafy.moida
+
