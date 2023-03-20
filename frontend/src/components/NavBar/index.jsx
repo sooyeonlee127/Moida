@@ -1,5 +1,3 @@
-import './index.css'
-
 const navigation = [
     { name: 'HOME', href: '#', current: true },
     { name: '기부하기', href: '#', current: false },
