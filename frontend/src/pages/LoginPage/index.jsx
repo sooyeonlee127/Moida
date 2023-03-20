@@ -12,7 +12,7 @@ const LoginPage = () => {
         <input type="hidden" name="remember" defaultValue="true" />
         <div className="-space-y-px rounded-md shadow-sm">
           <div>
-            <label htmlFor="email-address" className="sr-only">
+            <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
               EMAIL
             </label>
             <input
@@ -22,11 +22,10 @@ const LoginPage = () => {
               autoComplete="email"
               required
               className="relative block w-full rounded-t-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="EMAIL"
             />
           </div>
           <div>
-            <label htmlFor="password" className="sr-only">
+            <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
               PASSWORD
             </label>
             <input
@@ -36,11 +35,9 @@ const LoginPage = () => {
               autoComplete="current-password"
               required
               className="relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder="PASSWORD"
             />
           </div>
         </div>
-
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <input
@@ -54,7 +51,6 @@ const LoginPage = () => {
             </label>
           </div>
         </div>
-
         <div>
           <button
             type="submit"
@@ -62,7 +58,7 @@ const LoginPage = () => {
           >
             <span className="absolute inset-y-0 left-0 flex items-center pl-3">
             </span>
-            Sign in
+            로그인
           </button>
         </div>
       </form>
