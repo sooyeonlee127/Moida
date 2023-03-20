@@ -35,11 +35,6 @@ const SignupPage = () => {
                     <div className="relative mt-2.5">
                     <div className="absolute inset-y-0 left-0 flex items-center">
                         <label htmlfor="country" className="sr-only">Country</label>
-                        <select id="country" name="country" className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-9 text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
-                        <option>US</option>
-                        <option>CA</option>
-                        <option>EU</option>
-                        </select>
                         <svg className="pointer-events-none absolute top-0 right-3 h-full w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                         </svg>
@@ -71,8 +66,9 @@ const SignupPage = () => {
                 </div>
                 <label htmlFor="phone" className="">phone</label>
                 <div className="flex flex-row space-x-4">
-                    <input type="text" name="phone" id="phone" required className="rounded-md ring-1 ring-inset ring-gray-300 relative rounded-t-md border-0 py-1.5 "/>
-                    <input type="text" name="phone" className="rounded-md ring-1 ring-inset ring-gray-300 relative rounded-t-md border-0 py-1.5 "/>
+                    <select id="country" name="country" className="h-full rounded-md border-0 bg-transparent bg-none py-0 pl-4 pr-9 text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm">
+                        <option>010</option>
+                    </select><input type="text" name="phone" className="rounded-md ring-1 ring-inset ring-gray-300 relative rounded-t-md border-0 py-1.5 "/>
                     <input type="text" name="phone" className="rounded-md ring-1 ring-inset ring-gray-300 relative rounded-t-md border-0 py-1.5 "/>
                 </div>
                 <label htmlFor="password1" className="">password</label>

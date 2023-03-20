@@ -1,4 +1,4 @@
-import './index.css'
+
 
 const navigation = [
     { name: 'HOME', href: '#', current: true },
