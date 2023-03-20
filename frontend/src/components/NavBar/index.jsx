@@ -1,4 +1,3 @@
-import { Disclosure } from '@headlessui/react'
 import './index.css'
 
 const navigation = [
