@@ -5,7 +5,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class PointCharge {
+public class UsersProject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +25,12 @@ public class PointCharge {
     @Column(nullable = false)
     private Long amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="users_id")
-    private Users users;
+    @Column(nullable = false)
+    private int ticket_cnt;
+
+    @Column(nullable = false, length = 45)
+    private String contractAddress;
+
+    //관계 설정
+
 }
