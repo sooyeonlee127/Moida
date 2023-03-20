@@ -5,7 +5,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -35,4 +34,8 @@ public class Article {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_volunteer_id")
+    private UsersVolunteer usersVolunteer;
 }

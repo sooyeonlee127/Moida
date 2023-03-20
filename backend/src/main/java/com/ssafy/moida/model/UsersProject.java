@@ -28,9 +28,14 @@ public class UsersProject {
     @Column(nullable = false)
     private int ticket_cnt;
 
-    @Column(nullable = false, length = 45)
+    @Column(length = 45)
     private String contractAddress;
 
-    //관계 설정
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
+    private Users users;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
 }

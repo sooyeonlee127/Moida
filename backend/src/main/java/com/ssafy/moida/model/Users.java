@@ -16,7 +16,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Users {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,18 +33,22 @@ public class Users {
     private String nickname;
 
     @Column(nullable = false, columnDefinition = "integer default 0")
-    private int ticket_cnt;
+    private int ticketCnt;
 
     @Column(nullable = false, columnDefinition = "integer default 0")
     private Long point;
-    private String nft_url;
-    private String wallet_url;
+
+    //nft주소랑 지갑주소가 아직 알 수 없어서 잠시 null 처리함
+    //@Column(nullable = false, length = 500)
+    @Column(length = 500)
+    private String nftUrl;
+    //@Column(nullable = false, length = 500)
+    @Column(length = 500)
+    private String walletUrl;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @OneToMany(mappedBy = "users")
-    private List<PointCharge> PointCharges = new ArrayList<>();
+    @Builder.Default
+    private Role role = Role.ROLE_USER; //ROLE_USER, ROLE_ADMIN
 
 }

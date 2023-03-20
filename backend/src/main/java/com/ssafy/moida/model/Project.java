@@ -23,17 +23,17 @@ public class Project {
     private Long amount;
 
     @Column(nullable = false)
-    private Long target_amount;
+    private Long targetAmount;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime start_date;
+    private LocalDateTime startDate;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime end_date;
+    private LocalDateTime endDate;
 
-    @Column(nullable = false, length = 5000)
+    @Column(nullable = false, length = 500)
     private String subject;
 
     @Column(nullable = false, length = 500)

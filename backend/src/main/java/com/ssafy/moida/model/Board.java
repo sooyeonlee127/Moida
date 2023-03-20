@@ -28,7 +28,7 @@ public class Board {
     @Column(nullable = false, length = 100)
     private String subject;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 
