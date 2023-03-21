@@ -6,7 +6,10 @@ import com.ssafy.moida.api.common.VolunteerDto;
 import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
 import com.ssafy.moida.model.Project;
+import com.ssafy.moida.model.ProjectDonation;
+import com.ssafy.moida.model.ProjectVolunteer;
 import com.ssafy.moida.repository.ProjectRepository;
+import com.ssafy.moida.repository.VolunteerRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,21 +20,31 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private DonationService donationService;
+    @Autowired
+    private VolunteerService volunteerService;
 
     @Transactional
     public void save(CreateProjectReqDto createProjectReqDto){
         ProjectDto pd = createProjectReqDto.getProjectDto();
-        DonationDto dd = createProjectReqDto.getDonationDto();
-        VolunteerDto vd = createProjectReqDto.getVolunteerDto();
 
         // 기부 데이터베이스에 저장
-
+        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationDto());
 
         // 봉사 데이터베이스에 저장
+        ProjectVolunteer projectVolunteer = volunteerService.save(createProjectReqDto.getVolunteerDto());
 
 
         // 프로젝트 데이터베이스에 저장
-        Project project = Project.builder().subject(pd.getSubject()).description(pd.getDescription()).generation(pd.getGeneration()).build();
+        Project project = Project.builder()
+            .subject(pd.getSubject())
+            .description(pd.getDescription())
+            .generation(pd.getGeneration())
+            .projectVolunteer(projectVolunteer)
+            .projectDonation(projectDonation)
+            .build();
+
         projectRepository.save(project);
     }
 
