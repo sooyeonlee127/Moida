@@ -9,9 +9,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * [프로젝트 봉사 섹션에 해당하는 엔티티]
+ * PK : 프로젝트 봉사 아이디
+ * 난이도, 일자(시작-종료), 위치, 소제목, 설명
+ */
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Table(name="p_volunteer")
@@ -34,10 +38,20 @@ public class ProjectVolunteer {
     @Column(length = 500, nullable = false)
     private String location;
 
+    @Column(length = 500, nullable = false)
+    private String subject;
+
     @Column(length = 500)
     private String description;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @Builder
+    public ProjectVolunteer(Double difficultyLevel, LocalDateTime startDate, LocalDateTime endDate,
+        String location, String subject, String description) {
+        this.difficultyLevel = difficultyLevel;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.subject = subject;
+        this.description = description;
+    }
 }
