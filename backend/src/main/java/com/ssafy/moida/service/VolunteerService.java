@@ -9,6 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * 봉사 기능 - 봉사 DB 테이블 사이의 브릿지
+ */
 @Service
 @Transactional
 public class VolunteerService {
@@ -16,16 +22,18 @@ public class VolunteerService {
     private VolunteerRepository volunteerRepository;
 
     public ProjectVolunteer save(VolunteerDto vd){
-        ProjectVolunteer pv = ProjectVolunteer.builder()
-//            .startDate(dd.getStartDate())
-//            .endDate(dd.getEndDate())
-            .difficultyLevel(vd.getDifficultyLevel())
-            .subject(vd.getSubject())
-            .description(vd.getDescription())
-            .location(vd.getLocation())
-            .build();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        volunteerRepository.save(pv);
-        return pv;
+        ProjectVolunteer projectVolunteer = ProjectVolunteer.builder()
+                .startDate(LocalDateTime.parse(vd.getStartDate(), formatter))
+                .endDate(LocalDateTime.parse(vd.getEndDate(), formatter))
+                .difficultyLevel(vd.getDifficultyLevel())
+                .location(vd.getLocation())
+                .subject(vd.getSubject())
+                .description(vd.getDescription())
+                .build();
+
+        volunteerRepository.save(projectVolunteer);
+        return projectVolunteer;
     }
 }
