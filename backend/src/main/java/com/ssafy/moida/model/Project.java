@@ -1,5 +1,6 @@
 package com.ssafy.moida.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,7 +14,6 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,11 @@ public class Project {
     @Column(nullable = false)
     private Long targetAmount;
 
-    @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false, updatable = false)
     private LocalDateTime startDate;
 
-    @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false, updatable = false)
     private LocalDateTime endDate;
 
@@ -45,5 +45,4 @@ public class Project {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category; //SQUIRREL, CRANE, WILD_ANIMAL
-
 }
