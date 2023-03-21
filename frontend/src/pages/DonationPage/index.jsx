@@ -40,14 +40,17 @@ const DonationPage = () => {
                     </div>
                 </Aside>
             </Main>
-            <Article />
+            <Article>
+                <Content></Content>
+            </Article>
         </div>
     )
 }
 
 const Main = styled.div`
 padding-top: 50px;
-${tw`container flex flex-row space-x-5 mx-auto`}
+max-width: 1200px;
+${tw`flex flex-row space-x-5 mx-auto`}
 `
 
 const MainImage = styled.div`
@@ -75,16 +78,22 @@ const CoinButton = styled.button`
 ${tw`border px-3 py-1 hover:bg-sky-500 active:bg-sky-600`}
 `
 
-const GroupButton = styled.button`
+const GroupButton = styled.div`
 ${tw`flex space-x-3`}
 `
 
 const Button = styled.button`
-${tw`border px-2 py-2`}
+${tw`border px-2 py-2 hover:bg-sky-500 active:bg-sky-600`}
 `
 
 const Article = styled.div`
-${tw`py-5 px-3 border mt-10 w-full`}
+margin: 20px 0;
+border-top: 1px solid black;
+${tw``}
+`
+
+const Content = styled.div`
+${tw`container mx-auto`}
 `
 
 export default DonationPage
