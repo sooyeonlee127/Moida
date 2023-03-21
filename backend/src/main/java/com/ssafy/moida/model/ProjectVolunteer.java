@@ -1,5 +1,6 @@
 package com.ssafy.moida.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,7 +14,6 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @Table(name="p_volunteer")
 public class ProjectVolunteer {
     @Id
@@ -23,15 +23,15 @@ public class ProjectVolunteer {
     @Column(nullable = false)
     private Double difficultyLevel;
 
-    @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(updatable = false)
     private LocalDateTime startDate;
 
-    @CreatedDate
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(updatable = false)
     private LocalDateTime endDate;
 
-    @Column(length = 500)
+    @Column(length = 500, nullable = false)
     private String location;
 
     @Column(length = 500)
