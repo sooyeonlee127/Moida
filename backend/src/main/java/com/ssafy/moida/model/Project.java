@@ -1,14 +1,12 @@
 package com.ssafy.moida.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
-
+/**
+ * [프로젝트 전체 정보 엔티티]
+ * 프로젝트 아이디, 프로젝트명, 간단 설명, 차수, 카테고리
+ */
 @Entity
 @Getter
 @Builder
@@ -18,20 +16,6 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false)
-    private Long amount;
-
-    @Column(nullable = false)
-    private Long targetAmount;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime startDate;
-
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime endDate;
 
     @Column(nullable = false, length = 500)
     private String subject;
