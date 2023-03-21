@@ -1,61 +1,69 @@
-import styled from 'styled-components';
-import tw from 'twin.macro';
-
-
-const navigation = [
-    { name: 'HOME', href: '#', current: true },
-    { name: '기부하기', href: '#', current: false },
-    { name: '인증하기', href: '#', current: false },
-    { name: '가챠샵', href: '#', current: false },
-    { name: '티켓 5', href: '#', current: false },
-    { name: '15000P', href: '#', current: false },
-    { name: 'SIGNUP/LOGIN', href: '#', current: false },
-  ]
-
-  const classNames = (...classes) => {
-    return classes.filter(Boolean).join(' ')
-  }
-  
+import React, { useState } from "react";
+import styled from "styled-components";
+import tw from "twin.macro";
 
 const NavBar = () => {
-    return  <> 
-        <Nav>
+  const point = useState(0);
+  const ticket = useState(0);
 
-          <div className="relative flex h-16 items-center justify-between">
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <div className="flex flex-shrink-0 items-center px-7">
-                <p className="text-black">우리로고</p>
-              </div>
-                <div className="flex space-x-4">
-                  {navigation.map((item) => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className={classNames(
-                        item.current ? 'text-red-500' : 'text-gray-900 hover:text-white',
-                        'rounded-md px-3 py-2 text-sm font-medium'
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </a>
-                  ))}
-                </div>
-            </div>
-          </div>
-        </Nav>
-      </>
+  const navigation = [
+    { name: "HOME", href: "#" },
+    { name: "기부하기", href: "#" },
+    { name: "인증하기", href: "#" },
+    { name: "가챠샵", href: "#" },
+    { name: `${ticket[0]}개`, href: "#" },
+    { name: `${point[0]} P`, href: "#" },
+    { name: "SIGNUP/LOGIN", href: "#" },
+  ];
 
+  return (
+    <>
+      <Nav>
+        <Section>
+          <Logo>
+            <p>우리로고</p>
+          </Logo>
+          <Title>
+            {navigation.map((item) => (
+              <a key={item.name} href={item.href}>
+                {item.name}
+              </a>
+            ))}
+          </Title>
+        </Section>
+      </Nav>
+    </>
+  );
 };
 
-
-
-// const 스타일드컴포넌트이름 = styled.태그명`
-// 	css스타일명 : css스타일 값; 
-// ` 
 const Nav = styled.div`
-  ${tw`z-10 bg-yellow-200 fixed top-0 left-0 right-0 mx-auto max-w-7xl px-2 sm:px-6 lg:px-8`}
-`
+  ${tw`
+  z-10 bg-yellow-100
+  fixed top-0 left-0 right-0 
+  px-2
+  text-black
+  h-16
+  relative
+  flex items-center justify-between
+  `}
+`;
 
+const Section = styled.div`
+  ${tw`
+  flex flex-1 items-center justify-center sm:items-stretch sm:justify-start
+  `}
+`;
+
+const Logo = styled.div`
+  ${tw`
+  flex flex-shrink-0 items-center px-7
+  `}
+`;
+
+const Title = styled.div`
+  ${tw`
+  flex space-x-4
+  `}
+`;
 
 export default NavBar;
