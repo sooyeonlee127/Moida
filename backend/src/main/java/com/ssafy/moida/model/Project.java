@@ -1,13 +1,7 @@
 package com.ssafy.moida.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.sql.Date;
-import java.time.LocalDateTime;
 
 /**
  * [프로젝트 전체 정보 엔티티]
