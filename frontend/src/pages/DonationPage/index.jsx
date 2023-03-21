@@ -1,9 +1,11 @@
 import styled from "styled-components"
 import tw from "twin.macro"
+import DonationForm from "./components/DonationForm"
+import VolunteerForm from "./components/VolunteerForm"
+import { useState } from "react"
 
 const DonationPage = () => {
-    const ratio = 50;
-    // const ratio = parseInt(모금액/목표금액*100) => 반환값 0~100사이 정수
+    const [tabIndex, setTabIndex] = useState(0); // 0: 기부, 1: 봉사
 
     return (
         <div>
@@ -11,33 +13,10 @@ const DonationPage = () => {
                 <MainImage />
                 <Aside>
                     <TabGroup>
-                        <Tab>기부하기</Tab>
-                        <Tab>봉사하기</Tab>
+                        <Tab onClick={ () => setTabIndex(0) }>기부하기</Tab>
+                        <Tab onClick={ () => setTabIndex(1) }>봉사하기</Tab>
                     </TabGroup>
-                    <div>
-                        <span>D-day</span>
-                        <p>Title</p>
-                        <p>content</p>
-                        <div>
-                            <p>{ratio}%</p>
-                            기부 목표금액<br/>
-                            <progress id="progress" value={ratio} min="0" max="100" />
-                            현재 모금액
-                        </div>
-                        <div>
-                            <p>10000 원</p>
-                            <CoinButtonGroup>
-                                <CoinButton>1,000원</CoinButton>
-                                <CoinButton>5,000원</CoinButton>
-                                <CoinButton>10,000원</CoinButton>
-                                <CoinButton>50,000원</CoinButton>
-                            </CoinButtonGroup>
-                        </div>
-                        <GroupButton>
-                            <Button>초기화</Button>
-                            <Button>기부하기</Button>
-                        </GroupButton>
-                    </div>
+                    { tabIndex===1 ? <VolunteerForm/> : <DonationForm/>}
                 </Aside>
             </Main>
             <Article>
@@ -70,21 +49,7 @@ const Tab = styled.button`
 ${tw`basis-1/2 px-2 py-3 hover:bg-sky-500 active:bg-sky-600`}
 `
 
-const CoinButtonGroup = styled.div`
-${tw`grid grid-cols-4 gap-1 `}
-`
 
-const CoinButton = styled.button`
-${tw`border px-3 py-1 hover:bg-sky-500 active:bg-sky-600`}
-`
-
-const GroupButton = styled.div`
-${tw`flex space-x-3`}
-`
-
-const Button = styled.button`
-${tw`border px-2 py-2 hover:bg-sky-500 active:bg-sky-600`}
-`
 
 const Article = styled.div`
 margin: 20px 0;
@@ -93,6 +58,9 @@ ${tw``}
 `
 
 const Content = styled.div`
+background-color: grey;
+min-height: 500px;
+box-sizing: border-box;
 ${tw`container mx-auto`}
 `
 
