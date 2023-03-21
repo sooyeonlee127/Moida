@@ -17,7 +17,6 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Table(name="p_volunteer")
 public class ProjectVolunteer {
     @Id
