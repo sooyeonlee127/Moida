@@ -4,10 +4,11 @@ import lombok.Getter;
 
 /**
  * [봉사 정보를 담은 dto]
- * 봉사일자(시작-종료), 위치, 설명
+ * 봉사일자(시작-종료), 위치, 설명 + 봉사 고유 아이디
  */
 @Getter
 public class VolunteerDto {
+    private Long id;
     private String startDate;
     private String endDate;
     private String location;
