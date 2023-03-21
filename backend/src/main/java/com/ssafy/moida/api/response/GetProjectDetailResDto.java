@@ -4,7 +4,12 @@ import com.ssafy.moida.api.common.DonationDto;
 import com.ssafy.moida.api.common.ProjectDto;
 import com.ssafy.moida.api.common.VolunteerDto;
 import java.util.List;
+
+import com.ssafy.moida.model.Project;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * [프로젝트 상세 조회 dto: 상세 보기 페이지]
@@ -14,17 +19,21 @@ import lombok.Getter;
  * 사진
  */
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class GetProjectDetailResDto{
+    private Long id;
     private ProjectDto projectDto;
     private DonationDto donationDto;
     private VolunteerDto volunteerDto;
     private List<String> pictures;
 
-    public GetProjectDetailResDto(ProjectDto projectDto, DonationDto donationDto,
-        VolunteerDto volunteerDto, List<String> pictures) {
-        this.projectDto = projectDto;
-        this.donationDto = donationDto;
-        this.volunteerDto = volunteerDto;
-        this.pictures = pictures;
+    public GetProjectDetailResDto(Project p, List<String> pics){
+        this.id = p.getId();
+        this.projectDto = new ProjectDto(p.getCategory().toString(), p.getSubject(), p.getDescription(), p.getGeneration());
+        this.donationDto = new DonationDto(p.getProjectDonation());
+        this.volunteerDto = new VolunteerDto(p.getProjectVolunteer());
+        this.pictures = pics;
     }
 }
