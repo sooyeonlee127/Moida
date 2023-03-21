@@ -2,6 +2,8 @@ package com.ssafy.moida.config;
 
 import com.ssafy.moida.config.jwt.JwtAccessDeniendHandeler;
 import com.ssafy.moida.config.jwt.JwtAuthenticationEntryPoint;
+import com.ssafy.moida.config.jwt.JwtSecurityConfig;
+import com.ssafy.moida.config.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,7 @@ public class SecurityConfig {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniendHandeler jwtAccessDeniendHandeler;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -64,6 +67,8 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) //401
                 .accessDeniedHandler(jwtAccessDeniendHandeler) //403
+                .and()
+                .apply(new JwtSecurityConfig(jwtTokenProvider))
 
                 .and()
                 .authorizeHttpRequests()
