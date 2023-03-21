@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -50,5 +51,12 @@ public class Users {
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private Role role = Role.ROLE_USER; //ROLE_USER, ROLE_ADMIN
+
+    public List<String> getRoleList() {
+        if (this.role != null) {
+            return Arrays.asList(this.role.toString());
+        }
+        return new ArrayList<>();
+    }
 
 }
