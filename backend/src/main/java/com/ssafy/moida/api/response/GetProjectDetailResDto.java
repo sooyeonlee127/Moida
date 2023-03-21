@@ -8,9 +8,9 @@ import lombok.Getter;
 
 /**
  * [프로젝트 상세 조회 dto: 상세 보기 페이지]
- * ProjectDto(프로젝트) : 프로젝트 아이디, 카테고리, 주제, 차수, 간단설명
- * DonationDto(기부) : 기부 일자(시작-종료), 모금액(현재, 목표), 설명
- * VolunteerDto(봉사) : 봉사 아이디, 봉사 일자(시작-종료), 설명
+ * ProjectDto(프로젝트) : id, 카테고리, 주제, 차수, 간단설명
+ * DonationDto(기부) : id, 기부 일자(시작-종료), 모금액(현재, 목표), 설명
+ * VolunteerDto(봉사) : id, 난이도, 일자(시작-종료), 위치, 소제목, 설명
  * 사진
  */
 @Getter

@@ -4,11 +4,16 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * [프로젝트 사진 엔티티]
+ * PK : 사진 아이디
+ * FK : 프로젝트 아이디
+ * 사진 url
+ */
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="p_picture")
 public class ProjectPicture {
     @Id
@@ -21,4 +26,10 @@ public class ProjectPicture {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
+
+    @Builder
+    public ProjectPicture(String pictureUrl, Project project) {
+        this.pictureUrl = pictureUrl;
+        this.project = project;
+    }
 }
