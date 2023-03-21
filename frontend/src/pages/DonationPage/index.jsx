@@ -22,5 +22,4 @@ ${tw`h-96 w-64 bg-cover bg-[url('https://thumb.mt.co.kr/06/2021/02/2021022514598
 `
 
 
-
 export default DonationPage
