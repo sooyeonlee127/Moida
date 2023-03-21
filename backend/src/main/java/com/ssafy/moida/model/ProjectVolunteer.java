@@ -9,6 +9,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * [프로젝트 봉사 엔티티]
+ * 봉사 아이디, 난이도, 일자(시작-종료), 위치, 소제목, 설명
+ */
 @Entity
 @Getter
 @Builder
@@ -33,6 +37,9 @@ public class ProjectVolunteer {
 
     @Column(length = 500, nullable = false)
     private String location;
+
+    @Column(length = 500, nullable = false)
+    private String subject;
 
     @Column(length = 500)
     private String description;
