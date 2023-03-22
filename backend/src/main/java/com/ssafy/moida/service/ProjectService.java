@@ -38,7 +38,6 @@ public class ProjectService {
 
         // 봉사 데이터베이스에 저장
         ProjectVolunteer projectVolunteer = volunteerService.save(createProjectReqDto.getVolunteerDto());
-
         // 프로젝트 데이터베이스에 저장
         Project project = Project.builder()
             .subject(pd.getSubject())
