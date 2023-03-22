@@ -27,11 +27,9 @@ public class UtilController {
         this.utilService = utilService;
     }
 
-    // 이메일 인증 검사(중복검사) -> 중복이면 409 에러, 아니면 이메일 보내고 200
     @Operation(summary = "이메일 중복 검사 및 인증", description = "회원이 입력한 이메일의 중복 검사를 합니다. 중복이 아니라면 이메일로 인증 코드를 발송합니다.")
     @PostMapping(
             path = "/exists/email/{email}"
-            //consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<?> checkUserEmail(
             @PathVariable("email") String email
