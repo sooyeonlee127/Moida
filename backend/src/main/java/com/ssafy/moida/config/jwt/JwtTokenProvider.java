@@ -2,8 +2,8 @@ package com.ssafy.moida.config.jwt;
 
 import com.ssafy.moida.api.common.TokenDto;
 import com.ssafy.moida.auth.PrincipalDetails;
-import com.ssafy.moida.model.Role;
-import com.ssafy.moida.model.Users;
+import com.ssafy.moida.model.user.Role;
+import com.ssafy.moida.model.user.Users;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;

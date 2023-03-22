@@ -1,6 +1,6 @@
 package com.ssafy.moida.auth;
 
-import com.ssafy.moida.model.Users;
+import com.ssafy.moida.model.user.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
