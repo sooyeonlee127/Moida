@@ -51,6 +51,7 @@ public class VolunteerService {
      * 봉사 일시 테이블 데이터 추가 : 봉사 일자 사이의 LocalDate 정보를 v_date_info 테이블에 추가
      * @param p
      */
+    @Transactional
     public void saveVolunteerDateInfo(Project p){
         ProjectVolunteer pv = p.getProjectVolunteer();
 
