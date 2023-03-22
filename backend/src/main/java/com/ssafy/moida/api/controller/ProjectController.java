@@ -1,13 +1,13 @@
 package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.CreateProjectReqDto;
+import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
+import com.ssafy.moida.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
+    private final ProjectService projectService;
+
+    public ProjectController(ProjectService projectService){
+        this.projectService = projectService;
+    }
+
     @Operation(summary = "프로젝트 생성", description = "새 프로젝트를 생성합니다.")
     @PostMapping(consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
@@ -23,7 +29,7 @@ public class ProjectController {
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
         @RequestPart(value = "files", required = false) List<MultipartFile> files
     ){
-        System.out.println(createProjectReqDto);
+        projectService.save(createProjectReqDto);
         return new ResponseEntity<>("프로젝트 생성 완료", HttpStatus.OK);
     }
 
@@ -36,7 +42,8 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 정보 상세 조회", description = "프로젝트 상세 페이지 정보를 조회합니다.")
     @GetMapping("/{projectid}")
-    public ResponseEntity<?> getProjectDetail(@RequestParam(value = "projectid") Long projectId){
-        return new ResponseEntity<>("프로젝트 조회 완료", HttpStatus.OK);
+    public ResponseEntity<GetProjectDetailResDto> getProjectDetail(@PathVariable(value = "projectid") int projectId){
+        GetProjectDetailResDto getProjectDetailResDto = projectService.getProjectDetail((long) projectId);
+        return new ResponseEntity<>(getProjectDetailResDto, HttpStatus.OK);
     }
 }

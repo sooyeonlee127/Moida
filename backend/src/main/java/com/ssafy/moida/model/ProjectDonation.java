@@ -26,13 +26,13 @@ public class ProjectDonation {
     @Column(nullable = false)
     private Long targetAmount;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+//    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false, updatable = false)
-    private Date startDate;
+    private LocalDateTime startDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+//    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false, updatable = false)
-    private Date endDate;
+    private LocalDateTime endDate;
 
     @Column(nullable = false, length = 500)
     private String subject;
@@ -41,8 +41,8 @@ public class ProjectDonation {
     private String description;
 
     @Builder
-    public ProjectDonation(Long amount, Long targetAmount, Date startDate,
-        Date endDate, String subject, String description) {
+    public ProjectDonation(Long amount, Long targetAmount, LocalDateTime startDate,
+        LocalDateTime endDate, String subject, String description) {
         this.amount = amount;
         this.targetAmount = targetAmount;
         this.startDate = startDate;

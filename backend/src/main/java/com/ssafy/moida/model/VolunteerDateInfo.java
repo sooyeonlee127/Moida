@@ -1,34 +1,43 @@
 package com.ssafy.moida.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
-
+/**
+ * [봉사 일자 엔티티]
+ * PK : 봉사 일자 아이디
+ * FK : 프로젝트
+ * 봉사 일자, 신청인원(현재, 최대)
+ */
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @Table(name="v_date_info")
 public class VolunteerDateInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime volunteerDate;
+    private LocalDate volunteerDate;
 
-    @Column(nullable = false, columnDefinition = "integer default 10")
-    private int maximumAmount;
+    @Column(nullable = false)
+    private int capacity;
+
+    @Column(nullable = false)
+    private int maxCapacity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_volunteer_id")
-    private ProjectVolunteer projectVolunteer;
+    @JoinColumn(name = "project_id")
+    private Project project;
 
+    @Builder
+    public VolunteerDateInfo(LocalDate volunteerDate, int capacity, int maxCapacity,
+        Project project) {
+        this.volunteerDate = volunteerDate;
+        this.capacity = capacity;
+        this.maxCapacity = maxCapacity;
+        this.project = project;
+    }
 }
