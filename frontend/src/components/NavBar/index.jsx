@@ -5,15 +5,14 @@ import tw from "twin.macro";
 const NavBar = () => {
   const point = useState(0);
   const ticket = useState(0);
-
   const navigation = [
-    { name: "HOME", href: "#" },
-    { name: "기부하기", href: "#" },
+    { name: "HOME", href: "/" },
+    { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "#" },
-    { name: "가챠샵", href: "#" },
-    { name: `${ticket[0]}개`, href: "#" },
-    { name: `${point[0]} P`, href: "#" },
-    { name: "SIGNUP/LOGIN", href: "#" },
+    { name: "가챠샵", href: "/gatcha" },
+    { name: `${ticket[0]}개`, href: "/gatcha" },
+    { name: `${point[0]} P`, href: "/point" },
+    { name: "SIGNUP", href: "/signup" },
   ];
 
   return (
