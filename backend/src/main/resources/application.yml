@@ -2,20 +2,19 @@ spring:
   datasource:
     password: root
     username: root
-    url: jdbc:mysql://localhost:3307/moida
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/moida
+    driver-class-name: org.mariadb.jdbc.Driver
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
   jpa:
     hibernate:
-      ddl-auto: 'create'
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        format_sql: 'true'
-    generate-ddl: 'true'
+        format_sql: true
   http:
     multipart:
       maxFileSize: 100MB
@@ -31,6 +30,8 @@ logging:
           EC2MetadataUtils: ERROR
 server:
   port: '5000'
+  servlet:
+    context-path: /api
 
 springdoc:
   api-docs:
