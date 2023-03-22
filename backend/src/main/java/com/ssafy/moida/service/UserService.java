@@ -71,11 +71,15 @@ public class UserService {
     }
 
     // 닉네임 중복 검사
-    public boolean DuplicatedUserByNickname(String nickname) {
-        // 닉네임이 중복이면 false
-        // 닉네님이 중복이 아니라면 true
+    public void DuplicatedUserByNickname(String nickname) {
+        // 닉네임이 존재하면 true, 아니라면 false
+        boolean userNickname = userRepository.existsByNickname(nickname);
 
-        return false;
+        // 닉네임이 존재한다면 중복이므로 에러 던지기
+        if(userNickname) {
+            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+        }
+
     }
 
     //비밀번호 정규 표현식 검사
