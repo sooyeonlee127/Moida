@@ -1,13 +1,15 @@
 package com.ssafy.moida.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
-
+/**
+ * [봉사 일자 엔티티]
+ * PK : 봉사 일자 아이디
+ * FK : 프로젝트
+ * 봉사 일자, 신청인원(현재, 최대)
+ */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,7 +20,7 @@ public class VolunteerDateInfo {
     private Long id;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime volunteerDate;
+    private LocalDate volunteerDate;
 
     @Column(nullable = false)
     private int capacity;
@@ -31,7 +33,7 @@ public class VolunteerDateInfo {
     private Project project;
 
     @Builder
-    public VolunteerDateInfo(LocalDateTime volunteerDate, int capacity, int maxCapacity,
+    public VolunteerDateInfo(LocalDate volunteerDate, int capacity, int maxCapacity,
         Project project) {
         this.volunteerDate = volunteerDate;
         this.capacity = capacity;
