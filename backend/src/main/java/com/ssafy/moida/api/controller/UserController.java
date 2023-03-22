@@ -36,9 +36,6 @@ public class UserController {
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
-    // 이메일 인증 검사(중복검사) -> 중복이면 409 에러, 아니면 이메일 보내고 200
-    // 이메일 인증 번호 검사(유효한 이메일인지 검사) -> 인증 번호가 틀리면 409 에러? false?, 맞으면 200
-
     @Operation(summary = "닉네임 중복 검사", description = "회원 닉네임 중복 검사를 합니다.")
     @PostMapping(
             path = "/exists/nickname",

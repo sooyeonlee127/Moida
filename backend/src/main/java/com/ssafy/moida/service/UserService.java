@@ -54,22 +54,6 @@ public class UserService {
         userRepository.save(u);
     }
 
-    // 이메일 인증 검사(중복검사)
-    public boolean DuplicatedUserByEmail(String email) {
-        // 이메일 중복이면 false
-        // 이메일 중복이 아니면 인증 번호 생성해서 해당 이메일로 전송하고 true
-
-        return false;
-    }
-
-    // 이메일 인증 번호 검사(유효한 이메일인지 검사)
-    public boolean VaildUserByEmail(String number) {
-        // 보낸 인증 번호와 입력한 인증 번호가 같다면 true
-        // 다르다면 false
-
-        return false;
-    }
-
     // 닉네임 중복 검사
     public void DuplicatedUserByNickname(String nickname) {
         // 닉네임이 존재하면 true, 아니라면 false
