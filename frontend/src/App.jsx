@@ -6,7 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import DonationPage from "./pages/DonationPage";
 import GatchaPage from "./pages/GatchaPage";
 import PointPage from "./pages/PointPage";
-// import ProfilePage from "./pages/ProfilePage";
+import ProfilePage from "./pages/ProfilePage";
 // import ReviewPage from "./pages/ReviewPage";
 import SignupPage from "./pages/SignupPage";
 
@@ -20,7 +20,7 @@ function App() {
         <Route path={"/donation"} element={<DonationPage />} />
         <Route path={"/gatcha"} element={<GatchaPage />} />
         <Route path={"/point"} element={<PointPage />} />
-        {/* <Route path={"/profile"} element={<ProfilePage />} /> */}
+        <Route path={"/profile"} element={<ProfilePage />} />
         {/* <Route path={"/review"} element={<ReviewPage />} /> */}
         <Route path={"/signup"} element={<SignupPage />} />
       </Routes>
