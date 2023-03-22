@@ -4,10 +4,12 @@ import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
 import java.util.List;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProjectController {
     private final ProjectService projectService;
     private final VolunteerService volunteerService;
+    private final ProjectPictureService projectPictureService;
 
-    public ProjectController(ProjectService projectService, VolunteerService volunteerService){
+    public ProjectController(ProjectService projectService, VolunteerService volunteerService,
+     ProjectPictureService projectPictureService){
         this.projectService = projectService;
         this.volunteerService = volunteerService;
+        this.projectPictureService = projectPictureService;
     }
 
     @Operation(summary = "프로젝트 생성", description = "새 프로젝트를 생성합니다.")
@@ -31,7 +36,7 @@ public class ProjectController {
     })
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
-        @RequestPart(value = "files", required = false) List<MultipartFile> files
+        @RequestPart(value = "files", required = false) List<MultipartFile> fileList
     ){
         Project project = projectService.save(createProjectReqDto);
 
@@ -39,16 +44,20 @@ public class ProjectController {
         volunteerService.saveVolunteerDateInfo(project);
 
         // 사진 데이터베이스 저장
-
+        try {
+            projectPictureService.save(fileList, project);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return new ResponseEntity<>("프로젝트 생성 완료", HttpStatus.OK);
     }
 
     @Operation(summary = "프로젝트 정보 조회", description = "메인페이지에서 조회할 프로젝트의 가벼운 정보를 조회합니다.")
     @GetMapping
-    public GetProjectResDto getProject(){
+    public ResponseEntity<GetProjectResDto> getProject(){
 
-        return null;
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @Operation(summary = "프로젝트 정보 상세 조회", description = "프로젝트 상세 페이지 정보를 조회합니다.")
