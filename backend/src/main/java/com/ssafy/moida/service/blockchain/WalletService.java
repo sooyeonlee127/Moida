@@ -22,7 +22,7 @@ public class WalletService {
         this.connector = connector;
         this.walletRepository = walletRepository;
         this.transactionRepository = transactionRepository;
-        this.tokenMgr = connector.getTokenMgr();
-        this.decimals = connector.getDecimals();
+//        this.tokenMgr = connector.getTokenMgr();
+//        this.decimals = connector.getDecimals();
     }
 }
