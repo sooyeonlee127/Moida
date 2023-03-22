@@ -8,7 +8,7 @@ import DonationDetailPage from "./pages/DonationDetailPage";
 import GatchaPage from "./pages/GatchaPage";
 import PointPage from "./pages/PointPage";
 import ProfilePage from "./pages/ProfilePage";
-// import ReviewPage from "./pages/ReviewPage";
+import ReviewPage from "./pages/ReviewPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
 
@@ -27,7 +27,7 @@ function App() {
         <Route path={"/gatcha"} element={<GatchaPage />} />
         <Route path={"/point"} element={<PointPage />} />
         <Route path={"/profile"} element={<ProfilePage />} />
-        {/* <Route path={"/review"} element={<ReviewPage />} /> */}
+        <Route path={"/review"} element={<ReviewPage />} />
         <Route path={"/signup"} element={<SignupPage />} />
         <Route path={"/payresult"} element={<PayResult />} />
       </Routes>
