@@ -3,10 +3,13 @@ package com.ssafy.moida.api.controller;
 import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
+import com.ssafy.moida.model.Project;
 import com.ssafy.moida.service.ProjectService;
+import com.ssafy.moida.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,9 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/project")
 public class ProjectController {
     private final ProjectService projectService;
+    private final VolunteerService volunteerService;
 
-    public ProjectController(ProjectService projectService){
+    public ProjectController(ProjectService projectService, VolunteerService volunteerService){
         this.projectService = projectService;
+        this.volunteerService = volunteerService;
     }
 
     @Operation(summary = "프로젝트 생성", description = "새 프로젝트를 생성합니다.")
@@ -29,7 +34,14 @@ public class ProjectController {
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
         @RequestPart(value = "files", required = false) List<MultipartFile> files
     ){
-        projectService.save(createProjectReqDto);
+        Project project = projectService.save(createProjectReqDto);
+
+        // 봉사일시 데이터베이스 저장
+        volunteerService.saveVolunteerDateInfo(project);
+
+        // 사진 데이터베이스 저장
+
+
         return new ResponseEntity<>("프로젝트 생성 완료", HttpStatus.OK);
     }
 

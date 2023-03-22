@@ -20,15 +20,15 @@ public class ProjectPicture {
     private Long id;
 
     @Column(nullable = false, length = 500)
-    private String pictureUrl;
+    private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 
     @Builder
-    public ProjectPicture(String pictureUrl, Project project) {
-        this.pictureUrl = pictureUrl;
+    public ProjectPicture(String url, Project project) {
+        this.url = url;
         this.project = project;
     }
 }
