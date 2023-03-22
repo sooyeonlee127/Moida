@@ -48,7 +48,6 @@ public class Users {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Builder.Default
     private Role role = Role.ROLE_USER; //ROLE_USER, ROLE_ADMIN
 
     public List<String> getRoleList() {
