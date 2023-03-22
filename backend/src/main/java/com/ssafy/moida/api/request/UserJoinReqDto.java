@@ -1,9 +1,7 @@
 package com.ssafy.moida.api.request;
 
-import com.ssafy.moida.model.Role;
-import lombok.AllArgsConstructor;
+import com.ssafy.moida.model.user.Role;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**

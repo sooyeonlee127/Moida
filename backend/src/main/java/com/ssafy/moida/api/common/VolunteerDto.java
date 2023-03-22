@@ -1,8 +1,6 @@
 package com.ssafy.moida.api.common;
 
-import com.ssafy.moida.model.ProjectVolunteer;
-import java.time.LocalDate;
-import java.util.Date;
+import com.ssafy.moida.model.project.ProjectVolunteer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

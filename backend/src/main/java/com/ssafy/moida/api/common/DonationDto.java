@@ -1,11 +1,9 @@
 package com.ssafy.moida.api.common;
 
-import com.ssafy.moida.model.ProjectDonation;
+import com.ssafy.moida.model.project.ProjectDonation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 /**
  * [기부 정보를 담은 dto]

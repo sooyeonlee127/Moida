@@ -1,0 +1,13 @@
+package com.ssafy.moida.repository.project;
+
+import com.ssafy.moida.model.project.VolunteerDateInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ * 봉사 일시 레포지토리
+ */
+@Repository
+public interface VolunteerDateInfoRepository extends JpaRepository<VolunteerDateInfo, Long> {
+
+}
