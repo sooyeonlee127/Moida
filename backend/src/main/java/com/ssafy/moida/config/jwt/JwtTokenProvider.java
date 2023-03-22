@@ -12,14 +12,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.security.Key;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
+
+/**
+ * [Jwt 토큰 생성, 인증, 검증]
+ * */
 
 @Slf4j
 @Component
@@ -38,6 +39,11 @@ public class JwtTokenProvider implements InitializingBean {
         key = Keys.hmacShaKeyFor(encodedKey.getBytes());
     }
 
+    /**
+     * [JWT 토큰 생성]
+     * param : Authentication authentication
+     * return : TokenDto
+     * */
     public TokenDto generateTokenDto(Authentication authentication) {
         // 권한들 가져오기
         String authorities = authentication.getAuthorities().stream()
@@ -46,7 +52,7 @@ public class JwtTokenProvider implements InitializingBean {
 
         long now = (new Date()).getTime();
 
-        // Access Token 생성
+        // 엑세스 토큰 생성
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())       // payload "sub": "name"
@@ -55,12 +61,13 @@ public class JwtTokenProvider implements InitializingBean {
                 .signWith(key, SignatureAlgorithm.HS512)    // header "alg": "HS512"
                 .compact();
 
-        // Refresh Token 생성
+        // 리프레시 토큰 생성
         String refreshToken = Jwts.builder()
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
+        // TokenDto 생성하여 return
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
@@ -69,20 +76,32 @@ public class JwtTokenProvider implements InitializingBean {
                 .build();
     }
 
+    /**
+     * [토큰 인증 및 사용자 정보 가져오기]
+     * param : String accessToken
+     * return : Authentication
+     * */
     public Authentication getAuthentication(String accessToken) {
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
+        // 권한 정보 확인
         if (claims.get(AUTHORITIES_KEY) == null) {
             throw new RuntimeException("권한 정보가 없는 토큰입니다.");
         }
 
+        // UserDetails를 커스텀한 PrincipalDetails에 사용자 정보 담기
         PrincipalDetails principalDetails = new PrincipalDetails(
-                Users.builder().email(claims.getSubject())
-                        .role(Role.valueOf(claims.get(AUTHORITIES_KEY).toString())).build());
+                Users.builder().email(claims.getSubject()).role(Role.valueOf(claims.get(AUTHORITIES_KEY).toString())).build());
+
         return new UsernamePasswordAuthenticationToken(principalDetails, "", principalDetails.getAuthorities());
     }
 
+    /**
+     * [토큰 검증]
+     * param : String token
+     * return : boolean
+     * */
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
@@ -99,6 +118,11 @@ public class JwtTokenProvider implements InitializingBean {
         return false;
     }
 
+    /**
+     * [토큰 복호화]
+     * param : String accessToken
+     * return : Claims(token payload에 들어가는 정보)
+     * */
     private Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
