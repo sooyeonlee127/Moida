@@ -10,25 +10,32 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @Table(name="v_date_info")
 public class VolunteerDateInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime volunteerDate;
 
-    @Column(nullable = false, columnDefinition = "integer default 10")
-    private int maximumAmount;
+    @Column(nullable = false)
+    private int capacity;
+
+    @Column(nullable = false)
+    private int maxCapacity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_volunteer_id")
-    private ProjectVolunteer projectVolunteer;
+    @JoinColumn(name = "project_id")
+    private Project project;
 
+    @Builder
+    public VolunteerDateInfo(LocalDateTime volunteerDate, int capacity, int maxCapacity,
+        Project project) {
+        this.volunteerDate = volunteerDate;
+        this.capacity = capacity;
+        this.maxCapacity = maxCapacity;
+        this.project = project;
+    }
 }

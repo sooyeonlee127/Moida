@@ -26,16 +26,17 @@ public class ProjectVolunteer {
     @Column(nullable = false)
     private Double difficultyLevel;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(updatable = false)
     private LocalDateTime startDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(updatable = false)
     private LocalDateTime endDate;
 
     @Column(length = 500, nullable = false)
     private String location;
+
+    @Column(nullable = false)
+    private int capacityPerDate;
 
     @Column(length = 500, nullable = false)
     private String subject;
@@ -45,11 +46,12 @@ public class ProjectVolunteer {
 
     @Builder
     public ProjectVolunteer(Double difficultyLevel, LocalDateTime startDate, LocalDateTime endDate,
-        String location, String subject, String description) {
+        String location, int capacityPerDate, String subject, String description) {
         this.difficultyLevel = difficultyLevel;
         this.startDate = startDate;
         this.endDate = endDate;
         this.location = location;
+        this.capacityPerDate = capacityPerDate;
         this.subject = subject;
         this.description = description;
     }
