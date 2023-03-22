@@ -5,6 +5,7 @@ import { useState } from 'react'
 const menuArr = [
     { name: '기부내역', content: 'Tab menu ONE' },
     { name: '봉사내역', content: 'Tab menu TWO' },
+    { name: '포인트 내역', content: 'Tab menu THREE' },
   ];
 
 const UserContent = () => {
@@ -15,24 +16,19 @@ const UserContent = () => {
                 <Ul>
                 {menuArr.map((element, index)=>{
                     return (
-                        <Li
-                            key={index}
-                            className={tabIndex === index ? "submenu focused" : "submenu"}
-                            onClick={()=> setTabIndex(index)}
-                        >
-                            {element.name}
-                        </Li>
+                    <Li
+                    key={index}
+                    className={tabIndex === index ? "submenu focused" : "submenu"}
+                    onClick={()=> setTabIndex(index)}
+                    >
+                    {element.name}
+                    </Li>
                     )
                 })}
-
-                    {/* <Li>
-                        <A href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500">봉사 내역</A>
-                    </Li> */}
                 </Ul>
             </TabGroup>
             <Desc>
                 <p>{menuArr[tabIndex].content}</p>
-
             </Desc>
         </div>
     )

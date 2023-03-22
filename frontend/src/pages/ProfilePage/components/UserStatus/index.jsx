@@ -23,7 +23,6 @@ flex;
 flex-direction: row;
 justify-content: start;
 text-align: left;
-padding: 20px 30px;
 `
 
 const Nickname = styled.p`
