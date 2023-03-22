@@ -9,15 +9,11 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-<<<<<<< HEAD
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
     "elliptic": "^6.5.4",
     "fs": "0.0.1-security",
     "path": "^0.12.7",
-=======
-    "elliptic": "^6.5.4",
->>>>>>> 77fe5dfac6bb3a5f28024c1a5708f2b9db2efb5f
     "react": "^18.2.0",
     "react-calendar": "^4.0.0",
     "react-dom": "^18.2.0",
