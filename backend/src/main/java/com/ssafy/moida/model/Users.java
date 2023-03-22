@@ -13,7 +13,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Users {
@@ -59,4 +58,17 @@ public class Users {
         return new ArrayList<>();
     }
 
+    @Builder
+
+    public Users(String email, String password, String phone, String nickname, int ticketCnt, Long point, String nftUrl, String walletUrl, Role role) {
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.nickname = nickname;
+        this.ticketCnt = ticketCnt;
+        this.point = point;
+        this.nftUrl = nftUrl;
+        this.walletUrl = walletUrl;
+        this.role = role;
+    }
 }
