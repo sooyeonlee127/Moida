@@ -2,6 +2,7 @@ package com.ssafy.moida.model.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,7 +59,6 @@ public class Users {
     }
 
     @Builder
-
     public Users(String email, String password, String phone, String nickname, int ticketCnt, Long point, String nftUrl, String walletUrl, Role role) {
         this.email = email;
         this.password = password;
@@ -69,5 +69,12 @@ public class Users {
         this.nftUrl = nftUrl;
         this.walletUrl = walletUrl;
         this.role = role;
+    }
+
+    /*
+     * [희주] 패스워크 인코더
+     */
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
     }
 }

@@ -5,8 +5,9 @@ package com.ssafy.moida.blockchain.controller;
  */
 
 import com.ssafy.moida.blockchain.dto.SignupReqDto;
+import com.ssafy.moida.blockchain.service.TestService;
+import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
-//import com.ssafy.moida.service.blockchain.TestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-//    private final TestService testService;
+    private final TestService testService;
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@RequestBody SignupReqDto dto) throws ChangeSetPersister.NotFoundException {
         Users user= Users.builder()
@@ -34,7 +35,7 @@ public class TestController {
                 .nickname(dto.getNickname())
                 .build();
 
-//        testService.saveOrUpdateUser(user);
+        testService.saveOrUpdateUser(user, Role.ROLE_USER);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
 
     }
