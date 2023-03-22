@@ -3,9 +3,7 @@ package com.ssafy.moida.service;
 import com.ssafy.moida.api.common.DonationDto;
 import com.ssafy.moida.model.ProjectDonation;
 import com.ssafy.moida.repository.DonationRepository;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 /**
@@ -21,6 +19,9 @@ public class DonationService {
     }
 
     public ProjectDonation save(DonationDto dd){
+//        dd.setAmount(0L);
+//        ProjectDonation projectDonation = modelMapper.map(dd, ProjectDonation.class);
+
         ProjectDonation projectDonation = ProjectDonation.builder()
             .startDate(LocalDateTime.of(LocalDate.parse(dd.getStartDate()), LocalTime.MIDNIGHT))
             .endDate(LocalDateTime.of(LocalDate.parse(dd.getEndDate()), LocalTime.MAX))
@@ -31,7 +32,6 @@ public class DonationService {
             .build();
 
         System.out.println(projectDonation);
-
         donationRepository.save(projectDonation);
         return projectDonation;
     }
