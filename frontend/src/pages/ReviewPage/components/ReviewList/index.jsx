@@ -8,11 +8,14 @@ const ReviewList = () => {
   let [review,SetReview] = useState(Review);
 
   return (
-    <Wrapper>
-      <SubWrapper>
+    <Div className="Wrapper">
+      <Div className="SubWrapper">
+        {/* 기업후기 */}
+
+        {/* 유저후기 */}
         <Gallery>Gallery</Gallery>
 
-        <ReviewWrapper>
+        <Div className="ReviewWrapper">
         {
           review.map((element,index) => {
             return (
@@ -20,38 +23,9 @@ const ReviewList = () => {
             )
           })
         }
-        </ReviewWrapper>
-
-
-        {/* <ReviewWrapper>
-          {review.map((review,index) => (
-            <div key={review.id} className="group relative">
-              <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
-                <img
-                  src={review.imageSrc}
-                  alt={review.imageAlt}
-                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                />
-              </div>
-              <ReviewContent>
-                <div>
-                  <ReviewName>
-                    <a href={review.href}>
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {review.title}
-                    </a>
-                  </ReviewName>
-                  <p className="mt-1 text-sm text-gray-500">{review.color}</p>
-                </div>
-                <p className="text-sm font-medium text-gray-900">{review.date}</p>
-              </ReviewContent>
-            </div>
-          ))}
-        </ReviewWrapper> */}
-
-
-      </SubWrapper>
-    </Wrapper>
+        </Div>
+      </Div>
+    </Div>
   )
 }
 
@@ -59,45 +33,50 @@ const ReviewList = () => {
 function ReviewCard(props) {
   return (
     <div>
-      {/* <h4>{props.review.id}</h4> */}
       <img src={props.review.imageSrc} alt={props.review.imageAlt}/>
-      <ReviewContent>
+      <Div className="ReviewContent">
         <ReviewName>
           <a href={props.review.href}>
             <SpanTag aria-hidden="true"/>
             <h4>{props.review.title}</h4>
           </a>
         </ReviewName>
-      <ReivewPrice>{props.review.date}</ReivewPrice>
-      </ReviewContent>
-      {/* <ReviewColor>{props.review.color}</ReviewColor> */}
+      <Div className="ReivewPrice">{props.review.date}</Div>
+      </Div>
     </div>
   )
 }
 
 
+const Div = styled.div`
+.ReviewContent {
+  ${tw`mt-4 flex justify-between`}
+}
 
+  .Wrapper {
+    ${tw`mt-4 flex justify-between`}
+  }
 
-const ReviewContent = styled.div`
-${tw`mt-4 flex justify-between`}`
+  .SubWrapper {
+    ${tw`mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8`}
+  }
 
-const Wrapper = styled.div`
-${tw`bg-white`}`
+  .ReviewWrapper {
+    ${tw`mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8`}
+  }
 
-const SubWrapper = styled.div`
-${tw`mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8`}`
+  .ReivewPrice {
+    ${tw`text-sm font-medium text-gray-900`}
+  }
+
+  .ReviewColor {
+    ${tw`mt-1 text-sm text-gray-500`}
+  }
+
+`
 
 const Gallery = styled.h2`
 ${tw`text-2xl font-bold tracking-tight text-gray-900`}`
-
-const ReviewWrapper = styled.div`
-${tw`mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8`}`
-
-const ReviewColor = styled.div`
-${tw`mt-1 text-sm text-gray-500`}`
-
-const ReivewPrice = styled.div`
-${tw`text-sm font-medium text-gray-900`}`
 
 const SpanTag = styled.span`
 ${tw`absolute inset-0`}`
@@ -107,28 +86,3 @@ ${tw`text-sm text-gray-700`}`
 
 export default ReviewList;
 
-
-// 
-//   export default function ReviewList() {
-//     return <>
-//     <Example/>
-//         <Wrapper>
-//         <SubWrapper>
-//           <TitleText>
-//             <h2>Gallery</h2>
-//           </TitleText>
-//           <PictureWrapper>
-//             {Reviews.map((Review) => (
-//                 <div key={Review.id}>
-//                     <div>
-//                         <img src={Review.imageSrc} alt={Review.imageAlt} />
-//                         onC
-//                     </div>
-//                 </div>
-
-//             ))}
-//           </PictureWrapper>
-//           </SubWrapper>
-//         </Wrapper>
-//         </>
-//   }
