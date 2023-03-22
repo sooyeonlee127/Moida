@@ -36,18 +36,15 @@ public class ProjectService {
      * @param createProjectReqDto
      */
     @Transactional
-    public void save(CreateProjectReqDto createProjectReqDto){
-        ProjectDto pd = createProjectReqDto.getProjectDto();
-
+    public Project save(CreateProjectReqDto createProjectReqDto){
         // 기부 데이터베이스에 저장
-        // 만약에 저장이 안될 경우, 예외 처리 후 이후 로직 실행을 막아야 함.
         ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationDto());
 
         // 봉사 데이터베이스에 저장
-        // 만약에 저장이 안될 경우, 예외 처리 후 이후 로직 실행을 막아야 함.
         ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerDto());
 
         // 프로젝트 데이터베이스에 저장
+        ProjectDto pd = createProjectReqDto.getProjectDto();
         Project project = Project.builder()
             .subject(pd.getSubject())
             .description(pd.getDescription())
@@ -58,8 +55,7 @@ public class ProjectService {
             .build();
         projectRepository.save(project);
 
-        // 봉사일시 데이터베이스 저장
-        volunteerService.saveVolunteerDateInfo(project);
+        return project;
     }
 
     /**
