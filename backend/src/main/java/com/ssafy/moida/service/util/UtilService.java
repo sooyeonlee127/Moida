@@ -1,8 +1,8 @@
-package com.ssafy.moida.service;
+package com.ssafy.moida.service.util;
 
-import com.ssafy.moida.repository.UserRepository;
-import com.ssafy.moida.util.error.ErrorCode;
-import com.ssafy.moida.util.exception.CustomException;
+import com.ssafy.moida.repository.user.UserRepository;
+import com.ssafy.moida.utils.error.ErrorCode;
+import com.ssafy.moida.utils.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
