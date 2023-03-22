@@ -3,25 +3,36 @@ package com.ssafy.moida.service;
 import com.ssafy.moida.api.common.DonationDto;
 import com.ssafy.moida.model.ProjectDonation;
 import com.ssafy.moida.repository.DonationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+/**
+ * 기부 기능 - 기부 DB 테이블 사이의 브릿지
+ */
 @Service
 @Transactional
 public class DonationService {
+    @Autowired
     private DonationRepository donationRepository;
 
-    public ProjectDonation save(DonationDto dd){
-        ProjectDonation pd = ProjectDonation.builder()
-//            .startDate(dd.getStartDate())
-//            .endDate(dd.getEndDate())
+    public ProjectDonation save(DonationDto dd){;
+
+        ProjectDonation projectDonation = ProjectDonation.builder()
+            .startDate(dd.getStartDate())
+            .endDate(dd.getEndDate())
             .amount(0L)
             .targetAmount(dd.getTargetAmount())
             .subject(dd.getSubject())
             .description(dd.getDescription())
             .build();
 
-        donationRepository.save(pd);
-        return pd;
+        donationRepository.save(projectDonation);
+        return projectDonation;
     }
 }

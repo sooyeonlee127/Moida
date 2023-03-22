@@ -12,5 +12,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAll();
 
     // 프로젝트 상세 조회
-    List<Project> findById(long id);
+    Project findById(long id);
 }

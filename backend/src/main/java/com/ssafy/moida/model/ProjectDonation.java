@@ -3,6 +3,8 @@ package com.ssafy.moida.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 import lombok.*;
 
 /**
@@ -13,7 +15,6 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Table(name = "p_donation")
 public class ProjectDonation {
     @Id
@@ -27,11 +28,11 @@ public class ProjectDonation {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false, updatable = false)
-    private LocalDateTime startDate;
+    private Date startDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false, updatable = false)
-    private LocalDateTime endDate;
+    private Date endDate;
 
     @Column(nullable = false, length = 500)
     private String subject;
@@ -40,8 +41,8 @@ public class ProjectDonation {
     private String description;
 
     @Builder
-    public ProjectDonation(Long amount, Long targetAmount, LocalDateTime startDate,
-        LocalDateTime endDate, String subject, String description) {
+    public ProjectDonation(Long amount, Long targetAmount, Date startDate,
+        Date endDate, String subject, String description) {
         this.amount = amount;
         this.targetAmount = targetAmount;
         this.startDate = startDate;

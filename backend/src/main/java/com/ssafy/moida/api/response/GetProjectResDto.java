@@ -3,6 +3,10 @@ package com.ssafy.moida.api.response;
 import com.ssafy.moida.api.common.DonationDto;
 import com.ssafy.moida.api.common.ProjectDto;
 import java.util.List;
+
+import com.ssafy.moida.api.common.VolunteerDto;
+import com.ssafy.moida.model.Project;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -12,7 +16,9 @@ import lombok.Getter;
  * 사진
  */
 @Getter
+@AllArgsConstructor
 public class GetProjectResDto {
+    private Long id;
     private ProjectDto projectDto;
     private DonationDto donationDto;
     private List<String> pictures;
@@ -21,5 +27,12 @@ public class GetProjectResDto {
         this.projectDto = projectDto;
         this.donationDto = donationDto;
         this.pictures = pictures;
+    }
+
+    public GetProjectResDto(Project p, List<String> pics){
+        this.id = p.getId();
+        this.projectDto = new ProjectDto(p.getCategory().toString(), p.getSubject(), p.getDescription(), p.getGeneration());
+        this.donationDto = new DonationDto(p.getProjectDonation());
+        this.pictures = pics;
     }
 }
