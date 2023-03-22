@@ -14,6 +14,7 @@ import lombok.*;
  */
 @Entity
 @Getter
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_donation")
 public class ProjectDonation {
@@ -26,11 +27,9 @@ public class ProjectDonation {
     @Column(nullable = false)
     private Long targetAmount;
 
-//    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false, updatable = false)
     private LocalDateTime startDate;
 
-//    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false, updatable = false)
     private LocalDateTime endDate;
 
