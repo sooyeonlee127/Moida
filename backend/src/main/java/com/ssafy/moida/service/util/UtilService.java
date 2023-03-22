@@ -29,7 +29,7 @@ public class UtilService {
         this.emailSender = emailSender;
     }
 
-    // 인증 코드 생성
+    // 인증코드 생성
     public static String createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
@@ -54,35 +54,42 @@ public class UtilService {
 
     // 이메일에 들어갈 인증코드와 메시지 생성
     public MimeMessage createMessage(String email) throws MessagingException, UnsupportedEncodingException {
-        //인증 코드 생성
+        // 인증코드 생성
         code = createKey();
 
+        // 인증코드가 포함된 메일 내용 작성
+        String msg="";
+        msg += "<div style='margin:20px;'>";
+        msg += "<h1> 안녕하세요. </h1>";
+        msg += "<h1> 야생동물 상생 플랫폼 [모이다] 입니다. </h1>";
+        msg += "<br>";
+        msg += "<p>아래 인증 코드를 복사해 입력하여 회원가입을 진행해주세요. <p>";
+        msg += "<br>";
+        msg += "<p>감사합니다.<p>";
+        msg += "<br>";
+        msg += "<div align='center' style='border:1px solid black; font-family:verdana';>";
+        msg += "<h3 style='color:RoyalBlue;'>회원가입 인증 코드입니다.</h3>";
+        msg += "<div style='font-size:130%'>";
+        msg += "CODE : <strong>";
+        msg += code+"</strong><div><br/> ";
+        msg += "</div>";
+
         //메세지 작성
-        MimeMessage  message = emailSender.createMimeMessage();
+        MimeMessage message = emailSender.createMimeMessage();
 
-        message.addRecipients(MimeMessage.RecipientType.TO, email);//보내는 대상
-        message.setSubject("[모이다]회원가입 인증 코드");//제목
-
-        String msgg="";
-        msgg+= "<div style='margin:20px;'>";
-        msgg+= "<h1> 안녕하세요. 야생동물 상생 플랫폼 [모이다] 입니다. </h1>";
-        msgg+= "<br>";
-        msgg+= "<p>아래 인증 코드를 복사해 입력해주세요<p>";
-        msgg+= "<br>";
-        msgg+= "<p>감사합니다.<p>";
-        msgg+= "<br>";
-        msgg+= "<div align='center' style='border:1px solid black; font-family:verdana';>";
-        msgg+= "<h3 style='color:blue;'>회원가입 인증 코드입니다.</h3>";
-        msgg+= "<div style='font-size:130%'>";
-        msgg+= "CODE : <strong>";
-        msgg+= code+"</strong><div><br/> ";
-        msgg+= "</div>";
-
-        message.setText(msgg, "utf-8", "html");//내용
-        message.setFrom(new InternetAddress("jikumjikum207@gmail.com","모이다"));//보내는 사람
+        message.addRecipients(MimeMessage.RecipientType.TO, email); // 메일 받는 대상
+        message.setSubject("[모이다]회원가입 인증 코드"); // 메일 제목
+        message.setText(msg, "utf-8", "html"); // 메일 내용
+        message.setFrom(new InternetAddress("jikumjikum207@gmail.com","모이다")); // 보내는 사람
 
         return message;
 
+    }
+
+    // 이메일 전송
+    public String sendMessage(MimeMessage emailMsg) {
+        emailSender.send(emailMsg);
+        return code;
     }
 
     // 이메일 인증 검사(중복검사)
@@ -98,18 +105,6 @@ public class UtilService {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         }
 
-        // 중복이 아니라면 인증 번호 생성해서 이메일로 전송하기
-        //createMessage(email);
-        //MimeMessage message = createMessage(email);
-
-    }
-
-    // 이메일 인증 번호 검사(유효한 이메일인지 검사)
-    public boolean VaildUserByEmail(String number) {
-        // 보낸 인증 번호와 입력한 인증 번호가 같다면 true
-        // 다르다면 false
-
-        return false;
     }
 
 }
