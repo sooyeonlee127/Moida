@@ -1,7 +1,7 @@
 package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.UserJoinReqDto;
-import com.ssafy.moida.service.UserService;
+import com.ssafy.moida.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
