@@ -26,7 +26,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 회원가입
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
     @PostMapping(
             path = "/join",
@@ -35,11 +34,13 @@ public class UserController {
     public ResponseEntity<?> join(
             @RequestBody UserJoinReqDto userJoinReqDto
     ) {
-        // 이메일 중복 검사
-        // 닉네임 중복 검사
-        userService.JoinUser(userJoinReqDto); // 회원 가입
-
+        userService.VaildUserByPassword(userJoinReqDto.getPassword());  // 비밀번호 정규식 검사
+        userService.JoinUser(userJoinReqDto);                           // 회원 가입
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
+
+    // 이메일 인증 검사(중복검사) -> 중복이면 409 에러, 아니면 이메일 보내고 200
+    // 이메일 인증 번호 검사(유효한 이메일인지 검사) -> 인증 번호가 틀리면 409 에러? false?, 맞으면 200
+    // 닉네임 중복 검사 -> 중복이면 409? false?, 아니면 200
 
 }
