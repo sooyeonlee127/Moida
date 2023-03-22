@@ -17,5 +17,5 @@ public enum ErrorCode {
     DATA_NOT_FOUND(NOT_FOUND, "일치하는 데이터가 없습니다.");
 
     private final HttpStatus httpStatus;
-    private final String detail;
+    private final String message;
 }
