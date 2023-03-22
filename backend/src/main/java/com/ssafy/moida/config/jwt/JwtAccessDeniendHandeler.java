@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * [403 error(Forbidden, 권한 없음) 처리]
+ * */
+
 @Component
 public class JwtAccessDeniendHandeler implements AccessDeniedHandler {
 

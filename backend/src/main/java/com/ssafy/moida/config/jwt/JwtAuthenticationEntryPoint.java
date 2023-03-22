@@ -13,6 +13,10 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * [401 error(Unauthorized, 인증 자격 증명 불가) 처리]
+ * */
+
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
