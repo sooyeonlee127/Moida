@@ -23,7 +23,7 @@ function App() {
         <Route path={"/gatcha"} element={<GatchaPage />} />
         <Route path={"/point"} element={<PointPage />} />
         <Route path={"/profile"} element={<ProfilePage />} />
-         <Route path={"/review"} element={<ReviewPage />} />
+        <Route path={"/review"} element={<ReviewPage />} />
         <Route path={"/signup"} element={<SignupPage />} />
       </Routes>
     </div>

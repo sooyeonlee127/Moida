@@ -8,7 +8,7 @@ const NavBar = () => {
   const navigation = [
     { name: "HOME", href: "/" },
     { name: "기부하기", href: "/donation" },
-    { name: "인증하기", href: "#" },
+    { name: "인증하기", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
     { name: `${ticket[0]}개`, href: "/gatcha" },
     { name: `${point[0]} P`, href: "/point" },

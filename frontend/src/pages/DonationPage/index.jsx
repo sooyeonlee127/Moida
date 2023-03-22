@@ -1,6 +1,29 @@
 import styled from 'styled-components'
 import tw from 'twin.macro'
 
+const cardList = [
+    {
+        title: "Apple Watch",
+        image: "https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/",
+        description: "",
+        alt: "",
+        href: "/donation/1"
+    }, 
+    {
+        title: "Apple Watch",
+        image: "https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/",
+        description: "",
+        alt: "",
+        href: "/donation/2"
+    }, 
+    {
+        title: "Apple Watch",
+        image: "https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/",
+        description: "",
+        alt: "",
+        href: "/donation/3"
+    }, 
+]
 
 const DonationPage = () => {
     return (
