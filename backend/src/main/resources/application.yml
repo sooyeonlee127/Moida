@@ -59,3 +59,16 @@ springdoc:
   pre-loading-enabled: true
   packages-to-scan: com.ssafy.moida
 
+cloud:
+  aws:
+    s3:
+      bucket: moida.bucket
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ${STORAGE_PUBLIC_KEY}
+      secret-key: ${STORAGE_PRIVATE_KEY}
+

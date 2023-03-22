@@ -8,12 +8,14 @@ import com.ssafy.moida.model.project.Category;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
+import com.ssafy.moida.repository.project.ProjectPictureRepository;
 import com.ssafy.moida.repository.project.ProjectRepository;
 
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.util.ArrayList;
 import java.util.List;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,8 @@ public class ProjectService {
     private DonationService donationService;
     @Autowired
     private VolunteerService volunteerService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public ProjectService(ProjectRepository projectRepository){
         this.projectRepository = projectRepository;
@@ -60,11 +64,18 @@ public class ProjectService {
 
     /**
      * 프로젝트 정보 조회(메인 페이지)
+     * 현재 카테고리에서 가장 최근 generation 만 select
      * @return
      */
     public List<GetProjectResDto> getProject(){
-        // projectRepository.findAll()
-        return null;
+        List<Project> projectList = projectRepository.findAll();
+        List<GetProjectResDto> results = new ArrayList<>();
+
+        for (int i = 0; i < projectList.size(); i++) {
+
+        }
+
+        return results;
     }
 
     /**
