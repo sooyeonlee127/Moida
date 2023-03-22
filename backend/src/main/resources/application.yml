@@ -18,6 +18,14 @@ spring:
   http:
     multipart:
       maxFileSize: 100MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jikumjikum207@gmail.com
+    password: kmueafliiwvcdmfx
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
 logging:
   level:
