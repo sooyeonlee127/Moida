@@ -8,21 +8,21 @@ const cardList = [
         image: "https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/",
         description: "",
         alt: "",
-        path: ""
+        href: "/donation/1"
     }, 
     {
         title: "Apple Watch",
         image: "https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/",
         description: "",
         alt: "",
-        path: ""
+        href: "/donation/2"
     }, 
     {
         title: "Apple Watch",
         image: "https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/",
         description: "",
         alt: "",
-        path: ""
+        href: "/donation/3"
     }, 
 ]
 
@@ -48,7 +48,7 @@ const DonationPage = () => {
                                 <span class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-3">5.0</span>
                             </Stars>
                             <WrapBtn>
-                                <Button>자세히</Button>
+                                <Button href={element.href}>자세히</Button>
                             </WrapBtn>
                         </CardContent>
                     </Card>
@@ -87,7 +87,8 @@ ${tw`w-5 h-5 text-yellow-300`}
 const WrapBtn = styled.div`
 ${tw`flex items-center justify-between`}
 `
-const Button = styled.button`
+const Button = styled.a`
+cursor: pointer;
 ${tw`text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
 `
 export default DonationPage
