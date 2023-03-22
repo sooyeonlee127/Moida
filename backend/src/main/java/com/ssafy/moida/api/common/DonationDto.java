@@ -16,8 +16,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class DonationDto {
     private Long id;
-    private Date startDate;
-    private Date endDate;
+    private String startDate;
+    private String endDate;
     private Long targetAmount;
     private Long amount;
     private String subject;
@@ -25,8 +25,8 @@ public class DonationDto {
 
     public DonationDto(ProjectDonation pd){
         this.id = pd.getId();
-        this.startDate = pd.getStartDate();
-        this.endDate = pd.getEndDate();
+        this.startDate = String.valueOf(pd.getStartDate());
+        this.endDate = String.valueOf(pd.getEndDate());
         this.targetAmount = pd.getTargetAmount();
         this.amount = pd.getAmount();
         this.subject = pd.getSubject();
