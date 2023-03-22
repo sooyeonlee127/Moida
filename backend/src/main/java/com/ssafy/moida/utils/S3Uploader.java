@@ -29,18 +29,18 @@ public class S3Uploader {
      * @param multipartFile : 업로드할 파일
      * @param dirName : 파일 이름
      */
-    public String uploadFiles(MultipartFile multipartFile, String dirName, String fileName) throws IOException {
+    public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)
             .orElseThrow(() -> new IllegalArgumentException("[error]: MultipartFile -> 파일 변환 실패"));
-        return upload(uploadFile, dirName, fileName);
+        return upload(uploadFile, dirName);
     }
 
     /**
      * 로컬 경로에 저장
      */
-    public String upload(File uploadFile, String filePath, String fileNameParam) {
+    public String upload(File uploadFile, String filePath) {
         // S3에 저장된 파일 이름
-        String fileName = filePath + "/" + UUID.randomUUID() + fileNameParam;
+        String fileName = filePath + "/" + UUID.randomUUID();
         // s3로 업로드
         String uploadImageUrl = putS3(uploadFile, fileName);
         removeNewFile(uploadFile);
@@ -52,7 +52,7 @@ public class S3Uploader {
      * S3로 업로드
      * @param uploadFile : 업로드할 파일
      * @param fileName : 업로드할 파일 이름
-     * @return
+     * @return 업로드 경로
      */
     public String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(
