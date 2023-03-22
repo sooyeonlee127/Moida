@@ -9,6 +9,8 @@ import GatchaPage from "./pages/GatchaPage";
 import PointPage from "./pages/PointPage";
 import ProfilePage from "./pages/ProfilePage";
 import ReviewPage from "./pages/ReviewPage";
+import ReviewDetailPage from "./pages/ReviewDetailPage"
+import NoticeDetailPage from "./pages/NoticeDetailPage"
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
 
@@ -28,6 +30,8 @@ function App() {
         <Route path={"/point"} element={<PointPage />} />
         <Route path={"/profile"} element={<ProfilePage />} />
         <Route path={"/review"} element={<ReviewPage />} />
+        <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
+        <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
         <Route path={"/signup"} element={<SignupPage />} />
         <Route path={"/payresult"} element={<PayResult />} />
       </Routes>
