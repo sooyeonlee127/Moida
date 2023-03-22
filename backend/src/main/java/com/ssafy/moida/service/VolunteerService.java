@@ -18,8 +18,11 @@ import java.time.format.DateTimeFormatter;
 @Service
 @Transactional
 public class VolunteerService {
-    @Autowired
-    private VolunteerRepository volunteerRepository;
+    private final VolunteerRepository volunteerRepository;
+
+    public VolunteerService(VolunteerRepository volunteerRepository){
+        this.volunteerRepository = volunteerRepository;
+    }
 
     public ProjectVolunteer save(VolunteerDto vd){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

@@ -18,8 +18,11 @@ import java.time.format.DateTimeFormatter;
 @Service
 @Transactional
 public class DonationService {
-    @Autowired
-    private DonationRepository donationRepository;
+    private final DonationRepository donationRepository;
+
+    public DonationService(DonationRepository donationRepository) {
+        this.donationRepository = donationRepository;
+    }
 
     public ProjectDonation save(DonationDto dd){;
 

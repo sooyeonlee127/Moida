@@ -22,12 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class ProjectService {
-    @Autowired
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
     @Autowired
     private DonationService donationService;
     @Autowired
     private VolunteerService volunteerService;
+
+    public ProjectService(ProjectRepository projectRepository){
+        this.projectRepository = projectRepository;
+    }
 
     @Transactional
     public void save(CreateProjectReqDto createProjectReqDto){
