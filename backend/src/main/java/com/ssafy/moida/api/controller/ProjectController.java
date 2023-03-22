@@ -42,7 +42,8 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 정보 상세 조회", description = "프로젝트 상세 페이지 정보를 조회합니다.")
     @GetMapping("/{projectid}")
-    public GetProjectDetailResDto getProjectDetail(@PathVariable(value = "projectid") Long projectId){
-        return projectService.getProjectDetail(projectId);
+    public ResponseEntity<GetProjectDetailResDto> getProjectDetail(@PathVariable(value = "projectid") int projectId){
+        GetProjectDetailResDto getProjectDetailResDto = projectService.getProjectDetail((long) projectId);
+        return new ResponseEntity<>(getProjectDetailResDto, HttpStatus.OK);
     }
 }
