@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import tw from 'twin.macro'
 
-
 const cardList = [
     {
         title: "Apple Watch",
@@ -33,7 +32,7 @@ const DonationPage = () => {
             <WrapCard>
                 {cardList.map((element, index)=>{
                     return (
-                    <Card 
+                    <Card
                     key={index}
                     >
                         <CardImage src={element.image} alt={element.alt} />

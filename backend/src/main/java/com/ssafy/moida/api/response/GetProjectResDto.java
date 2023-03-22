@@ -4,8 +4,7 @@ import com.ssafy.moida.api.common.DonationDto;
 import com.ssafy.moida.api.common.ProjectDto;
 import java.util.List;
 
-import com.ssafy.moida.api.common.VolunteerDto;
-import com.ssafy.moida.model.Project;
+import com.ssafy.moida.model.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

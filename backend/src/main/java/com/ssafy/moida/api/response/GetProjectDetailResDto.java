@@ -5,7 +5,7 @@ import com.ssafy.moida.api.common.ProjectDto;
 import com.ssafy.moida.api.common.VolunteerDto;
 import java.util.List;
 
-import com.ssafy.moida.model.Project;
+import com.ssafy.moida.model.project.Project;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
