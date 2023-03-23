@@ -1,15 +1,10 @@
 package com.ssafy.moida.api.response;
 
-import com.ssafy.moida.api.request.DonationReqDto;
 import com.ssafy.moida.api.request.ProjectReqDto;
-import com.ssafy.moida.api.request.VolunteerReqDto;
 import java.util.List;
 
 import com.ssafy.moida.model.project.Project;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * [세은] 프로젝트 상세 조회 dto: 상세 보기 페이지
@@ -18,8 +13,7 @@ import lombok.Setter;
  * VolunteerDto(봉사) : id, 난이도, 일자(시작-종료), 위치, 소제목, 설명
  * 사진
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class GetProjectDetailResDto{
@@ -27,8 +21,8 @@ public class GetProjectDetailResDto{
     private String thumbnail;
     private int generation;
     private ProjectReqDto projectReqDto;
-    private DonationReqDto donationReqDto;
-    private VolunteerReqDto volunteerReqDto;
+    private DonationResDto donationResDto;
+    private VolunteerResDto volunteerResDto;
     private List<String> pictures;
 
     public GetProjectDetailResDto(Project p, List<String> pics){
@@ -36,8 +30,8 @@ public class GetProjectDetailResDto{
         this.thumbnail = p.getThumbnail();
         this.generation = p.getGeneration();
         this.projectReqDto = new ProjectReqDto(p.getCategory(), p.getSubject(), p.getDescription());
-        this.donationReqDto = new DonationReqDto(p.getProjectDonation());
-        this.volunteerReqDto = new VolunteerReqDto(p.getProjectVolunteer());
+        this.donationResDto = new DonationResDto(p.getProjectDonation());
+        this.volunteerResDto = new VolunteerResDto(p.getProjectVolunteer());
         this.pictures = pics;
     }
 }
