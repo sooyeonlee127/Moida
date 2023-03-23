@@ -57,6 +57,9 @@ public class AuthController {
 
         ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
 
+        log.info("access : {}", request.getHeader("Authorization"));
+        log.info("refresh : {}", request.getHeader("Refresh"));
+
         String jwt = authService.resolveToken(request, JwtProperties.AUTHORIZATION_HEADER);
         String refresh = authService.resolveToken(request, JwtProperties.REFRESH_HEADER);
 
