@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * [프로젝트 자체 dto]
+ * [세은] 프로젝트 자체 dto
  * 카테고리, 주제, 차수, 간단설명 + 프로젝트 아이디
  */
 @Getter

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 @SpringBootApplication
 public class MoidaApplication {
-	// aws s3 관련 설정 : 지연 문제 해결
+	// [세은] aws s3 관련 설정 : 지연 문제 해결
 	static {
 		System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
 	}
@@ -17,6 +17,7 @@ public class MoidaApplication {
 		SpringApplication.run(MoidaApplication.class, args);
 	}
 
+	// [세은] modelMapper 빈 등록
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();

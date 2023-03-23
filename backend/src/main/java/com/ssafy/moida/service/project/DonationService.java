@@ -6,9 +6,7 @@ import com.ssafy.moida.repository.project.DonationRepository;
 import java.time.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-/**
- * 기부 기능 - 기부 DB 테이블 사이의 브릿지
- */
+
 @Service
 @Transactional
 public class DonationService {
@@ -18,6 +16,11 @@ public class DonationService {
         this.donationRepository = donationRepository;
     }
 
+    /**
+     * [세은] 프로젝트 기부 테이블 저장
+     * @param dd
+     * @return
+     */
     public ProjectDonation save(DonationDto dd){
 //        dd.setAmount(0L);
 //        ProjectDonation projectDonation = modelMapper.map(dd, ProjectDonation.class);
