@@ -9,10 +9,7 @@ import jdk.jshell.execution.Util;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 
@@ -33,10 +30,10 @@ public class UtilController {
 
     @Operation(summary = "이메일 중복 검사 및 인증", description = "회원이 입력한 이메일의 중복 검사를 합니다. 중복이 아니라면 이메일로 인증 코드를 발송합니다.")
     @PostMapping(
-            path = "/exists/{email}"
+            path = "/exists"
     )
     public ResponseEntity<?> checkUserEmail(
-            @PathVariable("email") String email
+            @RequestParam(value = "email", required = true) String email
     ) throws MessagingException, UnsupportedEncodingException {
         utilService.DuplicatedUserByEmail(email); // 이메일 중복 검사
 
