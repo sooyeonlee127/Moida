@@ -1,9 +1,7 @@
 package com.ssafy.moida.model.project;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import lombok.*;
 
