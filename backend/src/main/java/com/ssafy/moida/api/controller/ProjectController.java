@@ -53,7 +53,7 @@ public class ProjectController {
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
         @AuthenticationPrincipal PrincipalDetails principal
     ){
-
+        // 전달된 토큰이 관리자 계정인지 확인
         Users loginUser = null;
         try {
             loginUser = userService.findByUsername(principal.getUsername());
@@ -65,7 +65,9 @@ public class ProjectController {
             return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
         }
 
+        // 봉사 데이터베이스 저장
         Project project = projectService.save(createProjectReqDto, thumbnail);
+
         // 봉사일시 데이터베이스 저장
         volunteerService.saveVolunteerDateInfo(project);
 
