@@ -5,6 +5,7 @@ import com.ssafy.moida.model.project.ProjectPicture;
 import com.ssafy.moida.repository.project.ProjectPictureRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +26,14 @@ public class ProjectPictureService {
 
     /**
      * [세은] 프로젝트 사진 테이블 저장
-     * @param fileList
-     * @param p
+     * @param fileList, p
      * @throws IOException
      */
     @Transactional
     public void save(List<MultipartFile> fileList, Project p) throws IOException {
         for (int i = 0; i < fileList.size(); i++) {
-            String url = s3Uploader.uploadFiles(fileList.get(i), "static/project");
+            // S3 업로드 후 url 반환
+            String url = s3Uploader.uploadFileToS3(fileList.get(i), "static/project");
 
             ProjectPicture projectPicture = ProjectPicture.builder()
                 .url(url)
@@ -41,5 +42,21 @@ public class ProjectPictureService {
 
             projectPictureRepository.save(projectPicture);
         }
+    }
+
+    /**
+     * [세은] 프로젝트에 따른 파일 조회
+     * @param project
+     * @return List<String> : 파일 url 리스트
+     */
+    public List<String> getFileList(Project project){
+        List<ProjectPicture> fileList = projectPictureRepository.findByProject(project);
+        List<String> results = new ArrayList<>();
+
+        for (int i = 0, size = fileList.size(); i < size; i++) {
+            results.add(fileList.get(i).getUrl());
+        }
+
+        return results;
     }
 }
