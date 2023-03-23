@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro'
+import axios from 'axios'
+import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 
+//==================
 const regExp = {
     email: {
-        rule: /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
+        rule: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
         message: "형식에 맞게 작성"
     },
     nickname: {
@@ -62,10 +66,7 @@ const Form = (props) => {
                 message = "숫자를 입력해주세요";
             } 
         }
-        setFormInfo({...formInfo, //기존 inputs 객체를 복사 - 나머지 패턴
-            [id]: value, //name 키를 가진 값을 value 로 설정
-            phoneMessage: message //에러메시지 내용담기
-        })
+        setFormInfo({...formInfo, [id]: value,  phoneMessage: message})
     }
     const checkPassword = (event) => {
         const { value } = event.target;
@@ -75,15 +76,49 @@ const Form = (props) => {
                 message = "비밀번호가 일치하지 않습니다"
             }
         }
-        setFormInfo({...formInfo, //기존 inputs 객체를 복사 - 나머지 패턴
-            passwordConfirm: value, //name 키를 가진 값을 value 로 설정
-            passwordConfirmMessage: message //에러메시지 내용담기
-        })
+        setFormInfo({...formInfo, passwordConfirm: value, passwordConfirmMessage: message})
     } 
 
+    const navigate = useNavigate();
+    // 아래부터는 회원가입 관련 코드
+    const signupMutation = useMutation(async(formdata) => {
+        return axios.post("/api/user/join",
+        formdata,{
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': "*/*"
+            }
+        })
+        .then((response) => response)
+        .catch((error) => error);
+    });
+
+    const handleSubmit = async (event) => {
+        await event.preventDefault();
+        const formData = {
+            email: formInfo.email,
+            password: formInfo.password,
+            phone: formInfo.phone1+'-'+formInfo.phone2+'-'+formInfo.phone3,
+            nickname: formInfo.nickname,
+            nftUrl: "string",
+            walletUrl: "string",
+            role: "ROLE_USER"
+        }
+        const res = await signupMutation.mutateAsync(formData)
+        if (res.status===200) {
+            console.log("회원가입 완료")
+            navigate("/")
+
+        } else if (res.status===400) {
+            console.log("잘못된 접근입니다.")
+        } else {
+            console.log("이미 존재하는 회원 또는 닉네임입니다.")
+        }
+        console.log(res)
+    };
 
     return (
-        <MyForm action="#" method="POST">
+        <MyForm action="#" method="POST" onSubmit={handleSubmit}>
                 <WrapInput>
                     <Div>
                         <Label htmlfor="email">Email</Label>
