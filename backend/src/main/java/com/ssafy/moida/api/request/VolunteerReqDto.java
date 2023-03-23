@@ -1,10 +1,9 @@
-package com.ssafy.moida.api.common;
+package com.ssafy.moida.api.request;
 
 import com.ssafy.moida.model.project.ProjectVolunteer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -14,9 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VolunteerDto {
-    @Schema(description = "고유 아이디", readOnly = false)
-    private Long id;
+public class VolunteerReqDto {
     @Schema(description = "시작 날짜", defaultValue = "2023-03-28")
     private String startDate;
     @Schema(description = "종료 날짜", defaultValue = "2023-04-10")
@@ -32,8 +29,7 @@ public class VolunteerDto {
     @Schema(description = "상세 설명", defaultValue = "먹이가 필요한 다람쥐에게 도토리를 전달하는 봉사입니다")
     private String description;
 
-    public VolunteerDto(ProjectVolunteer pv){
-        this.id = pv.getId();
+    public VolunteerReqDto(ProjectVolunteer pv){
         this.startDate = String.valueOf(pv.getStartDate());
         this.endDate = String.valueOf(pv.getEndDate());
         this.difficultyLevel = pv.getDifficultyLevel();

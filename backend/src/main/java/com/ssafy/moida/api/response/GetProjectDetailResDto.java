@@ -2,7 +2,7 @@ package com.ssafy.moida.api.response;
 
 import com.ssafy.moida.api.request.DonationReqDto;
 import com.ssafy.moida.api.request.ProjectReqDto;
-import com.ssafy.moida.api.common.VolunteerDto;
+import com.ssafy.moida.api.request.VolunteerReqDto;
 import java.util.List;
 
 import com.ssafy.moida.model.project.Project;
@@ -28,7 +28,7 @@ public class GetProjectDetailResDto{
     private int generation;
     private ProjectReqDto projectReqDto;
     private DonationReqDto donationReqDto;
-    private VolunteerDto volunteerDto;
+    private VolunteerReqDto volunteerReqDto;
     private List<String> pictures;
 
     public GetProjectDetailResDto(Project p, List<String> pics){
@@ -37,7 +37,7 @@ public class GetProjectDetailResDto{
         this.generation = p.getGeneration();
         this.projectReqDto = new ProjectReqDto(p.getCategory(), p.getSubject(), p.getDescription());
         this.donationReqDto = new DonationReqDto(p.getProjectDonation());
-        this.volunteerDto = new VolunteerDto(p.getProjectVolunteer());
+        this.volunteerReqDto = new VolunteerReqDto(p.getProjectVolunteer());
         this.pictures = pics;
     }
 }

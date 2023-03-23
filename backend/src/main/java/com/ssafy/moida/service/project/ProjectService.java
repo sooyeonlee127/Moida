@@ -48,7 +48,7 @@ public class ProjectService {
         ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto());
 
         // 봉사 데이터베이스에 저장
-        ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerDto());
+        ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerReqDto());
 
         /*
         프로젝트 데이터베이스에 저장
