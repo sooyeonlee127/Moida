@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 
 const DonationDetailPage = () => {
-    const { donationId } = useParams(); // const 변수명 = useParams().파라미터명;
+    const { donationid } = useParams(); // const 변수명 = useParams().파라미터명;
     const [tabIndex, setTabIndex] = useState(0); // 0: 기부, 1: 봉사
 
     return (
@@ -23,7 +23,7 @@ const DonationDetailPage = () => {
                 </Aside>
             </Main>
             <Article>
-                <p>{donationId}번째</p>
+                <p>{donationid}번째</p>
                 <Content></Content>
             </Article>
         </div>
