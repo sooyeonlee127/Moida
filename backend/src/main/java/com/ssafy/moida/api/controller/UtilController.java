@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 
-@Tag(name="회원관리")
+/**
+ * Util(email 등) 관련 컨트롤러
+ * */
+
+@Tag(name="유틸서비스")
 @RestController
-@RequestMapping("/user/")
+@RequestMapping("/util")
 public class UtilController {
 
     private final UtilService utilService;
@@ -29,7 +33,7 @@ public class UtilController {
 
     @Operation(summary = "이메일 중복 검사 및 인증", description = "회원이 입력한 이메일의 중복 검사를 합니다. 중복이 아니라면 이메일로 인증 코드를 발송합니다.")
     @PostMapping(
-            path = "/exists/email/{email}"
+            path = "/exists/{email}"
     )
     public ResponseEntity<?> checkUserEmail(
             @PathVariable("email") String email
