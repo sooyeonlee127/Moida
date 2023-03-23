@@ -39,18 +39,21 @@ public class ProjectController {
     })
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
+        @RequestPart(value = "thumbnail", required = true) MultipartFile thumbnail,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList
     ){
-        Project project = projectService.save(createProjectReqDto);
+        Project project = projectService.save(createProjectReqDto, thumbnail);
 
         // 봉사일시 데이터베이스 저장
         volunteerService.saveVolunteerDateInfo(project);
 
         // 사진 데이터베이스 저장
-        try {
-            projectPictureService.save(fileList, project);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(fileList != null && fileList.size() > 0){
+            try {
+                projectPictureService.save(fileList, project);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return new ResponseEntity<>("프로젝트 생성 완료", HttpStatus.OK);
