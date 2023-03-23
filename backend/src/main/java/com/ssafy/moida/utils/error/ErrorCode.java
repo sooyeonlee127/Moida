@@ -8,14 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-/**
- * 프로젝트 관련 에러코드
- */
-
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-    /* 404 NOT_FOUND : DATA를 찾을 수 없음 */
+    /* [세은] 404 NOT_FOUND : DATA를 찾을 수 없음 */
     DATA_NOT_FOUND(NOT_FOUND, "일치하는 데이터가 없습니다."),
 
     /* 400 BAD_REQUEST : 클라이언트의 요청이 유효하지 않아 더 이상 작업을 진행하지 않는 경우 */

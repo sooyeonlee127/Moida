@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * 프로젝트 파일
- */
 @Service
 @Transactional(readOnly = true)
 public class ProjectPictureService {
@@ -26,6 +23,12 @@ public class ProjectPictureService {
         this.s3Uploader = s3Uploader;
     }
 
+    /**
+     * [세은] 프로젝트 사진 테이블 저장
+     * @param fileList
+     * @param p
+     * @throws IOException
+     */
     @Transactional
     public void save(List<MultipartFile> fileList, Project p) throws IOException {
         for (int i = 0; i < fileList.size(); i++) {

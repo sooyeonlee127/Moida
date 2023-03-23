@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * [기부 정보를 담은 dto]
+ * [세은] 기부 정보를 담은 dto
  * 기부 일자(시작-종료), 모금액(현재, 목표), 소제목, 설명 + 기부 아이디
  */
 @Getter
