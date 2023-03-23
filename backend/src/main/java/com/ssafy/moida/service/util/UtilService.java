@@ -107,19 +107,4 @@ public class UtilService {
         return code;
     }
 
-    /**
-     * [한선영] 이메일 중복 검사
-     * @param email
-     * */
-    public void DuplicatedUserByEmail(String email) {
-        // 이메일이 존재하면 true, 아니라면 false
-        boolean userEmail = userRepository.existsByEmail(email);
-
-        // 이메일이 존재한다면 중복이므로 에러 던지기
-        if(userEmail) {
-            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
-        }
-
-    }
-
 }
