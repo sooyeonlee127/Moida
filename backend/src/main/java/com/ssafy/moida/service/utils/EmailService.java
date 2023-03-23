@@ -11,17 +11,17 @@ import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 /**
- * mail에 관련된 각종 함수를 처리하는 서비스
+ * email에 관련된 각종 함수를 처리하는 서비스
  * */
 
 @Slf4j
 @Service
-public class MailService {
+public class EmailService {
     private final JavaMailSender emailSender;
 
     private String code;
 
-    public MailService(JavaMailSender emailSender) {
+    public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 
