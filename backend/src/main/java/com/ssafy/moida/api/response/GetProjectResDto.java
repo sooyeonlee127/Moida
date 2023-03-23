@@ -20,18 +20,15 @@ public class GetProjectResDto {
     private Long id;
     private ProjectDto projectDto;
     private DonationDto donationDto;
-    private List<String> pictures;
 
-    public GetProjectResDto(ProjectDto projectDto, DonationDto donationDto, List<String> pictures) {
+    public GetProjectResDto(ProjectDto projectDto, DonationDto donationDto) {
         this.projectDto = projectDto;
         this.donationDto = donationDto;
-        this.pictures = pictures;
     }
 
-    public GetProjectResDto(Project p, List<String> pics){
+    public GetProjectResDto(Project p){
         this.id = p.getId();
-        this.projectDto = new ProjectDto(p.getCategory().toString(), p.getSubject(), p.getDescription(), p.getGeneration());
+        this.projectDto = new ProjectDto(p.getCategory(), p.getSubject(), p.getDescription());
         this.donationDto = new DonationDto(p.getProjectDonation());
-        this.pictures = pics;
     }
 }
