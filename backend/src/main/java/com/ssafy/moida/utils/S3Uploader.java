@@ -23,17 +23,6 @@ public class S3Uploader {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-//    /**
-//     * [세은] 컨트롤러 연결 테스트 메서드
-//     * @param multipartFile : 업로드할 파일
-//     * @param dirName : 파일 이름
-//     */
-//    public String uploadFiles(MultipartFile multipartFile, String dirName) throws IOException {
-//        File uploadFile = convert(multipartFile)
-//            .orElseThrow(() -> new IllegalArgumentException("[error]: MultipartFile -> 파일 변환 실패"));
-//        return upload(uploadFile, dirName);
-//    }
-
     /**
      * [세은] 로컬 경로에 저장
      */
