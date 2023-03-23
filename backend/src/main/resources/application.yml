@@ -18,6 +18,14 @@ spring:
   http:
     multipart:
       maxFileSize: 100MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: jikumjikum207@gmail.com
+    password: kmueafliiwvcdmfx
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
 logging:
   level:
@@ -50,4 +58,17 @@ springdoc:
     query-config-enabled: true
   pre-loading-enabled: true
   packages-to-scan: com.ssafy.moida
+
+cloud:
+  aws:
+    s3:
+      bucket: moida.bucket
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+    credentials:
+      access-key: ${STORAGE_PUBLIC_KEY}
+      secret-key: ${STORAGE_PRIVATE_KEY}
 

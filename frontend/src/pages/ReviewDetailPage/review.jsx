@@ -2,7 +2,7 @@ let Review = [
     {
       id: 1,
       title: '드디어 다람쥐 가까이서 봤어요',
-      href: '#',
+      href: '/review/1',
       imageSrc: 'https://www.wonju.go.kr/DATA/bbs/136/202107031124275466AEAEDB644417BBG.jpg',
       imageAlt: "Front of men's Basic Tee in black.",
       date: '2023-03-23',
@@ -11,7 +11,7 @@ let Review = [
     {
         id: 2,
         title: '흑두루미와 함께하는',
-        href: '#',
+        href: '/review/2',
         imageSrc: 'https://www.rfa.org/korean/weekly_program/environment/fe-mj-02132020101822.html/durumi-620.jpg/@@images/b0202742-8fde-44ee-84ba-d0db21b12fdf.jpeg',
         imageAlt: "Front of men's Basic Tee in black.",
         date: '2023-03-20',
@@ -20,7 +20,7 @@ let Review = [
       {
         id: 3,
         title: '원주로 봉사 다녀왔습니다',
-        href: '#',
+        href: '/review/3',
         imageSrc: 'https://img.kr.news.samsung.com/kr/wp-content/uploads/2018/10/20181009-pressrelease-thai-1.jpg',
         imageAlt: "Front of men's Basic Tee in black.",
         date: '2023-03-17',
@@ -29,7 +29,7 @@ let Review = [
       {
         id: 4,
         title: '옥수수수',
-        href: '#',
+        href: '/review/4',
         imageSrc: 'https://images.mypetlife.co.kr/content/uploads/2019/10/09152625/andre-ouellet-P-zN6GfHv8M-unsplash-1536x1024.jpg',
         imageAlt: "Front of men's Basic Tee in black.",
         date: '2023-01-23',
@@ -38,7 +38,7 @@ let Review = [
       {
         id: 5,
         title: '순천으로 봉사다녀왔어요!',
-        href: '#',
+        href: '/review/5',
         imageSrc: 'https://img.kr.news.samsung.com/kr/wp-content/uploads/2018/10/20181009-pressrelease-thai-3.jpg',
         imageAlt: "Front of men's Basic Tee in black.",
         date: '2023-01-03',
@@ -47,7 +47,7 @@ let Review = [
       {
         id: 6,
         title: '다람쥐 덕후',
-        href: '#',
+        href: '/review/6',
         imageSrc: 'https://www.wonju.go.kr/DATA/bbs/136/202107031124275530E98BA2B1AGF23G0.jpg',
         imageAlt: "Front of men's Basic Tee in black.",
         date: '2022-12-23',
@@ -56,7 +56,7 @@ let Review = [
       {
         id: 7,
         title: '오소리 봤어요',
-        href: '#',
+        href: '/review/7',
         imageSrc: 'https://www.ihalla.com/upimages/gisaimg/202203/10_722149.jpg',
         imageAlt: "Front of men's Basic Tee in black.",
         date: '2022-12-27',
@@ -65,13 +65,12 @@ let Review = [
       {
         id: 8,
         title: '천수만 봉사 인증',
-        href: '#',
+        href: '/review/8',
         imageSrc: 'https://cdn.sstimes.kr/news/photo/201510/2244_2386_5329.jpg',
         imageAlt: "Front of men's Basic Tee in black.",
         date: '2022-10-15',
         color: 'Black',
-      },
-      
+      }
   ];
 
   export default Review;

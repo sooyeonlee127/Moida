@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 회원관리 관련 컨트롤러
@@ -39,8 +36,15 @@ public class UserController {
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
-    // 이메일 인증 검사(중복검사) -> 중복이면 409 에러, 아니면 이메일 보내고 200
-    // 이메일 인증 번호 검사(유효한 이메일인지 검사) -> 인증 번호가 틀리면 409 에러? false?, 맞으면 200
-    // 닉네임 중복 검사 -> 중복이면 409? false?, 아니면 200
+    @Operation(summary = "닉네임 중복 검사", description = "회원 닉네임 중복 검사를 합니다.")
+    @PostMapping(
+            path = "/exists/nickname/{nickname}"
+    )
+    public ResponseEntity<?> checkUserNickname(
+            @PathVariable("nickname") String nickname
+    ) {
+        userService.DuplicatedUserByNickname(nickname); // 닉네임 중복 검사
+        return new ResponseEntity<>("닉네임 중복 없음", HttpStatus.OK);
+    }
 
 }
