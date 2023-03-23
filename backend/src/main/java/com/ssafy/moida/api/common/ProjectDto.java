@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * [프로젝트 자체 dto]
+ * [세은] 프로젝트 자체 dto
  * 카테고리, 주제, 차수, 간단설명 + 프로젝트 아이디
  */
 @Getter
@@ -16,12 +16,10 @@ public class ProjectDto {
     private String category;
     private String subject;
     private String description;
-    private int generation;
 
-    public ProjectDto(String category, String subject, String description, int generation) {
+    public ProjectDto(String category, String subject, String description) {
         this.category = category;
         this.subject = subject;
         this.description = description;
-        this.generation = generation;
     }
 }

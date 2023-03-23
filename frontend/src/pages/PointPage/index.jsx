@@ -1,60 +1,87 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
 
 const PointPage = () => {
+  const navigate = useNavigate();
   const [currentPoint, setCurrentPoint] = useState(0);
-
-  const donate = (price) => {
+  const [child, setChild] = useState("");
+  const [submitFlag, setSubmitFlag] = useState(false);
+  const donate = async (price) => {
     setCurrentPoint(currentPoint + price);
   };
 
   const [kakaoUrl, SetKakaoUrl] = useState("");
-
   useEffect(() => {
-    axios({
-      url: "/v1/payment/ready",
-      method: "POST",
-      headers: {
-        Authorization: "KakaoAK 75072266177df82ab4bc1574f658a897",
-        "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
-      },
-      next_redirect_pc_url: "",
-      tid: "",
-      params: {
-        cid: "TC0ONETIME",
-        partner_order_id: "partner_order_id",
-        partner_user_id: "partner_user_id",
-        item_name: "초코파이",
-        quantity: 1,
-        total_amount: 2200,
-        tax_free_amount: 0,
-        vat_amount: 200,
-        approval_url: "http://localhost:3000/payresult",
-        fail_url: "http://localhost:3000/payresult",
-        cancel_url: "http://localhost:3000/payresult",
-      },
-    })
-      .then((res) => {
-        console.log(res.data.next_redirect_pc_url);
-        window.localStorage.setItem("tid", res.data.tid);
-        SetKakaoUrl(res.data.next_redirect_pc_url);
+    if (currentPoint !== 0) {
+      axios({
+        url: "/v1/payment/ready",
+        method: "POST",
+        headers: {
+          Authorization: "KakaoAK 75072266177df82ab4bc1574f658a897",
+          "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
+        },
+        next_redirect_pc_url: "",
+        tid: "",
+        params: {
+          cid: "TC0ONETIME",
+          partner_order_id: "partner_order_id",
+          partner_user_id: "partner_user_id",
+          item_name: "모이다 기부포인트",
+          quantity: 1,
+          total_amount: currentPoint,
+          tax_free_amount: 0,
+          vat_amount: 200,
+          approval_url: "http://localhost:3000/payresult",
+          fail_url: "http://localhost:3000/payresult",
+          cancel_url: "http://localhost:3000/payresult",
+        },
       })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+        .then((res) => {
+          console.log(res.data.next_redirect_pc_url);
+          window.localStorage.setItem("tid", res.data.tid);
+          SetKakaoUrl(res.data.next_redirect_pc_url);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [currentPoint]);
 
   const kakaoPay = () => {
-    console.log("카카오페이");
-    window.open(kakaoUrl);
+    if (kakaoUrl === "") {
+      alert("1000원 이상 결제만 가능합니다.");
+    } else {
+      setSubmitFlag(true);
+      SetKakaoUrl("");
+      setCurrentPoint(0);
+      const tmp = window.open(kakaoUrl);
+      setChild(tmp);
+      // 자식창에서 버튼 눌렀을 때 동작
+      window.parentCallback = (page) => {
+        try {
+          window.open("about:blank", "_self").self.close();
+        } catch {
+          console.log("");
+        }
+      };
+    }
   };
 
   return (
     <PointContainer>
       <LeftSide>
         <Heading>블록체인 사진</Heading>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            console.log("window opener : ", child);
+          }}
+        >
+          확인
+        </button>
       </LeftSide>
       <RightSide>
         <PointForm>
@@ -69,6 +96,7 @@ const PointPage = () => {
               onClick={(e) => {
                 e.preventDefault();
                 setCurrentPoint(0);
+                SetKakaoUrl("");
               }}
             >
               초기화
