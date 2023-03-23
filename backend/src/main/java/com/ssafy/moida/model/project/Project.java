@@ -29,9 +29,11 @@ public class Project {
     @Column(nullable = false)
     private String thumbnail;
 
+//    @Column(nullable = false)
+//    private Category category; //SQUIRREL, CRANE, WILD_ANIMAL
+
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Category category; //SQUIRREL, CRANE, WILD_ANIMAL
+    private String category; //SQUIRREL, CRANE, WILD_ANIMAL
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "p_donation_id")
@@ -42,7 +44,9 @@ public class Project {
     private ProjectVolunteer projectVolunteer;
 
     @Builder
-    public Project(String subject, String description, int generation, String thumbnail, Category category,
+    public Project(String subject, String description, int generation, String thumbnail,
+//        Category category,
+        String category,
         ProjectDonation projectDonation, ProjectVolunteer projectVolunteer) {
         this.subject = subject;
         this.description = description;
