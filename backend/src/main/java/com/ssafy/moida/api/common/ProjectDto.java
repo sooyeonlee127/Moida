@@ -16,12 +16,10 @@ public class ProjectDto {
     private String category;
     private String subject;
     private String description;
-    private int generation;
 
-    public ProjectDto(String category, String subject, String description, int generation) {
+    public ProjectDto(String category, String subject, String description) {
         this.category = category;
         this.subject = subject;
         this.description = description;
-        this.generation = generation;
     }
 }
