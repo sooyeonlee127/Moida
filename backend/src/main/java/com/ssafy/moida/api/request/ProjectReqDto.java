@@ -1,4 +1,4 @@
-package com.ssafy.moida.api.common;
+package com.ssafy.moida.api.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectDto {
-    private Long id;
+public class ProjectReqDto {
     @Schema(description = "카테고리", defaultValue = "CRANE")
     private String category;
     @Schema(description = "프로젝트명", defaultValue = "다람쥐와 도토리")
@@ -21,9 +20,4 @@ public class ProjectDto {
     @Schema(description = "프로젝트 대략의 설명", defaultValue = "다람쥐는 오늘도 도토리를 찾아 헤맵니다...")
     private String description;
 
-    public ProjectDto(String category, String subject, String description) {
-        this.category = category;
-        this.subject = subject;
-        this.description = description;
-    }
 }

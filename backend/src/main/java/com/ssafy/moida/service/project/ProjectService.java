@@ -1,6 +1,6 @@
 package com.ssafy.moida.service.project;
 
-import com.ssafy.moida.api.common.ProjectDto;
+import com.ssafy.moida.api.request.ProjectReqDto;
 import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
@@ -54,7 +54,7 @@ public class ProjectService {
         프로젝트 데이터베이스에 저장
         저장 시에 generation은 가장 최신 generation 을 찾아 넣어주기
          */
-        ProjectDto pd = createProjectReqDto.getProjectDto();
+        ProjectReqDto pd = createProjectReqDto.getProjectReqDto();
         List<Project> projectList = projectRepository.findNewestGenerationByCategory(pd.getCategory());
 
         int generation = 1;
