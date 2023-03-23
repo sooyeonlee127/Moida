@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
+/**
+ * Util(email 등)에 관련된 각종 함수를 처리하는 서비스
+ * */
+
 @Slf4j
 @Service
 @Transactional
@@ -29,7 +33,10 @@ public class UtilService {
         this.emailSender = emailSender;
     }
 
-    // 인증코드 생성
+    /**
+     * [한선영] 인증코드 생성
+     * @return key.toString() (인증코드)
+     * */
     public static String createKey() {
         StringBuffer key = new StringBuffer();
         Random rnd = new Random();
@@ -52,7 +59,11 @@ public class UtilService {
         return key.toString();
     }
 
-    // 이메일에 들어갈 인증코드와 메시지 생성
+    /**
+     * [한선영] 이메일 내용(인증코드 및 메시지) 생성
+     * @param email
+     * @return message
+     * */
     public MimeMessage createMessage(String email) throws MessagingException, UnsupportedEncodingException {
         // 인증코드 생성
         code = createKey();
@@ -86,17 +97,21 @@ public class UtilService {
 
     }
 
-    // 이메일 전송
+    /**
+     * [한선영] 이메일 전송
+     * @param emailMsg
+     * @return code
+     * */
     public String sendMessage(MimeMessage emailMsg) {
         emailSender.send(emailMsg);
         return code;
     }
 
-    // 이메일 인증 검사(중복검사)
+    /**
+     * [한선영] 이메일 중복 검사
+     * @param email
+     * */
     public void DuplicatedUserByEmail(String email) {
-        // 이메일 중복이면 false
-        // 이메일 중복이 아니면 인증 번호 생성해서 해당 이메일로 전송하고 true
-
         // 이메일이 존재하면 true, 아니라면 false
         boolean userEmail = userRepository.existsByEmail(email);
 
