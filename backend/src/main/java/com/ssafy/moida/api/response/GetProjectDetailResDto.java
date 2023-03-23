@@ -25,6 +25,7 @@ import lombok.Setter;
 public class GetProjectDetailResDto{
     private Long id;
     private String thumbnail;
+    private int generation;
     private ProjectDto projectDto;
     private DonationDto donationDto;
     private VolunteerDto volunteerDto;
@@ -33,7 +34,8 @@ public class GetProjectDetailResDto{
     public GetProjectDetailResDto(Project p, List<String> pics){
         this.id = p.getId();
         this.thumbnail = p.getThumbnail();
-        this.projectDto = new ProjectDto(p.getCategory().toString(), p.getSubject(), p.getDescription(), p.getGeneration());
+        this.generation = p.getGeneration();
+        this.projectDto = new ProjectDto(p.getCategory(), p.getSubject(), p.getDescription());
         this.donationDto = new DonationDto(p.getProjectDonation());
         this.volunteerDto = new VolunteerDto(p.getProjectVolunteer());
         this.pictures = pics;
