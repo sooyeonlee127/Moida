@@ -58,7 +58,7 @@ public class UserController {
     public ResponseEntity<?> checkUserEmail(
             @PathVariable(value = "email") String email
     ) throws MessagingException, UnsupportedEncodingException {
-        String code = userService.DuplicatedUserByEmail(email); // 이메일 중복 검사 및 인증
+        String code = userService.duplicatedUserByEmail(email); // 이메일 중복 검사 및 인증
 
         return new ResponseEntity<>(code, HttpStatus.OK);
     }
