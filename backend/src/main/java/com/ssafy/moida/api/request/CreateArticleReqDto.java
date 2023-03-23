@@ -13,7 +13,7 @@ public class CreateArticleReqDto {
     private String subject;
     @Schema(description = "내용", defaultValue = "너무나 즐거웠어요~해피해피")
     private String description;
-    @Schema(description = "내용", defaultValue = "너무나 즐거웠어요~해피해피")
+    @Schema(description = "난이도", defaultValue = "4.0")
     private Double difficultyLevel;
     @Schema(description = "프로젝트 아이디", defaultValue = "1")
     private Long projectId;
