@@ -15,12 +15,14 @@ import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Slf4j
 @Transactional(readOnly = true)
 public class ProjectService {
     private final ProjectRepository projectRepository;
@@ -49,15 +51,23 @@ public class ProjectService {
         // 봉사 데이터베이스에 저장
         ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerDto());
 
-        // 프로젝트 데이터베이스에 저장
+        /*
+        프로젝트 데이터베이스에 저장
+        저장 시에 generation은 가장 최신 generation 을 찾아 넣어주기
+         */
         ProjectDto pd = createProjectReqDto.getProjectDto();
+        List<Project> projectList = projectRepository.findNewestGenerationByCategory(pd.getCategory());
+
+        int generation = 1;
+        if(projectList != null && projectList.size() > 0) generation = projectList.get(0).getGeneration() + 1;
+
         String thumbnailUrl = s3Uploader.uploadFileToS3(thumbnail, "static/project");
         Project project = Project.builder()
             .subject(pd.getSubject())
             .description(pd.getDescription())
-            .generation(pd.getGeneration())
+            .generation(generation)
             .thumbnail(thumbnailUrl)
-            .category(Category.valueOf(pd.getCategory()))
+            .category(pd.getCategory())
             .projectVolunteer(projectVolunteer)
             .projectDonation(projectDonation)
             .build();
@@ -72,11 +82,11 @@ public class ProjectService {
      * @return
      */
     public List<GetProjectResDto> getProject(){
-        List<Project> projectList = projectRepository.findAll();
+        List<Project> projectList = projectRepository.findNewestProjectByCategory();
         List<GetProjectResDto> results = new ArrayList<>();
 
         for (int i = 0; i < projectList.size(); i++) {
-
+            results.add(new GetProjectResDto(projectList.get(i)));
         }
 
         return results;
