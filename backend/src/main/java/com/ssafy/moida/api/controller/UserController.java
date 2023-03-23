@@ -31,8 +31,8 @@ public class UserController {
     public ResponseEntity<?> join(
             @RequestBody UserJoinReqDto userJoinReqDto
     ) {
-        userService.VaildUserByPassword(userJoinReqDto.getPassword());  // 비밀번호 정규식 검사
-        userService.JoinUser(userJoinReqDto);                           // 회원 가입
+        userService.vaildUserByPassword(userJoinReqDto.getPassword());  // 비밀번호 정규식 검사
+        userService.joinUser(userJoinReqDto);                           // 회원 가입
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
@@ -43,7 +43,7 @@ public class UserController {
     public ResponseEntity<?> checkUserNickname(
             @RequestParam(value = "nickname", required = true) String nickname
     ) {
-        userService.DuplicatedUserByNickname(nickname); // 닉네임 중복 검사
+        userService.duplicatedUserByNickname(nickname); // 닉네임 중복 검사
         return new ResponseEntity<>("닉네임 중복 없음", HttpStatus.OK);
     }
 
