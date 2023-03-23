@@ -127,6 +127,6 @@ public class UserService {
      * @return
      */
     public Users findByUsername(String username){
-        return userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        return userRepository.findByNickname(username).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

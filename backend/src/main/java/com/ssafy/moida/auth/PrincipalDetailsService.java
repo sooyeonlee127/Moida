@@ -26,7 +26,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 
         // 이메일로 유저 정보 찾기
         Users user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         return new PrincipalDetails(user);
     }

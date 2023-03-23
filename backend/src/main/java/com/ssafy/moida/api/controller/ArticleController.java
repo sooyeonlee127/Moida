@@ -8,16 +8,9 @@ import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
-import okhttp3.Response;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -45,7 +38,7 @@ public class ArticleController {
         try {
             loginUser = userService.findByUsername(principal.getUsername());
         } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.MEMBER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
@@ -64,7 +57,7 @@ public class ArticleController {
         try {
             loginUser = userService.findByUsername(principal.getUsername());
         } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.MEMBER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);

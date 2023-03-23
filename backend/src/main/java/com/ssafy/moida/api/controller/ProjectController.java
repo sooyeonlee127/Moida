@@ -56,7 +56,7 @@ public class ProjectController {
         try {
             loginUser = userService.findByUsername(principal.getUsername());
         } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.MEMBER_NOT_FOUND, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
         if(loginUser.getRole().equals("ROLE_ADMIN")){
