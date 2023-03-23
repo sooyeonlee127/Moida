@@ -94,4 +94,16 @@ public class ProjectController {
         GetProjectDetailResDto getProjectDetailResDto = projectService.getProjectDetail((long) projectId);
         return new ResponseEntity<>(getProjectDetailResDto, HttpStatus.OK);
     }
+
+    @Operation(summary = "사용자 기부 신청", description = "사용자가 기부를 신청합니다.")
+    @PostMapping(path = "/donation")
+    public ResponseEntity<?> createUserDonation(@AuthenticationPrincipal PrincipalDetails principal){
+        return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
+    }
+    
+    @Operation(summary = "사용자 봉사 신청", description = "사용자가 봉사를 신청합니다.")
+    @PostMapping(path = "/volunteer")
+    public ResponseEntity<?> createUserVolunteer(@AuthenticationPrincipal PrincipalDetails principal){
+        return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
+    }
 }
