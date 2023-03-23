@@ -38,6 +38,7 @@ const createAccount = async () => {
 
     const wallet = signer.connect(provider);
     await wallet.sendTransaction(signed);
+
     // web3.eth.sendTransaction(tx).then((receipt) => receipt);
     // // ERC-20 토큰 보내기 전 허용
     // await TOKENContract.methods.approve(coinBase, 100).send({ from: coinBase });
