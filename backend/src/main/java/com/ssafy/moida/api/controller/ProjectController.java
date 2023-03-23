@@ -39,7 +39,7 @@ public class ProjectController {
     })
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
-        @RequestPart(value = "thumbnail", required = true) MultipartFile thumbnail,
+        @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList
     ){
         Project project = projectService.save(createProjectReqDto, thumbnail);
@@ -61,9 +61,9 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 정보 조회", description = "메인페이지에서 조회할 프로젝트의 가벼운 정보를 조회합니다.")
     @GetMapping
-    public ResponseEntity<GetProjectResDto> getProject(){
-
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    public ResponseEntity<List<GetProjectResDto>> getProject(){
+        List<GetProjectResDto> getProjectResDtoList = projectService.getProject();
+        return new ResponseEntity<>(getProjectResDtoList, HttpStatus.OK);
     }
 
     @Operation(summary = "프로젝트 정보 상세 조회", description = "프로젝트 상세 페이지 정보를 조회합니다.")
