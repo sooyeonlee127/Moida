@@ -16,9 +16,12 @@ public enum ErrorCode {
 
     /* [한선영] 400 BAD_REQUEST : 클라이언트의 요청이 유효하지 않아 더 이상 작업을 진행하지 않는 경우 */
     INVALID_PASSWORD(BAD_REQUEST, "유효하지 않은 비밀번호입니다."),
+    INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
+    MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
 
     /* [한선영] 404 NOT_FOUND : Resource를 찾을 수 없음 */
-    MEMBER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
+    USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
+    REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
 
     /* [한선영] 409 CONFLICT : 클라이언트의 요청이 서버 상태와 충돌하는 경우 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다.");
