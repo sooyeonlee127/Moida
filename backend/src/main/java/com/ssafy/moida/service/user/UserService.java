@@ -84,7 +84,7 @@ public class UserService {
      * @param email
      * @return code
      * */
-    public String DuplicatedUserByEmail(String email) throws MessagingException, UnsupportedEncodingException {
+    public String duplicatedUserByEmail(String email) throws MessagingException, UnsupportedEncodingException {
         // 이메일이 존재하면 true, 아니라면 false
         boolean userEmail = userRepository.existsByEmail(email);
 

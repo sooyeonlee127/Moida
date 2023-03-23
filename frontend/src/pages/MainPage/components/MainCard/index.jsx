@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import tw from "twin.macro";
+import { useNavigate } from "react-router-dom";
 
 const MainCard = (props) => {
-  const { title, content } = props.card;
+  const navigate = useNavigate();
+  const { title, content, href } = props.card;
+
   return (
     <>
       <Container>
@@ -10,7 +13,14 @@ const MainCard = (props) => {
           <InnerBox>
             <Heading>{title}</Heading>
             <Text>{content}</Text>
-            <Button>참여하기</Button>
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(href, { replace: false });
+              }}
+            >
+              참여하기
+            </Button>
           </InnerBox>
         </Box>
       </Container>
