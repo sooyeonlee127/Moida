@@ -24,8 +24,7 @@ public class S3Uploader {
     private String bucket;
 
     /**
-     *
-     * 컨트롤러 연결 테스트 메서드
+     * [세은] 컨트롤러 연결 테스트 메서드
      * @param multipartFile : 업로드할 파일
      * @param dirName : 파일 이름
      */
@@ -36,7 +35,7 @@ public class S3Uploader {
     }
 
     /**
-     * 로컬 경로에 저장
+     * [세은] 로컬 경로에 저장
      */
     public String upload(File uploadFile, String filePath) {
         // S3에 저장된 파일 이름
@@ -49,7 +48,7 @@ public class S3Uploader {
 
 
     /**
-     * S3로 업로드
+     * [세은] S3로 업로드
      * @param uploadFile : 업로드할 파일
      * @param fileName : 업로드할 파일 이름
      * @return 업로드 경로
@@ -61,7 +60,7 @@ public class S3Uploader {
     }
 
     /**
-     * S3에 있는 파일 삭제
+     * [세은] S3에 있는 파일 삭제
      * 영어 파일만 삭제 가능 -> 한글 이름 파일은 안됨
      */
     public void deleteS3(String filePath) throws Exception {
@@ -81,7 +80,7 @@ public class S3Uploader {
     }
 
     /**
-     * 로컬에 저장된 파일 지우기
+     * [세은] 로컬에 저장된 파일 지우기
      * @param targetFile : 저장된 파일
      */
     private void removeNewFile(File targetFile) {
@@ -93,7 +92,7 @@ public class S3Uploader {
     }
 
     /**
-     * 로컬에 파일 업로드 및 변환
+     * [세은] 로컬에 파일 업로드 및 변환
      * @param file : 업로드할 파일
      */
     private Optional<File> convert(MultipartFile file) throws IOException {

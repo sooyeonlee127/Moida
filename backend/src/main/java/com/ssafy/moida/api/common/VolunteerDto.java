@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * [봉사 정보를 담은 dto]
+ * [세은] 봉사 정보를 담은 dto
  * 난이도, 일자(시작-종료), 위치, 매일 가능한 봉사인원, 소제목, 설명 + 봉사 고유 아이디
  */
 @Getter

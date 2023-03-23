@@ -15,6 +15,9 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * [세은] 프로젝트 컨트롤러
+ */
 @Tag(name="프로젝트(관리자 ver.)")
 @RestController
 @RequestMapping("/project")

@@ -36,7 +36,7 @@ public class ProjectService {
     }
 
     /**
-     * 프로젝트 테이블 데이터 추가
+     * [세은] 프로젝트 테이블 데이터 추가
      * @param createProjectReqDto
      */
     @Transactional
@@ -63,7 +63,7 @@ public class ProjectService {
     }
 
     /**
-     * 프로젝트 정보 조회(메인 페이지)
+     * [세은] 프로젝트 정보 조회(메인 페이지)
      * 현재 카테고리에서 가장 최근 generation 만 select
      * @return
      */
@@ -79,7 +79,7 @@ public class ProjectService {
     }
 
     /**
-     * 프로젝트 정보 상세 조회(상세 조회)
+     * [세은] 프로젝트 정보 상세 조회(상세 조회)
      * @return GetProjectDetailResDto
      */
     public GetProjectDetailResDto getProjectDetail(Long projectId){
