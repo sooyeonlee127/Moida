@@ -3,16 +3,21 @@ package com.ssafy.moida.api.controller;
 import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
+import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.VolunteerService;
+import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.utils.error.ErrorCode;
+import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.http.*;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,12 +29,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/project")
 public class ProjectController {
     private final ProjectService projectService;
+    private final UserService userService;
     private final VolunteerService volunteerService;
     private final ProjectPictureService projectPictureService;
 
-    public ProjectController(ProjectService projectService, VolunteerService volunteerService,
-     ProjectPictureService projectPictureService){
+    public ProjectController(ProjectService projectService, UserService userService,
+        VolunteerService volunteerService, ProjectPictureService projectPictureService){
         this.projectService = projectService;
+        this.userService = userService;
         this.volunteerService = volunteerService;
         this.projectPictureService = projectPictureService;
     }
@@ -42,9 +49,21 @@ public class ProjectController {
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
         @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
-        Authentication authentication
+        @AuthenticationPrincipal PrincipalDetails principal
     ){
+        // 전달된 토큰이 관리자 계정인지 확인
+        Users loginUser = null;
+        try {
+            loginUser = userService.findByUsername(principal.getUsername());
+        } catch (CustomException e) {
+            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
 
+        if(loginUser.getRole().equals("ROLE_ADMIN")){
+            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
+        }
+
+        // 봉사 데이터베이스 저장
         Project project = projectService.save(createProjectReqDto, thumbnail);
 
         // 봉사일시 데이터베이스 저장
@@ -74,5 +93,17 @@ public class ProjectController {
     public ResponseEntity<GetProjectDetailResDto> getProjectDetail(@PathVariable(value = "projectid") int projectId){
         GetProjectDetailResDto getProjectDetailResDto = projectService.getProjectDetail((long) projectId);
         return new ResponseEntity<>(getProjectDetailResDto, HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 기부 신청", description = "사용자가 기부를 신청합니다.")
+    @PostMapping(path = "/donation")
+    public ResponseEntity<?> createUserDonation(@AuthenticationPrincipal PrincipalDetails principal){
+        return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
+    }
+    
+    @Operation(summary = "사용자 봉사 신청", description = "사용자가 봉사를 신청합니다.")
+    @PostMapping(path = "/volunteer")
+    public ResponseEntity<?> createUserVolunteer(@AuthenticationPrincipal PrincipalDetails principal){
+        return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
     }
 }
