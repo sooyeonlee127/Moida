@@ -1,35 +1,27 @@
-package com.ssafy.moida.service.util;
+package com.ssafy.moida.service.utils;
 
-import com.ssafy.moida.repository.user.UserRepository;
-import com.ssafy.moida.utils.error.ErrorCode;
-import com.ssafy.moida.utils.exception.CustomException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 /**
- * Util(email 등)에 관련된 각종 함수를 처리하는 서비스
+ * mail에 관련된 각종 함수를 처리하는 서비스
  * */
 
 @Slf4j
 @Service
-@Transactional
-public class UtilService {
-
-    private final UserRepository userRepository;
+public class MailService {
     private final JavaMailSender emailSender;
 
     private String code;
 
-    public UtilService(UserRepository userRepository, JavaMailSender emailSender) {
-        this.userRepository = userRepository;
+    public MailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 
