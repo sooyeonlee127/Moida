@@ -121,4 +121,12 @@ public class UserService {
 
     }
 
+    /**
+     * [세은] username으로 해당 user 찾기
+     * @param username
+     * @return
+     */
+    public Users findByUsername(String username){
+        return userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+    }
 }
