@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Swagger Api Config
+ * [세은] Swagger Api Config
  */
 @Configuration
 public class SwaggerConfig {

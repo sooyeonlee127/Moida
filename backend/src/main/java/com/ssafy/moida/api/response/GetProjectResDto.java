@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * [프로젝트 조회 Dto : 메인페이지에 필요한 데이터]
+ * [세은] 프로젝트 조회 Dto : 메인페이지에 필요한 데이터
  * ProjectDto(프로젝트) : 프로젝트 아이디, 카테고리, 주제, 차수, 간단설명
  * DonationDto(기부) : 기부 일자(시작-종료), 모금액(현재, 목표), 설명
  * 사진
