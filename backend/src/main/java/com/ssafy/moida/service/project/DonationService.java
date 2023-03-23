@@ -34,7 +34,6 @@ public class DonationService {
             .description(dd.getDescription())
             .build();
 
-        System.out.println(projectDonation);
         donationRepository.save(projectDonation);
         return projectDonation;
     }
