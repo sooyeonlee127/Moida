@@ -24,6 +24,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'junit:junit:4.13.1'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -45,8 +46,12 @@ dependencies {
 	implementation 'org.modelmapper:modelmapper:2.4.4'
 	// aws-s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+//	// https://mvnrepository.com/artifact/org.web3j/core
+//	implementation group: 'org.web3j', name: 'core', version: '5.0.0'
 	// https://mvnrepository.com/artifact/org.web3j/core
-	implementation group: 'org.web3j', name: 'core', version: '5.0.0'
+	implementation 'org.web3j:core:4.8.7'
+	implementation("com.squareup.okhttp3:okhttp:4.9.3")
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	// email
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }

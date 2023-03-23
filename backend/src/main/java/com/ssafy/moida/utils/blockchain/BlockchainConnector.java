@@ -72,6 +72,7 @@ public class BlockchainConnector {
         this.transactionRepository = transactionRepository;
         this.web3j = Web3j.build(new HttpService("http:127.0.0.1:8545")); // 일단 하드햇 기본 네트워크
 //        this.web3j = Web3j.build(new HttpService("http:j8c2071.p.ssafy.io:8545"));
+//        subscribe();
     }
 
     @PostConstruct
