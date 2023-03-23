@@ -1,6 +1,6 @@
 package com.ssafy.moida.service.project;
 
-import com.ssafy.moida.api.common.VolunteerDto;
+import com.ssafy.moida.api.request.VolunteerReqDto;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
@@ -33,7 +33,7 @@ public class VolunteerService {
      * @param vd
      * @return ProjectVolunteer(엔티티)
      */
-    public ProjectVolunteer saveProjectVolunteer(VolunteerDto vd){
+    public ProjectVolunteer saveProjectVolunteer(VolunteerReqDto vd){
         ProjectVolunteer projectVolunteer = ProjectVolunteer.builder()
                 .startDate(LocalDateTime.of(LocalDate.parse(vd.getStartDate()), LocalTime.MIDNIGHT))
                 .endDate(LocalDateTime.of(LocalDate.parse(vd.getEndDate()), LocalTime.MAX))

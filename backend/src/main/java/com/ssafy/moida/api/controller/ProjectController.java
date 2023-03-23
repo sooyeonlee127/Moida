@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,8 +41,10 @@ public class ProjectController {
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
         @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
-        @RequestPart(value = "files", required = false) List<MultipartFile> fileList
+        @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
+        Authentication authentication
     ){
+
         Project project = projectService.save(createProjectReqDto, thumbnail);
 
         // 봉사일시 데이터베이스 저장

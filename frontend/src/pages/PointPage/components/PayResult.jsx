@@ -3,14 +3,31 @@ import axios from "axios";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 const PayResult = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryString = searchParams.get("pg_token");
-  const [quantity, setQuantity] = useState(0);
   const [price, setPrice] = useState(0);
   const [date, setDate] = useState("");
+  const [flag, setFlag] = useState(false);
+  const parentPage = (page) => {
+    if (page) {
+      try {
+        window.opener.parentCallback(page);
+        navigate(`${page}`, { replace: true });
+      } catch (error) {
+        navigate(`${page}`, { replace: true });
+      }
+    } else {
+      try {
+        window.opener.parentCallback(page);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   useEffect(() => {
     axios({
       url: "/v1/payment/approve",
@@ -29,36 +46,68 @@ const PayResult = () => {
     })
       .then((res) => {
         console.log(res);
-        setQuantity(res.data.quantity);
         setPrice(res.data.amount.total);
         setDate(res.data.approved_at);
+        setFlag(true);
+        parentPage();
       })
       .catch((error) => {
         console.log(error);
       });
   }, []);
-
-  return (
-    <>
-      <Container>
-        <Box>
-          <Heading>결제가 완료되었습니다.</Heading>
-          <Text>
-            포인트 내역 확인은 마이페이지의 포인트 탭에서 하실 수 있습니다.
-          </Text>
-      
+  if (flag) {
+    return (
+      <>
+        <Container>
           <Box>
-            <Text>도토리: {quantity}개</Text>
-            <Text>포인트: {price}P</Text>
-            <Text>날짜: {date}</Text>
-            <InnerBox>
-            <Button href="/profile">마이페이지</Button>
-            </InnerBox>
+            <Heading>결제가 완료되었습니다.</Heading>
+            <Text>
+              포인트 내역 확인은 마이페이지의 포인트 탭에서 하실 수 있습니다.
+            </Text>
+
+            <Box>
+              <Text>기부포인트 {price}P 충전</Text>
+              <Text>날짜: {date}</Text>
+              <InnerBox>
+                <Button href="/profile">마이페이지</Button>
+              </InnerBox>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </>
-  );
+        </Container>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Container>
+          <Box>
+            <Heading>결제가 취소되었습니다.</Heading>
+            <Box>
+              <Text>결제를 다시 진행해주세요.</Text>
+              <InnerBox>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    parentPage("/point");
+                  }}
+                >
+                  결제페이지로 돌아가기
+                </Button>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    parentPage("/");
+                  }}
+                >
+                  메인으로 돌아가기
+                </Button>
+              </InnerBox>
+            </Box>
+          </Box>
+        </Container>
+      </>
+    );
+  }
 };
 
 const Container = styled.main`
