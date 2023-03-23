@@ -15,6 +15,7 @@ import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
 
 function App() {
+
   return (
     <div className="App">
       <NavBar />
