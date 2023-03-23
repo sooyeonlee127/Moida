@@ -4,13 +4,17 @@ import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.repository.user.UserRepository;
+import com.ssafy.moida.service.utils.EmailService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,10 +28,12 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -74,18 +80,26 @@ public class UserService {
     }
 
     /**
-     * [한선영] 이메일 중복 검사
+     * [한선영] 이메일 중복 검사 및 인증 코드 발송
      * @param email
+     * @return code
      * */
-    public void DuplicatedUserByEmail(String email) {
+    public String DuplicatedUserByEmail(String email) throws MessagingException, UnsupportedEncodingException {
         // 이메일이 존재하면 true, 아니라면 false
         boolean userEmail = userRepository.existsByEmail(email);
+
+        String code = null;
 
         // 이메일이 존재한다면 중복이므로 에러 던지기
         if(userEmail) {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
+        } else {
+            // 중복이 아니라면 인증 번호 생성해서 이메일로 전송하기
+            MimeMessage message = emailService.createMessage(email);
+            code = emailService.sendMessage(message);
         }
 
+        return code;
     }
 
     /**
