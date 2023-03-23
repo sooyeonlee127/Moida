@@ -1,35 +1,27 @@
-package com.ssafy.moida.service.util;
+package com.ssafy.moida.service.utils;
 
-import com.ssafy.moida.repository.user.UserRepository;
-import com.ssafy.moida.utils.error.ErrorCode;
-import com.ssafy.moida.utils.exception.CustomException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 /**
- * Util(email 등)에 관련된 각종 함수를 처리하는 서비스
+ * email에 관련된 각종 함수를 처리하는 서비스
  * */
 
 @Slf4j
 @Service
-@Transactional
-public class UtilService {
-
-    private final UserRepository userRepository;
+public class EmailService {
     private final JavaMailSender emailSender;
 
     private String code;
 
-    public UtilService(UserRepository userRepository, JavaMailSender emailSender) {
-        this.userRepository = userRepository;
+    public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 
@@ -105,21 +97,6 @@ public class UtilService {
     public String sendMessage(MimeMessage emailMsg) {
         emailSender.send(emailMsg);
         return code;
-    }
-
-    /**
-     * [한선영] 이메일 중복 검사
-     * @param email
-     * */
-    public void DuplicatedUserByEmail(String email) {
-        // 이메일이 존재하면 true, 아니라면 false
-        boolean userEmail = userRepository.existsByEmail(email);
-
-        // 이메일이 존재한다면 중복이므로 에러 던지기
-        if(userEmail) {
-            throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
-        }
-
     }
 
 }
