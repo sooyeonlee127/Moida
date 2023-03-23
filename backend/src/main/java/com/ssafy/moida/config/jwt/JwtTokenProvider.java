@@ -8,6 +8,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,6 +34,8 @@ public class JwtTokenProvider implements InitializingBean {
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일
 
     private Key key;
+
+    RedisTemplate<String, String> redisTemplate;
 
     @Override
     public void afterPropertiesSet() throws Exception {  // init()
@@ -103,6 +107,15 @@ public class JwtTokenProvider implements InitializingBean {
      * return : boolean
      * */
     public boolean validateToken(String token) {
+
+        ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
+
+        // 토큰이 null이라면 로그아웃된 유저의 토큰
+        if (logoutValueOperations.get(token) != null) {
+            log.info("로그아웃된 토큰입니다.");
+            return false;
+        }
+
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
