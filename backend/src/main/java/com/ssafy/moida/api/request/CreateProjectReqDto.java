@@ -1,8 +1,5 @@
 package com.ssafy.moida.api.request;
 
-import com.ssafy.moida.api.common.DonationDto;
-import com.ssafy.moida.api.common.ProjectDto;
-import com.ssafy.moida.api.common.VolunteerDto;
 import lombok.Getter;
 
 /**
@@ -13,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 public class CreateProjectReqDto {
-    private ProjectDto projectDto;
-    private DonationDto donationDto;
-    private VolunteerDto volunteerDto;
+    private ProjectReqDto projectReqDto;
+    private DonationReqDto donationReqDto;
+    private VolunteerReqDto volunteerReqDto;
 }
