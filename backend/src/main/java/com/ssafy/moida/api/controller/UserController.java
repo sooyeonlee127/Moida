@@ -38,13 +38,12 @@ public class UserController {
 
     @Operation(summary = "닉네임 중복 검사", description = "회원 닉네임 중복 검사를 합니다.")
     @PostMapping(
-            path = "/exists/nickname",
-            consumes = MediaType.APPLICATION_JSON_VALUE
+            path = "/exists/nickname/{nickname}"
     )
     public ResponseEntity<?> checkUserNickname(
-            @PathVariable String nickname
+            @PathVariable("nickname") String nickname
     ) {
-        userService.DuplicatedUserByNickname(nickname);                 // 닉네임 중복 검사
+        userService.DuplicatedUserByNickname(nickname); // 닉네임 중복 검사
         return new ResponseEntity<>("닉네임 중복 없음", HttpStatus.OK);
     }
 
