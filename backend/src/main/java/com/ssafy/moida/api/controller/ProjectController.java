@@ -15,6 +15,9 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * [세은] 프로젝트 컨트롤러
+ */
 @Tag(name="프로젝트(관리자 ver.)")
 @RestController
 @RequestMapping("/project")
@@ -36,18 +39,21 @@ public class ProjectController {
     })
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
+        @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList
     ){
-        Project project = projectService.save(createProjectReqDto);
+        Project project = projectService.save(createProjectReqDto, thumbnail);
 
         // 봉사일시 데이터베이스 저장
         volunteerService.saveVolunteerDateInfo(project);
 
         // 사진 데이터베이스 저장
-        try {
-            projectPictureService.save(fileList, project);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if(fileList != null && fileList.size() > 0){
+            try {
+                projectPictureService.save(fileList, project);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return new ResponseEntity<>("프로젝트 생성 완료", HttpStatus.OK);
@@ -55,9 +61,9 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 정보 조회", description = "메인페이지에서 조회할 프로젝트의 가벼운 정보를 조회합니다.")
     @GetMapping
-    public ResponseEntity<GetProjectResDto> getProject(){
-
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    public ResponseEntity<List<GetProjectResDto>> getProject(){
+        List<GetProjectResDto> getProjectResDtoList = projectService.getProject();
+        return new ResponseEntity<>(getProjectResDtoList, HttpStatus.OK);
     }
 
     @Operation(summary = "프로젝트 정보 상세 조회", description = "프로젝트 상세 페이지 정보를 조회합니다.")

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * [프로젝트 상세 조회 dto: 상세 보기 페이지]
+ * [세은] 프로젝트 상세 조회 dto: 상세 보기 페이지
  * ProjectDto(프로젝트) : id, 카테고리, 주제, 차수, 간단설명
  * DonationDto(기부) : id, 기부 일자(시작-종료), 모금액(현재, 목표), 설명
  * VolunteerDto(봉사) : id, 난이도, 일자(시작-종료), 위치, 소제목, 설명
@@ -24,6 +24,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetProjectDetailResDto{
     private Long id;
+    private String thumbnail;
+    private int generation;
     private ProjectDto projectDto;
     private DonationDto donationDto;
     private VolunteerDto volunteerDto;
@@ -31,7 +33,9 @@ public class GetProjectDetailResDto{
 
     public GetProjectDetailResDto(Project p, List<String> pics){
         this.id = p.getId();
-        this.projectDto = new ProjectDto(p.getCategory().toString(), p.getSubject(), p.getDescription(), p.getGeneration());
+        this.thumbnail = p.getThumbnail();
+        this.generation = p.getGeneration();
+        this.projectDto = new ProjectDto(p.getCategory(), p.getSubject(), p.getDescription());
         this.donationDto = new DonationDto(p.getProjectDonation());
         this.volunteerDto = new VolunteerDto(p.getProjectVolunteer());
         this.pictures = pics;
