@@ -8,31 +8,33 @@ import com.ssafy.moida.model.project.Category;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
-import com.ssafy.moida.repository.project.ProjectPictureRepository;
 import com.ssafy.moida.repository.project.ProjectRepository;
 
+import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.util.ArrayList;
 import java.util.List;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Transactional(readOnly = true)
 public class ProjectService {
     private final ProjectRepository projectRepository;
+    private final S3Uploader s3Uploader;
     @Autowired
     private DonationService donationService;
     @Autowired
     private VolunteerService volunteerService;
     @Autowired
-    private ModelMapper modelMapper;
+    private ProjectPictureService projectPictureService;
 
-    public ProjectService(ProjectRepository projectRepository){
+    public ProjectService(ProjectRepository projectRepository, S3Uploader s3Uploader){
         this.projectRepository = projectRepository;
+        this.s3Uploader = s3Uploader;
     }
 
     /**
@@ -40,7 +42,7 @@ public class ProjectService {
      * @param createProjectReqDto
      */
     @Transactional
-    public Project save(CreateProjectReqDto createProjectReqDto){
+    public Project save(CreateProjectReqDto createProjectReqDto, MultipartFile thumbnail){
         // 기부 데이터베이스에 저장
         ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationDto());
 
@@ -49,10 +51,12 @@ public class ProjectService {
 
         // 프로젝트 데이터베이스에 저장
         ProjectDto pd = createProjectReqDto.getProjectDto();
+        String thumbnailUrl = s3Uploader.uploadFileToS3(thumbnail, "static/project");
         Project project = Project.builder()
             .subject(pd.getSubject())
             .description(pd.getDescription())
             .generation(pd.getGeneration())
+            .thumbnail(thumbnailUrl)
             .category(Category.valueOf(pd.getCategory()))
             .projectVolunteer(projectVolunteer)
             .projectDonation(projectDonation)
@@ -83,8 +87,9 @@ public class ProjectService {
      * @return GetProjectDetailResDto
      */
     public GetProjectDetailResDto getProjectDetail(Long projectId){
-        Project projects = projectRepository.findById(projectId)
+        Project project = projectRepository.findById(projectId)
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-        return new GetProjectDetailResDto(projects, new ArrayList<>());
+        List<String> fileList = projectPictureService.getFileList(project);
+        return new GetProjectDetailResDto(project, fileList);
     }
 }
