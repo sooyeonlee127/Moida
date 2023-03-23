@@ -35,7 +35,7 @@ public class UtilService {
 
     /**
      * [한선영] 인증코드 생성
-     * @return
+     * @return key.toString() (인증코드)
      * */
     public static String createKey() {
         StringBuffer key = new StringBuffer();
@@ -62,7 +62,7 @@ public class UtilService {
     /**
      * [한선영] 이메일 내용(인증코드 및 메시지) 생성
      * @param email
-     * @return
+     * @return message
      * */
     public MimeMessage createMessage(String email) throws MessagingException, UnsupportedEncodingException {
         // 인증코드 생성
@@ -100,7 +100,7 @@ public class UtilService {
     /**
      * [한선영] 이메일 전송
      * @param emailMsg
-     * @return
+     * @return code
      * */
     public String sendMessage(MimeMessage emailMsg) {
         emailSender.send(emailMsg);
