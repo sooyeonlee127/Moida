@@ -4,7 +4,6 @@ import com.ssafy.moida.api.common.ProjectDto;
 import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
-import com.ssafy.moida.model.project.Category;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
@@ -46,7 +45,7 @@ public class ProjectService {
     @Transactional
     public Project save(CreateProjectReqDto createProjectReqDto, MultipartFile thumbnail){
         // 기부 데이터베이스에 저장
-        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationDto());
+        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto());
 
         // 봉사 데이터베이스에 저장
         ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerDto());

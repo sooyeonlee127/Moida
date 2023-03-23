@@ -1,8 +1,7 @@
 package com.ssafy.moida.api.response;
 
-import com.ssafy.moida.api.common.DonationDto;
+import com.ssafy.moida.api.request.DonationReqDto;
 import com.ssafy.moida.api.common.ProjectDto;
-import java.util.List;
 
 import com.ssafy.moida.model.project.Project;
 import lombok.AllArgsConstructor;
@@ -19,16 +18,16 @@ import lombok.Getter;
 public class GetProjectResDto {
     private Long id;
     private ProjectDto projectDto;
-    private DonationDto donationDto;
+    private DonationResDto donationResDto;
 
-    public GetProjectResDto(ProjectDto projectDto, DonationDto donationDto) {
+    public GetProjectResDto(ProjectDto projectDto, DonationResDto donationResDto) {
         this.projectDto = projectDto;
-        this.donationDto = donationDto;
+        this.donationResDto = donationResDto;
     }
 
     public GetProjectResDto(Project p){
         this.id = p.getId();
         this.projectDto = new ProjectDto(p.getCategory(), p.getSubject(), p.getDescription());
-        this.donationDto = new DonationDto(p.getProjectDonation());
+        this.donationResDto = new DonationResDto(p.getProjectDonation());
     }
 }

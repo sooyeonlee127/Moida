@@ -1,6 +1,6 @@
 package com.ssafy.moida.service.project;
 
-import com.ssafy.moida.api.common.DonationDto;
+import com.ssafy.moida.api.request.DonationReqDto;
 import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.repository.project.DonationRepository;
 import java.time.*;
@@ -21,7 +21,7 @@ public class DonationService {
      * @param dd
      * @return
      */
-    public ProjectDonation save(DonationDto dd){
+    public ProjectDonation save(DonationReqDto dd){
 //        dd.setAmount(0L);
 //        ProjectDonation projectDonation = modelMapper.map(dd, ProjectDonation.class);
 
