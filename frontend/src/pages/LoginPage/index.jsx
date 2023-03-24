@@ -38,7 +38,7 @@ const LoginPage = () => {
     console.log("password:", state.password);
     console.log("remember", state.remember);
     axios({
-      url: "/api/login",
+      url: "/api/auth/login",
       method: "POST",
       data: {
         email: state.email,
