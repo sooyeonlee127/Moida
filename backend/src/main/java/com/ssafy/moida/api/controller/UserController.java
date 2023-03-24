@@ -1,6 +1,7 @@
 package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.UserJoinReqDto;
+import com.ssafy.moida.api.response.UserInfoResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.user.UserService;
@@ -69,15 +70,27 @@ public class UserController {
     @GetMapping(
             path = "/me"
     )
-    public ResponseEntity<?> getUserDetail (
+    public ResponseEntity<UserInfoResDto> getUserDetail (
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
         // 로그인 된 유저 정보 가져오기
         Users user = userService.findByEmail(principal.getUsername());
 
+        // 봉사 글 개수 가져오기
+        // 총 포인트 확인하기
 
+        // Dto에 유저 정보 저장
+        UserInfoResDto userInfoResDto = UserInfoResDto.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .ticketCnt(user.getTicketCnt())
+                .point(user.getPoint())
+                .nftUrl(user.getNftUrl())
+                .volunteerCnt(0)
+                .totalPoint(0L)
+                .build();
 
-        return new ResponseEntity<>("my", HttpStatus.OK);
+        return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
     }
 
 }
