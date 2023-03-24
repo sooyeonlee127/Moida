@@ -62,6 +62,32 @@ public class AuthController {
         return new ResponseEntity<>(loginUser, HttpStatus.OK);
     }
 
+    @Operation(summary = "토큰 재발행", description = "토큰 재발행을 합니다.")
+    @PostMapping(
+            path = "/accessToken"
+    )
+    public ResponseEntity<?> reissueAccessToken(
+            HttpServletResponse response,
+            HttpServletRequest request
+    ) {
+        // 받은 token 정보 가져오기
+        String jwt = authService.resolveToken(request, JwtProperties.AUTHORIZATION_HEADER);
+        String refresh = authService.resolveToken(request, JwtProperties.REFRESH_HEADER);
+
+        // requestTokenDto에 받은 토큰 정보 저장하기
+        TokenDto requestTokenDto = TokenDto.builder()
+                .accessToken(jwt)
+                .refreshToken(refresh).build();
+
+        // 토큰 재발행
+        TokenDto tokenDto = authService.reissueAccessToken(requestTokenDto);
+
+        // 헤더에 토큰 정보 담기
+        response.setHeader(JwtProperties.AUTHORIZATION_HEADER, tokenDto.getGrantType() + " " + tokenDto.getAccessToken());
+        response.setHeader(JwtProperties.REFRESH_HEADER, tokenDto.getGrantType() + " " + tokenDto.getRefreshToken());
+        return new ResponseEntity<>("access token 재발행 성공", HttpStatus.OK);
+    }
+
     @Transactional
     @Operation(summary = "로그아웃", description = "로그아웃을 합니다.")
     @PostMapping("/logout")
