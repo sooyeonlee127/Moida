@@ -62,23 +62,8 @@ public class ProjectController {
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 프론트에서 유효한 토큰이 들어오지 않을 경우
-        if(principalDetails == null){
-            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
-        }
-        
-        // 토큰 유효성 검증 (관리자인지 확인)
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
-
-        // 관리자가 아닌 경우, 권한 없음 예외 발생
-        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)){
-            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
-        }
+        // 토큰 유효성 검증 및 관리자 확인
+        validateAdminTokenAndGetUser(principalDetails, true);
 
         // 기부 데이터베이스에 저장
         ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto(),
@@ -125,18 +110,8 @@ public class ProjectController {
         @RequestBody CreateDonationReqDto createDonationReqDto,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 프론트에서 유효한 토큰이 들어오지 않을 경우
-        if(principalDetails == null){
-            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
-        }
-
         // 토큰 유효성 검증
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
+        Users loginUser = validateAdminTokenAndGetUser(principalDetails, false);
 
         Project project = projectService.findById(createDonationReqDto.getProjectId());
         Long points = project.getPointPerMoi() * createDonationReqDto.getMoi();
@@ -165,18 +140,8 @@ public class ProjectController {
         @Schema(description = "봉사 신청 일시 고유아이디", defaultValue = "1") Long vDateInfoId,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 프론트에서 유효한 토큰이 들어오지 않을 경우
-        if(principalDetails == null){
-            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
-        }
-
-        // 유효한 유저인지 검증
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
+        // 토큰 유효성 검증
+        Users loginUser = validateAdminTokenAndGetUser(principalDetails, false);
 
         // 해당봉사일 정보
         VolunteerDateInfo volunteerDateInfo = volunteerService.findVolunteerDateInfoById(vDateInfoId);
@@ -199,4 +164,30 @@ public class ProjectController {
 
         return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
     }
+
+    /**
+     * [세은] 토큰 유효성 검증, 관리자 확인, 토큰 사용자 조회
+     * @param principalDetails
+     * @param checkAdmin
+     * @return
+     */
+    private Users validateAdminTokenAndGetUser(PrincipalDetails principalDetails, boolean checkAdmin){
+        if(principalDetails == null) {
+            throw new CustomException(ErrorCode.INVALID_CLIENT_TOKEN);
+        }
+
+        Users loginUser = null;
+        try{
+            loginUser = userService.findByEmail(principalDetails.getUsername());
+        } catch (CustomException e){
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        if(checkAdmin && !loginUser.getRole().equals(Role.ROLE_ADMIN)){
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+        }
+
+        return loginUser;
+    }
+
 }
