@@ -1,7 +1,6 @@
 package com.ssafy.moida.service.project;
 
 import com.ssafy.moida.api.request.ProjectReqDto;
-import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
 import com.ssafy.moida.model.project.Project;
@@ -12,61 +11,53 @@ import com.ssafy.moida.repository.project.ProjectRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
 @Slf4j
-@Transactional(readOnly = true)
+@Service
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final S3Uploader s3Uploader;
-    @Autowired
-    private DonationService donationService;
-    @Autowired
-    private VolunteerService volunteerService;
-    @Autowired
-    private ProjectPictureService projectPictureService;
+    private final ProjectPictureService projectPictureService;
 
-    public ProjectService(ProjectRepository projectRepository, S3Uploader s3Uploader){
+    public ProjectService(ProjectRepository projectRepository, S3Uploader s3Uploader,
+        ProjectPictureService projectPictureService){
         this.projectRepository = projectRepository;
         this.s3Uploader = s3Uploader;
+        this.projectPictureService = projectPictureService;
     }
 
     /**
      * [세은] 프로젝트 테이블 데이터 추가
-     * @param createProjectReqDto
+     * @param projectReqDto
+     * @param projectVolunteer
+     * @param projectDonation
+     * @param thumbnail
+     * @return
      */
     @Transactional
-    public Project save(CreateProjectReqDto createProjectReqDto, MultipartFile thumbnail){
-        // 기부 데이터베이스에 저장
-        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto());
-
-        // 봉사 데이터베이스에 저장
-        ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerReqDto());
-
+    public Project save(ProjectReqDto projectReqDto, ProjectVolunteer projectVolunteer, ProjectDonation projectDonation, MultipartFile thumbnail){
         /*
         프로젝트 데이터베이스에 저장
         저장 시에 generation은 가장 최신 generation 을 찾아 넣어주기
          */
-        ProjectReqDto pd = createProjectReqDto.getProjectReqDto();
-        List<Project> projectList = projectRepository.findNewestGenerationByCategory(pd.getCategory());
-
+        List<Project> projectList = projectRepository.findNewestGenerationByCategory(projectReqDto.getCategory());
         int generation = 1;
         if(projectList != null && projectList.size() > 0) generation = projectList.get(0).getGeneration() + 1;
 
+        // 메인 이미지 s3 url 반환
         String thumbnailUrl = s3Uploader.uploadFileToS3(thumbnail, "static/project");
+
         Project project = Project.builder()
-            .subject(pd.getSubject())
-            .description(pd.getDescription())
+            .subject(projectReqDto.getSubject())
+            .description(projectReqDto.getDescription())
             .generation(generation)
             .thumbnail(thumbnailUrl)
-            .category(pd.getCategory())
+            .category(projectReqDto.getCategory())
             .projectVolunteer(projectVolunteer)
             .projectDonation(projectDonation)
             .build();
