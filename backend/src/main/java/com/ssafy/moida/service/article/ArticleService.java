@@ -1,4 +1,4 @@
-package com.ssafy.moida.service;
+package com.ssafy.moida.service.article;
 
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.model.article.Article;
