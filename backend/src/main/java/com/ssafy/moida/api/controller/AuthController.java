@@ -57,8 +57,7 @@ public class AuthController {
         int ticketCnt = users.getTicketCnt();
         Long point = users.getPoint();
         Role role = users.getRole();
-        String msg = "로그인 성공";
-        LoginUserInfoResDto loginUser = new LoginUserInfoResDto(ticketCnt, point, role, msg);
+        LoginUserInfoResDto loginUser = new LoginUserInfoResDto(ticketCnt, point, role);
 
         return new ResponseEntity<>(loginUser, HttpStatus.OK);
     }

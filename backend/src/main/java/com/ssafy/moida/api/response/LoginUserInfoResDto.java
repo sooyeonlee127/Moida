@@ -15,6 +15,5 @@ public class LoginUserInfoResDto {
     private int ticketCnt;
     private Long point;
     private Role role;
-    private String msg;
 
 }
