@@ -155,7 +155,7 @@ public class ProjectController {
 
         // 이미 해당 일자에 봉사 신청이 이미 되어있는지 확인
         if(volunteerService.existsByVolunteerDateInfo(volunteerDateInfo)){
-            return new ResponseEntity<>(ErrorCode.INVALID_VOLUNTEER_DATE, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ErrorCode.DUPLICATE_VOLUNTEER_REGISTER, HttpStatus.BAD_REQUEST);
         }
 
         // UsersVolunteer에 해당 내용 저장
