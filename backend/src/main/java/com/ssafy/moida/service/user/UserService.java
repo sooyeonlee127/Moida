@@ -163,8 +163,9 @@ public class UserService {
     }
 
     /**
-     * [한선영] 유저가 참여한 기부 프로젝트 목록 가져오기
-     *
+     * [한선영] 유저가 참여한 기부 프로젝트 목록(GetUserDonationResDto) 가져오기
+     * @param userId
+     * @return
      * */
     public List<GetUserDonationResDto> getUsersDonation(Long userId) {
         List<GetUserDonationResDto> result = new ArrayList<>();
