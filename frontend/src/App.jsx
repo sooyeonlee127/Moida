@@ -14,8 +14,13 @@ import NoticeDetailPage from "./pages/NoticeDetailPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
 import AdminPage from "./pages/AdminPage";
+import {useContext} from 'react';
+import { AuthContext } from "../src/contexts/AuthContext";
+
 
 function App() {
+  const {userData, setUserData} = useContext(AuthContext)
+
   return (
     <div className="App">
       <NavBar />

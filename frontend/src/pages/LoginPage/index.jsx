@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
-import { useReducer } from "react";
+import { useReducer, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { AuthContext } from "../../contexts/AuthContext";
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { authData, setAuthData } = useContext(AuthContext);
+
   const reducer = (state, action) => {
     return {
       ...state,
@@ -48,12 +50,15 @@ const LoginPage = () => {
       .then((res) => {
         const token = res.headers.authorization;
         localStorage.setItem("accessToken", token);
+        console.log(res.data);
         console.log(res);
-        navigate("/", { replace: true });
-        navigate(0);
+        // setAuthData("?");
+
+        // navigate("/", { replace: true });
+        // navigate(0);
       })
       .catch((error) => {
-        const response = error.response.data;
+        const response = error.response;
         if (response.status === 404) {
           alert("로그인 실패! 존재하지 않는 회원입니다.");
         } else if (response.status === 401) {
@@ -65,66 +70,70 @@ const LoginPage = () => {
   };
 
   return (
-    <Container>
-      <InnerContainer>
-        <div>
-          <Heading>로그인</Heading>
-        </div>
-        <LoginForm action="#" method="POST">
-          <InputGroup>
-            <div>
-              <InputText htmlFor="email">EMAIL</InputText>
-              <LoginInput
-                id="email-address"
-                name="email"
-                value={email}
-                type="email"
-                autoComplete="email"
-                required
-                onChange={onChange}
-              />
-            </div>
-            <div>
-              <InputText htmlFor="password">PASSWORD</InputText>
-              <LoginInput
-                id="password"
-                name="password"
-                value={password}
-                type="password"
-                autoComplete="current-password"
-                required
-                onChange={onChange}
-              />
-            </div>
-          </InputGroup>
-          <RememberMeContainer>
-            <RememberMeBox>
-              <RememberMe
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                value={remember}
-                onClick={(e) => {
-                  checkedRemeberMe();
-                }}
-              />
-              <RememberMeText htmlFor="remember-me">Remember me</RememberMeText>
-            </RememberMeBox>
-          </RememberMeContainer>
+    <AuthContext.Provider value={{ authData, setAuthData }}>
+      <Container>
+        <InnerContainer>
           <div>
-            <SubmitButton
-              type="submit"
-              onClick={(e) => {
-                e.preventDefault();
-                loginSubmit();
-              }}
-            >
-              로그인
-            </SubmitButton>
+            <Heading>로그인</Heading>
           </div>
-        </LoginForm>
-      </InnerContainer>
-    </Container>
+          <LoginForm action="#" method="POST">
+            <InputGroup>
+              <div>
+                <InputText htmlFor="email">EMAIL</InputText>
+                <LoginInput
+                  id="email-address"
+                  name="email"
+                  value={email}
+                  type="email"
+                  autoComplete="email"
+                  required
+                  onChange={onChange}
+                />
+              </div>
+              <div>
+                <InputText htmlFor="password">PASSWORD</InputText>
+                <LoginInput
+                  id="password"
+                  name="password"
+                  value={password}
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  onChange={onChange}
+                />
+              </div>
+            </InputGroup>
+            <RememberMeContainer>
+              <RememberMeBox>
+                <RememberMe
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  value={remember}
+                  onClick={(e) => {
+                    checkedRemeberMe();
+                  }}
+                />
+                <RememberMeText htmlFor="remember-me">
+                  Remember me
+                </RememberMeText>
+              </RememberMeBox>
+            </RememberMeContainer>
+            <div>
+              <SubmitButton
+                type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  loginSubmit();
+                }}
+              >
+                로그인
+              </SubmitButton>
+            </div>
+          </LoginForm>
+        </InnerContainer>
+      </Container>
+    </AuthContext.Provider>
   );
 };
 

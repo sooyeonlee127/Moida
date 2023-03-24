@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
-
+import { AuthContext } from "../../contexts/AuthContext";
 const NavBar = () => {
+  const { userData } = useContext(AuthContext);
+
   const token = useState(localStorage.getItem("token"));
   const point = useState(0);
   const ticket = useState(0);
@@ -30,7 +32,7 @@ const NavBar = () => {
         <Nav>
           <Section>
             <Logo>
-              <p>우리 로고</p>
+              <p>우리 로고 {userData.value}</p>
             </Logo>
             <Title>
               {userNavigation.map((item) => (
@@ -49,7 +51,7 @@ const NavBar = () => {
         <Nav>
           <Section>
             <Logo>
-              <p>우리 로고</p>
+              <p>우리 로고{userData.value}</p>
             </Logo>
             <Title>
               {navigation.map((item) => (
