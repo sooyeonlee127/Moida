@@ -15,12 +15,13 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name="회원인증")
 @Slf4j
 @RestController
-@RequestMapping("/")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final AuthService authService;
@@ -33,9 +34,7 @@ public class AuthController {
     }
 
     @Operation(summary = "로그인", description = "로그인을 합니다.")
-    @PostMapping(
-            path = "/login"
-    )
+    @PostMapping("/login")
     public ResponseEntity<?> login(
             HttpServletResponse response,
             @RequestBody LoginDto loginDto
@@ -44,27 +43,28 @@ public class AuthController {
         TokenDto token = authService.login(loginDto);
 
         // 발급한 토큰을 헤더에 담아서 전달
-        response.setHeader(JwtProperties.AUTHORIZATION_HEADER,token.getGrantType() + token.getAccessToken()); // AccessToken
-        response.setHeader(JwtProperties.REFRESH_HEADER,token.getGrantType() + token.getRefreshToken()); // RefreshToekn
+        response.setHeader(JwtProperties.AUTHORIZATION_HEADER,token.getGrantType() + " " + token.getAccessToken()); // AccessToken
+        response.setHeader(JwtProperties.REFRESH_HEADER,token.getGrantType() + " " +token.getRefreshToken()); // RefreshToekn
 
         return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
     }
 
-    // 로그아웃
+    @Transactional
     @Operation(summary = "로그아웃", description = "로그아웃을 합니다.")
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal PrincipalDetails principal, HttpServletRequest request) {
+    public ResponseEntity<?> logout(
+            @AuthenticationPrincipal PrincipalDetails principal,
+            HttpServletRequest request
+    ) {
 
         ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
-
-        log.info("access : {}", request.getHeader("Authorization"));
-        log.info("refresh : {}", request.getHeader("Refresh"));
 
         String jwt = authService.resolveToken(request, JwtProperties.AUTHORIZATION_HEADER);
         String refresh = authService.resolveToken(request, JwtProperties.REFRESH_HEADER);
 
+        // header로 받은 토큰이 하나라도 null 이라면
         if (jwt == null || refresh == null) {
-            return new ResponseEntity<>("로그아웃 실패", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("TOKEN_IS_NULL", HttpStatus.BAD_REQUEST);
         }
 
         logoutValueOperations.set(jwt, jwt);
