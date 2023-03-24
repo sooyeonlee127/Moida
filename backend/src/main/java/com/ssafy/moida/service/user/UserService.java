@@ -129,4 +129,13 @@ public class UserService {
     public Users findByNickname(String nickname){
         return userRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
+
+    /**
+     * [한선영] email로 해당 user 찾기
+     * @param email
+     * @return
+     * */
+    public Users findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 }
