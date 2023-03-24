@@ -180,4 +180,18 @@ public class UserService {
     public void updateAfterDonation(Users users, Long point, int ticketCnt){
         users.updateDonation(users.getPoint() - point, users.getTicketCnt() + ticketCnt);
     }
+
+    /**
+     * [세은] 사용자가 기부할 경우 UsersDonation 제이터 저장
+     */
+    @Transactional
+    public void saveUsersDonation(Long amount, int tickentCnt, Users users, Project project){
+        UsersDonation usersDonation = UsersDonation.builder()
+            .amount(amount)
+            .ticketCnt(tickentCnt)
+            .users(users)
+            .project(project)
+            .build();
+        usersDonationRepository.save(usersDonation);
+    }
 }
