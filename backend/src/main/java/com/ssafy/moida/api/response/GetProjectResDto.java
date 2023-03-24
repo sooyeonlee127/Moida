@@ -26,7 +26,7 @@ public class GetProjectResDto {
 
     public GetProjectResDto(Project p){
         this.id = p.getId();
-        this.projectReqDto = new ProjectReqDto(p.getCategory(), p.getSubject(), p.getDescription());
+        this.projectReqDto = new ProjectReqDto(p.getCategory(), p.getSubject(),  p.getDescription(), p.getPointPerMoi());
         this.donationResDto = new DonationResDto(p.getProjectDonation());
     }
 }
