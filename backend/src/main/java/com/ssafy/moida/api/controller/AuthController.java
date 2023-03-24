@@ -2,9 +2,12 @@ package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.common.LoginDto;
 import com.ssafy.moida.api.common.TokenDto;
+import com.ssafy.moida.api.response.LoginUserInfoResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.config.jwt.JwtProperties;
+import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.auth.AuthService;
+import com.ssafy.moida.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,17 +28,19 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
     private final RedisTemplate redisTemplate;
 
-    public AuthController(AuthService authService, RedisTemplate redisTemplate) {
+    public AuthController(AuthService authService, UserService userService, RedisTemplate redisTemplate) {
         this.authService = authService;
+        this.userService = userService;
         this.redisTemplate = redisTemplate;
     }
 
     @Operation(summary = "로그인", description = "로그인을 합니다.")
     @PostMapping("/login")
-    public ResponseEntity<?> login(
+    public ResponseEntity<LoginUserInfoResDto> login(
             HttpServletResponse response,
             @RequestBody LoginDto loginDto
     ) {
@@ -46,7 +51,14 @@ public class AuthController {
         response.setHeader(JwtProperties.AUTHORIZATION_HEADER,token.getGrantType() + " " + token.getAccessToken()); // AccessToken
         response.setHeader(JwtProperties.REFRESH_HEADER,token.getGrantType() + " " +token.getRefreshToken()); // RefreshToekn
 
-        return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
+        // 로그인한 유저의 티켓갯수, 포인트, 로그인 정보를 LoginUserInfoResDto에 담기
+        Users users = userService.findByEmail(loginDto.getEmail());
+        int ticketCnt = users.getTicketCnt();
+        Long point = users.getPoint();
+        String msg = "로그인 성공";
+        LoginUserInfoResDto loginUser = new LoginUserInfoResDto(ticketCnt, point, msg);
+
+        return new ResponseEntity<>(loginUser, HttpStatus.OK);
     }
 
     @Transactional
