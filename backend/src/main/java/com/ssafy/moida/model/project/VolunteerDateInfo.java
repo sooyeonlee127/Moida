@@ -41,4 +41,8 @@ public class VolunteerDateInfo {
         this.maxCapacity = maxCapacity;
         this.project = project;
     }
+
+    public void updateCapacity(int capacity){
+        this.capacity = capacity;
+    }
 }

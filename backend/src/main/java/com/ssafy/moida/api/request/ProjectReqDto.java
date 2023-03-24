@@ -19,5 +19,6 @@ public class ProjectReqDto {
     private String subject;
     @Schema(description = "프로젝트 대략의 설명", defaultValue = "다람쥐는 오늘도 도토리를 찾아 헤맵니다...")
     private String description;
-
+    @Schema(description = "곡물 당 포인트 가치", defaultValue = "1400")
+    private Long pointPerMoi;
 }

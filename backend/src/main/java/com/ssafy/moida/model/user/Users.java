@@ -58,7 +58,6 @@ public class Users {
     }
 
     @Builder
-
     public Users(String email, String password, String phone, String nickname, int ticketCnt, Long point, String nftUrl, String walletUrl, Role role) {
         this.email = email;
         this.password = password;
@@ -69,5 +68,10 @@ public class Users {
         this.nftUrl = nftUrl;
         this.walletUrl = walletUrl;
         this.role = role;
+    }
+
+    public void updateDonation(Long point, int ticketCnt){
+        this.point = point;
+        this.ticketCnt = ticketCnt;
     }
 }
