@@ -1,5 +1,6 @@
 package com.ssafy.moida.service.user;
 
+import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.model.project.Project;
@@ -172,6 +173,15 @@ public class UserService {
         result = usersDonationRepository.findDonationsByUserId(userId);
 
         return result;
+    }
+
+    /**
+     * [한선영] 비밀번호 변경
+     * @param email, changePwdReqDto
+     * */
+    public void changePwd(String email, ChangePwdReqDto changePwdReqDto) {
+        Users users = findByEmail(email);
+        users.updatePassword(bCryptPasswordEncoder.encode(changePwdReqDto.getPassword()));
     }
 
 }

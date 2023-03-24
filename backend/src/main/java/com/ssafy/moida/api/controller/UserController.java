@@ -1,5 +1,6 @@
 package com.ssafy.moida.api.controller;
 
+import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.api.response.UserInfoResDto;
@@ -116,6 +117,22 @@ public class UserController {
         userDonationList = userService.getUsersDonation(userId);
 
         return new ResponseEntity<>(userDonationList, HttpStatus.OK);
+    }
+
+    @Operation(summary = "비밀번호 변경", description = "로그인한 유저의 비밀번호를 변경합니다.")
+    @PutMapping(
+            path = "/me/password",
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<?> changePassword(
+            @AuthenticationPrincipal PrincipalDetails principal,
+            @RequestBody ChangePwdReqDto changePwdReqDto
+    ) {
+
+        Users user = userService.findByEmail(principal.getUsername());
+        userService.changePwd(user.getEmail(), changePwdReqDto);
+
+        return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
     }
 
 }
