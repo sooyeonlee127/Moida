@@ -44,7 +44,7 @@ public class UserService {
      * */
     public void joinUser(UserJoinReqDto userJoinReqDto) {
         //user role 확인
-        if(userJoinReqDto.getRole().equals("ROLE_ADMIN")) {
+        if(userJoinReqDto.getRole().equals(Role.valueOf("ROLE_ADMIN"))) {
             userJoinReqDto.setRole(Role.valueOf("ROLE_ADMIN"));
         } else {
             userJoinReqDto.setRole(Role.valueOf("ROLE_USER"));
