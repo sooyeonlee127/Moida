@@ -3,7 +3,9 @@ package com.ssafy.moida.api.controller;
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.CreateBoardReqDto;
 import com.ssafy.moida.auth.PrincipalDetails;
+import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
+import com.ssafy.moida.service.ArticleService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -23,9 +25,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/article")
 public class ArticleController {
     private final UserService userService;
+    private final ArticleService articleService;
 
-    public ArticleController(UserService userService) {
+    public ArticleController(UserService userService, ArticleService articleService) {
         this.userService = userService;
+        this.articleService = articleService;
     }
 
     @Operation(summary = "사용자 봉사 후기 작성", description = "사용자가 봉사 후기를 작성합니다.")
@@ -34,15 +38,24 @@ public class ArticleController {
     })
     public ResponseEntity<?> createArticle(
         @RequestPart(value = "article") CreateArticleReqDto createArticleReqDto,
-        @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
-        @AuthenticationPrincipal PrincipalDetails principal
+        @RequestPart(value = "file", required = false) MultipartFile file,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
+        // 프론트에서 유효한 토큰이 들어오지 않을 경우
+        if(principalDetails == null){
+            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
+        }
+
+        // 토큰 유효성 검증
         Users loginUser = null;
         try {
-            loginUser = userService.findByNickname(principal.getUsername());
+            loginUser = userService.findByEmail(principalDetails.getUsername());
         } catch (CustomException e) {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
+
+        // 게시판에 저장
+        articleService.save(createArticleReqDto, file);
 
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
@@ -54,14 +67,27 @@ public class ArticleController {
     public ResponseEntity<?> createBoard(
         @RequestPart(value = "article") CreateBoardReqDto createBoardReqDto,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
-        @AuthenticationPrincipal PrincipalDetails principal
+        @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
+        // 프론트에서 유효한 토큰이 들어오지 않을 경우
+        if(principalDetails == null){
+            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
+        }
+
+        // 토큰 유효성 검증 (관리자인지 확인)
         Users loginUser = null;
         try {
-            loginUser = userService.findByNickname(principal.getUsername());
+            loginUser = userService.findByEmail(principalDetails.getUsername());
         } catch (CustomException e) {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
+
+        // 관리자가 아닌 경우, 권한 없음 예외 발생
+        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)){
+            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
+        }
+
+
 
         return new ResponseEntity<>("공지사항 작성 완료", HttpStatus.OK);
     }

@@ -15,6 +15,8 @@ public class CreateArticleReqDto {
     private String description;
     @Schema(description = "난이도", defaultValue = "4.0")
     private Double difficultyLevel;
-    @Schema(description = "프로젝트 아이디", defaultValue = "1")
-    private Long projectId;
+    @Schema(description = "카테고리", defaultValue = "CRANE")
+    private String category;
+    @Schema(description = "봉사 프로젝트 아이디", defaultValue = "1")
+    private Long usersVolunteerProjectId;
 }
