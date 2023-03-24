@@ -5,7 +5,10 @@ import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.model.project.ProjectDonation;
+import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.user.Users;
+import com.ssafy.moida.service.project.DonationService;
 import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.VolunteerService;
@@ -32,13 +35,15 @@ public class ProjectController {
     private final ProjectService projectService;
     private final UserService userService;
     private final VolunteerService volunteerService;
+    private final DonationService donationService;
     private final ProjectPictureService projectPictureService;
 
     public ProjectController(ProjectService projectService, UserService userService,
-        VolunteerService volunteerService, ProjectPictureService projectPictureService){
+        VolunteerService volunteerService, DonationService donationService, ProjectPictureService projectPictureService){
         this.projectService = projectService;
         this.userService = userService;
         this.volunteerService = volunteerService;
+        this.donationService = donationService;
         this.projectPictureService = projectPictureService;
     }
 
@@ -50,13 +55,13 @@ public class ProjectController {
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
         @RequestPart(value = "thumbnail", required = true) MultipartFile thumbnail,
-        @RequestPart(value = "files", required = false) List<MultipartFile> fileList
-//        @AuthenticationPrincipal PrincipalDetails principal
+        @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 전달된 토큰이 관리자 계정인지 확인
         Users loginUser = null;
         try {
-            loginUser = userService.findByNickname(principal.getUsername());
+//            loginUser = userService.(principalDetails.getUsername());
         } catch (CustomException e) {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -65,8 +70,14 @@ public class ProjectController {
             return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
         }
 
+        // 기부 데이터베이스에 저장
+        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto());
+
+        // 봉사 데이터베이스에 저장
+        ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerReqDto());
+
         // 봉사 데이터베이스 저장
-        Project project = projectService.save(createProjectReqDto, thumbnail);
+        Project project = projectService.save(createProjectReqDto.getProjectReqDto(), projectVolunteer, projectDonation, thumbnail);
 
         // 봉사일시 데이터베이스 저장
         volunteerService.saveVolunteerDateInfo(project);
