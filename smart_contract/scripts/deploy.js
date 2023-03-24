@@ -22,6 +22,14 @@ async function main() {
       lockedAmount
     )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
   );
+
+  // 배포할 컨트랙트 이름을 getContractfactory의 매개변수로 주면 된다.
+  const HeeToken = await hre.ethers.getContractFactory("HeeToken");
+  const heeToken = await HeeToken.deploy(); // 생성자의 매개변수를 deploy에 넣는다.
+
+  await heeToken.deployed();
+
+  console.log(`HeeToken complete deployed yo ${heeToken.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
