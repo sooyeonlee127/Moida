@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
 
 const PointPage = () => {
-  const navigate = useNavigate();
   const [currentPoint, setCurrentPoint] = useState(0);
-  const [child, setChild] = useState("");
-  const [submitFlag, setSubmitFlag] = useState(false);
   const donate = async (price) => {
     setCurrentPoint(currentPoint + price);
   };
@@ -17,7 +13,7 @@ const PointPage = () => {
   useEffect(() => {
     if (currentPoint !== 0) {
       axios({
-        url: "/v1/payment/ready",
+        url: "https://kapi.kakao.com/v1/payment/ready",
         method: "POST",
         headers: {
           Authorization: "KakaoAK 75072266177df82ab4bc1574f658a897",
@@ -54,11 +50,9 @@ const PointPage = () => {
     if (kakaoUrl === "") {
       alert("1000원 이상 결제만 가능합니다.");
     } else {
-      setSubmitFlag(true);
       SetKakaoUrl("");
       setCurrentPoint(0);
-      const tmp = window.open(kakaoUrl);
-      setChild(tmp);
+      window.open(kakaoUrl);
       // 자식창에서 버튼 눌렀을 때 동작
       window.parentCallback = (page) => {
         try {
@@ -74,14 +68,6 @@ const PointPage = () => {
     <PointContainer>
       <LeftSide>
         <Heading>블록체인 사진</Heading>
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            console.log("window opener : ", child);
-          }}
-        >
-          확인
-        </button>
       </LeftSide>
       <RightSide>
         <PointForm>
