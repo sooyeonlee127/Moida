@@ -28,7 +28,7 @@ public class UsersProject {
     private Long amount;
 
     @Column(nullable = false)
-    private int ticket_cnt;
+    private int ticketCnt;
 
     @Column(length = 45)
     private String contractAddress;
