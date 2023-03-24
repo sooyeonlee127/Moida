@@ -29,8 +29,8 @@ public class Project {
     @Column(nullable = false)
     private String thumbnail;
 
-//    @Column(nullable = false)
-//    private Category category; //SQUIRREL, CRANE, WILD_ANIMAL
+    @Column(nullable = false)
+    private Long pointPerMoi;
 
     @Column(nullable = false)
     private String category; //SQUIRREL, CRANE, WILD_ANIMAL
@@ -45,14 +45,13 @@ public class Project {
 
     @Builder
     public Project(String subject, String description, int generation, String thumbnail,
-//        Category category,
-        String category,
-        ProjectDonation projectDonation, ProjectVolunteer projectVolunteer) {
+        String category, Long pointPerMoi, ProjectDonation projectDonation, ProjectVolunteer projectVolunteer) {
         this.subject = subject;
         this.description = description;
         this.generation = generation;
         this.thumbnail = thumbnail;
         this.category = category;
+        this.pointPerMoi = pointPerMoi;
         this.projectDonation = projectDonation;
         this.projectVolunteer = projectVolunteer;
     }
