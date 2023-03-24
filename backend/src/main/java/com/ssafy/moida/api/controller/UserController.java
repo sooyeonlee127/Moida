@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.io.UnsupportedEncodingException;
  * 회원관리 관련 컨트롤러
  */
 @Tag(name="회원관리")
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -76,7 +78,10 @@ public class UserController {
         // 로그인 된 유저 정보 가져오기
         Users user = userService.findByEmail(principal.getUsername());
 
-        // 봉사 글 개수 가져오기
+        // 유저가 참여한 봉사 개수 가져오기
+        long totalVolunteerCnt = userService.totalVolunteerCnt();
+        log.info("volunteer Cnt : {}", totalVolunteerCnt);
+
         // 총 포인트 확인하기
 
         // Dto에 유저 정보 저장
@@ -86,7 +91,7 @@ public class UserController {
                 .ticketCnt(user.getTicketCnt())
                 .point(user.getPoint())
                 .nftUrl(user.getNftUrl())
-                .volunteerCnt(0)
+                .volunteerCnt(totalVolunteerCnt)
                 .totalPoint(0L)
                 .build();
 
