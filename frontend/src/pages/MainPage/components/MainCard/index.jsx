@@ -7,8 +7,8 @@ const MainCard = (props) => {
   const card = props.card;
 
   return (
-    <>
-      <Container>
+      <Container className="card" id={"maincard_"+card.id}>
+        <p>{card.style}</p>
         <Box>
           <InnerBox>
             <Heading>{card.projectReqDto.subject}</Heading>
@@ -24,14 +24,13 @@ const MainCard = (props) => {
           </InnerBox>
         </Box>
       </Container>
-    </>
-  );
+  )
 };
 
 const Container = styled.div`
-  ${tw`
-  mx-auto max-w-7xl py-24 sm:px-6 sm:py-32 lg:px-8
-  `}
+height: 100vh;
+width: 100vw;
+  ${tw`mx-auto snap-center snap-always`}
 `;
 
 const Box = styled.div`
