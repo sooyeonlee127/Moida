@@ -44,4 +44,13 @@ public class ArticleService {
 
         articleRepository.save(article);
     }
+
+    @Transactional
+    public void delete(Long articleId){
+        articleRepository.deleteById(articleId);
+    }
+
+    public boolean existsById(Long articleId){
+        return articleRepository.existsById(articleId);
+    }
 }
