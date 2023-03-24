@@ -32,10 +32,23 @@ public class Article {
     private Double difficultyLevel;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    private String category;
+
+    @Column(nullable = true)
+    private String url;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_volunteer_id")
     private UsersVolunteer usersVolunteer;
+
+    @Builder
+    public Article(String subject, String description, Double difficultyLevel, String category,
+        String url, UsersVolunteer usersVolunteer) {
+        this.subject = subject;
+        this.description = description;
+        this.difficultyLevel = difficultyLevel;
+        this.category = category;
+        this.url = url;
+        this.usersVolunteer = usersVolunteer;
+    }
 }

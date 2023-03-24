@@ -57,7 +57,12 @@ public class Users {
         return new ArrayList<>();
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
     @Builder
+
     public Users(String email, String password, String phone, String nickname, int ticketCnt, Long point, String nftUrl, String walletUrl, Role role) {
         this.email = email;
         this.password = password;

@@ -1,5 +1,6 @@
 package com.ssafy.moida.service.user;
 
+import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.model.project.Project;
@@ -163,14 +164,24 @@ public class UserService {
     }
 
     /**
-     * [한선영] 유저가 참여한 기부 프로젝트 목록 가져오기
-     *
+     * [한선영] 유저가 참여한 기부 프로젝트 목록(GetUserDonationResDto) 가져오기
+     * @param userId
+     * @return
      * */
     public List<GetUserDonationResDto> getUsersDonation(Long userId) {
         List<GetUserDonationResDto> result = new ArrayList<>();
         result = usersDonationRepository.findDonationsByUserId(userId);
 
         return result;
+    }
+
+    /**
+     * [한선영] 비밀번호 변경
+     * @param email, changePwdReqDto
+     * */
+    public void changePwd(String email, ChangePwdReqDto changePwdReqDto) {
+        Users users = findByEmail(email);
+        users.updatePassword(bCryptPasswordEncoder.encode(changePwdReqDto.getPassword()));
     }
 
     /**
