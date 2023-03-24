@@ -99,4 +99,12 @@ public class UserController {
         return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
     }
 
+    @GetMapping(
+            path = ""
+    )
+    public ResponseEntity<?> getUserVolunteerList() {
+
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
 }
