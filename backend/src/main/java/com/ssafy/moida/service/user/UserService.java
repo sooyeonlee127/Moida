@@ -122,11 +122,11 @@ public class UserService {
     }
 
     /**
-     * [세은] username으로 해당 user 찾기
-     * @param username
+     * [세은] nickname으로 해당 user 찾기
+     * @param nickname
      * @return
      */
-    public Users findByUsername(String username){
-        return userRepository.findByNickname(username).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    public Users findByNickname(String nickname){
+        return userRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }

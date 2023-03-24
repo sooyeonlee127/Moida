@@ -39,7 +39,7 @@ public class ArticleController {
     ){
         Users loginUser = null;
         try {
-            loginUser = userService.findByUsername(principal.getUsername());
+            loginUser = userService.findByNickname(principal.getUsername());
         } catch (CustomException e) {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
@@ -58,7 +58,7 @@ public class ArticleController {
     ){
         Users loginUser = null;
         try {
-            loginUser = userService.findByUsername(principal.getUsername());
+            loginUser = userService.findByNickname(principal.getUsername());
         } catch (CustomException e) {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }

@@ -54,16 +54,16 @@ public class ProjectController {
 //        @AuthenticationPrincipal PrincipalDetails principal
     ){
         // 전달된 토큰이 관리자 계정인지 확인
-//        Users loginUser = null;
-//        try {
-//            loginUser = userService.findByUsername(principal.getUsername());
-//        } catch (CustomException e) {
-//            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-//        }
-//
-//        if(loginUser.getRole().equals("ROLE_ADMIN")){
-//            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
-//        }
+        Users loginUser = null;
+        try {
+            loginUser = userService.findByNickname(principal.getUsername());
+        } catch (CustomException e) {
+            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        if(loginUser.getRole().equals("ROLE_ADMIN")){
+            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
+        }
 
         // 봉사 데이터베이스 저장
         Project project = projectService.save(createProjectReqDto, thumbnail);
