@@ -108,7 +108,7 @@ public class UserService {
      * */
     public void vaildUserByPassword(String password) {
         // 영문대소문자, 숫자, 특수문자 조합 8자이상 16자 이내
-        Pattern pwdPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,16}$");
+        Pattern pwdPattern = Pattern.compile("^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\\d~!@#$%^&*()_+=]{8,16}$");
         Matcher pwdMatcher = pwdPattern.matcher(password);
 
         /*

@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
  */
 @Tag(name="회원관리")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
