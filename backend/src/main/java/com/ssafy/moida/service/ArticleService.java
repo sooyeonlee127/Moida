@@ -2,8 +2,10 @@ package com.ssafy.moida.service;
 
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.model.article.Article;
+import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
+import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
@@ -17,12 +19,15 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
     private final S3Uploader s3Uploader;
+    private final VolunteerDateInfoRepository volunteerDateInfoRepository;
 
     public ArticleService(ArticleRepository articleRepository,
-        UsersVolunteerRepository usersVolunteerRepository, S3Uploader s3Uploader) {
+        UsersVolunteerRepository usersVolunteerRepository, S3Uploader s3Uploader,
+        VolunteerDateInfoRepository volunteerDateInfoRepository) {
         this.articleRepository = articleRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
         this.s3Uploader = s3Uploader;
+        this.volunteerDateInfoRepository = volunteerDateInfoRepository;
     }
 
     @Transactional
@@ -30,6 +35,9 @@ public class ArticleService {
         UsersVolunteer usersVolunteer =
             usersVolunteerRepository.findById(createArticleReqDto.getUsersVolunteerProjectId())
                 .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+
+        // 프로젝트 불러 와야헤~~
+//        Project project = volunteerDateInfoRepository.
 
         String url = s3Uploader.uploadFileToS3(file, "static/article");
 
