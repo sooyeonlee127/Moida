@@ -151,4 +151,11 @@ public class UserService {
         return usersVolunteerRepository.countBy();
     }
 
+    /**
+     * [세은] 사용자가 기부할 경우, 포인트 차감 & 티켓 갯수 업데이트
+     */
+    @Transactional
+    public void updateAfterDonation(Users users, Long point, int ticketCnt){
+        users.updateDonation(users.getPoint() - point, users.getTicketCnt() + ticketCnt);
+    }
 }
