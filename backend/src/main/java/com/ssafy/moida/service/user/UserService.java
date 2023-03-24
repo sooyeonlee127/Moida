@@ -4,6 +4,7 @@ import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.repository.user.UserRepository;
+import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.service.utils.EmailService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -28,11 +29,13 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UsersVolunteerRepository usersVolunteerRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, UsersVolunteerRepository usersVolunteerRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.usersVolunteerRepository = usersVolunteerRepository;
         this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -138,4 +141,14 @@ public class UserService {
     public Users findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
+
+    /**
+     * [한선영] 유저가 참여한 봉사의 개수 가져오기
+     * @return
+     * */
+    public long totalVolunteerCnt() {
+        // 봉사 프로젝트 개수 가져오기
+        return usersVolunteerRepository.countBy();
+    }
+
 }
