@@ -7,6 +7,7 @@ import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
+import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.project.DonationService;
 import com.ssafy.moida.service.project.ProjectPictureService;
@@ -66,7 +67,7 @@ public class ProjectController {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
-        if(!loginUser.getRole().equals("ROLE_ADMIN")){
+        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)){
             return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
         }
 
@@ -110,7 +111,10 @@ public class ProjectController {
 
     @Operation(summary = "사용자 기부 신청", description = "사용자가 기부를 신청합니다.")
     @PostMapping(path = "/donation")
-    public ResponseEntity<?> createUserDonation(@AuthenticationPrincipal PrincipalDetails principal){
+    public ResponseEntity<?> createUserDonation(
+        
+        @AuthenticationPrincipal PrincipalDetails principal
+    ){
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
     }
     
