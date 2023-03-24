@@ -18,7 +18,7 @@ public class DonationReqDto {
     private String startDate;
     @Schema(description = "종료 날짜", defaultValue = "2023-03-27")
     private String endDate;
-    @Schema(description = "목표 기부 금액", defaultValue = "1000000")
+    @Schema(description = "목표 곡물 갯수", defaultValue = "2500")
     private Long targetAmount;
     @Schema(description = "소제목", defaultValue = "다람쥐에게 도토리를 주세요")
     private String subject;
