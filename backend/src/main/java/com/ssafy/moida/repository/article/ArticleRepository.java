@@ -6,5 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
+    void deleteById(Long id);
 
+    boolean existsById(Long id);
 }

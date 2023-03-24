@@ -55,4 +55,8 @@ public class ProjectVolunteer {
         this.subject = subject;
         this.description = description;
     }
+
+    public void updateDifficulty(Double difficultyLevel){
+        this.difficultyLevel = difficultyLevel;
+    }
 }
