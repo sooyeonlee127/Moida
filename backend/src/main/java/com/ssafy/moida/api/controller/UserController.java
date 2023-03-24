@@ -130,6 +130,7 @@ public class UserController {
     ) {
 
         Users user = userService.findByEmail(principal.getUsername());
+        userService.vaildUserByPassword(changePwdReqDto.getPassword());
         userService.changePwd(user.getEmail(), changePwdReqDto);
 
         return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
