@@ -5,6 +5,7 @@ import com.ssafy.moida.api.common.TokenDto;
 import com.ssafy.moida.api.response.LoginUserInfoResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.config.jwt.JwtProperties;
+import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.auth.AuthService;
 import com.ssafy.moida.service.user.UserService;
@@ -55,8 +56,9 @@ public class AuthController {
         Users users = userService.findByEmail(loginDto.getEmail());
         int ticketCnt = users.getTicketCnt();
         Long point = users.getPoint();
+        Role role = users.getRole();
         String msg = "로그인 성공";
-        LoginUserInfoResDto loginUser = new LoginUserInfoResDto(ticketCnt, point, msg);
+        LoginUserInfoResDto loginUser = new LoginUserInfoResDto(ticketCnt, point, role, msg);
 
         return new ResponseEntity<>(loginUser, HttpStatus.OK);
     }

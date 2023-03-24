@@ -1,5 +1,6 @@
 package com.ssafy.moida.api.response;
 
+import com.ssafy.moida.model.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,6 +14,7 @@ import lombok.Getter;
 public class LoginUserInfoResDto {
     private int ticketCnt;
     private Long point;
+    private Role role;
     private String msg;
 
 }
