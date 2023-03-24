@@ -54,7 +54,7 @@ public class ProjectController {
         // 전달된 토큰이 관리자 계정인지 확인
         Users loginUser = null;
         try {
-            loginUser = userService.findByUsername(principal.getUsername());
+            loginUser = userService.findByNickname(principal.getUsername());
         } catch (CustomException e) {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
