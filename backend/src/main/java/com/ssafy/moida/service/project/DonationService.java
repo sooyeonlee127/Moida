@@ -18,16 +18,18 @@ public class DonationService {
 
     /**
      * [세은] 프로젝트 기부 테이블 저장
+     *
      * @param dd
+     * @param pointPerMoi
      * @return
      */
-    public ProjectDonation save(DonationReqDto dd){
+    public ProjectDonation save(DonationReqDto dd, Long pointPerMoi){
 
         ProjectDonation projectDonation = ProjectDonation.builder()
             .startDate(LocalDateTime.of(LocalDate.parse(dd.getStartDate()), LocalTime.MIDNIGHT))
             .endDate(LocalDateTime.of(LocalDate.parse(dd.getEndDate()), LocalTime.MAX))
             .amount(0L)
-            .targetAmount(dd.getTargetAmount())
+            .targetAmount(dd.getTargetAmount() * pointPerMoi)
             .subject(dd.getSubject())
             .description(dd.getDescription())
             .build();

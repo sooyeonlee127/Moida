@@ -29,7 +29,7 @@ public class GetProjectDetailResDto{
         this.id = p.getId();
         this.thumbnail = p.getThumbnail();
         this.generation = p.getGeneration();
-        this.projectReqDto = new ProjectReqDto(p.getCategory(), p.getSubject(), p.getDescription());
+        this.projectReqDto = new ProjectReqDto(p.getCategory(), p.getSubject(), p.getDescription(), p.getPointPerMoi());
         this.donationResDto = new DonationResDto(p.getProjectDonation());
         this.volunteerResDto = new VolunteerResDto(p.getProjectVolunteer());
         this.pictures = pics;

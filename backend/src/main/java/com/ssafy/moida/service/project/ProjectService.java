@@ -58,12 +58,19 @@ public class ProjectService {
             .generation(generation)
             .thumbnail(thumbnailUrl)
             .category(projectReqDto.getCategory())
+            .pointPerMoi(projectReqDto.getPointPerMoi())
             .projectVolunteer(projectVolunteer)
             .projectDonation(projectDonation)
             .build();
         projectRepository.save(project);
 
         return project;
+    }
+
+    public Project findById(Long projectId){
+        return projectRepository.findById(projectId).orElseThrow(
+            () -> new CustomException(ErrorCode.DATA_NOT_FOUND)
+        );
     }
 
     /**

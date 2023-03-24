@@ -4,6 +4,7 @@ import com.ssafy.moida.model.project.Category;
 import com.ssafy.moida.model.project.Project;
 import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +19,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAll();
 
     // 프로젝트 상세 조회
-    Project findById(long id);
+    Optional<Project> findById(Long id);
 
     // 해당 카테고리에 해당하는 프로젝트의 가장 최신 차순 출력
     @Query("SELECT p FROM Project p WHERE p.category = :category ORDER BY p.generation DESC")
