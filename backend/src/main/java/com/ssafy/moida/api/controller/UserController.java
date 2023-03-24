@@ -1,6 +1,7 @@
 package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.UserJoinReqDto;
+import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.api.response.UserInfoResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.user.Users;
@@ -17,6 +18,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 회원관리 관련 컨트롤러
@@ -99,12 +102,20 @@ public class UserController {
         return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
     }
 
+    @Operation(summary = "내 기부 내역", description = "로그인한 유저의 기부 내역을 반환합니다.")
     @GetMapping(
-            path = ""
+            path = "/me/donation"
     )
-    public ResponseEntity<?> getUserVolunteerList() {
+    public ResponseEntity<?> getUserDonationList(
+            @AuthenticationPrincipal PrincipalDetails principal
+    ) {
+        Users user = userService.findByEmail(principal.getUsername());
+        Long userId = user.getId();
 
-        return new ResponseEntity<>("", HttpStatus.OK);
+        List<GetUserDonationResDto> userDonationList = new ArrayList<>();
+        userDonationList = userService.getUsersDonation(userId);
+
+        return new ResponseEntity<>(userDonationList, HttpStatus.OK);
     }
 
 }
