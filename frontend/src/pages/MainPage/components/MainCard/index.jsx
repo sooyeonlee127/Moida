@@ -4,19 +4,19 @@ import { useNavigate } from "react-router-dom";
 
 const MainCard = (props) => {
   const navigate = useNavigate();
-  const { title, content, href } = props.card;
+  const card = props.card;
 
   return (
     <>
       <Container>
         <Box>
           <InnerBox>
-            <Heading>{title}</Heading>
-            <Text>{content}</Text>
+            <Heading>{card.projectReqDto.subject}</Heading>
+            <Text>{card.projectReqDto.description}</Text>
             <Button
               onClick={(e) => {
                 e.preventDefault();
-                navigate(href, { replace: false });
+                navigate("/donation/"+card.id, { replace: false });
               }}
             >
               참여하기
