@@ -63,4 +63,12 @@ public class UserController {
         return new ResponseEntity<>(code, HttpStatus.OK);
     }
 
+    @GetMapping(
+            path = "/me"
+    )
+    public ResponseEntity<?> getUserDetail () {
+
+        return new ResponseEntity<>("my", HttpStatus.OK);
+    }
+
 }
