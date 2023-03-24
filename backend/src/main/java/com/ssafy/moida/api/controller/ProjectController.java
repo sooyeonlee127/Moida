@@ -149,12 +149,12 @@ public class ProjectController {
         // 기부 모이 수에 따른 티켓 발급
         int tickets = (int) (Math.log(points) / Math.log(2));
 
-        // Users 테이블 업데이트
+        // Users 테이블 업데이트 : 포인트 차감, 티켓 발급
         userService.updateAfterDonation(loginUser, points, tickets);
 
         // UsersDonation 테이블 업데이트
+        userService.saveUsersDonation(points, tickets, loginUser, project);
 
-        System.out.println(createDonationReqDto);
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
     }
 
