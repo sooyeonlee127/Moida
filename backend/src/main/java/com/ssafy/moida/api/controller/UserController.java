@@ -18,7 +18,7 @@ import java.io.UnsupportedEncodingException;
  */
 @Tag(name="회원관리")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
@@ -61,6 +61,14 @@ public class UserController {
         String code = userService.duplicatedUserByEmail(email); // 이메일 중복 검사 및 인증
 
         return new ResponseEntity<>(code, HttpStatus.OK);
+    }
+
+    @GetMapping(
+            path = "/me"
+    )
+    public ResponseEntity<?> getUserDetail () {
+
+        return new ResponseEntity<>("my", HttpStatus.OK);
     }
 
 }

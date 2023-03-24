@@ -44,7 +44,7 @@ public class UserService {
      * */
     public void joinUser(UserJoinReqDto userJoinReqDto) {
         //user role 확인
-        if(userJoinReqDto.getRole().equals("ROLE_ADMIN")) {
+        if(userJoinReqDto.getRole().equals(Role.valueOf("ROLE_ADMIN"))) {
             userJoinReqDto.setRole(Role.valueOf("ROLE_ADMIN"));
         } else {
             userJoinReqDto.setRole(Role.valueOf("ROLE_USER"));
@@ -108,7 +108,7 @@ public class UserService {
      * */
     public void vaildUserByPassword(String password) {
         // 영문대소문자, 숫자, 특수문자 조합 8자이상 16자 이내
-        Pattern pwdPattern = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,16}$");
+        Pattern pwdPattern = Pattern.compile("^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\\d~!@#$%^&*()_+=]{8,16}$");
         Matcher pwdMatcher = pwdPattern.matcher(password);
 
         /*
@@ -121,4 +121,21 @@ public class UserService {
 
     }
 
+    /**
+     * [세은] nickname으로 해당 user 찾기
+     * @param nickname
+     * @return
+     */
+    public Users findByNickname(String nickname){
+        return userRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
+
+    /**
+     * [한선영] email로 해당 user 찾기
+     * @param email
+     * @return
+     * */
+    public Users findByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+    }
 }

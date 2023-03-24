@@ -1,7 +1,69 @@
 import styled from "styled-components";
 import tw from "twin.macro";
+import axios from "axios";
+import { useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const reducer = (state, action) => {
+    return {
+      ...state,
+      [action.name]: action.value,
+    };
+  };
+  const useInputs = (initialForm) => {
+    const [state, dispatch] = useReducer(reducer, initialForm);
+    const onChange = (e) => {
+      dispatch(e.target);
+    };
+    return [state, onChange];
+  };
+  const [state, onChange] = useInputs({
+    email: "",
+    password: "",
+    remember: false,
+  });
+
+  const { email, password, remember } = state;
+
+  const checkedRemeberMe = () => {
+    const checkbox = document.getElementById("remember-me");
+    const is_checked = checkbox.checked;
+    state.remember = is_checked;
+  };
+
+  const loginSubmit = () => {
+    console.log("email", state.email);
+    console.log("password:", state.password);
+    console.log("remember", state.remember);
+    axios({
+      url: "/api/login",
+      method: "POST",
+      data: {
+        email: state.email,
+        password: state.password,
+      },
+    })
+      .then((res) => {
+        const token = res.headers.authorization;
+        localStorage.setItem("token", token);
+        console.log(res);
+        navigate("/", { replace: true });
+        navigate(0);
+      })
+      .catch((error) => {
+        const response = error.response.data;
+        if (response.status === 404) {
+          alert("로그인 실패! 존재하지 않는 회원입니다.");
+        } else if (response.status === 401) {
+          alert("로그인 실패! 비밀번호를 확인해주세요.");
+        } else {
+          alert(response.message);
+        }
+      });
+  };
+
   return (
     <Container>
       <InnerContainer>
@@ -15,9 +77,11 @@ const LoginPage = () => {
               <LoginInput
                 id="email-address"
                 name="email"
+                value={email}
                 type="email"
                 autoComplete="email"
                 required
+                onChange={onChange}
               />
             </div>
             <div>
@@ -25,20 +89,38 @@ const LoginPage = () => {
               <LoginInput
                 id="password"
                 name="password"
+                value={password}
                 type="password"
                 autoComplete="current-password"
                 required
+                onChange={onChange}
               />
             </div>
           </InputGroup>
           <RememberMeContainer>
             <RememberMeBox>
-              <RememberMe id="remember-me" name="remember-me" type="checkbox" />
+              <RememberMe
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                value={remember}
+                onClick={(e) => {
+                  checkedRemeberMe();
+                }}
+              />
               <RememberMeText htmlFor="remember-me">Remember me</RememberMeText>
             </RememberMeBox>
           </RememberMeContainer>
           <div>
-            <SubmitButton type="submit">로그인</SubmitButton>
+            <SubmitButton
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                loginSubmit();
+              }}
+            >
+              로그인
+            </SubmitButton>
           </div>
         </LoginForm>
       </InnerContainer>
