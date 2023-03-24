@@ -22,8 +22,6 @@ public class DonationService {
      * @return
      */
     public ProjectDonation save(DonationReqDto dd){
-//        dd.setAmount(0L);
-//        ProjectDonation projectDonation = modelMapper.map(dd, ProjectDonation.class);
 
         ProjectDonation projectDonation = ProjectDonation.builder()
             .startDate(LocalDateTime.of(LocalDate.parse(dd.getStartDate()), LocalTime.MIDNIGHT))

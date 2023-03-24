@@ -5,7 +5,11 @@ import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.model.project.ProjectDonation;
+import com.ssafy.moida.model.project.ProjectVolunteer;
+import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
+import com.ssafy.moida.service.project.DonationService;
 import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.VolunteerService;
@@ -18,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,40 +36,49 @@ public class ProjectController {
     private final ProjectService projectService;
     private final UserService userService;
     private final VolunteerService volunteerService;
+    private final DonationService donationService;
     private final ProjectPictureService projectPictureService;
 
     public ProjectController(ProjectService projectService, UserService userService,
-        VolunteerService volunteerService, ProjectPictureService projectPictureService){
+        VolunteerService volunteerService, DonationService donationService, ProjectPictureService projectPictureService){
         this.projectService = projectService;
         this.userService = userService;
         this.volunteerService = volunteerService;
+        this.donationService = donationService;
         this.projectPictureService = projectPictureService;
     }
 
+    @Transactional
     @Operation(summary = "프로젝트 생성", description = "새 프로젝트를 생성합니다.")
     @PostMapping(consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
-        @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
+        @RequestPart(value = "thumbnail", required = true) MultipartFile thumbnail,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
-        @AuthenticationPrincipal PrincipalDetails principal
+        @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 전달된 토큰이 관리자 계정인지 확인
         Users loginUser = null;
         try {
-            loginUser = userService.findByNickname(principal.getUsername());
+            loginUser = userService.findByEmail(principalDetails.getUsername());
         } catch (CustomException e) {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
-        if(loginUser.getRole().equals("ROLE_ADMIN")){
+        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)){
             return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
         }
 
+        // 기부 데이터베이스에 저장
+        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto());
+
+        // 봉사 데이터베이스에 저장
+        ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerReqDto());
+
         // 봉사 데이터베이스 저장
-        Project project = projectService.save(createProjectReqDto, thumbnail);
+        Project project = projectService.save(createProjectReqDto.getProjectReqDto(), projectVolunteer, projectDonation, thumbnail);
 
         // 봉사일시 데이터베이스 저장
         volunteerService.saveVolunteerDateInfo(project);
@@ -97,7 +111,10 @@ public class ProjectController {
 
     @Operation(summary = "사용자 기부 신청", description = "사용자가 기부를 신청합니다.")
     @PostMapping(path = "/donation")
-    public ResponseEntity<?> createUserDonation(@AuthenticationPrincipal PrincipalDetails principal){
+    public ResponseEntity<?> createUserDonation(
+        
+        @AuthenticationPrincipal PrincipalDetails principal
+    ){
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
     }
     
