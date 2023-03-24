@@ -61,12 +61,12 @@ public class ProjectController {
         // 전달된 토큰이 관리자 계정인지 확인
         Users loginUser = null;
         try {
-//            loginUser = userService.(principalDetails.getUsername());
+            loginUser = userService.findByEmail(principalDetails.getUsername());
         } catch (CustomException e) {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
-        if(loginUser.getRole().equals("ROLE_ADMIN")){
+        if(!loginUser.getRole().equals("ROLE_ADMIN")){
             return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
         }
 
