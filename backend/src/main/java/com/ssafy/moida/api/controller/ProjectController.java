@@ -1,5 +1,6 @@
 package com.ssafy.moida.api.controller;
 
+import com.ssafy.moida.api.request.CreateDonationReqDto;
 import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
@@ -80,7 +81,8 @@ public class ProjectController {
         }
 
         // 기부 데이터베이스에 저장
-        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto());
+        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto(),
+            createProjectReqDto.getProjectReqDto().getPointPerMoi());
 
         // 봉사 데이터베이스에 저장
         ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerReqDto());
@@ -120,8 +122,39 @@ public class ProjectController {
     @Operation(summary = "사용자 기부 신청", description = "사용자가 기부를 신청합니다.")
     @PostMapping(path = "/donation")
     public ResponseEntity<?> createUserDonation(
-        @AuthenticationPrincipal PrincipalDetails principal
+        @RequestBody CreateDonationReqDto createDonationReqDto,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
+        // 프론트에서 유효한 토큰이 들어오지 않을 경우
+        if(principalDetails == null){
+            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
+        }
+
+        // 토큰 유효성 검증
+        Users loginUser = null;
+        try {
+            loginUser = userService.findByEmail(principalDetails.getUsername());
+        } catch (CustomException e) {
+            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        Project project = projectService.findById(createDonationReqDto.getProjectId());
+        Long points = project.getPointPerMoi() * createDonationReqDto.getMoi();
+
+        // 기부하려는 금액이 현재 보유 포인트보다 많은 경우 에러 반환
+        if(points > loginUser.getPoint()){
+            return new ResponseEntity<>(ErrorCode.EXCEED_MAX_CAPACITY, HttpStatus.BAD_REQUEST);
+        }
+
+        // 기부 모이 수에 따른 티켓 발급
+        int tickets = (int) (Math.log(points) / Math.log(2));
+
+        // Users 테이블 업데이트
+        userService.updateAfterDonation(loginUser, points, tickets);
+
+        // UsersDonation 테이블 업데이트
+
+        System.out.println(createDonationReqDto);
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
     }
 
