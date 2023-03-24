@@ -1,9 +1,14 @@
 package com.ssafy.moida.service.user;
 
 import com.ssafy.moida.api.request.UserJoinReqDto;
+import com.ssafy.moida.api.response.GetUserDonationResDto;
+import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
+import com.ssafy.moida.model.user.UsersDonation;
+import com.ssafy.moida.repository.project.ProjectRepository;
 import com.ssafy.moida.repository.user.UserRepository;
+import com.ssafy.moida.repository.user.UsersDonationRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.service.utils.EmailService;
 import com.ssafy.moida.utils.error.ErrorCode;
@@ -16,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,12 +36,16 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
+    private final UsersDonationRepository usersDonationRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, UsersVolunteerRepository usersVolunteerRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, ProjectRepository projectRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
+        this.usersDonationRepository = usersDonationRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
         this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
@@ -149,6 +160,17 @@ public class UserService {
     public long totalVolunteerCnt() {
         // 봉사 프로젝트 개수 가져오기
         return usersVolunteerRepository.countBy();
+    }
+
+    /**
+     * [한선영] 유저가 참여한 기부 프로젝트 목록 가져오기
+     *
+     * */
+    public List<GetUserDonationResDto> getUsersDonation(Long userId) {
+        List<GetUserDonationResDto> result = new ArrayList<>();
+        result = usersDonationRepository.findDonationsByUserId(userId);
+
+        return result;
     }
 
     /**
