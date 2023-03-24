@@ -61,6 +61,11 @@ public class ProjectController {
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
+        // 프론트에서 유효한 토큰이 들어오지 않을 경우
+        if(principalDetails == null){
+            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
+        }
+        
         // 토큰 유효성 검증 (관리자인지 확인)
         Users loginUser = null;
         try {
@@ -119,13 +124,19 @@ public class ProjectController {
     ){
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
     }
-    
+
+    @Transactional
     @Operation(summary = "사용자 봉사 신청", description = "사용자가 봉사를 신청합니다.")
     @PostMapping(path = "/volunteer")
     public ResponseEntity<?> createUserVolunteer(
         @Schema(description = "봉사 신청 일시 고유아이디", defaultValue = "1") Long vDateInfoId,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
+        // 프론트에서 유효한 토큰이 들어오지 않을 경우
+        if(principalDetails == null){
+            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
+        }
+
         // 유효한 유저인지 검증
         Users loginUser = null;
         try {
@@ -139,8 +150,19 @@ public class ProjectController {
 
         // capacity + 1이 max_capacity 를 넘을 경우 에러 발생(400)
         if(volunteerDateInfo.getCapacity() >= volunteerDateInfo.getMaxCapacity()){
-//            return new ResponseEntity<>();
+            return new ResponseEntity<>(ErrorCode.EXCEED_MAX_CAPACITY, HttpStatus.BAD_REQUEST);
         }
+
+        // 이미 해당 일자에 봉사 신청이 이미 되어있는지 확인
+        if(volunteerService.existsByVolunteerDateInfo(volunteerDateInfo)){
+            return new ResponseEntity<>(ErrorCode.INVALID_VOLUNTEER_DATE, HttpStatus.BAD_REQUEST);
+        }
+
+        // UsersVolunteer에 해당 내용 저장
+        volunteerService.saveUsersVolunteer(loginUser, volunteerDateInfo);
+
+        // 해당 봉사일에 인원 수 추가
+        volunteerService.updateCapacity(volunteerDateInfo);
 
         return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
     }
