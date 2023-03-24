@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,27 +42,28 @@ public class ProjectController {
         this.projectPictureService = projectPictureService;
     }
 
+    @Transactional
     @Operation(summary = "프로젝트 생성", description = "새 프로젝트를 생성합니다.")
     @PostMapping(consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
-        @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
-        @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
-        @AuthenticationPrincipal PrincipalDetails principal
+        @RequestPart(value = "thumbnail", required = true) MultipartFile thumbnail,
+        @RequestPart(value = "files", required = false) List<MultipartFile> fileList
+//        @AuthenticationPrincipal PrincipalDetails principal
     ){
         // 전달된 토큰이 관리자 계정인지 확인
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByUsername(principal.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
-
-        if(loginUser.getRole().equals("ROLE_ADMIN")){
-            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
-        }
+//        Users loginUser = null;
+//        try {
+//            loginUser = userService.findByUsername(principal.getUsername());
+//        } catch (CustomException e) {
+//            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+//        }
+//
+//        if(loginUser.getRole().equals("ROLE_ADMIN")){
+//            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
+//        }
 
         // 봉사 데이터베이스 저장
         Project project = projectService.save(createProjectReqDto, thumbnail);
