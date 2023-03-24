@@ -7,7 +7,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 
 const PayResult = () => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams(); // 에러 아님
   const queryString = searchParams.get("pg_token");
   const [price, setPrice] = useState(0);
   const [date, setDate] = useState("");
@@ -30,7 +30,7 @@ const PayResult = () => {
   };
   useEffect(() => {
     axios({
-      url: "/v1/payment/approve",
+      url: "https://kapi.kakao.com/v1/payment/approve",
       method: "POST",
       headers: {
         Authorization: "KakaoAK 75072266177df82ab4bc1574f658a897",

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
+import { Link } from "react-router-dom";
 
 const NavBar = () => {
   const token = useState(localStorage.getItem("token"));
@@ -33,9 +34,9 @@ const NavBar = () => {
             </Logo>
             <Title>
               {userNavigation.map((item) => (
-                <a key={item.name} href={item.href}>
+                <Link on key={item.name} to={item.href}>
                   {item.name}
-                </a>
+                </Link>
               ))}
             </Title>
           </Section>

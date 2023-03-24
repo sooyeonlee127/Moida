@@ -20,7 +20,7 @@ public class UserInfoResDto {
     private Long point;
     private String nftUrl;
 
-    private int volunteerCnt;
+    private long volunteerCnt;
     private Long totalPoint;
 
 
