@@ -6,6 +6,8 @@ import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.project.VolunteerRepository;
+import com.ssafy.moida.utils.error.ErrorCode;
+import com.ssafy.moida.utils.exception.CustomException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -72,6 +74,16 @@ public class VolunteerService {
                 .build();
             volunteerDateInfoRepository.save(volunteerDateInfo);
         }
+    }
+
+    /**
+     * [세은] 봉사 일시 테이블 데이터 추가
+     * @param id
+     * @return
+     */
+    public VolunteerDateInfo findVolunteerDateInfoById(Long id){
+        return volunteerDateInfoRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
 
 }

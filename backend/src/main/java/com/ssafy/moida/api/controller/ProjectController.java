@@ -7,6 +7,7 @@ import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
+import com.ssafy.moida.model.project.VolunteerDateInfo;
 import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.project.DonationService;
@@ -17,6 +18,7 @@ import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
@@ -29,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * [세은] 프로젝트 컨트롤러
  */
-@Tag(name="프로젝트(관리자 ver.)")
+@Tag(name="프로젝트")
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
@@ -49,7 +51,7 @@ public class ProjectController {
     }
 
     @Transactional
-    @Operation(summary = "프로젝트 생성", description = "새 프로젝트를 생성합니다.")
+    @Operation(summary = "[관리자] 프로젝트 생성", description = "관리자가 새 프로젝트를 생성합니다.")
     @PostMapping(consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
@@ -59,7 +61,7 @@ public class ProjectController {
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 전달된 토큰이 관리자 계정인지 확인
+        // 토큰 유효성 검증 (관리자인지 확인)
         Users loginUser = null;
         try {
             loginUser = userService.findByEmail(principalDetails.getUsername());
@@ -67,6 +69,7 @@ public class ProjectController {
             return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
+        // 관리자가 아닌 경우, 권한 없음 예외 발생
         if(!loginUser.getRole().equals(Role.ROLE_ADMIN)){
             return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
         }
@@ -83,7 +86,7 @@ public class ProjectController {
         // 봉사일시 데이터베이스 저장
         volunteerService.saveVolunteerDateInfo(project);
 
-        // 사진 데이터베이스 저장
+        // 프로젝트 상세설명이 들어왔을 때만, 사진 데이터베이스에 저장
         if(fileList != null && fileList.size() > 0){
             try {
                 projectPictureService.save(fileList, project);
@@ -112,7 +115,6 @@ public class ProjectController {
     @Operation(summary = "사용자 기부 신청", description = "사용자가 기부를 신청합니다.")
     @PostMapping(path = "/donation")
     public ResponseEntity<?> createUserDonation(
-        
         @AuthenticationPrincipal PrincipalDetails principal
     ){
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
@@ -120,7 +122,26 @@ public class ProjectController {
     
     @Operation(summary = "사용자 봉사 신청", description = "사용자가 봉사를 신청합니다.")
     @PostMapping(path = "/volunteer")
-    public ResponseEntity<?> createUserVolunteer(@AuthenticationPrincipal PrincipalDetails principal){
+    public ResponseEntity<?> createUserVolunteer(
+        @Schema(description = "봉사 신청 일시 고유아이디", defaultValue = "1") Long vDateInfoId,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        // 유효한 유저인지 검증
+        Users loginUser = null;
+        try {
+            loginUser = userService.findByEmail(principalDetails.getUsername());
+        } catch (CustomException e) {
+            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
+        // 해당봉사일 정보
+        VolunteerDateInfo volunteerDateInfo = volunteerService.findVolunteerDateInfoById(vDateInfoId);
+
+        // capacity + 1이 max_capacity 를 넘을 경우 에러 발생(400)
+        if(volunteerDateInfo.getCapacity() >= volunteerDateInfo.getMaxCapacity()){
+//            return new ResponseEntity<>();
+        }
+
         return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
     }
 }
