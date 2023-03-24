@@ -3,9 +3,13 @@ package com.ssafy.moida.service.project;
 import com.ssafy.moida.api.request.VolunteerReqDto;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectVolunteer;
+import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
+import com.ssafy.moida.model.user.Users;
+import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.project.VolunteerRepository;
+import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.time.LocalDate;
@@ -24,10 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class VolunteerService {
     private final VolunteerRepository volunteerRepository;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
+    private final UsersVolunteerRepository usersVolunteerRepository;
 
-    public VolunteerService(VolunteerRepository volunteerRepository, VolunteerDateInfoRepository volunteerDateInfoRepository){
+    public VolunteerService(VolunteerRepository volunteerRepository, VolunteerDateInfoRepository volunteerDateInfoRepository,
+        UsersVolunteerRepository usersVolunteerRepository){
         this.volunteerRepository = volunteerRepository;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
+        this.usersVolunteerRepository = usersVolunteerRepository;
     }
 
     /**
@@ -86,4 +93,22 @@ public class VolunteerService {
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
 
+    @Transactional
+    public void updateCapacity(VolunteerDateInfo volunteerDateInfo){
+        volunteerDateInfo.updateCapacity(volunteerDateInfo.getCapacity() + 1);
+    }
+
+    public boolean existsByVolunteerDateInfo(VolunteerDateInfo volunteerDateInfo){
+        return usersVolunteerRepository.existsByVolunteerDateInfo(volunteerDateInfo);
+    }
+
+    @Transactional
+    public void saveUsersVolunteer(Users users, VolunteerDateInfo volunteerDateInfo){
+        UsersVolunteer usersVolunteer = UsersVolunteer.builder()
+            .status(Status.REGISTER)
+            .users(users)
+            .volunteerDateInfo(volunteerDateInfo)
+            .build();
+        usersVolunteerRepository.save(usersVolunteer);
+    }
 }

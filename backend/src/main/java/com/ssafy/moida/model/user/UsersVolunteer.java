@@ -1,9 +1,12 @@
 package com.ssafy.moida.model.user;
 
-import com.ssafy.moida.model.article.Status;
+import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -11,10 +14,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UsersVolunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +23,7 @@ public class UsersVolunteer {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Status status = Status.SIGNUP; //SIGNUP, CANCEL, DONE
+    private Status status = Status.REGISTER;
 
     @CreatedDate
     @Column(updatable = false)
@@ -37,4 +37,11 @@ public class UsersVolunteer {
     @JoinColumn(name = "v_date_info_id")
     private VolunteerDateInfo volunteerDateInfo;
 
+    @Builder
+    public UsersVolunteer(Status status, Users users,
+        VolunteerDateInfo volunteerDateInfo) {
+        this.status = status;
+        this.users = users;
+        this.volunteerDateInfo = volunteerDateInfo;
+    }
 }
