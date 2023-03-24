@@ -56,6 +56,8 @@ public class ArticleController {
 
         // 게시판에 저장
         articleService.save(createArticleReqDto, file);
+        
+        // 프로젝트 difficultyLevel 업데이트
 
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
@@ -87,8 +89,6 @@ public class ArticleController {
             return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
         }
 
-
-
         return new ResponseEntity<>("공지사항 작성 완료", HttpStatus.OK);
     }
 
@@ -113,7 +113,12 @@ public class ArticleController {
     @Operation(summary = "사용자 인증글 삭제", description = "특정 사용자 인증글을 삭제합니다.")
     @DeleteMapping ("/{articleid}")
     public ResponseEntity<?> deleteArticle(@PathVariable("articleid") int articleId){
-        return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
+        // 삭제하려는 인증글이 없을 경우 오류 반환(404)
+        if(!articleService.existsById((long) articleId)){
+            return new ResponseEntity<>(ErrorCode.DATA_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+        articleService.delete((long) articleId);
+        return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
     }
 
 }
