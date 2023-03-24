@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectReqDto {
-    @Schema(description = "카테고리", defaultValue = "CRANE")
+    @Schema(description = "카테고리", defaultValue = "CRANE", allowableValues = {"SQUIRREL", "CRANE", "WILD_ANIMAL"})
     private String category;
     @Schema(description = "프로젝트명", defaultValue = "다람쥐와 도토리")
     private String subject;
