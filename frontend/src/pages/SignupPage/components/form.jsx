@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import tw from 'twin.macro'
 import axios from 'axios'
@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
 //==================
+
 const regExp = {
     email: {
         rule: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
@@ -18,41 +19,103 @@ const regExp = {
     password: {
         rule: /^(?!((?:[A-Za-z]+)|(?:[~!@#$%^&*()_+=]+)|(?:[0-9]+))$)[A-Za-z\d~!@#$%^&*()_+=]{8,16}$/,
         message: "영문, 숫자, 특수문자 중 2가지 이상 조합하여 8~16 자리로 설정해주세요"
-    }
+    },
 }
 
 const Form = (props) => {
+
     const [ formInfo, setFormInfo ] = useState({
-        email: "",
-        emailMessage: "",
+        email: "ssdf@dfgd.cde",
         nickname: "",
-        nicknameMessage: "",
         phone1: "010",
         phone2: "",
         phone3: "",
-        phoneMessage: "",
         password: "",
-        passwordMessage: "",
         passwordConfirm: "",
-        passwordConfirmMessage: "",
     })
 
-    const changeInput = (event) => {
-        const { value, name } = event.target;
-        let message = ''; // 에러메시지를 담을 변수
-        const msgtag = name+"Message"
+    const [ inputMessage, setInputMessage] = useState({
+        email: "",
+        nickname: "",
+        phone: "",
+        password: "",
+        passwordConfirm: "",
+    })
 
-        if(value.match(regExp[name]['rule']) !== null){ 
-            message = "";
+    const [ validation, setValidation ] = useState({
+        email: "false",
+        nickname: "false",
+        phone: "false",
+        password: "false",
+        passwordConfirm: "false", 
+    })
+
+    
+
+  
+    const changeInput = (event) => {
+        console.log("changeInput")
+        const { value, id, name } = event.target;
+        console.log("value :", value)
+        // console.log(value, id, name)
+        if (id === "passwordConfirm") {
+            setFormInfo((prevState) => { return {...prevState, passwordConfirm: value}})
         } else {
-            message = regExp[name]['message'];
+            setFormInfo((prevState) => { return {...prevState, [name]: value}})
         }
-        setFormInfo({...formInfo, //기존 inputs 객체를 복사 - 나머지 패턴
-            [name]: value, //name 키를 가진 값을 value 로 설정
-            [msgtag]: message //에러메시지 내용담기
-        })
+        
+        setValidation((prevState) => { return {...prevState, [name]: "false"}})
+        // console.log("regExp[name]['rule']", regExp[name]['rule'])
+        if (id === "passwordConfirm") {
+            console.log(formInfo.password, "+ ",value)
+            if(formInfo.password === value) { 
+                console.log("일치?")
+                setInputMessage((prevState) => {return {...prevState, passwordConfirm: "" }})
+            } else {
+                console.log("불일치")
+                setInputMessage((prevState) => {return {...prevState, passwordConfirm: "비밀번호가 일치하지 않습니다" }})
+            }
+        } else if(value.match(regExp[name]['rule']) !== null){ 
+            console.log("통과")
+            if (name !== "email") {
+                setValidation((prevState) => { return {...prevState, [name]: "true"}})
+                if (name!=="nickname") {
+                    setInputMessage((prevState) => {return {...prevState, [name]: "" }})
+                }
+            } 
+        } else {
+            setInputMessage((prevState) => {return {...prevState, [name]: regExp[name]['message']}})
+        }
     }
+
+    useEffect(() => {
+        console.log("useEffect")
+        if (formInfo.nickname.match(regExp['nickname']['rule']) !== null) {
+            axios.post(
+                "/api/user/exists/nickname/"+formInfo.nickname,
+                {headers: {'Accept': "*/*"} }
+            ).then(res => {
+                // console.log(res)
+                setInputMessage((prevState) => { return {...prevState, nickname: "사용 가능한 닉네임입니다."} })
+                setValidation((prevState) => {return {...prevState, nickname: "true"}})
+            })
+            .catch(error => {
+                // console.log(error)
+                setValidation((prevState) => {return {...prevState, nickname: "false"}})
+                if (error.response.status===409) {
+                    setInputMessage((prevState) => { return {...prevState, nickname: "이미 존재하는 닉네임입니다"} })
+                } else if (error.response.status===500) {
+                    setInputMessage((prevState) => { return {...prevState, nickname: "잘못된 입력입니다"} })
+                }
+            })
+        } else {
+            setInputMessage((prevState) => { return { ...prevState, nickname: regExp['nickname']['message'] } });
+        }
+    }, [formInfo.nickname])
+
+
     const changePhone = (event) => {
+        console.log("changePhone")
         const { value, id } = event.target;
         const p2 = formInfo.phone2
         const p3 = formInfo.phone3
@@ -68,20 +131,11 @@ const Form = (props) => {
         }
         setFormInfo({...formInfo, [id]: value,  phoneMessage: message})
     }
-    const checkPassword = (event) => {
-        const { value } = event.target;
-        let message = ''
-        if(formInfo.password.match(regExp['password']['rule']) !== null){ 
-            if (value !== formInfo.password) {
-                message = "비밀번호가 일치하지 않습니다"
-            }
-        }
-        setFormInfo({...formInfo, passwordConfirm: value, passwordConfirmMessage: message})
-    } 
 
     const navigate = useNavigate();
     // 아래부터는 회원가입 관련 코드
     const signupMutation = useMutation(async(formdata) => {
+        console.log("signupMutation")
         return axios.post("/api/user/join",
         formdata,{
             headers: {
@@ -93,8 +147,9 @@ const Form = (props) => {
         .catch((error) => error);
     });
 
-    const handleSubmit = async (event) => {
-        await event.preventDefault();
+    const handleSubmit = (event) => {
+        console.log("handleSubmit")
+        event.preventDefault();
         const formData = {
             email: formInfo.email,
             password: formInfo.password,
@@ -104,23 +159,55 @@ const Form = (props) => {
             walletUrl: "string",
             role: "ROLE_USER"
         }
-        const res = await signupMutation.mutateAsync(formData)
-        if (res.status===200) {
-            console.log("회원가입 완료")
-            navigate("/")
-
-        } else if (res.status===400) {
-            console.log("잘못된 접근입니다.")
-        } else {
-            console.log("이미 존재하는 회원 또는 닉네임입니다.")
-        }
-        console.log(res)
+        signupMutation.mutateAsync(formData)
+        .then(res => {
+            console.log(res)
+            if (res.status===200) {
+                console.log("회원가입 완료")
+                navigate("/")
+            } else if (res.status===400) {
+                console.log("잘못된 접근입니다.")
+            } else {
+                console.log("이미 존재하는 회원 또는 닉네임입니다.")
+            }
+        })
     };
+
+    const checkEmail = () => {
+        console.log("checkEmail")
+        console.log("formInfo.email", formInfo.email)
+        axios({
+            url: "/api/user/exists/email/"+formInfo.email,
+            method: "POST",
+        })
+        .then(res => {
+            console.log(res)
+            setValidation((prevState) => { return {...prevState, email: "true"}})
+            alert("사용 가능한 이메일입니다.")
+        })
+        .catch(err => {
+            if (err.response.status===409) {
+                alert("이미 존재하는 이메일입니다")
+            } else if (err.response.status===500) {
+                alert("잘못된 입력입니다")
+            } else {
+                alert("알 수 없는 오류입니다.")
+            }
+        })
+    }
+
+
+
+
 
     return (
         <MyForm action="#" method="POST" onSubmit={handleSubmit}>
                 <WrapInput>
                     <Div>
+                        <p>email: {validation.email}</p>
+                        <p>nickname: {validation.nickname}</p>
+                        <p>pw: {validation.password}</p>
+                        <p>phone: {validation.phone}</p>
                         <Label htmlfor="email">Email</Label>
                         <InnerDiv>
                             <Input 
@@ -128,17 +215,18 @@ const Form = (props) => {
                                 name="email" 
                                 id="email" 
                                 className="growinput"
+                                value={formInfo.email}
                                 onChange={ changeInput } 
                                 required
                             />
-                            <Button onClick={() => {alert(formInfo.email+"는 사용 가능할지도?")}}>중복확인</Button>
+                            <Button type='button' onClick={checkEmail}>중복확인</Button>
                         </InnerDiv>
-                        <Message>{formInfo.emailMessage}</Message>
+                        <Message>{inputMessage.email}</Message>
                     </Div>
                     <Div>
                         <Label htmlfor="nickname">Nickname</Label>
-                        <Input type="nickname" name="nickname" id="nickname"  value={formInfo.nickname} onInput={changeInput} autocomplete="nickname" className="blockinput"/>
-                        <Message>{formInfo.nicknameMessage}</Message>
+                        <Input type="nickname" name="nickname" id="nickname"  value={formInfo.nickname} onChange={changeInput} autocomplete="nickname" className="blockinput"/>
+                        <Message>{inputMessage.nickname}</Message>
                     </Div>
                     <Div>
                         <Label htmlfor="phone-number">Phone number</Label>
@@ -153,17 +241,17 @@ const Form = (props) => {
                             <Input type="text" id="phone2" name="phone" required className="growinput"  value={formInfo.phone2} onChange={changePhone} maxLength="4"/> -
                             <Input type="text" id="phone3" name="phone" required className="growinput"  value={formInfo.phone3} onChange={changePhone} maxLength="4"/>
                         </InnerDiv>
-                        <Message>{formInfo.phoneMessage}</Message>
+                        <Message>{inputMessage.phone}</Message>
                     </Div>
                     <Div>
-                        <Label htmlFor="password1">Password</Label>
-                        <Input type="password" name="password" id="password1" required className="blockinput" onChange={changeInput}/>
-                        <Message>{formInfo.passwordMessage}</Message>
+                        <Label htmlFor="password">Password</Label>
+                        <Input type="password" name="password" id="password" required className="blockinput" onChange={changeInput}/>
+                        <Message>{inputMessage.password}</Message>
                     </Div>
                     <Div>
-                        <Label htmlFor="password2">Check password</Label>
-                        <Input type="password" name="password" id="password2" required className="blockinput" onChange={checkPassword}/>
-                        <Message>{formInfo.passwordConfirmMessage}</Message>
+                        <Label htmlFor="password">Check password</Label>
+                        <Input type="password" name="password" id="passwordConfirm" required className="blockinput" onChange={changeInput}/>
+                        <Message>{inputMessage.passwordConfirm}</Message>
                     </Div>
                 </WrapInput>
                 <div className="mt-10">
