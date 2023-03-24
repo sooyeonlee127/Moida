@@ -7,11 +7,14 @@ import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.ArticleService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ArticleController {
     private final UserService userService;
     private final ArticleService articleService;
+    @Autowired
+    private TokenUtils tokenUtils;
 
     public ArticleController(UserService userService, ArticleService articleService) {
         this.userService = userService;
@@ -41,18 +46,8 @@ public class ArticleController {
         @RequestPart(value = "file", required = false) MultipartFile file,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 프론트에서 유효한 토큰이 들어오지 않을 경우
-        if(principalDetails == null){
-            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
-        }
-
         // 토큰 유효성 검증
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
         // 게시판에 저장
         articleService.save(createArticleReqDto, file);
@@ -69,23 +64,8 @@ public class ArticleController {
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 프론트에서 유효한 토큰이 들어오지 않을 경우
-        if(principalDetails == null){
-            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
-        }
-
-        // 토큰 유효성 검증 (관리자인지 확인)
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
-
-        // 관리자가 아닌 경우, 권한 없음 예외 발생
-        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)){
-            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
-        }
+        // 토큰 유효성 검증 및 관리자 확인
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
 
 
 
@@ -115,5 +95,4 @@ public class ArticleController {
     public ResponseEntity<?> deleteArticle(@PathVariable("articleid") int articleId){
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
-
 }

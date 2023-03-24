@@ -9,20 +9,21 @@ import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
-import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.project.DonationService;
 import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.VolunteerService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
-import com.ssafy.moida.utils.exception.CustomException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.*;
 import java.io.IOException;
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,8 @@ public class ProjectController {
     private final VolunteerService volunteerService;
     private final DonationService donationService;
     private final ProjectPictureService projectPictureService;
+    @Autowired
+    private TokenUtils tokenUtils;
 
     public ProjectController(ProjectService projectService, UserService userService,
         VolunteerService volunteerService, DonationService donationService, ProjectPictureService projectPictureService){
@@ -63,7 +66,7 @@ public class ProjectController {
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 토큰 유효성 검증 및 관리자 확인
-        validateAdminTokenAndGetUser(principalDetails, true);
+        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
 
         // 기부 데이터베이스에 저장
         ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto(),
@@ -111,7 +114,7 @@ public class ProjectController {
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 토큰 유효성 검증
-        Users loginUser = validateAdminTokenAndGetUser(principalDetails, false);
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
         Project project = projectService.findById(createDonationReqDto.getProjectId());
         Long points = project.getPointPerMoi() * createDonationReqDto.getMoi();
@@ -141,7 +144,7 @@ public class ProjectController {
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 토큰 유효성 검증
-        Users loginUser = validateAdminTokenAndGetUser(principalDetails, false);
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
         // 해당봉사일 정보
         VolunteerDateInfo volunteerDateInfo = volunteerService.findVolunteerDateInfoById(vDateInfoId);
@@ -164,30 +167,4 @@ public class ProjectController {
 
         return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
     }
-
-    /**
-     * [세은] 토큰 유효성 검증, 관리자 확인, 토큰 사용자 조회
-     * @param principalDetails
-     * @param checkAdmin
-     * @return
-     */
-    private Users validateAdminTokenAndGetUser(PrincipalDetails principalDetails, boolean checkAdmin){
-        if(principalDetails == null) {
-            throw new CustomException(ErrorCode.INVALID_CLIENT_TOKEN);
-        }
-
-        Users loginUser = null;
-        try{
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e){
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
-        }
-
-        if(checkAdmin && !loginUser.getRole().equals(Role.ROLE_ADMIN)){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
-        }
-
-        return loginUser;
-    }
-
 }
