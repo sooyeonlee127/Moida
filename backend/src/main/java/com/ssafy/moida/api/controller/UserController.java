@@ -69,6 +69,7 @@ public class UserController {
         return new ResponseEntity<>(code, HttpStatus.OK);
     }
 
+    @Operation(summary = "마이페이지", description = "마이페이지 내에 들어가는 로그인한 유저의 정보를 반환합니다.")
     @GetMapping(
             path = "/me"
     )
