@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import axios from "axios";
 
 const AdminPage = () => {
@@ -17,9 +17,9 @@ const AdminPage = () => {
     };
     return [state, onChange];
   };
+  const [files, setFiles] = useState([]);
+  const [thumbnail, setThumbnail] = useState();
   const [state, onChange] = useInputs({
-    thumbnail: "",
-    files: "",
     category: "",
     projectSubject: "",
     projectDescription: "",
@@ -37,8 +37,6 @@ const AdminPage = () => {
     volunteeDescription: "",
   });
   const {
-    thumbnail,
-    files,
     category,
     projectSubject,
     projectDescription,
@@ -86,8 +84,8 @@ const AdminPage = () => {
         type: "application/json",
       })
     );
-    formData.append("files", state.files);
-    formData.append("thumbnail", state.thumbnail);
+    formData.append("files", files);
+    formData.append("thumbnail", thumbnail);
     console.log(formData);
     console.log(state.thumbnail);
     axios
@@ -99,6 +97,7 @@ const AdminPage = () => {
       })
       .then((res) => {
         console.log(res);
+        alert("프로젝트 생성 완료했습니다.");
       })
       .catch((error) => {
         const response = error.response.data;
@@ -296,8 +295,56 @@ const AdminPage = () => {
                   id="files"
                   name="files"
                   type="file"
-                  value={files}
-                  onChange={onChange}
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setFiles([...files, e.target.files[0]]);
+                      console.log(files);
+                    }
+                  }}
+                />
+                <AdminInput
+                  id="files"
+                  name="files"
+                  type="file"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setFiles([...files, e.target.files[0]]);
+                      console.log(files);
+                    }
+                  }}
+                />
+                <AdminInput
+                  id="files"
+                  name="files"
+                  type="file"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setFiles([...files, e.target.files[0]]);
+                      console.log(files);
+                    }
+                  }}
+                />
+                <AdminInput
+                  id="files"
+                  name="files"
+                  type="file"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setFiles([...files, e.target.files[0]]);
+                      console.log(files);
+                    }
+                  }}
+                />
+                <AdminInput
+                  id="files"
+                  name="files"
+                  type="file"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setFiles([...files, e.target.files[0]]);
+                      console.log(files);
+                    }
+                  }}
                 />
               </div>
             </InputGroup>
@@ -311,8 +358,11 @@ const AdminPage = () => {
                   id="thumbnail"
                   name="thumbnail"
                   type="file"
-                  value={thumbnail}
-                  onChange={onChange}
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setThumbnail(e.target.files[0]);
+                    }
+                  }}
                 />
               </div>
             </InputGroup>

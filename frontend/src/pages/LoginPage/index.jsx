@@ -47,7 +47,7 @@ const LoginPage = () => {
     })
       .then((res) => {
         const token = res.headers.authorization;
-        localStorage.setItem("token", token);
+        localStorage.setItem("accessToken", token);
         console.log(res);
         navigate("/", { replace: true });
         navigate(0);
