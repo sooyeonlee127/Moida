@@ -1,7 +1,6 @@
 package com.ssafy.moida.model.user;
 
 import com.ssafy.moida.model.project.Project;
-import com.ssafy.moida.model.user.Users;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class UsersProject {
+public class UsersDonation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,4 +39,5 @@ public class UsersProject {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
+
 }
