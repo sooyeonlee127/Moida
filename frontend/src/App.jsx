@@ -1,4 +1,4 @@
-import NavBar from "./components/NavBar";
+
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
@@ -13,7 +13,11 @@ import ReviewDetailPage from "./pages/ReviewDetailPage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
+<<<<<<< Updated upstream
 import AdminPage from "./pages/AdminPage";
+=======
+import NavBar from "./components/NavBar/index.jsx"
+>>>>>>> Stashed changes
 
 function App() {
   return (
