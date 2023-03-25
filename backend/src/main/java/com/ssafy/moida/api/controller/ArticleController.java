@@ -2,11 +2,16 @@ package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.CreateBoardReqDto;
+import com.ssafy.moida.api.response.GetArticleDetailResDto;
+import com.ssafy.moida.api.response.GetArticleResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
+import com.ssafy.moida.model.article.Board;
 import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.article.ArticleService;
+import com.ssafy.moida.service.article.BoardDocumentService;
+import com.ssafy.moida.service.article.BoardService;
 import com.ssafy.moida.service.user.UserProjectService;
 import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
@@ -14,11 +19,13 @@ import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.io.IOException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,16 +37,20 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/article")
 public class ArticleController {
     private final ArticleService articleService;
-
     private final UserProjectService userProjectService;
-    @Autowired
-    private TokenUtils tokenUtils;
-    @Autowired
-    private DtoValidationUtils dtoValidationUtils;
+    private final TokenUtils tokenUtils;
+    private final DtoValidationUtils dtoValidationUtils;
+    private final BoardService boardService;
+    private final BoardDocumentService boardDocumentService;
 
-    public ArticleController(ArticleService articleService, UserProjectService userProjectService) {
+    public ArticleController(ArticleService articleService, UserProjectService userProjectService,
+                             TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils, BoardService boardService, BoardDocumentService boardDocumentService) {
         this.articleService = articleService;
         this.userProjectService = userProjectService;
+        this.tokenUtils = tokenUtils;
+        this.dtoValidationUtils = dtoValidationUtils;
+        this.boardService = boardService;
+        this.boardDocumentService = boardDocumentService;
     }
 
     @Operation(summary = "사용자 봉사 후기 작성", description = "사용자가 봉사 후기를 작성합니다.")
@@ -74,6 +85,7 @@ public class ArticleController {
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
 
+    @Transactional
     @Operation(summary = "관리자 봉사 인증 작성", description = "관리자가 봉사 인증글(공지)을 작성합니다.")
     @PostMapping(path = "/board", consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
@@ -84,28 +96,48 @@ public class ArticleController {
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 토큰 유효성 검증 및 관리자 확인
-        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+        Users admin = tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+
+        // DTO NOT NULL 검증
+        dtoValidationUtils.validateCreateBoardReqDto(createBoardReqDto);
+
+        // Board 데이터베이스 저장
+        Board board = boardService.save(createBoardReqDto, admin);
+
+        // 사진 데이터베이스 저장
+        if(fileList != null && fileList.size() > 0){
+            try {
+                boardDocumentService.save(fileList, board);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         return new ResponseEntity<>("공지사항 작성 완료", HttpStatus.OK);
     }
 
-    @Operation(summary = "전체 봉사 게시글 조회", description = "전체 봉사 게시글을 조회합니다.")
+    @Operation(summary = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항) 조회", description = "전체 인증갤러리 글을 조회합니다.")
     @GetMapping
-    public ResponseEntity<?> getArticlesAndBoards(){
-        return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
+    public ResponseEntity<GetArticleResDto> getArticlesAndBoards(){
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @Operation(summary = "봉사 게시글(공지사항) 상세조회", description = "특정 공지사항을 상세 조회합니다.")
     @GetMapping("/board/{boardid}")
     public ResponseEntity<?> getBoardDetails(@PathVariable("boardid") int boardId){
+        if(!boardService.existsById((long) boardId)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 인증글 상세조회", description = "특정 사용자 인증글을 상세 조회합니다.")
     @GetMapping("/{articleid}")
-    public ResponseEntity<?> getArticleDetails(@PathVariable("articleid") int articleId){
-
-        return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
+    public ResponseEntity<GetArticleDetailResDto> getArticleDetails(@PathVariable("articleid") int articleId){
+        if(!articleService.existsById((long) articleId)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+        return new ResponseEntity<>(articleService.findById((long) articleId), HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 인증글 삭제", description = "특정 사용자 인증글을 삭제합니다.")
