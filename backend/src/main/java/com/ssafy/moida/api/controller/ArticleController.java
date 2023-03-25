@@ -4,9 +4,11 @@ import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.CreateBoardReqDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.user.Users;
+import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.article.ArticleService;
-import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.service.user.UserProjectService;
 import com.ssafy.moida.utils.TokenUtils;
+import com.ssafy.moida.utils.error.ErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -24,14 +26,15 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
-    private final UserService userService;
     private final ArticleService articleService;
+
+    private final UserProjectService userProjectService;
     @Autowired
     private TokenUtils tokenUtils;
 
-    public ArticleController(UserService userService, ArticleService articleService) {
-        this.userService = userService;
+    public ArticleController(ArticleService articleService, UserProjectService userProjectService) {
         this.articleService = articleService;
+        this.userProjectService = userProjectService;
     }
 
     @Operation(summary = "사용자 봉사 후기 작성", description = "사용자가 봉사 후기를 작성합니다.")
@@ -46,8 +49,16 @@ public class ArticleController {
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
+        // DTO로 들어온 UsersVolunteer 안의 user_id와 일치하는지 검증
+        UsersVolunteer volunteerUser = userProjectService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
+
+        // 일치하지 않는 유저라면 권한 없음 오류 반환
+        if(loginUser.getId() != volunteerUser.getUsers().getId()){
+            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER.getMessage(), HttpStatus.UNAUTHORIZED);
+        }
+
         // 게시판에 저장
-        articleService.save(createArticleReqDto, file);
+        articleService.save(createArticleReqDto, volunteerUser, file);
         
         // 프로젝트 difficultyLevel 업데이트
 
@@ -92,7 +103,7 @@ public class ArticleController {
     public ResponseEntity<?> deleteArticle(@PathVariable("articleid") int articleId){
         // 삭제하려는 인증글이 없을 경우 오류 반환(404)
         if(!articleService.existsById((long) articleId)){
-            return new ResponseEntity<>(ErrorCode.DATA_NOT_FOUND, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorCode.DATA_NOT_FOUND.getMessage(), HttpStatus.NOT_FOUND);
         }
         articleService.delete((long) articleId);
         return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
