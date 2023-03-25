@@ -1,5 +1,6 @@
 package com.ssafy.moida.api.response;
 
+import com.ssafy.moida.model.article.Article;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +19,18 @@ public class GetArticleDetailResDto {
     private Long id;
     private double difficultyLevel;
     private String subject;
-    private  String description;
+    private String description;
     private LocalDateTime regDate;
     private String category;
     private String url;
+
+    public GetArticleDetailResDto(Article article){
+        this.id = article.getId();
+        this.difficultyLevel = article.getDifficultyLevel();
+        this.subject = article.getSubject();
+        this.description = article.getDescription();
+        this.regDate = article.getRegDate();
+        this.category = article.getCategory();
+        this.url = article.getUrl();
+    }
 }
