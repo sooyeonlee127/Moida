@@ -1,9 +1,6 @@
 package com.ssafy.moida.utils;
 
-import com.ssafy.moida.api.request.CreateProjectReqDto;
-import com.ssafy.moida.api.request.DonationReqDto;
-import com.ssafy.moida.api.request.ProjectReqDto;
-import com.ssafy.moida.api.request.VolunteerReqDto;
+import com.ssafy.moida.api.request.*;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import org.apache.commons.lang3.StringUtils;
@@ -88,6 +85,33 @@ public class DtoValidationUtils {
             throw new IllegalArgumentException("최대 봉사 인원수는 필수 입력값이며 양수 값만 가능합니다");
         }
     }
+
+    /**
+     * [세은] CreateArticleReqDto NOT NULL 검증
+     * @param createArticleReqDto
+     */
+    public void validateCreateArticleReqDto(CreateArticleReqDto createArticleReqDto){
+        if(StringUtils.isBlank(createArticleReqDto.getSubject())){
+            throw new IllegalArgumentException("제목은 필수 입력값입니다.");
+        }
+
+        if(StringUtils.isBlank(createArticleReqDto.getDescription())){
+            throw new IllegalArgumentException("내용은 필수 입력값입니다.");
+        }
+
+        if(StringUtils.isBlank(createArticleReqDto.getCategory())){
+            throw new IllegalArgumentException("카테고리은 필수 입력값입니다.");
+        }
+
+        if(createArticleReqDto.getDifficultyLevel() <= 0){
+            throw new IllegalArgumentException("봉사 난이도는 필수 입력값이며 양수 값만 가능합니다");
+        }
+
+        if(createArticleReqDto.getUsersVolunteerProjectId() == null || createArticleReqDto.getUsersVolunteerProjectId() <= 0){
+            throw new IllegalArgumentException("사용자 봉사 아이디는 필수 입력값이며 양수 값만 가능합니다");
+        }
+    }
+
 
     /**
      * [세은] 프로젝트 생성 시 NOT NULL 검ㅅ

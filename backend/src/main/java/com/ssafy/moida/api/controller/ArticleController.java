@@ -8,6 +8,7 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.article.ArticleService;
 import com.ssafy.moida.service.user.UserProjectService;
+import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -33,6 +34,8 @@ public class ArticleController {
     private final UserProjectService userProjectService;
     @Autowired
     private TokenUtils tokenUtils;
+    @Autowired
+    private DtoValidationUtils dtoValidationUtils;
 
     public ArticleController(ArticleService articleService, UserProjectService userProjectService) {
         this.articleService = articleService;
@@ -50,6 +53,9 @@ public class ArticleController {
     ){
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+
+        // DTO NOT NULL 검증
+        dtoValidationUtils.validateCreateArticleReqDto(createArticleReqDto);
 
         // DTO로 들어온 UsersVolunteer 안의 user_id와 일치하는지 검증
         UsersVolunteer usersVolunteer = userProjectService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
