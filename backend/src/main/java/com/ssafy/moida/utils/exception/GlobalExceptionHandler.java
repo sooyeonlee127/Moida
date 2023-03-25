@@ -38,8 +38,8 @@ public class GlobalExceptionHandler {
         Map<String, Object> response = new HashMap<>();
 
         response.put("error", HttpStatus.BAD_REQUEST);
-        response.put("code", "INVALID_CLIENT_INPUT");
-        response.put("status", "400");
+        response.put("code", "UNPROCESSABLE ENTITY");
+        response.put("status", "422");
         response.put("message", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
