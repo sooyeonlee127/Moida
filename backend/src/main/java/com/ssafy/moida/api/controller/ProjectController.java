@@ -18,6 +18,7 @@ import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
+import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.*;
 import java.io.IOException;
 import java.util.List;
@@ -128,7 +129,7 @@ public class ProjectController {
 
         // 기부하려는 금액이 현재 보유 포인트보다 많은 경우 에러 반환
         if(points > loginUser.getPoint()){
-            return new ResponseEntity<>(ErrorCode.EXCEED_MAX_CAPACITY, HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.EXCEED_MAX_CAPACITY);
         }
 
         // 기부 모이 수에 따른 티켓 발급
