@@ -1,12 +1,12 @@
 package com.ssafy.moida.service.article;
 
 import com.ssafy.moida.api.request.CreateArticleReqDto;
+import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.model.article.Article;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
-import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -65,6 +65,17 @@ public class ArticleService {
         Double difficultyLevel = (project.getProjectVolunteer().getDifficultyLevel() + createArticleReqDto.getDifficultyLevel()) / (projectArticleCount + 1);
 
         project.getProjectVolunteer().updateDifficulty(difficultyLevel);
+    }
+
+    /**
+     * [세은] 사용자 게시글 상세조회
+     * @param articleId
+     * @return
+     */
+    public GetArticleDetailResDto findById(Long articleId){
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        return new GetArticleDetailResDto(article);
     }
 
     /**
