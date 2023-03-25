@@ -30,14 +30,15 @@ public class ArticleService {
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
     }
 
+    /**
+     * [세은] Article에 사용자 봉사 인증 게시물 데이터 추가
+     * @param createArticleReqDto
+     * @param usersVolunteer
+     * @param file
+     */
     @Transactional
-    public void save(CreateArticleReqDto createArticleReqDto, MultipartFile file){
-        UsersVolunteer usersVolunteer =
-            usersVolunteerRepository.findById(createArticleReqDto.getUsersVolunteerProjectId())
-                .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-
-        // 프로젝트 불러 와야헤~~
-//        Project project = volunteerDateInfoRepository.
+    public void save(CreateArticleReqDto createArticleReqDto,
+                     UsersVolunteer usersVolunteer, MultipartFile file){
 
         String url = s3Uploader.uploadFileToS3(file, "static/article");
 
@@ -53,11 +54,20 @@ public class ArticleService {
         articleRepository.save(article);
     }
 
+    /**
+     * [세은] 사용자 인증게시물 삭제
+     * @param articleId
+     */
     @Transactional
     public void delete(Long articleId){
         articleRepository.deleteById(articleId);
     }
 
+    /**
+     * [세은] 사용자 인증게시물 존재 확인
+     * @param articleId
+     * @return
+     */
     public boolean existsById(Long articleId){
         return articleRepository.existsById(articleId);
     }
