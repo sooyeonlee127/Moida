@@ -15,23 +15,21 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@Transactional
 public class ArticleService {
     private final ArticleRepository articleRepository;
-    private final UsersVolunteerRepository usersVolunteerRepository;
     private final S3Uploader s3Uploader;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
 
-    public ArticleService(ArticleRepository articleRepository,
-        UsersVolunteerRepository usersVolunteerRepository, S3Uploader s3Uploader,
+    public ArticleService(ArticleRepository articleRepository,S3Uploader s3Uploader,
         VolunteerDateInfoRepository volunteerDateInfoRepository) {
         this.articleRepository = articleRepository;
-        this.usersVolunteerRepository = usersVolunteerRepository;
         this.s3Uploader = s3Uploader;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
     }
 
     /**
-     * [세은] Article에 사용자 봉사 인증 게시물 데이터 추가
+     * [세은] Article에 사용자 봉사 인증 게시물 데이터 추가 및 Project DifficultyLevel 업데이트
      * @param createArticleReqDto
      * @param usersVolunteer
      * @param file
@@ -39,8 +37,17 @@ public class ArticleService {
     @Transactional
     public void save(CreateArticleReqDto createArticleReqDto,
                      UsersVolunteer usersVolunteer, MultipartFile file){
+        // 사진 S3 업로드
+        String url = "";
+        if(file != null)  url = s3Uploader.uploadFileToS3(file, "static/article");
+        System.out.println("url : " + url);
 
-        String url = s3Uploader.uploadFileToS3(file, "static/article");
+        /*
+         * Project DifficultyLevel 업데이트
+         * DifficultyLevel = 기존의 difficultyLevel + 새로운 difficultyLevel / 전체 difficultyLevel 갯수
+         */
+        Project project = volunteerDateInfoRepository
+                .findById(usersVolunteer.getVolunteerDateInfo().getId()).get().getProject();
 
         Article article = Article.builder()
             .subject(createArticleReqDto.getSubject())
@@ -49,9 +56,15 @@ public class ArticleService {
             .category(createArticleReqDto.getCategory())
             .url(url)
             .usersVolunteer(usersVolunteer)
+            .project(project)
             .build();
 
         articleRepository.save(article);
+
+        Long projectArticleCount = articleRepository.countByProjectId(project.getId());
+        Double difficultyLevel = (project.getProjectVolunteer().getDifficultyLevel() + createArticleReqDto.getDifficultyLevel()) / (projectArticleCount + 1);
+
+        project.getProjectVolunteer().updateDifficulty(difficultyLevel);
     }
 
     /**
@@ -64,7 +77,7 @@ public class ArticleService {
     }
 
     /**
-     * [세은] 사용자 인증게시물 존재 확인
+     * [세은] 사용자 인증게시물 존재여부 확인
      * @param articleId
      * @return
      */

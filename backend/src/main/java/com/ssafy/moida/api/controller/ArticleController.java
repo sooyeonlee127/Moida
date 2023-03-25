@@ -3,12 +3,14 @@ package com.ssafy.moida.api.controller;
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.CreateBoardReqDto;
 import com.ssafy.moida.auth.PrincipalDetails;
+import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.article.ArticleService;
 import com.ssafy.moida.service.user.UserProjectService;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
+import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
@@ -50,15 +52,18 @@ public class ArticleController {
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
         // DTO로 들어온 UsersVolunteer 안의 user_id와 일치하는지 검증
-        UsersVolunteer volunteerUser = userProjectService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
+        UsersVolunteer usersVolunteer = userProjectService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
+        if(loginUser.getId() != usersVolunteer.getUsers().getId()){
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+        }
 
-        // 일치하지 않는 유저라면 권한 없음 오류 반환
-        if(loginUser.getId() != volunteerUser.getUsers().getId()){
-            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER.getMessage(), HttpStatus.UNAUTHORIZED);
+        // 해당 usersVolunteer.state 가 DONE인지 검증
+        if(!usersVolunteer.getStatus().equals(Status.DONE)){
+            throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
         }
 
         // 게시판에 저장 및 프로젝트 difficultyLevel 업데이트
-        articleService.save(createArticleReqDto, volunteerUser, file);
+        articleService.save(createArticleReqDto, usersVolunteer, file);
 
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
