@@ -33,8 +33,8 @@ const NavBar = () => {
               <p>우리 로고</p>
             </Logo>
             <Title>
-              {userNavigation.map((item) => (
-                <Link on key={item.name} to={item.href}>
+              {userNavigation.map((item, index) => (
+                <Link on={item.name} key={index} to={item.href}>
                   {item.name}
                 </Link>
               ))}
@@ -66,13 +66,15 @@ const NavBar = () => {
 };
 
 const Nav = styled.div`
+position: fixed;
+top: 0;
+width: 100%;
+z-index: 1;
   ${tw`
-  z-10 bg-yellow-100
-  fixed top-0 left-0 right-0 
+  bg-yellow-100
   px-2
   text-black
   h-16
-  relative
   flex items-center justify-between
   `}
 `;

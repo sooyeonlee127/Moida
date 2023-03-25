@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom'
 
 //==================
 
+
+
 const regExp = {
     email: {
         rule: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
@@ -22,7 +24,9 @@ const regExp = {
     },
 }
 
-const Form = (props) => {
+
+
+const Form = () => {
 
     const [ formInfo, setFormInfo ] = useState({
         email: "ssdf@dfgd.cde",
@@ -51,12 +55,12 @@ const Form = (props) => {
     })
 
     
-
+    
   
     const changeInput = (event) => {
-        console.log("changeInput")
+        // console.log("changeInput")
         const { value, id, name } = event.target;
-        console.log("value :", value)
+        // console.log("value :", value)
         // console.log(value, id, name)
         if (id === "passwordConfirm") {
             setFormInfo((prevState) => { return {...prevState, passwordConfirm: value}})
@@ -76,7 +80,7 @@ const Form = (props) => {
                 setInputMessage((prevState) => {return {...prevState, passwordConfirm: "비밀번호가 일치하지 않습니다" }})
             }
         } else if(value.match(regExp[name]['rule']) !== null){ 
-            console.log("통과")
+            // console.log("통과")
             if (name !== "email") {
                 setValidation((prevState) => { return {...prevState, [name]: "true"}})
                 if (name!=="nickname") {
@@ -87,32 +91,43 @@ const Form = (props) => {
             setInputMessage((prevState) => {return {...prevState, [name]: regExp[name]['message']}})
         }
     }
+    
+    
+    const [timer, setTimer] = useState(0); // 디바운싱 타이머
 
     useEffect(() => {
-        console.log("useEffect")
-        if (formInfo.nickname.match(regExp['nickname']['rule']) !== null) {
-            axios.post(
-                "/api/user/exists/nickname/"+formInfo.nickname,
-                {headers: {'Accept': "*/*"} }
-            ).then(res => {
-                // console.log(res)
-                setInputMessage((prevState) => { return {...prevState, nickname: "사용 가능한 닉네임입니다."} })
-                setValidation((prevState) => {return {...prevState, nickname: "true"}})
-            })
-            .catch(error => {
-                // console.log(error)
-                setValidation((prevState) => {return {...prevState, nickname: "false"}})
-                if (error.response.status===409) {
-                    setInputMessage((prevState) => { return {...prevState, nickname: "이미 존재하는 닉네임입니다"} })
-                } else if (error.response.status===500) {
-                    setInputMessage((prevState) => { return {...prevState, nickname: "잘못된 입력입니다"} })
-                }
-            })
+        if (timer) {
+            console.log('clear timer');
+            clearTimeout(timer);
+        }
+        if (formInfo.nickname.match(regExp['nickname']['rule']) !== null) { // 디바운싱 (입력 1초 뒤 axios 요청)
+            const newTimer = setTimeout(() => {
+                console.log("axios 요청")
+                axios.post(
+                    "/api/user/exists/nickname/"+formInfo.nickname,
+                    {headers: {'Accept': "*/*"} }
+                ).then(res => {
+                    // console.log(res)
+                    setInputMessage((prevState) => { return {...prevState, nickname: "사용 가능한 닉네임입니다."} })
+                    setValidation((prevState) => {return {...prevState, nickname: "true"}})
+                })
+                .catch(error => {
+                    // console.log(error)
+                    setValidation((prevState) => {return {...prevState, nickname: "false"}})
+                    if (error.response.status===409) {
+                        setInputMessage((prevState) => { return {...prevState, nickname: "이미 존재하는 닉네임입니다"} })
+                    } else if (error.response.status===500) {
+                        setInputMessage((prevState) => { return {...prevState, nickname: "잘못된 입력입니다"} })
+                    }
+                })
+            }, 1000)
+            setTimer(newTimer);
         } else {
             setInputMessage((prevState) => { return { ...prevState, nickname: regExp['nickname']['message'] } });
         }
     }, [formInfo.nickname])
 
+    
 
     const changePhone = (event) => {
         console.log("changePhone")
@@ -225,7 +240,7 @@ const Form = (props) => {
                     </Div>
                     <Div>
                         <Label htmlfor="nickname">Nickname</Label>
-                        <Input type="nickname" name="nickname" id="nickname"  value={formInfo.nickname} onChange={changeInput} autocomplete="nickname" className="blockinput"/>
+                        <Input type="nickname" name="nickname" id="nickname" onChange={changeInput} autocomplete="nickname" className="blockinput"/>
                         <Message>{inputMessage.nickname}</Message>
                     </Div>
                     <Div>
