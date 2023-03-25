@@ -35,4 +35,12 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="users_id")
     private Users users;
+
+    @Builder
+    public Board(String description, String subject, Project project, Users users) {
+        this.description = description;
+        this.subject = subject;
+        this.project = project;
+        this.users = users;
+    }
 }
