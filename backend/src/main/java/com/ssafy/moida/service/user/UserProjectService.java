@@ -1,6 +1,5 @@
 package com.ssafy.moida.service.user;
 
-import com.ssafy.moida.model.project.VolunteerDateInfo;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
@@ -31,6 +30,4 @@ public class UserProjectService {
         return usersVolunteerRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
-
-
 }

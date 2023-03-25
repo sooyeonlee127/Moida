@@ -57,10 +57,8 @@ public class ArticleController {
             return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER.getMessage(), HttpStatus.UNAUTHORIZED);
         }
 
-        // 게시판에 저장
+        // 게시판에 저장 및 프로젝트 difficultyLevel 업데이트
         articleService.save(createArticleReqDto, volunteerUser, file);
-        
-        // 프로젝트 difficultyLevel 업데이트
 
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
@@ -75,7 +73,7 @@ public class ArticleController {
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 토큰 유효성 검증 및 관리자 확인
-        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
 
         return new ResponseEntity<>("공지사항 작성 완료", HttpStatus.OK);
     }
@@ -95,6 +93,7 @@ public class ArticleController {
     @Operation(summary = "사용자 인증글 상세조회", description = "특정 사용자 인증글을 상세 조회합니다.")
     @GetMapping("/{articleid}")
     public ResponseEntity<?> getArticleDetails(@PathVariable("articleid") int articleId){
+
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
 
