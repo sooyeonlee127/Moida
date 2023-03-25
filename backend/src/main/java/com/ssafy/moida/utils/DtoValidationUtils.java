@@ -112,6 +112,24 @@ public class DtoValidationUtils {
         }
     }
 
+    /**
+     * [세은] createBoardReqDto NOT NULL 검증
+     * @param createBoardReqDto
+     */
+    public void validateCreateBoardReqDto(CreateBoardReqDto createBoardReqDto){
+        if(StringUtils.isBlank(createBoardReqDto.getSubject())){
+            throw new IllegalArgumentException("제목은 필수 입력값입니다.");
+        }
+
+        if(StringUtils.isBlank(createBoardReqDto.getDescription())){
+            throw new IllegalArgumentException("내용은 필수 입력값입니다.");
+        }
+
+        if(createBoardReqDto.getProjectId() == null || createBoardReqDto.getProjectId() <= 0){
+            throw new IllegalArgumentException("프로젝트 아이디는 필수 입력값이며 양수 값만 가능합니다");
+        }
+    }
+
 
     /**
      * [세은] 프로젝트 생성 시 NOT NULL 검ㅅ
