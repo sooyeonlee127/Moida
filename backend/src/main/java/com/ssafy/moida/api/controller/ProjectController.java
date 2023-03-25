@@ -15,6 +15,7 @@ import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.VolunteerService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import io.swagger.v3.oas.annotations.*;
@@ -45,6 +46,9 @@ public class ProjectController {
     @Autowired
     private TokenUtils tokenUtils;
 
+    @Autowired
+    private DtoValidationUtils dtoValidationUtils;
+
     public ProjectController(ProjectService projectService, UserService userService,
         VolunteerService volunteerService, DonationService donationService, ProjectPictureService projectPictureService){
         this.projectService = projectService;
@@ -61,12 +65,15 @@ public class ProjectController {
     })
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
-        @RequestPart(value = "thumbnail", required = true) MultipartFile thumbnail,
+        @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 토큰 유효성 검증 및 관리자 확인
         tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+
+        // DTO NOT NULL 검증
+        dtoValidationUtils.validateCreateProjectReqDto(createProjectReqDto);
 
         // 기부 데이터베이스에 저장
         ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto(),
