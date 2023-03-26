@@ -4,6 +4,7 @@ import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.api.response.GetUserPointResDto;
+import com.ssafy.moida.api.response.GetUserVolunteerResDto;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.user.PointCharge;
 import com.ssafy.moida.model.user.Role;
@@ -160,7 +161,7 @@ public class UserService {
     }
 
     /**
-     * [한선영] 유저가 참여한 봉사의 개수 가져오기
+     * [한선영] 사용자가 참여한 봉사의 개수 가져오기
      * @return
      * */
     public long totalVolunteerCnt() {
@@ -169,13 +170,25 @@ public class UserService {
     }
 
     /**
-     * [한선영] 유저가 참여한 기부 프로젝트 목록(GetUserDonationResDto) 가져오기
+     * [한선영] 사용자가 참여한 기부 프로젝트 목록(GetUserDonationResDto) 가져오기
      * @param userId
      * @return
      * */
     public List<GetUserDonationResDto> getUsersDonation(Long userId) {
         List<GetUserDonationResDto> result = new ArrayList<>();
         result = usersDonationRepository.findDonationsByUserId(userId);
+
+        return result;
+    }
+
+    /**
+     * [한선영] 사용자가 참여한 봉사 프로젝트 목록(GetUserVolunteerResDto) 가져오기
+     * @param userId
+     * @return
+     * */
+    public List<GetUserVolunteerResDto> getUsersVolunteer(Long userId) {
+        List<GetUserVolunteerResDto> result = new ArrayList<>();
+        result = usersVolunteerRepository.findVolunteersByUserId(userId);
 
         return result;
     }

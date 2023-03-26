@@ -4,6 +4,7 @@ import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.api.response.GetUserPointResDto;
+import com.ssafy.moida.api.response.GetUserVolunteerResDto;
 import com.ssafy.moida.api.response.UserInfoResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Status;
@@ -147,7 +148,7 @@ public class UserController {
         return new ResponseEntity<>("봉사 취소가 완료되었습니다", HttpStatus.OK);
     }
 
-    @Operation(summary = "사용자 기부 내역", description = "로그인한 유저의 기부 내역을 반환합니다.")
+    @Operation(summary = "사용자 기부 내역", description = "로그인한 사용자의 기부 내역을 반환합니다.")
     @GetMapping(
             path = "/me/donation"
     )
@@ -161,6 +162,22 @@ public class UserController {
         userDonationList = userService.getUsersDonation(userId);
 
         return new ResponseEntity<>(userDonationList, HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 봉사 내역", description = "로그인한 사용자의 봉사 내역을 반환합니다.")
+    @GetMapping(
+            path = "/me/volunteer"
+    )
+    public ResponseEntity<?> getUserVolunteerList(
+            @AuthenticationPrincipal PrincipalDetails principal
+    ) {
+        Users user = userService.findByEmail(principal.getUsername());
+        Long userId = user.getId();
+
+        List<GetUserVolunteerResDto> userVolunteerList = new ArrayList<>();
+        userVolunteerList = userService.getUsersVolunteer(userId);
+
+        return new ResponseEntity<>(userVolunteerList, HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 포인트 내역", description = "로그인한 유저의 포인트 사용 내역을 반환합니다.")
