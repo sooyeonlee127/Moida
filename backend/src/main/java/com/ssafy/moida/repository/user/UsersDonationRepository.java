@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UsersDonationRepository extends JpaRepository<UsersDonation, Long> {
     @Query("SELECT new com.ssafy.moida.api.response.GetUserDonationResDto("
@@ -20,4 +21,5 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
             + "WHERE ud.users.id = :userId ")
     List<GetUserDonationResDto> findDonationsByUserId(@Param("userId") Long userId);
 
+    Optional<List<UsersDonation>> findByUsersId(Long userId);
 }
