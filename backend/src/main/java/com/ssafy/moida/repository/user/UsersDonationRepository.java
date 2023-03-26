@@ -15,7 +15,7 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
             + "ud.project.subject, "
             + "ud.project.generation, "
             + "ud.regDate, "
-            + "Long(ud.amount * ud.project.pointPerMoi), "
+            + "Long(ud.amount / ud.project.pointPerMoi), "
             + "ud.ticketCnt) "
             + "FROM UsersDonation ud "
             + "WHERE ud.users.id = :userId ")
