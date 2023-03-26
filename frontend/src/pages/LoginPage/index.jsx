@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
-import { useReducer } from "react";
+import { useReducer, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/Auth";
 
 const LoginPage = () => {
+  const { setIsLogin, setPoint, setTicket } = useContext(AuthContext);
   const navigate = useNavigate();
   const reducer = (state, action) => {
     return {
@@ -48,7 +50,11 @@ const LoginPage = () => {
       .then((res) => {
         const token = res.headers.authorization;
         localStorage.setItem("accessToken", token);
+        setIsLogin(true);
         console.log(res);
+        // 응답값으로 받아오기
+        setPoint(10);
+        setTicket(10);
         navigate("/", { replace: true });
         navigate(0);
       })
@@ -130,11 +136,13 @@ const LoginPage = () => {
 
 const Heading = styled.h2`
   ${tw`
-  mt-6 text-center text-3xl font-bold tracking-tight text-gray-900
+  mt-6 text-center text-4xl font-normal tracking-normal text-gray-700
   `}
 `;
 
 const Container = styled.div`
+  height: 100vh;
+  width: 100vw;
   ${tw`
   flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 
   `}
@@ -142,7 +150,7 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
   ${tw`
-  w-full max-w-md space-y-8
+  bg-gray-100 px-20 py-7 w-full max-w-md space-y-8
   `}
 `;
 
@@ -160,13 +168,13 @@ const InputGroup = styled.div`
 
 const InputText = styled.label`
   ${tw`
-  block text-sm font-medium leading-6 text-gray-900
+  px-1 mt-4 flex text-sm font-light leading-6 text-gray-500
   `}
 `;
 
 const LoginInput = styled.input`
   ${tw`
-  relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
+  relative block w-full border-0 px-2 py-1.5 text-gray-800 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
   
   `}
 `;
@@ -185,19 +193,19 @@ const RememberMeBox = styled.div`
 
 const RememberMe = styled.input`
   ${tw`
-  h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600
+  h-5 w-5 border-gray-200 text-indigo-600 focus:ring-indigo-600
   `}
 `;
 
 const RememberMeText = styled.label`
   ${tw`
-  ml-2 block text-sm text-gray-900
+  ml-2 block text-sm text-gray-900 font-light
   `}
 `;
 
 const SubmitButton = styled.button`
   ${tw`
-  w-full h-full bg-yellow-600 py-2 px-10 font-semibold text-black
+  bg-yellow-300 w-full h-full  py-3 px-10 font-normal text-gray-600
   `}
 `;
 
