@@ -3,12 +3,21 @@ import tw from "twin.macro";
 import { useNavigate } from "react-router-dom";
 import useScroll from '../useScroll';
 import "../../main.css"
+import { useEffect } from "react";
+import { useState } from "react";
+
+
+
 
 const Projects = () => {
   const navigate = useNavigate();
-  const { ref: target1, inView:isVisible1 } = useScroll();
-  const { ref: target2, inView:isVisible2 } = useScroll();
-  const { ref: target3, inView:isVisible3 } = useScroll();
+  const { ref: target1, inView:inView1, isShown:isShown1 } = useScroll();
+  const { ref: target2, inView:inView2, isShown:isShown2 } = useScroll();
+  const { ref: target3, inView:inView3, isShown:isShown3 } = useScroll();
+
+  const clickCard = (event, routePath) => {
+      navigate("/donation/"+ routePath, { replace: false });
+  }
   const cards = [
     {
       "id": 0,
@@ -66,38 +75,45 @@ const Projects = () => {
     }
 
   ];
+  const [value, setValue] = useState();
+  const handleScroll = () => {
+    setValue(parseInt(window.scrollY))
+    console.log(value)
+  }
+  useEffect(() => {
+    console.log(target1.current.offsetTop)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [value])
+
+
+
+ 
   return (
     <div className="project">
       <StickyContainer ref={target1}>
-        <Sticky id={"card_"+cards[0].id} className={isVisible1? "card show": "card"}>
+        <Sticky id={"card_"+cards[0].id} className={isShown1? "card show": "card"}>
           <Heading>{cards[0].projectReqDto.subject}</Heading>
           <Text>{cards[0].projectReqDto.description}</Text>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/donation/"+cards[0].id, { replace: false });
-            }}
-            >
+          {/* <p>{value}</p> */}
+          <Button onClick={() => clickCard(cards[0].id)}>
             참여하기
           </Button>
+          {/* <div style={{ marginTop: `${inView2 && value- target2.current?.offsetTop}px` }}>ddd</div> */}
+          <div>{inView1 && (value - target1.current?.offsetTop)}{inView1 ? "true":"false"}</div>
         </Sticky>
       </StickyContainer>
       <StickyContainer ref={target2}>
-        <Sticky id={"card_"+cards[1].id} className={isVisible2? "card show": "card"} ref={target2}>
+        <Sticky id={"card_"+cards[1].id} className={isShown2? "card show": "card"}>
           <Heading>{cards[1].projectReqDto.subject}</Heading>
           <Text>{cards[1].projectReqDto.description}</Text>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/donation/"+cards[1].id, { replace: false });
-            }}
-            >
+          <Button onClick={() => clickCard(cards[1].id)}>
             참여하기
           </Button>
         </Sticky>
       </StickyContainer>
       <StickyContainer ref={target3}>
-        <Sticky id={"card_"+cards[2].id} className={isVisible3? "card show": "card"} ref={target3}>
+        <Sticky id={"card_"+cards[2].id} className={isShown3? "card show": "card"}>
           <Heading>{cards[2].projectReqDto.subject}</Heading>
           <Text>{cards[2].projectReqDto.description}</Text>
           <Button

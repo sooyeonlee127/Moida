@@ -3,7 +3,8 @@ import { useRef, useEffect, useState } from 'react';
 
 const useScroll = (threshold=0.05) => {
   const element = useRef();
-  const [isVisible, setIsVisible] = useState(false);
+  const [isShown, setIsShown] = useState(false);
+  const [inView, setInView] = useState(false);
 
   useEffect(() => {
     let observer;
@@ -12,7 +13,10 @@ const useScroll = (threshold=0.05) => {
       observer = new IntersectionObserver((entries) => {
         const entry = entries[0]
         console.log(entry.target.className)
-        setIsVisible(entry.isIntersecting)
+        setInView(entry.isIntersecting)
+        if (entry.isIntersecting) {
+          setIsShown(true)
+        }
       }, { threshold: threshold });
       observer.observe(element.current);
     }
@@ -22,7 +26,8 @@ const useScroll = (threshold=0.05) => {
 
   return {
     ref: element,
-    inView: isVisible
+    inView: inView,
+    isShown: isShown,
   };
 };
 

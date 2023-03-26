@@ -14,11 +14,7 @@ import NoticeDetailPage from "./pages/NoticeDetailPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
 import AdminPage from "./pages/AdminPage";
-<<<<<<< HEAD
-import NavBar from "./components/NavBar/index.jsx"
-=======
 import Auth from "./context/Auth";
->>>>>>> 05be6667b57347424c1535573b60d9a185166964
 
 export default function App() {
   return (
