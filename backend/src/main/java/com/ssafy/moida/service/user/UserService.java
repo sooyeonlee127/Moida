@@ -192,11 +192,12 @@ public class UserService {
 
     /**
      * [한선영] 비밀번호 변경
-     * @param email, changePwdReqDto
+     * @param email
+     * @param password
      * */
-    public void changePwd(String email, ChangePwdReqDto changePwdReqDto) {
+    public void changePwd(String email, String password) {
         Users users = findByEmail(email);
-        users.updatePassword(bCryptPasswordEncoder.encode(changePwdReqDto.getPassword()));
+        users.updatePassword(bCryptPasswordEncoder.encode(password));
     }
 
     /**
