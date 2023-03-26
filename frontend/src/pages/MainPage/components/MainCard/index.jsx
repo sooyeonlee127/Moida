@@ -7,7 +7,7 @@ const MainCard = (props) => {
   const card = props.card;
 
   return (
-      <Container className="card" id={"maincard_"+card.id}>
+      <Container className="card" id={"card_"+card.id}>
         <p>{card.style}</p>
         <Box>
           <InnerBox>
@@ -28,9 +28,13 @@ const MainCard = (props) => {
 };
 
 const Container = styled.div`
-height: 100vh;
 width: 100vw;
-  ${tw`mx-auto snap-center snap-always`}
+  ${`height: calc(100vh - 64px);`}
+  ${tw`mx-auto snap-center snap-mandatory`}
+
+
+padding: 0;
+margin: 0;
 `;
 
 const Box = styled.div`
