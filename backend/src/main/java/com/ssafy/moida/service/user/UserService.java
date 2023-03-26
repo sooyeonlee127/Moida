@@ -3,11 +3,13 @@ package com.ssafy.moida.service.user;
 import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
+import com.ssafy.moida.api.response.GetUserPointResDto;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.model.user.PointCharge;
 import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersDonation;
-import com.ssafy.moida.repository.project.ProjectRepository;
+import com.ssafy.moida.repository.user.PointChargeRepository;
 import com.ssafy.moida.repository.user.UserRepository;
 import com.ssafy.moida.repository.user.UsersDonationRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
@@ -23,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,17 +41,17 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ProjectRepository projectRepository;
     private final UsersDonationRepository usersDonationRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
+    private final PointChargeRepository pointChargeRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public UserService(UserRepository userRepository, ProjectRepository projectRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, PointChargeRepository pointChargeRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
-        this.projectRepository = projectRepository;
         this.usersDonationRepository = usersDonationRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
+        this.pointChargeRepository = pointChargeRepository;
         this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -204,5 +208,47 @@ public class UserService {
             .project(project)
             .build();
         usersDonationRepository.save(usersDonation);
+    }
+
+    /**
+     * [한선영] 유저의 포인트 사용 목록(GetUserPointResDto) 가져오기
+     * @param userId
+     * @return
+     * */
+    public List<GetUserPointResDto> getUsersPoint(Long userId) {
+        List<GetUserPointResDto> result = new ArrayList<>();
+
+        //PointCharge랑 UsersDonation 정보 가져오기
+        List<UsersDonation> usersDonations = usersDonationRepository.findByUsersId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<PointCharge> pointCharges = pointChargeRepository.findByUsersId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        for (UsersDonation donation : usersDonations) {
+            GetUserPointResDto dto = new GetUserPointResDto();
+
+            dto.setPoints(donation.getAmount());
+            dto.setCategory("donation");
+            dto.setPointDate(donation.getRegDate());
+            dto.setProjectSubject(donation.getProject().getSubject());
+            dto.setGeneration(donation.getProject().getGeneration());
+            dto.setTicketCnt(donation.getTicketCnt());
+
+            result.add(dto);
+        }
+
+        for (PointCharge charge : pointCharges) {
+            GetUserPointResDto dto = new GetUserPointResDto();
+
+            dto.setPoints(charge.getAmount());
+            dto.setCategory("charge");
+            dto.setPointDate(charge.getRegDate());
+
+            result.add(dto);
+        }
+
+        Collections.sort(result, Comparator.comparing(GetUserPointResDto::getPointDate));
+
+        return result;
     }
 }

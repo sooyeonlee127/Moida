@@ -3,6 +3,7 @@ package com.ssafy.moida.api.controller;
 import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
+import com.ssafy.moida.api.response.GetUserPointResDto;
 import com.ssafy.moida.api.response.UserInfoResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Status;
@@ -109,22 +110,6 @@ public class UserController {
         return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
     }
 
-    @Operation(summary = "내 기부 내역", description = "로그인한 유저의 기부 내역을 반환합니다.")
-    @GetMapping(
-            path = "/me/donation"
-    )
-    public ResponseEntity<?> getUserDonationList(
-            @AuthenticationPrincipal PrincipalDetails principal
-    ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
-
-        List<GetUserDonationResDto> userDonationList = new ArrayList<>();
-        userDonationList = userService.getUsersDonation(userId);
-
-        return new ResponseEntity<>(userDonationList, HttpStatus.OK);
-    }
-
     @Operation(summary = "비밀번호 변경", description = "로그인한 유저의 비밀번호를 변경합니다.")
     @PutMapping(
             path = "/me/password",
@@ -160,6 +145,38 @@ public class UserController {
         userProjectService.updateUserVolunteerStatus(usersVolunteer, Status.CANCEL);
 
         return new ResponseEntity<>("봉사 취소가 완료되었습니다", HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 기부 내역", description = "로그인한 유저의 기부 내역을 반환합니다.")
+    @GetMapping(
+            path = "/me/donation"
+    )
+    public ResponseEntity<?> getUserDonationList(
+            @AuthenticationPrincipal PrincipalDetails principal
+    ) {
+        Users user = userService.findByEmail(principal.getUsername());
+        Long userId = user.getId();
+
+        List<GetUserDonationResDto> userDonationList = new ArrayList<>();
+        userDonationList = userService.getUsersDonation(userId);
+
+        return new ResponseEntity<>(userDonationList, HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 포인트 내역", description = "로그인한 유저의 포인트 사용 내역을 반환합니다.")
+    @GetMapping(
+            path = "/me/point"
+    )
+    public ResponseEntity<?> getUserPointList(
+            @AuthenticationPrincipal PrincipalDetails principal
+    ) {
+        Users user = userService.findByEmail(principal.getUsername());
+        Long userId = user.getId();
+
+        List<GetUserPointResDto> userPointList = new ArrayList<>();
+        userPointList = userService.getUsersPoint(userId);
+
+        return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
 
 }
