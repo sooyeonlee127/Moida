@@ -213,7 +213,7 @@ public class UserService {
 
     /**
      * [한선영] 유저의 포인트 충전
-     * @param users
+     * @param users, points
      * */
     @Transactional
     public void chargeUsersPoint(Users users, long points) {
@@ -270,4 +270,48 @@ public class UserService {
 
         return result;
     }
+
+    /**
+     * [한선영] 유저의 포인트 사용 목록 필터링해서 가져오기 - 수정필요
+     * @param filter, userId
+     * @return
+     * */
+    public List<GetUserPointResDto> getPointListFilter(String filter, Long userId) {
+        List<GetUserPointResDto> result = new ArrayList<>();
+        if(filter.equals("charge")) {
+            List<PointCharge> pointCharges = pointChargeRepository.findByUsersId(userId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            for (PointCharge charge : pointCharges) {
+                GetUserPointResDto dto = new GetUserPointResDto();
+
+                dto.setPoints(charge.getAmount());
+                dto.setCategory("charge");
+                dto.setPointDate(charge.getRegDate());
+
+                result.add(dto);
+            }
+        } else if(filter.equals("donation")) {
+            List<UsersDonation> usersDonations = usersDonationRepository.findByUsersId(userId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            for (UsersDonation donation : usersDonations) {
+                GetUserPointResDto dto = new GetUserPointResDto();
+
+                dto.setPoints(donation.getAmount());
+                dto.setCategory("donation");
+                dto.setPointDate(donation.getRegDate());
+                dto.setProjectSubject(donation.getProject().getSubject());
+                dto.setGeneration(donation.getProject().getGeneration());
+                dto.setTicketCnt(donation.getTicketCnt());
+
+                result.add(dto);
+            }
+        } else {
+            return getUsersPoint(userId);
+        }
+
+        return result;
+    }
+
 }

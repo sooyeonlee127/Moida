@@ -192,4 +192,21 @@ public class UserController {
         return new ResponseEntity<>("포인트 충전 완료", HttpStatus.OK);
     }
 
+    @Operation(summary = "사용자 포인트 내역 필터", description = "사용자의 포인트 사용 내역을 필터링하여 반환합니다.")
+    @GetMapping(
+            path = "/me/points/filters"
+    )
+    public ResponseEntity<?> pointFilter(
+            @AuthenticationPrincipal PrincipalDetails principal,
+            @RequestParam(value = "category") String category
+    ) {
+        Users user = userService.findByEmail(principal.getUsername());
+        Long userId = user.getId();
+
+        List<GetUserPointResDto> userPointList = new ArrayList<>();
+        userPointList = userService.getPointListFilter(category, userId);
+
+        return new ResponseEntity<>(userPointList, HttpStatus.OK);
+    }
+
 }
