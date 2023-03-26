@@ -212,21 +212,26 @@ public class UserService {
     }
 
     /**
-     * [한선영] 유저의 포인트 충전
+     * [한선영] 사용자가 포인트를 충전할 경우, 포인트 증가 업데이트
      * @param users, points
      * */
     @Transactional
-    public void chargeUsersPoint(Users users, long points) {
-        // 포인트 충전 내역 만들기
+    public void updateAfterPointCharge(Users users, Long amount) {
+        users.updatePoint(users.getPoint() + amount);
+    }
+
+    /**
+     * [한선영] 사용자가 포인트를 충전할 경우, PointCharge 데이터 저장
+     * @param users, points
+     * */
+    @Transactional
+    public void savePointCharge(Users users, Long amount) {
         PointCharge pointCharge = PointCharge.builder()
                 .regDate(LocalDateTime.now())
-                .amount(points)
+                .amount(amount)
                 .users(users)
                 .build();
         pointChargeRepository.save(pointCharge);
-
-        // 사용자의 정보에 포인트 정보 업데이트하기
-        users.updatePoint(points);
     }
 
     /**

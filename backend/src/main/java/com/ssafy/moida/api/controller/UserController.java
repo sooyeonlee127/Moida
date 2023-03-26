@@ -188,7 +188,10 @@ public class UserController {
             @RequestParam(value = "points") Long points
     ) {
         Users user = userService.findByEmail(principal.getUsername());
-        userService.chargeUsersPoint(user, points);
+
+        userService.updateAfterPointCharge(user, points);
+        userService.savePointCharge(user, points);
+
         return new ResponseEntity<>("포인트 충전 완료", HttpStatus.OK);
     }
 
