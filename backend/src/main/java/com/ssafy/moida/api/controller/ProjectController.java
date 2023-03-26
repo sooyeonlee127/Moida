@@ -9,20 +9,23 @@ import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
-import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.project.DonationService;
 import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.VolunteerService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.utils.DtoValidationUtils;
+import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.*;
 import java.io.IOException;
 import java.util.List;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +44,11 @@ public class ProjectController {
     private final VolunteerService volunteerService;
     private final DonationService donationService;
     private final ProjectPictureService projectPictureService;
+    @Autowired
+    private TokenUtils tokenUtils;
+
+    @Autowired
+    private DtoValidationUtils dtoValidationUtils;
 
     public ProjectController(ProjectService projectService, UserService userService,
         VolunteerService volunteerService, DonationService donationService, ProjectPictureService projectPictureService){
@@ -58,27 +66,15 @@ public class ProjectController {
     })
     public ResponseEntity<?> createProject(
         @RequestPart(value = "info", required = true) CreateProjectReqDto createProjectReqDto,
-        @RequestPart(value = "thumbnail", required = true) MultipartFile thumbnail,
+        @RequestPart(value = "thumbnail", required = false) MultipartFile thumbnail,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 프론트에서 유효한 토큰이 들어오지 않을 경우
-        if(principalDetails == null){
-            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
-        }
-        
-        // 토큰 유효성 검증 (관리자인지 확인)
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
+        // 토큰 유효성 검증 및 관리자 확인
+        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
 
-        // 관리자가 아닌 경우, 권한 없음 예외 발생
-        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)){
-            return new ResponseEntity<>(ErrorCode.UNAUTHORIZED_USER, HttpStatus.UNAUTHORIZED);
-        }
+        // DTO NOT NULL 검증
+        dtoValidationUtils.validateCreateProjectReqDto(createProjectReqDto);
 
         // 기부 데이터베이스에 저장
         ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto(),
@@ -125,25 +121,15 @@ public class ProjectController {
         @RequestBody CreateDonationReqDto createDonationReqDto,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 프론트에서 유효한 토큰이 들어오지 않을 경우
-        if(principalDetails == null){
-            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
-        }
-
         // 토큰 유효성 검증
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
         Project project = projectService.findById(createDonationReqDto.getProjectId());
         Long points = project.getPointPerMoi() * createDonationReqDto.getMoi();
 
         // 기부하려는 금액이 현재 보유 포인트보다 많은 경우 에러 반환
         if(points > loginUser.getPoint()){
-            return new ResponseEntity<>(ErrorCode.EXCEED_MAX_CAPACITY, HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.EXCEED_MAX_CAPACITY);
         }
 
         // 기부 모이 수에 따른 티켓 발급
@@ -165,18 +151,8 @@ public class ProjectController {
         @Schema(description = "봉사 신청 일시 고유아이디", defaultValue = "1") Long vDateInfoId,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
-        // 프론트에서 유효한 토큰이 들어오지 않을 경우
-        if(principalDetails == null){
-            return new ResponseEntity<>(ErrorCode.INVALID_CLIENT_TOKEN, HttpStatus.NOT_FOUND);
-        }
-
-        // 유효한 유저인지 검증
-        Users loginUser = null;
-        try {
-            loginUser = userService.findByEmail(principalDetails.getUsername());
-        } catch (CustomException e) {
-            return new ResponseEntity<>(ErrorCode.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-        }
+        // 토큰 유효성 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
         // 해당봉사일 정보
         VolunteerDateInfo volunteerDateInfo = volunteerService.findVolunteerDateInfoById(vDateInfoId);
