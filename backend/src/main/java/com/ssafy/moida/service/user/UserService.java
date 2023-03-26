@@ -60,7 +60,7 @@ public class UserService {
 
     /**
      * [한선영] 회원가입
-     * 유저 role이 "ROLE_ADMIN"으로 들어 왔을 때만 관리자로 회원가입, 그 외에는 일반유저로 회원가입
+     * 사용자의 role이 "ROLE_ADMIN"으로 들어 왔을 때만 관리자로 회원가입, 그 외에는 일반유저로 회원가입
      * @param userJoinReqDto
      * */
     public void joinUser(UserJoinReqDto userJoinReqDto) {
@@ -248,7 +248,7 @@ public class UserService {
     }
 
     /**
-     * [한선영] 유저의 포인트 사용 목록(GetUserPointResDto) 가져오기
+     * [한선영] 사용자의 포인트 사용 목록(GetUserPointResDto) 가져오기 - 수정필요
      * @param userId
      * @return
      * */
@@ -261,6 +261,7 @@ public class UserService {
         List<PointCharge> pointCharges = pointChargeRepository.findByUsersId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        // 기부 내역 저장
         for (UsersDonation donation : usersDonations) {
             GetUserPointResDto dto = new GetUserPointResDto();
 
@@ -274,6 +275,7 @@ public class UserService {
             result.add(dto);
         }
 
+        // 충전 내역 저장
         for (PointCharge charge : pointCharges) {
             GetUserPointResDto dto = new GetUserPointResDto();
 
@@ -284,6 +286,7 @@ public class UserService {
             result.add(dto);
         }
 
+        // 최신순으로 정렬
         Collections.sort(result, Comparator.comparing(GetUserPointResDto::getPointDate));
 
         return result;
@@ -296,7 +299,8 @@ public class UserService {
      * */
     public List<GetUserPointResDto> getPointListFilter(String filter, Long userId) {
         List<GetUserPointResDto> result = new ArrayList<>();
-        if(filter.equals("charge")) {
+
+        if(filter.equals("charge")) { // filter가 충전일때 포인트 내역
             List<PointCharge> pointCharges = pointChargeRepository.findByUsersId(userId)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -309,7 +313,7 @@ public class UserService {
 
                 result.add(dto);
             }
-        } else if(filter.equals("donation")) {
+        } else if(filter.equals("donation")) { // filter가 기부일때 포인트 내역
             List<UsersDonation> usersDonations = usersDonationRepository.findByUsersId(userId)
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -325,7 +329,7 @@ public class UserService {
 
                 result.add(dto);
             }
-        } else {
+        } else { // 나머지 경우에는 전체 포인트 내역
             return getUsersPoint(userId);
         }
 
