@@ -12,11 +12,13 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.user.UserProjectService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.service.utils.EmailService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,10 +41,12 @@ public class UserController {
 
     private final UserService userService;
     private final UserProjectService userProjectService;
+    private final EmailService emailService;
 
-    public UserController(UserService userService, UserProjectService userProjectService) {
+    public UserController(UserService userService, UserProjectService userProjectService, EmailService emailService) {
         this.userService = userService;
         this.userProjectService = userProjectService;
+        this.emailService = emailService;
     }
 
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
@@ -125,7 +129,7 @@ public class UserController {
 
         Users user = userService.findByEmail(principal.getUsername());
         userService.vaildUserByPassword(changePwdReqDto.getPassword());
-        userService.changePwd(user.getEmail(), changePwdReqDto);
+        userService.changePwd(user.getEmail(), changePwdReqDto.getPassword());
 
         return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
     }
@@ -229,6 +233,26 @@ public class UserController {
         userPointList = userService.getPointListFilter(category, userId);
 
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
+    }
+
+    @Operation(summary = "비밀번호 찾기", description = "가입된 이메일로 임시 비밀번호를 보냅니다.")
+    @PostMapping(
+            path = "/forgot-password"
+    )
+    public ResponseEntity<?> forgotPassword(
+            @PathVariable(value = "email") String email
+    ) throws MessagingException, UnsupportedEncodingException {
+        // 사용자 존재 확인
+        userService.findByEmail(email);
+
+        // 임시 비밀번호가 담긴 메일 전송
+        MimeMessage message = emailService.createForgotPwdMessage(email);
+        String tempPwd = emailService.sendMessage(message);
+
+        // 임시 비밀번호로 변경
+        userService.changePwd(email, tempPwd);
+
+        return new ResponseEntity<>("임시 비밀번호 발송 성공", HttpStatus.OK);
     }
 
 }
