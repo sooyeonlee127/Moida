@@ -26,10 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -339,8 +336,17 @@ public class UserService {
     /**
      * [한선영] 기부에 사용한 총 포인트
      * */
-    public Long getTotalPoint(Long userId) {
-        return usersDonationRepository.findTotalPoint(userId);
+    public long getTotalPoint(Long userId) {
+        long totalPoint;
+
+        OptionalLong optionalLong = usersDonationRepository.findTotalPoint(userId);
+        if(optionalLong == null) {
+            totalPoint = 0L;
+        } else {
+            totalPoint = optionalLong.getAsLong();
+        }
+
+        return totalPoint;
     }
 
 }

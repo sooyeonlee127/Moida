@@ -96,7 +96,7 @@ public class UserController {
         log.info("volunteer Cnt : {}", totalVolunteerCnt);
 
         // 총 포인트 확인하기
-        Long totalPoint = userService.getTotalPoint(user.getId());
+        long totalPoint = userService.getTotalPoint(user.getId());
         log.info("total Point : {}", totalPoint);
 
         // Dto에 유저 정보 저장
