@@ -58,7 +58,7 @@ public class UserController {
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
     }
 
-    @Operation(summary = "닉네임 중복 검사", description = "회원 닉네임 중복 검사를 합니다.")
+    @Operation(summary = "닉네임 중복 검사", description = "사용자의 닉네임 중복 검사를 합니다.")
     @PostMapping(
             path = "/exists/nickname/{nickname}"
     )
@@ -69,7 +69,7 @@ public class UserController {
         return new ResponseEntity<>("닉네임 중복 없음", HttpStatus.OK);
     }
 
-    @Operation(summary = "이메일 중복 검사 및 인증", description = "회원이 입력한 이메일의 중복 검사를 합니다. 중복이 아니라면 이메일로 인증 코드를 발송합니다.")
+    @Operation(summary = "이메일 중복 검사 및 인증", description = "사용자가 입력한 이메일의 중복 검사를 합니다. 중복이 아니라면 이메일로 인증 코드를 발송합니다.")
     @PostMapping(
             path = "/exists/email/{email}"
     )
@@ -81,7 +81,7 @@ public class UserController {
         return new ResponseEntity<>(code, HttpStatus.OK);
     }
 
-    @Operation(summary = "마이페이지", description = "마이페이지 내에 들어가는 로그인한 유저의 정보를 반환합니다.")
+    @Operation(summary = "마이페이지", description = "마이페이지 내에 들어가는 로그인한 사용자의 정보를 반환합니다.")
     @GetMapping(
             path = "/me"
     )
@@ -111,7 +111,7 @@ public class UserController {
         return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
     }
 
-    @Operation(summary = "비밀번호 변경", description = "로그인한 유저의 비밀번호를 변경합니다.")
+    @Operation(summary = "비밀번호 변경", description = "로그인한 사용자의 비밀번호를 변경합니다.")
     @PutMapping(
             path = "/me/password",
             consumes = MediaType.APPLICATION_JSON_VALUE
@@ -180,7 +180,7 @@ public class UserController {
         return new ResponseEntity<>(userVolunteerList, HttpStatus.OK);
     }
 
-    @Operation(summary = "사용자 포인트 내역", description = "로그인한 유저의 포인트 사용 내역을 반환합니다.")
+    @Operation(summary = "사용자 포인트 내역", description = "로그인한 사용자의 포인트 사용 내역을 반환합니다.")
     @GetMapping(
             path = "/me/points"
     )
@@ -202,12 +202,12 @@ public class UserController {
     )
     public ResponseEntity<?> chargePoint(
             @AuthenticationPrincipal PrincipalDetails principal,
-            @RequestParam(value = "points") Long points
+            @RequestParam(value = "point") Long point
     ) {
         Users user = userService.findByEmail(principal.getUsername());
 
-        userService.updateAfterPointCharge(user, points);
-        userService.savePointCharge(user, points);
+        userService.updateAfterPointCharge(user, point);
+        userService.savePointCharge(user, point);
 
         return new ResponseEntity<>("포인트 충전 완료", HttpStatus.OK);
     }
