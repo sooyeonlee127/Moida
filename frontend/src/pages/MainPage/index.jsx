@@ -1,22 +1,11 @@
-<<<<<<< HEAD
 import Projects from "./components/Projects";
-=======
-import React, { useState } from "react";
-import MainCard from "./components/MainCard";
->>>>>>> 05be6667b57347424c1535573b60d9a185166964
 import styled from "styled-components";
 // import tw from "twin.macro";
 import { useEffect, useRef } from "react";
 import useScroll from './components/useScroll';
 // import axios from "axios";
 
-<<<<<<< HEAD
-
-
-const MainPage = (props) => {
-=======
 const MainPage = () => {
->>>>>>> 05be6667b57347424c1535573b60d9a185166964
   // const getProjects = () => {
   //   axios({
   //     url: "/api/project",
@@ -26,10 +15,6 @@ const MainPage = () => {
   //     console.log(res.response)
   //   })
   // }
-<<<<<<< HEAD
-  // getProjects()
-
-=======
 
   // getProjects()
 
@@ -114,7 +99,6 @@ const MainPage = () => {
     }
 
   ]);
->>>>>>> 05be6667b57347424c1535573b60d9a185166964
   return (
     <Wrapper>
       <div className="intro"></div>
