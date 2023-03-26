@@ -179,4 +179,17 @@ public class UserController {
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
 
+    @Operation(summary = "사용자 포인트 충전", description = "사용자 포인트를 충전합니다.")
+    @PostMapping(
+            path = "/me/points/charge"
+    )
+    public ResponseEntity<?> chargePoint(
+            @AuthenticationPrincipal PrincipalDetails principal,
+            @RequestParam(value = "points") Long points
+    ) {
+        Users user = userService.findByEmail(principal.getUsername());
+        userService.chargeUsersPoint(user, points);
+        return new ResponseEntity<>("포인트 충전 완료", HttpStatus.OK);
+    }
+
 }

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -208,6 +209,24 @@ public class UserService {
             .project(project)
             .build();
         usersDonationRepository.save(usersDonation);
+    }
+
+    /**
+     * [한선영] 유저의 포인트 충전
+     * @param users
+     * */
+    @Transactional
+    public void chargeUsersPoint(Users users, long points) {
+        // 포인트 충전 내역 만들기
+        PointCharge pointCharge = PointCharge.builder()
+                .regDate(LocalDateTime.now())
+                .amount(points)
+                .users(users)
+                .build();
+        pointChargeRepository.save(pointCharge);
+
+        // 사용자의 정보에 포인트 정보 업데이트하기
+        users.updatePoint(points);
     }
 
     /**
