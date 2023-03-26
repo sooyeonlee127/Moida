@@ -1,6 +1,6 @@
 package com.ssafy.moida.model.article;
 
-import com.ssafy.moida.model.project.Category;
+import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,14 +41,19 @@ public class Article {
     @JoinColumn(name = "users_volunteer_id")
     private UsersVolunteer usersVolunteer;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
+    private Project project;
+
     @Builder
     public Article(String subject, String description, Double difficultyLevel, String category,
-        String url, UsersVolunteer usersVolunteer) {
+        String url, UsersVolunteer usersVolunteer, Project project) {
         this.subject = subject;
         this.description = description;
         this.difficultyLevel = difficultyLevel;
         this.category = category;
         this.url = url;
         this.usersVolunteer = usersVolunteer;
+        this.project = project;
     }
 }

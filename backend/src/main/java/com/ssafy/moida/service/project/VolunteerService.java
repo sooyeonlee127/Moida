@@ -69,7 +69,7 @@ public class VolunteerService {
         LocalDate startDate = LocalDate.of(sd.getYear(), sd.getMonth(), sd.getDayOfMonth());
         LocalDate endDate = LocalDate.of(ed.getYear(), ed.getMonth(), ed.getDayOfMonth());
 
-        /* 두 날 사이의 날짜 리스트 생성 */
+        // 두 날 사이의 날짜 리스트 생성
         List<LocalDate> dates = startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
 
         for(int i = 0; i < dates.size(); i++){
@@ -93,15 +93,29 @@ public class VolunteerService {
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
 
+    /**
+     * [세은] 봉사 일자 테이블 인원수 업데이트 (+1)
+     * @param volunteerDateInfo
+     */
     @Transactional
     public void updateCapacity(VolunteerDateInfo volunteerDateInfo){
         volunteerDateInfo.updateCapacity(volunteerDateInfo.getCapacity() + 1);
     }
 
+    /**
+     * [세은] 해당 봉사 일자에 사용자가 이미 신청하였는지 확인
+     * @param volunteerDateInfo
+     * @return
+     */
     public boolean existsByVolunteerDateInfo(VolunteerDateInfo volunteerDateInfo){
         return usersVolunteerRepository.existsByVolunteerDateInfo(volunteerDateInfo);
     }
 
+    /**
+     * [세은] UsersVolunteer에 사용자 봉사 신청 추가
+     * @param users
+     * @param volunteerDateInfo
+     */
     @Transactional
     public void saveUsersVolunteer(Users users, VolunteerDateInfo volunteerDateInfo){
         UsersVolunteer usersVolunteer = UsersVolunteer.builder()

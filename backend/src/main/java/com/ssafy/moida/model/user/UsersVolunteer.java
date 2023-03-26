@@ -44,4 +44,12 @@ public class UsersVolunteer {
         this.users = users;
         this.volunteerDateInfo = volunteerDateInfo;
     }
+
+    /**
+     * [세은] 사용자 봉사 상태 변경
+     * @param status
+     */
+    public void updateStatus(Status status){
+        this.status = status;
+    }
 }
