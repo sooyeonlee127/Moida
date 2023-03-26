@@ -165,7 +165,7 @@ public class UserController {
 
     @Operation(summary = "사용자 포인트 내역", description = "로그인한 유저의 포인트 사용 내역을 반환합니다.")
     @GetMapping(
-            path = "/me/point"
+            path = "/me/points"
     )
     public ResponseEntity<?> getUserPointList(
             @AuthenticationPrincipal PrincipalDetails principal
