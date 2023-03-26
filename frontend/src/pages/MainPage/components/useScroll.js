@@ -11,6 +11,7 @@ const useScroll = (threshold=0.05) => {
     if (element.current) {
       observer = new IntersectionObserver((entries) => {
         const entry = entries[0]
+        console.log(entry.target.className)
         setIsVisible(entry.isIntersecting)
       }, { threshold: threshold });
       observer.observe(element.current);
