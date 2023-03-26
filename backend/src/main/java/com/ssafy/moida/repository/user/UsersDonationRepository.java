@@ -22,4 +22,7 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
     List<GetUserDonationResDto> findDonationsByUserId(@Param("userId") Long userId);
 
     Optional<List<UsersDonation>> findByUsersId(Long userId);
+
+    @Query("select sum(ud.amount) from UsersDonation ud where ud.users.id = :userId")
+    Long findTotalPoint(@Param("userId") Long userId);
 }

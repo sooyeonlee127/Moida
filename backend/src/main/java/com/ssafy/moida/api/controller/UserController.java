@@ -96,6 +96,8 @@ public class UserController {
         log.info("volunteer Cnt : {}", totalVolunteerCnt);
 
         // 총 포인트 확인하기
+        Long totalPoint = userService.getTotalPoint(user.getId());
+        log.info("total Point : {}", totalPoint);
 
         // Dto에 유저 정보 저장
         UserInfoResDto userInfoResDto = UserInfoResDto.builder()
@@ -105,7 +107,7 @@ public class UserController {
                 .point(user.getPoint())
                 .nftUrl(user.getNftUrl())
                 .volunteerCnt(totalVolunteerCnt)
-                .totalPoint(0L)
+                .totalPoint(totalPoint)
                 .build();
 
         return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);

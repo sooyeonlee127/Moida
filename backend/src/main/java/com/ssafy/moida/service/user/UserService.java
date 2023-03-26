@@ -336,4 +336,11 @@ public class UserService {
         return result;
     }
 
+    /**
+     * [한선영] 기부에 사용한 총 포인트
+     * */
+    public Long getTotalPoint(Long userId) {
+        return usersDonationRepository.findTotalPoint(userId);
+    }
+
 }
