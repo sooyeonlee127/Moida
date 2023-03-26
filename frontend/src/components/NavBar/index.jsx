@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/Auth";
 
 const NavBar = () => {
-  const token = useState(localStorage.getItem("token"));
-  const point = useState(0);
-  const ticket = useState(0);
+  const {isLogin, ticket, point} = useContext(AuthContext);
   const navigation = [
     { name: "HOME", href: "/" },
     { name: "기부하기", href: "/donation" },
@@ -20,11 +19,11 @@ const NavBar = () => {
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
-    { name: `${ticket[0]}개`, href: "/gatcha" },
-    { name: `${point[0]} P`, href: "/point" },
+    { name: `${ticket}개`, href: "/gatcha" },
+    { name: `${point} P`, href: "/point" },
     { name: "LOGOUT", href: "#" },
   ];
-  if (token[0]) {
+  if (isLogin) {
     return (
       <>
         <Nav>

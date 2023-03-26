@@ -1,28 +1,36 @@
 // import { useState } from 'react'
-import styled from 'styled-components'
-import tw from 'twin.macro'
-import Form from './components/form'
+import styled from "styled-components";
+import tw from "twin.macro";
+import Form from "./components/form";
 
 const SignupPage = () => {
-
-    return (
-        <Container>
-            <WrapTitle>
-                <Title>회원가입</Title>
-                <Form/>
-            </WrapTitle>
-            
-        </Container>
-    )
-}
+  return (
+    <Container>
+      <InnerContainer>
+        <Heading>회원가입</Heading>
+        <Form />
+      </InnerContainer>
+    </Container>
+  );
+};
 const Container = styled.div`
-${tw`isolate bg-white py-28 px-6 sm:py-28 lg:px-8`}
-`
+  height: 100vh;
+  width: 100vw;
+  ${tw`
+    flex min-h-full items-center justify-center py-12
+`}
+`;
 
-const WrapTitle = styled.div`
-${tw`mx-auto max-w-2xl text-center`}
-`
-const Title = styled.h2`
-${tw`text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl`}
-`
+const InnerContainer = styled.div`
+  ${tw`
+  bg-gray-100 px-20 py-7 w-full max-w-xl space-y-8
+  `}
+`;
+
+const Heading = styled.h2`
+  ${tw`
+  mt-6 text-center text-4xl font-normal tracking-normal text-gray-700
+  `}
+`;
+
 export default SignupPage;
