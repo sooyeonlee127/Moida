@@ -1,4 +1,4 @@
-package com.ssafy.moida.blockchain.model;
+package com.ssafy.moida.model.blockchain;
 
 import com.ssafy.moida.model.user.Users;
 import jakarta.persistence.*;
