@@ -8,6 +8,7 @@ import com.ssafy.moida.api.response.GetArticleResDto;
 import com.ssafy.moida.model.article.Article;
 import com.ssafy.moida.model.article.Board;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
@@ -55,6 +56,8 @@ public class ArticleService {
         Project project = volunteerDateInfoRepository
                 .findById(usersVolunteer.getVolunteerDateInfo().getId()).get().getProject();
 
+        Users users = usersVolunteer.getUsers();
+
         Article article = Article.builder()
             .subject(createArticleReqDto.getSubject())
             .description(createArticleReqDto.getDescription())
@@ -63,7 +66,7 @@ public class ArticleService {
             .url(url)
             .usersVolunteer(usersVolunteer)
             .project(project)
-            .users(usersVolunteer.getUsers())
+            .users(users)
             .build();
 
         articleRepository.save(article);
@@ -72,6 +75,7 @@ public class ArticleService {
         Double difficultyLevel = (project.getProjectVolunteer().getDifficultyLevel() + createArticleReqDto.getDifficultyLevel()) / (projectArticleCount + 1);
 
         project.getProjectVolunteer().updateDifficulty(difficultyLevel);
+        users.updateTicket(users.getTicketCnt() + 2);
     }
 
     /**
