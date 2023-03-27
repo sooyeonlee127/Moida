@@ -10,7 +10,6 @@ import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
-import com.ssafy.moida.service.user.UserProjectService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.service.utils.EmailService;
 import com.ssafy.moida.utils.error.ErrorCode;
@@ -40,12 +39,10 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final UserProjectService userProjectService;
     private final EmailService emailService;
 
-    public UserController(UserService userService, UserProjectService userProjectService, EmailService emailService) {
+    public UserController(UserService userService, EmailService emailService) {
         this.userService = userService;
-        this.userProjectService = userProjectService;
         this.emailService = emailService;
     }
 
@@ -138,18 +135,18 @@ public class UserController {
     @Operation(summary = "사용자 봉사 취소", description = "사용자가 신청한 봉사를 취소합니다.")
     @PutMapping(path = "/me/volunteer/{volunteerid}")
     public ResponseEntity<?> updateUserVolunteerStatus(@PathVariable("volunteerid") int volunteerId){
-        if(!userProjectService.existsById((long) volunteerId)){
+        if(!userService.existsById((long) volunteerId)){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
         // REGISTER 상태인 경우에만 CANCEL로 변경이 가능함
-        UsersVolunteer usersVolunteer = userProjectService.findUsersVolunteerById((long) volunteerId);
+        UsersVolunteer usersVolunteer = userService.findUsersVolunteerById((long) volunteerId);
         if(!usersVolunteer.getStatus().equals(Status.REGISTER)){
             throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
         }
 
         // REGISTER  -> CANCEL로 변경
-        userProjectService.updateUserVolunteerStatus(usersVolunteer, Status.CANCEL);
+        userService.updateUserVolunteerStatus(usersVolunteer, Status.CANCEL);
 
         return new ResponseEntity<>("봉사 취소가 완료되었습니다", HttpStatus.OK);
     }

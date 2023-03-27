@@ -1,15 +1,13 @@
 package com.ssafy.moida.service.user;
 
-import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.api.response.GetUserPointResDto;
 import com.ssafy.moida.api.response.GetUserVolunteerResDto;
 import com.ssafy.moida.model.project.Project;
-import com.ssafy.moida.model.user.PointCharge;
-import com.ssafy.moida.model.user.Role;
-import com.ssafy.moida.model.user.Users;
-import com.ssafy.moida.model.user.UsersDonation;
+import com.ssafy.moida.model.project.Status;
+import com.ssafy.moida.model.user.*;
+import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.user.PointChargeRepository;
 import com.ssafy.moida.repository.user.UserRepository;
 import com.ssafy.moida.repository.user.UsersDonationRepository;
@@ -45,14 +43,16 @@ public class UserService {
     private final PointChargeRepository pointChargeRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final VolunteerDateInfoRepository volunteerDateInfoRepository;
 
-    public UserService(UserRepository userRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, PointChargeRepository pointChargeRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, PointChargeRepository pointChargeRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder, VolunteerDateInfoRepository volunteerDateInfoRepository) {
         this.userRepository = userRepository;
         this.usersDonationRepository = usersDonationRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
         this.pointChargeRepository = pointChargeRepository;
         this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.volunteerDateInfoRepository = volunteerDateInfoRepository;
     }
 
     /**
@@ -348,6 +348,35 @@ public class UserService {
         }
 
         return totalPoint;
+    }
+
+    /**
+     * [세은] UsersVolunteer 객체를 id로 찾기
+     * @param id
+     * @return
+     */
+    public UsersVolunteer findUsersVolunteerById(Long id){
+        return usersVolunteerRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+    }
+
+    /**
+     * [세은] UsersVolunteer 객체가 존재하는지 확인
+     * @param id
+     * @return
+     */
+    public boolean existsById(Long id){
+        return usersVolunteerRepository.existsById(id);
+    }
+
+    /**
+     * [세은] 사용자 봉사 신청 취소
+     * @param usersVolunteer
+     * @param status
+     */
+    @Transactional
+    public void updateUserVolunteerStatus(UsersVolunteer usersVolunteer, Status status){
+        usersVolunteer.updateStatus(status);
     }
 
 }
