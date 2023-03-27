@@ -13,6 +13,7 @@ import com.ssafy.moida.service.article.ArticleService;
 import com.ssafy.moida.service.article.BoardDocumentService;
 import com.ssafy.moida.service.article.BoardService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.service.user.UserVolunteerService;
 import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
@@ -42,15 +43,17 @@ public class ArticleController {
     private final DtoValidationUtils dtoValidationUtils;
     private final BoardService boardService;
     private final BoardDocumentService boardDocumentService;
+    private final UserVolunteerService userVolunteerService;
 
     public ArticleController(ArticleService articleService, UserService userService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils,
-                             BoardService boardService, BoardDocumentService boardDocumentService) {
+                             BoardService boardService, BoardDocumentService boardDocumentService, UserVolunteerService userVolunteerService) {
         this.articleService = articleService;
         this.userService = userService;
         this.tokenUtils = tokenUtils;
         this.dtoValidationUtils = dtoValidationUtils;
         this.boardService = boardService;
         this.boardDocumentService = boardDocumentService;
+        this.userVolunteerService = userVolunteerService;
     }
 
     @Operation(summary = "사용자 봉사 후기 작성", description = "사용자가 봉사 후기를 작성합니다.")
@@ -69,7 +72,7 @@ public class ArticleController {
         dtoValidationUtils.validateCreateArticleReqDto(createArticleReqDto);
 
         // DTO로 들어온 UsersVolunteer 안의 user_id와 일치하는지 검증
-        UsersVolunteer usersVolunteer = userService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
+        UsersVolunteer usersVolunteer = userVolunteerService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
         if(loginUser.getId() != usersVolunteer.getUsers().getId()){
             throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
         }
