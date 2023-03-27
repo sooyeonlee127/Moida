@@ -16,6 +16,7 @@ import PayResult from "./pages/PointPage/components/PayResult";
 import AdminPage from "./pages/AdminPage";
 import Auth from "./context/Auth";
 import NavBar from "./components/NavBar/index.jsx"
+import PasswordPage from "./pages/PasswordPage";
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
           <Route path={"/signup"} element={<SignupPage />} />
           <Route path={"/payresult"} element={<PayResult />} />
           <Route path={"/admin"} element={<AdminPage />} />
+          <Route path={"/password"} element={<PasswordPage />} />
         </Routes>
       </div>
     </Auth>
