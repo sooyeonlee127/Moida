@@ -122,9 +122,9 @@ public class UserController {
                 .nftUrl(user.getNftUrl())
                 .volunteerCnt(totalVolunteerCnt)
                 .totalPoint(totalPoint)
-                .MoiAcorn(moiAcorn)
-                .MoiSeed(moiSeed)
-                .MoiCorn(moiCorn)
+                .moiAcorn(moiAcorn)
+                .moiSeed(moiSeed)
+                .moiCorn(moiCorn)
                 .build();
 
         return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
