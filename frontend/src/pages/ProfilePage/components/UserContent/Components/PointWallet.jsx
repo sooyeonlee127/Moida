@@ -1,4 +1,5 @@
-import useListApi from "./api"
+import React from 'react';
+import useListApi from "./api";
 
 const PointWallet = () => {
     const { data: datas, error, loading } = useListApi("points")
@@ -14,19 +15,31 @@ const PointWallet = () => {
     return (
         <>
         <table>
-            {datas.map((data, index) => { 
-                console.log(data)
-                return (
-                    <tr key={index}>
-                        <td>분류 : {data.category}</td>
-                        <td>프로젝트 차수 : {data.generation}</td>
-                        <td>포인트 적립/사용일 : {data.pointDate}</td>
-                        <td>포인트 : {data.points}</td>
-                        <td>주제 : {data.projectSubject}</td>
-                        <td>티켓 카운트 : {data.ticketCnt}</td>
-                    </tr>
-                )
-            })}
+            <thead>
+                <tr>
+                    <th>분류</th>
+                    <th>프로젝트 차수</th>
+                    <th>포인트 적립/사용일</th>
+                    <th>포인트</th>
+                    <th>주제</th>
+                    <th>받은 티켓</th>
+                </tr>
+            </thead>
+            <tbody>
+                {datas.map((data, index) => { 
+                    console.log(data)
+                    return (
+                        <tr key={index}>
+                            <td>{data.category}</td>
+                            <td>{data.generation}</td>
+                            <td>{data.pointDate}</td>
+                            <td>{data.points}</td>
+                            <td>{data.projectSubject}</td>
+                            <td>{data.ticketCnt}</td>
+                        </tr>
+                    )
+                })}
+            </tbody>
         </table>
         <p> {datas.length === 0 && !loading? "빈 값":""}{loading? "로딩 중":""}</p>
             
@@ -34,4 +47,5 @@ const PointWallet = () => {
     )
 }
 
-export default PointWallet;
+export default React.memo(PointWallet);
+// React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은혁

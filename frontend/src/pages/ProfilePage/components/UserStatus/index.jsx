@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import tw from 'twin.macro'
-import { useState } from 'react'
 import { useQuery } from "@tanstack/react-query";
+import React from 'react';
 import axios from 'axios';
 
 
@@ -69,4 +69,5 @@ const ChargeBtn = styled.button`
 ${tw`border px-4 py-2 rounded bg-indigo-500 hover:bg-indigo-400 text-white active:bg-indigo-600`}
 `
 
-export default UserStatus
+export default React.memo(UserStatus); 
+// React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은혁
