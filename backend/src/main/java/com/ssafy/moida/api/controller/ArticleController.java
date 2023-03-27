@@ -116,9 +116,10 @@ public class ArticleController {
         return new ResponseEntity<>("공지사항 작성 완료", HttpStatus.OK);
     }
 
-    @Operation(summary = "전체 인증갤러리 조회", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
+    @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
     @GetMapping
-    public ResponseEntity<GetArticleResDto> getArticlesAndBoards(){
+    public ResponseEntity<List<GetArticleResDto>> getArticlesAndBoards(){
+
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
