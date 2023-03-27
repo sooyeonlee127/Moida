@@ -126,6 +126,12 @@ public class ArticleController {
         return new ResponseEntity<>(articleList, HttpStatus.OK);
     }
 
+    @Operation(summary = "카테고리별 공지사항 조회", description = "공지사항을 카테고리별 조회합니다. 카테고리별 공지사항 기수 리스트와 가장 최신 공지사항을 반환합니다.")
+    @GetMapping("/category?{category}")
+    public ResponseEntity<?> getBoardByCategory(){
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
     @Operation(summary = "공지사항 상세조회", description = "특정 공지사항을 상세 조회합니다.")
     @GetMapping("/board/{boardid}")
     public ResponseEntity<?> getBoardDetails(@PathVariable("boardid") int boardId){
