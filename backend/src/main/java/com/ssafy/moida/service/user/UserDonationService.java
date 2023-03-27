@@ -60,6 +60,8 @@ public class UserDonationService {
 
     /**
      * [한선영] 기부에 사용한 총 포인트
+     * @param userId
+     * @return
      * */
     public long getTotalPoint(Long userId) {
         boolean existDonation = usersDonationRepository.existsByUsersId(userId);
