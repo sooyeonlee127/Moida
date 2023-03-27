@@ -62,7 +62,7 @@ public class UserDonationService {
      * [한선영] 사용자가 기부를 한 적이 있는지 확인
      * @param userId
      * */
-    public boolean existDonation(Long userId) {
+    public boolean existsUserDonation(Long userId) {
         boolean existDonation = usersDonationRepository.existsByUsersId(userId);
         return existDonation;
     }
@@ -75,7 +75,7 @@ public class UserDonationService {
     public long getTotalPoint(Long userId) {
         long totalPoint;
 
-        if(existDonation(userId)) { // 기부 한 적이 있을 때
+        if(existsUserDonation(userId)) { // 기부 한 적이 있을 때
             totalPoint = usersDonationRepository.findTotalPoint(userId);
         } else { // 기부를 한 적이 없을 때
             totalPoint = 0L;
