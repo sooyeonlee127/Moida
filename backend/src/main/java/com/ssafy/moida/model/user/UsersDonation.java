@@ -27,6 +27,9 @@ public class UsersDonation {
     private Long amount;
 
     @Column(nullable = false)
+    private int moi;
+
+    @Column(nullable = false)
     private int ticketCnt;
 
     @Column(length = 45)

@@ -32,7 +32,6 @@ public class UserDonationService {
     public List<GetUserDonationResDto> getUsersDonation(Long userId) {
         List<GetUserDonationResDto> result = new ArrayList<>();
         result = usersDonationRepository.findDonationsByUserId(userId);
-
         return result;
     }
 
@@ -48,11 +47,12 @@ public class UserDonationService {
      * [세은] 사용자가 기부할 경우 UsersDonation 제이터 저장
      */
     @Transactional
-    public void saveUsersDonation(Long amount, int tickentCnt, Users users, Project project){
+    public void saveUsersDonation(Long amount, int tickentCnt, int moi, Users users, Project project){
         UsersDonation usersDonation = UsersDonation.builder()
                 .amount(amount)
                 .ticketCnt(tickentCnt)
                 .users(users)
+                .moi(moi)
                 .project(project)
                 .build();
         usersDonationRepository.save(usersDonation);

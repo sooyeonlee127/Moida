@@ -12,5 +12,5 @@ public class CreateDonationReqDto {
     @Schema(description = "프로젝트 아이디", defaultValue = "1")
     private Long projectId;
     @Schema(description = "기부한 모이 수", defaultValue = "5")
-    private Long moi;
+    private int moi;
 }
