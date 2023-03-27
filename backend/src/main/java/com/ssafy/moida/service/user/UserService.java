@@ -158,39 +158,6 @@ public class UserService {
     }
 
     /**
-     * [한선영] 사용자가 참여한 봉사의 개수 가져오기
-     * @return
-     * */
-    public long totalVolunteerCnt() {
-        // 봉사 프로젝트 개수 가져오기
-        return usersVolunteerRepository.countBy();
-    }
-
-    /**
-     * [한선영] 사용자가 참여한 기부 프로젝트 목록(GetUserDonationResDto) 가져오기
-     * @param userId
-     * @return
-     * */
-    public List<GetUserDonationResDto> getUsersDonation(Long userId) {
-        List<GetUserDonationResDto> result = new ArrayList<>();
-        result = usersDonationRepository.findDonationsByUserId(userId);
-
-        return result;
-    }
-
-    /**
-     * [한선영] 사용자가 참여한 봉사 프로젝트 목록(GetUserVolunteerResDto) 가져오기
-     * @param userId
-     * @return
-     * */
-    public List<GetUserVolunteerResDto> getUsersVolunteer(Long userId) {
-        List<GetUserVolunteerResDto> result = new ArrayList<>();
-        result = usersVolunteerRepository.findVolunteersByUserId(userId);
-
-        return result;
-    }
-
-    /**
      * [한선영] 비밀번호 변경
      * @param email
      * @param password
@@ -198,28 +165,6 @@ public class UserService {
     public void changePwd(String email, String password) {
         Users users = findByEmail(email);
         users.updatePassword(bCryptPasswordEncoder.encode(password));
-    }
-
-    /**
-     * [세은] 사용자가 기부할 경우, 포인트 차감 & 티켓 갯수 업데이트
-     */
-    @Transactional
-    public void updateAfterDonation(Users users, Long point, int ticketCnt){
-        users.updateDonation(users.getPoint() - point, users.getTicketCnt() + ticketCnt);
-    }
-
-    /**
-     * [세은] 사용자가 기부할 경우 UsersDonation 제이터 저장
-     */
-    @Transactional
-    public void saveUsersDonation(Long amount, int tickentCnt, Users users, Project project){
-        UsersDonation usersDonation = UsersDonation.builder()
-            .amount(amount)
-            .ticketCnt(tickentCnt)
-            .users(users)
-            .project(project)
-            .build();
-        usersDonationRepository.save(usersDonation);
     }
 
     /**
@@ -332,51 +277,6 @@ public class UserService {
         }
 
         return result;
-    }
-
-    /**
-     * [한선영] 기부에 사용한 총 포인트
-     * */
-    public long getTotalPoint(Long userId) {
-        long totalPoint;
-
-        OptionalLong optionalLong = usersDonationRepository.findTotalPoint(userId);
-        if(optionalLong == null) {
-            totalPoint = 0L;
-        } else {
-            totalPoint = optionalLong.getAsLong();
-        }
-
-        return totalPoint;
-    }
-
-    /**
-     * [세은] UsersVolunteer 객체를 id로 찾기
-     * @param id
-     * @return
-     */
-    public UsersVolunteer findUsersVolunteerById(Long id){
-        return usersVolunteerRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
-    }
-
-    /**
-     * [세은] UsersVolunteer 객체가 존재하는지 확인
-     * @param id
-     * @return
-     */
-    public boolean existsById(Long id){
-        return usersVolunteerRepository.existsById(id);
-    }
-
-    /**
-     * [세은] 사용자 봉사 신청 취소
-     * @param usersVolunteer
-     * @param status
-     */
-    @Transactional
-    public void updateUserVolunteerStatus(UsersVolunteer usersVolunteer, Status status){
-        usersVolunteer.updateStatus(status);
     }
 
 }
