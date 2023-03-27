@@ -88,7 +88,18 @@ public class UserDonationService {
      * [한선영] 기부한 포인트를 곡물 가치로 변환
      * */
     public int convertPointToMoi(long userId, String category) {
-        int moi = usersDonationRepository.findMoi(userId, category);
+        int moi;
+
+        boolean exist = usersDonationRepository.existsByuserIdAndProjectCategory(userId, category);
+        log.info("존재 여부 : {}", exist);
+
+        if(exist) { // 해당 프로젝트에 기부를 한 적이 있으면
+            moi = usersDonationRepository.findMoi(userId, category);
+            log.info("모이 : {}", moi);
+        } else { // 기부를 한 적이 없으면
+            moi = 0;
+        }
+
         return moi;
     }
 

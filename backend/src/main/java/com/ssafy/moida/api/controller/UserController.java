@@ -107,6 +107,12 @@ public class UserController {
         long totalPoint = userDonationService.getTotalPoint(user.getId());
         log.info("total Point : {}", totalPoint);
 
+        // 기부한 포인트를 곡물 가치로 변환하여 가져오기
+        long userId = user.getId();
+        int moiAcorn = userDonationService.convertPointToMoi(userId, "SQUIRREL");
+        int moiSeed = userDonationService.convertPointToMoi(userId, "CRANE");
+        int moiCorn = userDonationService.convertPointToMoi(userId, "WILD_ANIMAL");
+
         // Dto에 유저 정보 저장
         UserInfoResDto userInfoResDto = UserInfoResDto.builder()
                 .email(user.getEmail())
@@ -116,6 +122,9 @@ public class UserController {
                 .nftUrl(user.getNftUrl())
                 .volunteerCnt(totalVolunteerCnt)
                 .totalPoint(totalPoint)
+                .MoiAcorn(moiAcorn)
+                .MoiSeed(moiSeed)
+                .MoiCorn(moiCorn)
                 .build();
 
         return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
