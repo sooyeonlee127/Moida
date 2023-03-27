@@ -110,6 +110,7 @@ const Projects = () => {
           <Button onClick={() => clickCard(cards[1].id)}>
             참여하기
           </Button>
+          <div>{inView2 && (value - target2.current?.offsetTop)}{inView2 ? "true":"false"}</div>
         </Sticky>
       </StickyContainer>
       <StickyContainer ref={target3}>
@@ -124,6 +125,7 @@ const Projects = () => {
             >
             참여하기
           </Button>
+          <div>{inView3 && (value - target3.current?.offsetTop)}{inView3 ? "true":"false"}</div>
         </Sticky>
       </StickyContainer>
   </div>
