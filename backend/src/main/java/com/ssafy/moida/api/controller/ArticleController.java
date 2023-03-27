@@ -119,8 +119,8 @@ public class ArticleController {
     @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
     @GetMapping
     public ResponseEntity<List<GetArticleResDto>> getArticlesAndBoards(){
-
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        List<GetArticleResDto> articleList = articleService.getArticleList();
+        return new ResponseEntity<>(articleList, HttpStatus.OK);
     }
 
     @Operation(summary = "공지사항 상세조회", description = "특정 공지사항을 상세 조회합니다.")

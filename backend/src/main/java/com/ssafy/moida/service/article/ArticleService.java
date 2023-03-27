@@ -2,6 +2,7 @@ package com.ssafy.moida.service.article;
 
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
+import com.ssafy.moida.api.response.GetArticleResDto;
 import com.ssafy.moida.model.article.Article;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.user.UsersVolunteer;
@@ -10,6 +11,8 @@ import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,5 +97,21 @@ public class ArticleService {
      */
     public boolean existsById(Long articleId){
         return articleRepository.existsById(articleId);
+    }
+
+    /**
+     * [세은] 사용자 인증글 전체 가져오기(인증갤러리 조회용)
+     * @return
+     */
+    public List<GetArticleResDto> getArticleList(){
+        List<Article> articleList = articleRepository.findAll();
+        List<GetArticleResDto> results = new ArrayList<>();
+
+        for (int i = 0; i < articleList.size(); i++) {
+            Article a = articleList.get(i);
+            results.add(new GetArticleResDto(a.getId(), a.getSubject(), a.getUrl(), a.getDifficultyLevel()));
+        }
+
+        return results;
     }
 }
