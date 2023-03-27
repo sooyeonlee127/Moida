@@ -1,4 +1,4 @@
-package com.ssafy.moida.service.utils;
+package com.ssafy.moida.utils;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -15,13 +15,12 @@ import java.util.Random;
  * */
 
 @Slf4j
-@Service
-public class EmailService {
+public class EamailUtils {
     private final JavaMailSender emailSender;
 
     private String code;
 
-    public EmailService(JavaMailSender emailSender) {
+    public EamailUtils(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 
