@@ -10,8 +10,10 @@ import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
+import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
-import com.ssafy.moida.service.utils.EmailService;
+import com.ssafy.moida.service.user.UserVolunteerService;
+import com.ssafy.moida.utils.EamailUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,11 +42,15 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final EmailService emailService;
+    private final UserVolunteerService userVolunteerService;
+    private final UserDonationService userDonationService;
+    @Autowired
+    private EamailUtils eamailUtils;
 
-    public UserController(UserService userService, EmailService emailService) {
+    public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService) {
         this.userService = userService;
-        this.emailService = emailService;
+        this.userVolunteerService = userVolunteerService;
+        this.userDonationService = userDonationService;
     }
 
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
@@ -93,11 +100,11 @@ public class UserController {
         Users user = userService.findByEmail(principal.getUsername());
 
         // 유저가 참여한 봉사 개수 가져오기
-        long totalVolunteerCnt = userService.totalVolunteerCnt();
+        long totalVolunteerCnt = userVolunteerService.totalVolunteerCnt();
         log.info("volunteer Cnt : {}", totalVolunteerCnt);
 
         // 총 포인트 확인하기
-        long totalPoint = userService.getTotalPoint(user.getId());
+        long totalPoint = userDonationService.getTotalPoint(user.getId());
         log.info("total Point : {}", totalPoint);
 
         // Dto에 유저 정보 저장
@@ -135,18 +142,18 @@ public class UserController {
     @Operation(summary = "사용자 봉사 취소", description = "사용자가 신청한 봉사를 취소합니다.")
     @PutMapping(path = "/me/volunteer/{volunteerid}")
     public ResponseEntity<?> updateUserVolunteerStatus(@PathVariable("volunteerid") int volunteerId){
-        if(!userService.existsById((long) volunteerId)){
+        if(!userVolunteerService.existsById((long) volunteerId)){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
         // REGISTER 상태인 경우에만 CANCEL로 변경이 가능함
-        UsersVolunteer usersVolunteer = userService.findUsersVolunteerById((long) volunteerId);
+        UsersVolunteer usersVolunteer = userVolunteerService.findUsersVolunteerById((long) volunteerId);
         if(!usersVolunteer.getStatus().equals(Status.REGISTER)){
             throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
         }
 
         // REGISTER  -> CANCEL로 변경
-        userService.updateUserVolunteerStatus(usersVolunteer, Status.CANCEL);
+        userVolunteerService.updateUserVolunteerStatus(usersVolunteer, Status.CANCEL);
 
         return new ResponseEntity<>("봉사 취소가 완료되었습니다", HttpStatus.OK);
     }
@@ -162,7 +169,7 @@ public class UserController {
         Long userId = user.getId();
 
         List<GetUserDonationResDto> userDonationList = new ArrayList<>();
-        userDonationList = userService.getUsersDonation(userId);
+        userDonationList = userDonationService.getUsersDonation(userId);
 
         return new ResponseEntity<>(userDonationList, HttpStatus.OK);
     }
@@ -178,7 +185,7 @@ public class UserController {
         Long userId = user.getId();
 
         List<GetUserVolunteerResDto> userVolunteerList = new ArrayList<>();
-        userVolunteerList = userService.getUsersVolunteer(userId);
+        userVolunteerList = userVolunteerService.getUsersVolunteer(userId);
 
         return new ResponseEntity<>(userVolunteerList, HttpStatus.OK);
     }
@@ -243,8 +250,8 @@ public class UserController {
         userService.findByEmail(email);
 
         // 임시 비밀번호가 담긴 메일 전송
-        MimeMessage message = emailService.createForgotPwdMessage(email);
-        String tempPwd = emailService.sendMessage(message);
+        MimeMessage message = eamailUtils.createForgotPwdMessage(email);
+        String tempPwd = eamailUtils.sendMessage(message);
 
         // 임시 비밀번호로 변경
         userService.changePwd(email, tempPwd);

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
 
 const LoginPage = () => {
-  const { setIsLogin, setPoint, setTicket } = useContext(AuthContext);
+  const { setIsLogin, setPoint, setTicket, setRole } = useContext(AuthContext);
   const navigate = useNavigate();
   const reducer = (state, action) => {
     return {
@@ -48,15 +48,19 @@ const LoginPage = () => {
       },
     })
       .then((res) => {
+        const data = res.data;
         const token = res.headers.authorization;
         localStorage.setItem("accessToken", token);
+        localStorage.setItem("refreshToken", res.headers.refresh);
+        localStorage.setItem("point", data.point);
+        localStorage.setItem("ticket", data.ticketCnt);
+        localStorage.setItem("role", data.role);
         setIsLogin(true);
-        console.log(res);
         // 응답값으로 받아오기
-        setPoint(10);
-        setTicket(10);
+        setPoint(data.point);
+        setTicket(data.ticketCnt);
+        setRole(data.role);
         navigate("/", { replace: true });
-        navigate(0);
       })
       .catch((error) => {
         const response = error.response.data;

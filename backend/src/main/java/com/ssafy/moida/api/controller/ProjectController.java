@@ -14,6 +14,7 @@ import com.ssafy.moida.service.project.ProjectDonationService;
 import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.ProjectVolunteerService;
+import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
@@ -44,6 +45,7 @@ public class ProjectController {
     private final ProjectVolunteerService projectVolunteerService;
     private final ProjectDonationService projectDonationService;
     private final ProjectPictureService projectPictureService;
+    private final UserDonationService userDonationService;
     @Autowired
     private TokenUtils tokenUtils;
 
@@ -51,12 +53,13 @@ public class ProjectController {
     private DtoValidationUtils dtoValidationUtils;
 
     public ProjectController(ProjectService projectService, UserService userService,
-        ProjectVolunteerService projectVolunteerService, ProjectDonationService projectDonationService, ProjectPictureService projectPictureService){
+                             ProjectVolunteerService projectVolunteerService, ProjectDonationService projectDonationService, ProjectPictureService projectPictureService, UserDonationService userDonationService){
         this.projectService = projectService;
         this.userService = userService;
         this.projectVolunteerService = projectVolunteerService;
         this.projectDonationService = projectDonationService;
         this.projectPictureService = projectPictureService;
+        this.userDonationService = userDonationService;
     }
 
     @Transactional
@@ -136,10 +139,10 @@ public class ProjectController {
         int tickets = (int) (Math.log(points) / Math.log(2));
 
         // Users 테이블 업데이트 : 포인트 차감, 티켓 발급
-        userService.updateAfterDonation(loginUser, points, tickets);
+        userDonationService.updateAfterDonation(loginUser, points, tickets);
 
         // UsersDonation 테이블 업데이트
-        userService.saveUsersDonation(points, tickets, loginUser, project);
+        userDonationService.saveUsersDonation(points, tickets, loginUser, project);
 
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
     }
