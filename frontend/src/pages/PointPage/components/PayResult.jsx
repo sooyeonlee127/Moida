@@ -2,11 +2,13 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../context/Auth";
 
 const PayResult = () => {
   const navigate = useNavigate();
+  const { setPoint } = useContext(AuthContext);
   const [searchParams, setSearchParams] = useSearchParams(); // 에러 아님
   const queryString = searchParams.get("pg_token");
   const [price, setPrice] = useState(0);
@@ -27,6 +29,33 @@ const PayResult = () => {
         console.log(error);
       }
     }
+  };
+
+  const ChargePoint = (amount) => {
+    console.log("로컬 포인트", localStorage.getItem("point"));
+    console.log("amount:", amount);
+    axios({
+      url: "/api/users/me/points/charge",
+      method: "POST",
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+        refresh: localStorage.getItem("refreshToken"),
+      },
+      params: {
+        point: amount,
+      },
+    })
+      .then((res) => {
+        console.log("로컬 포인트", localStorage.getItem("point"));
+        const total =
+          parseInt(localStorage.getItem("point")) + parseInt(amount);
+        console.log(res);
+        localStorage.setItem("point", total);
+        setPoint(total);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   useEffect(() => {
     axios({
@@ -50,6 +79,7 @@ const PayResult = () => {
         setDate(res.data.approved_at);
         setFlag(true);
         parentPage();
+        ChargePoint(res.data.amount.total);
       })
       .catch((error) => {
         console.log(error);
