@@ -132,7 +132,7 @@ public class ProjectController {
 
         // 기부하려는 금액이 현재 보유 포인트보다 많은 경우 에러 반환
         if(points > loginUser.getPoint()){
-            throw new CustomException(ErrorCode.EXCEED_MAX_CAPACITY);
+            throw new CustomException(ErrorCode.EXCEED_USER_POINT);
         }
 
         // 기부 모이 수에 따른 티켓 발급
