@@ -2,18 +2,19 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../../context/Auth";
+import { useQuery } from "@tanstack/react-query";
 
 const PayResult = () => {
   const navigate = useNavigate();
-  const { setPoint } = useContext(AuthContext);
+  // 수연: param에서 pg_token 가져와서 카카오페이 결제 호출
   const [searchParams, setSearchParams] = useSearchParams(); // 에러 아님
   const queryString = searchParams.get("pg_token");
   const [price, setPrice] = useState(0);
   const [date, setDate] = useState("");
   const [flag, setFlag] = useState(false);
+  // 수연: 현재 페이지를 호출한 페이지를 제어
   const parentPage = (page) => {
     if (page) {
       try {
@@ -31,6 +32,31 @@ const PayResult = () => {
     }
   };
 
+  // 수연: refetch 위해서 useQuery 가져옴. 리팩토링 필요
+  const getMe = async () => {
+    try {
+      const response = await axios({
+        url: "/api/users/me",
+        method: "GET",
+        headers: {
+          accept: "*/*",
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  const { data, refetch } = useQuery({
+    queryKey: ["getMe"],
+    queryFn: getMe,
+    refetchOnMount: true,
+  });
+
+  // 수연: 포인트 충전 api 호출
   const ChargePoint = (amount) => {
     console.log("로컬 포인트", localStorage.getItem("point"));
     console.log("amount:", amount);
@@ -46,17 +72,15 @@ const PayResult = () => {
       },
     })
       .then((res) => {
-        console.log("로컬 포인트", localStorage.getItem("point"));
-        const total =
-          parseInt(localStorage.getItem("point")) + parseInt(amount);
         console.log(res);
-        localStorage.setItem("point", total);
-        setPoint(total);
+        refetch();
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  // 수연: 카카오페이 api 호출
   useEffect(() => {
     axios({
       url: "https://kapi.kakao.com/v1/payment/approve",

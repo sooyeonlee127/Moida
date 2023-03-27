@@ -4,6 +4,7 @@ import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.user.Users;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -42,5 +43,15 @@ public class Board {
         this.subject = subject;
         this.project = project;
         this.users = users;
+    }
+
+    /**
+     * [세은] 공지사항 수정
+     * @param subject
+     * @param description
+     */
+    public void updateBoard(String subject, String description){
+        if(!StringUtils.isBlank(subject)) this.subject = subject;
+        if(!StringUtils.isBlank(description)) this.description = description;
     }
 }

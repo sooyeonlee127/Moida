@@ -1,13 +1,45 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 
 const NavBar = () => {
-  const { isLogin, setIsLogin, ticket, point } = useContext(AuthContext);
+  // 은혁: useQuery
+  const getMe = async () => {
+    try {
+      const response = await axios({
+        url: "/api/users/me",
+        method: "GET",
+        headers: {
+          accept: "*/*",
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  const { data, refetch } = useQuery({
+    queryKey: ["getMe"],
+    queryFn: getMe,
+    refetchOnMount: true,
+  });
+
+  
+  // 수연: 로그인 상태에 따라 navbar 변경
+  const { isLogin, setIsLogin } = useContext(AuthContext);
+  useEffect(() => {
+    // data.point 값이 변경될 때마다 쿼리를 다시 실행
+    refetch();
+  }, [isLogin]);
   const navigation = [
+    // 로그아웃 상태의 navbar
     { name: "HOME", href: "/" },
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
@@ -16,13 +48,15 @@ const NavBar = () => {
     { name: "LOGIN", href: "/login" },
   ];
   const userNavigation = [
+    // 로그인 상태의 navbar
     { name: "HOME", href: "/" },
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
-    { name: `${ticket}개`, href: "/gatcha" },
-    { name: `${point} P`, href: "/point" },
+    { name: `${data ? data.ticketCnt : "  "}개`, href: "/gatcha" },
+    { name: `${data ? data.point : "  "} P`, href: "/point" },
   ];
+  // 수연: 로그아웃 호출
   const LogoutSubmit = () => {
     axios({
       url: "/api/auth/logout",
@@ -38,8 +72,6 @@ const NavBar = () => {
         console.log(data);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        localStorage.removeItem("point");
-        localStorage.removeItem("ticket");
         localStorage.removeItem("role");
         setIsLogin(false);
       })
