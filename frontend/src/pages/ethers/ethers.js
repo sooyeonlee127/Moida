@@ -14,7 +14,7 @@ const getAdminAddress = async () => {
   return coinbase;
 };
 
-// 지갑 만들기
+// 회원가입 - 지갑 만들기
 const createAccount = async () => {
   const password = "123456"; // 지갑 임시 패스워드 -> 나중에는 회원가입할 때 받은 비밀번호면 좋겠음
 
