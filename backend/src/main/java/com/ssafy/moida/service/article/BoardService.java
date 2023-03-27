@@ -21,8 +21,6 @@ public class BoardService {
     private final ProjectService projectService;
     private final BoardRepository boardRepository;
     private final BoardDocumentService boardDocumentService;
-
-
     public BoardService(ProjectService projectService, BoardRepository boardRepository,
         BoardDocumentService boardDocumentService) {
         this.projectService = projectService;
