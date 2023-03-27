@@ -62,13 +62,14 @@ public class UserDonationService {
      * [한선영] 기부에 사용한 총 포인트
      * */
     public long getTotalPoint(Long userId) {
+        boolean existDonation = usersDonationRepository.existsByUsersId(userId);
         long totalPoint;
 
-        OptionalLong optionalLong = usersDonationRepository.findTotalPoint(userId);
-        if(optionalLong == null) {
+        if(existDonation) { // 기부 한 적이 있을 때
+            totalPoint = usersDonationRepository.findTotalPoint(userId);
+
+        } else { // 기부를 한 적이 없을 때
             totalPoint = 0L;
-        } else {
-            totalPoint = optionalLong.getAsLong();
         }
 
         return totalPoint;

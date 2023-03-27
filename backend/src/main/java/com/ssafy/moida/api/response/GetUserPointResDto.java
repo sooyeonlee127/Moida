@@ -27,4 +27,12 @@ public class GetUserPointResDto {
 
     public GetUserPointResDto() {
     }
+
+    // 포인트 충전
+    public GetUserPointResDto(Long points, String category, LocalDateTime pointDate) {
+        this.points = points;
+        this.category = category;
+        this.pointDate = pointDate;
+    }
+
 }
