@@ -16,8 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class GetArticleResDto {
     private Long id;
-    private double difficultyLevel;
-    private LocalDateTime regDate;
-    private String category;
+    private String subject;
     private String url;
+    private double difficultyLevel;
 }
