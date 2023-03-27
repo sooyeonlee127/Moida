@@ -18,13 +18,10 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class GetUserVolunteerResDto {
-
     private Long volunteerId;
     private Long projectId;
     private String projectSubject;
     private int generation;
     private LocalDateTime regDate;
     private Status status;
-
-
 }
