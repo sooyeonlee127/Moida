@@ -10,6 +10,7 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.auth.AuthService;
 import com.ssafy.moida.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -90,6 +91,7 @@ public class AuthController {
 
     @Transactional
     @Operation(summary = "로그아웃", description = "로그아웃을 합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping("/logout")
     public ResponseEntity<?> logout(
             @AuthenticationPrincipal PrincipalDetails principal,

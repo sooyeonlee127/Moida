@@ -26,6 +26,7 @@ import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.IOException;
@@ -64,6 +65,7 @@ public class ArticleController {
     }
 
     @Operation(summary = "사용자 인증글 작성", description = "사용자가 봉사 후기를 작성합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
@@ -97,6 +99,7 @@ public class ArticleController {
 
     @Transactional
     @Operation(summary = "[관리자] 공지사항 작성", description = "관리자가 공지사항을 작성합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(path = "/board", consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
@@ -176,6 +179,7 @@ public class ArticleController {
     }
 
     @Operation(summary = "[관리자] 공지사항 수정", description = "관리자가 공지사항을 수정합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/board")
     public ResponseEntity<?> updateBoardDetails(
         @RequestBody UpdateBoardReqDto updateBoardReqDto,
@@ -212,6 +216,7 @@ public class ArticleController {
     }
 
     @Operation(summary = "사용자 인증글 삭제", description = "특정 사용자 인증글을 삭제합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @DeleteMapping ("/{articleid}")
     public ResponseEntity<?> deleteArticle(
         @PathVariable("articleid") int articleId,
@@ -235,6 +240,7 @@ public class ArticleController {
     }
 
     @Operation(summary = "사용자 인증글 수정", description = "사용자가 인증글을 수정합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping
     public ResponseEntity<?> updateArticleDetails(
         @RequestBody UpdateArticleReqDto updateArticleReqDto,

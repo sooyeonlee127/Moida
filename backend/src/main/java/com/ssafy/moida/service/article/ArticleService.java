@@ -2,11 +2,9 @@ package com.ssafy.moida.service.article;
 
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.UpdateArticleReqDto;
-import com.ssafy.moida.api.request.UpdateBoardReqDto;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetArticleResDto;
 import com.ssafy.moida.model.article.Article;
-import com.ssafy.moida.model.article.Board;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
