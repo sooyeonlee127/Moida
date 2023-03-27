@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 // import tw from 'twin.macro'
 import { useState } from 'react'
+import DonationList from './Components/DonationList'
+import VolunteerList from './Components/VolunteerList'
+import PointWallet from './Components/PointWallet';
 
 const menuArr = [
     { name: '기부내역', content: 'Tab menu ONE' },
@@ -16,9 +19,7 @@ const UserContent = () => {
                 <Ul>
                 {menuArr.map((element, index)=>{
                     return (
-                    <Li
-                    key={index}
-                    className={tabIndex === index ? "submenu focused" : "submenu"}
+                    <Li key={index} className={tabIndex === index ? "submenu focused" : "submenu"}
                     onClick={()=> setTabIndex(index)}
                     >
                     {element.name}
@@ -28,7 +29,9 @@ const UserContent = () => {
                 </Ul>
             </TabGroup>
             <Desc>
-                <p>{menuArr[tabIndex].content}</p>
+              {tabIndex === 0 ? <DonationList/>: "" }
+              {tabIndex === 1 ? <VolunteerList/>: "" }
+              {tabIndex === 2 ? <PointWallet/>: "" }
             </Desc>
         </div>
     )
