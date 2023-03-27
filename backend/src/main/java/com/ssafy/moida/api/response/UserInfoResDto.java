@@ -23,8 +23,8 @@ public class UserInfoResDto {
 
     private long volunteerCnt;
     private Long totalPoint;
-    private int MoiAcorn;
-    private int MoiSeed;
-    private int MoiCorn;
+    private int moiAcorn;
+    private int moiSeed;
+    private int moiCorn;
 
 }
