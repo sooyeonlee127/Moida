@@ -2,10 +2,7 @@ package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
-import com.ssafy.moida.api.response.GetUserDonationResDto;
-import com.ssafy.moida.api.response.GetUserPointResDto;
-import com.ssafy.moida.api.response.GetUserVolunteerResDto;
-import com.ssafy.moida.api.response.UserInfoResDto;
+import com.ssafy.moida.api.response.*;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
@@ -270,6 +267,22 @@ public class UserController {
         userService.changePwd(email, tempPwd);
 
         return new ResponseEntity<>("임시 비밀번호 발송 성공", HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 봉사 인증글 내역", description = "로그인한 사용자의 봉사 인증글 목록을 반환합니다.")
+    @GetMapping(
+            path = "/me/volunteer-article"
+    )
+    public ResponseEntity<?> getUserVolunteerArticleList(
+            @AuthenticationPrincipal PrincipalDetails principal
+    ) {
+        Users user = userService.findByEmail(principal.getUsername());
+        Long userId = user.getId();
+
+        List<GetArticleDetailResDto> userVolunteerArticleList = new ArrayList<>();
+        userVolunteerArticleList = userVolunteerService.getUsersVolunteerArticle(userId);
+
+        return new ResponseEntity<>(userVolunteerArticleList, HttpStatus.OK);
     }
 
 }
