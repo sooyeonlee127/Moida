@@ -64,7 +64,7 @@ public class AuthController {
 
     @Operation(summary = "토큰 재발행", description = "토큰 재발행을 합니다.")
     @PostMapping(
-            path = "/accessToken"
+            path = "/access-token"
     )
     public ResponseEntity<?> reissueAccessToken(
             HttpServletResponse response,
