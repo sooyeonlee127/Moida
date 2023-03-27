@@ -142,7 +142,7 @@ public class ProjectController {
         userDonationService.updateAfterDonation(loginUser, points, tickets);
 
         // UsersDonation 테이블 업데이트
-        userDonationService.saveUsersDonation(points, tickets, loginUser, project);
+        userDonationService.saveUsersDonation(points, tickets, createDonationReqDto.getMoi(), loginUser, project);
 
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
     }
