@@ -1,12 +1,13 @@
 import styled from 'styled-components'
 import tw from 'twin.macro'
+import { useState } from 'react'
 import { useQuery } from "@tanstack/react-query";
 import axios from 'axios';
 
 
 const UserStatus = () => {
-    // 사용자 정보 가져오기 - 이은혁
-    const getMe = async () => { 
+   
+    const getMe = async () => { // 사용자 정보 가져오기 - 이은혁
         try {
             const response = await axios({
                 url: "/api/users/me",
@@ -33,6 +34,7 @@ const UserStatus = () => {
 
 
     return (
+        <>
         <Wrapper>
             <Nickname>닉네임</Nickname>
             <Email>ssafy@gmail.com</Email>
@@ -43,6 +45,9 @@ const UserStatus = () => {
             <p>총 기부 금액 {data? data.totalPoint : "0"} P</p>
             <p>총 봉사 횟수 {data? data.volunteerCnt : "0"} 회</p>
         </Wrapper>
+        
+        
+        </>
     )
 }
 const Wrapper = styled.div`
@@ -63,4 +68,5 @@ color: darkblue;
 const ChargeBtn = styled.button`
 ${tw`border px-4 py-2 rounded bg-indigo-500 hover:bg-indigo-400 text-white active:bg-indigo-600`}
 `
+
 export default UserStatus
