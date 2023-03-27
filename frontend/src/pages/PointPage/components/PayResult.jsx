@@ -4,14 +4,17 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 const PayResult = () => {
   const navigate = useNavigate();
+  // 수연: param에서 pg_token 가져와서 카카오페이 결제 호출
   const [searchParams, setSearchParams] = useSearchParams(); // 에러 아님
   const queryString = searchParams.get("pg_token");
   const [price, setPrice] = useState(0);
   const [date, setDate] = useState("");
   const [flag, setFlag] = useState(false);
+  // 수연: 현재 페이지를 호출한 페이지를 제어
   const parentPage = (page) => {
     if (page) {
       try {
@@ -28,6 +31,56 @@ const PayResult = () => {
       }
     }
   };
+
+  // 수연: refetch 위해서 useQuery 가져옴. 리팩토링 필요
+  const getMe = async () => {
+    try {
+      const response = await axios({
+        url: "/api/users/me",
+        method: "GET",
+        headers: {
+          accept: "*/*",
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  };
+
+  const { data, refetch } = useQuery({
+    queryKey: ["getMe"],
+    queryFn: getMe,
+    refetchOnMount: true,
+  });
+
+  // 수연: 포인트 충전 api 호출
+  const ChargePoint = (amount) => {
+    console.log("로컬 포인트", localStorage.getItem("point"));
+    console.log("amount:", amount);
+    axios({
+      url: "/api/users/me/points/charge",
+      method: "POST",
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+        refresh: localStorage.getItem("refreshToken"),
+      },
+      params: {
+        point: amount,
+      },
+    })
+      .then((res) => {
+        console.log(res);
+        refetch();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // 수연: 카카오페이 api 호출
   useEffect(() => {
     axios({
       url: "https://kapi.kakao.com/v1/payment/approve",
@@ -50,6 +103,7 @@ const PayResult = () => {
         setDate(res.data.approved_at);
         setFlag(true);
         parentPage();
+        ChargePoint(res.data.amount.total);
       })
       .catch((error) => {
         console.log(error);
