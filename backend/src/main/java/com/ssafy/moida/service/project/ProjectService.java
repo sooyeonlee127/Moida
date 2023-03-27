@@ -67,6 +67,11 @@ public class ProjectService {
         return project;
     }
 
+    /**
+     * [세은] 아이디로 프로젝트 조회
+     * @param projectId
+     * @return
+     */
     public Project findById(Long projectId){
         return projectRepository.findById(projectId).orElseThrow(
             () -> new CustomException(ErrorCode.DATA_NOT_FOUND)

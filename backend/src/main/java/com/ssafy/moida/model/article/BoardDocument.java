@@ -1,25 +1,26 @@
 package com.ssafy.moida.model.article;
 
-import com.ssafy.moida.model.article.Board;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Document {
+public class BoardDocument {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 500)
-    private String fileUrl;
+    private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="board_id")
     private Board board;
+
+    @Builder
+    public BoardDocument(String url, Board board) {
+        this.url = url;
+        this.board = board;
+    }
 }

@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/Auth";
 
 const NavBar = () => {
-  const token = useState(localStorage.getItem("token"));
-  const point = useState(0);
-  const ticket = useState(0);
+  const {isLogin, ticket, point} = useContext(AuthContext);
   const navigation = [
     { name: "HOME", href: "/" },
     { name: "기부하기", href: "/donation" },
@@ -20,11 +19,11 @@ const NavBar = () => {
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
-    { name: `${ticket[0]}개`, href: "/gatcha" },
-    { name: `${point[0]} P`, href: "/point" },
+    { name: `${ticket}개`, href: "/gatcha" },
+    { name: `${point} P`, href: "/point" },
     { name: "LOGOUT", href: "#" },
   ];
-  if (token[0]) {
+  if (isLogin) {
     return (
       <>
         <Nav>
@@ -33,8 +32,8 @@ const NavBar = () => {
               <p>우리 로고</p>
             </Logo>
             <Title>
-              {userNavigation.map((item) => (
-                <Link on key={item.name} to={item.href}>
+              {userNavigation.map((item, index) => (
+                <Link on={item.name} key={index} to={item.href}>
                   {item.name}
                 </Link>
               ))}
@@ -66,13 +65,15 @@ const NavBar = () => {
 };
 
 const Nav = styled.div`
+position: fixed;
+top: 0;
+width: 100%;
+z-index: 1;
   ${tw`
-  z-10 bg-yellow-100
-  fixed top-0 left-0 right-0 
+  bg-yellow-100
   px-2
   text-black
   h-16
-  relative
   flex items-center justify-between
   `}
 `;

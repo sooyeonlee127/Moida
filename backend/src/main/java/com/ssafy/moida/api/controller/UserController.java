@@ -5,12 +5,16 @@ import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.api.response.UserInfoResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
+import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
+import com.ssafy.moida.model.user.UsersVolunteer;
+import com.ssafy.moida.service.user.UserProjectService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.utils.error.ErrorCode;
+import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,9 +36,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserProjectService userProjectService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserProjectService userProjectService) {
         this.userService = userService;
+        this.userProjectService = userProjectService;
     }
 
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
@@ -134,6 +140,26 @@ public class UserController {
         userService.changePwd(user.getEmail(), changePwdReqDto);
 
         return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
+    }
+
+    /* [세은] 사용자 봉사 취소 */
+    @Operation(summary = "사용자 봉사 취소", description = "사용자가 신청한 봉사를 취소합니다.")
+    @PutMapping(path = "/me/volunteer/{volunteerid}")
+    public ResponseEntity<?> updateUserVolunteerStatus(@PathVariable("volunteerid") int volunteerId){
+        if(!userProjectService.existsById((long) volunteerId)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+
+        // REGISTER 상태인 경우에만 CANCEL로 변경이 가능함
+        UsersVolunteer usersVolunteer = userProjectService.findUsersVolunteerById((long) volunteerId);
+        if(!usersVolunteer.getStatus().equals(Status.REGISTER)){
+            throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
+        }
+
+        // REGISTER  -> CANCEL로 변경
+        userProjectService.updateUserVolunteerStatus(usersVolunteer, Status.CANCEL);
+
+        return new ResponseEntity<>("봉사 취소가 완료되었습니다", HttpStatus.OK);
     }
 
 }
