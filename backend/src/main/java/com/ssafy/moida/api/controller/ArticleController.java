@@ -2,11 +2,17 @@ package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.CreateBoardReqDto;
+import com.ssafy.moida.api.request.UpdateArticleReqDto;
+import com.ssafy.moida.api.request.UpdateBoardReqDto;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetArticleResDto;
+import com.ssafy.moida.api.response.GetBoardDetailResDto;
+import com.ssafy.moida.api.response.GetBoardListByCategoryResDto;
+import com.ssafy.moida.api.response.GetGenerationAndIdResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.article.Board;
 import com.ssafy.moida.model.project.Status;
+import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.article.ArticleService;
@@ -19,6 +25,7 @@ import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.IOException;
@@ -94,7 +101,7 @@ public class ArticleController {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
     public ResponseEntity<?> createBoard(
-        @RequestPart(value = "article") CreateBoardReqDto createBoardReqDto,
+        @RequestPart(value = "board") CreateBoardReqDto createBoardReqDto,
         @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
         @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
@@ -127,26 +134,71 @@ public class ArticleController {
     }
 
     @Operation(summary = "카테고리별 공지사항 조회", description = "공지사항을 카테고리별 조회합니다. 카테고리별 공지사항 기수 리스트와 가장 최신 공지사항을 반환합니다.")
-    @GetMapping("/category?{category}")
-    public ResponseEntity<?> getBoardByCategory(){
-        return new ResponseEntity<>("", HttpStatus.OK);
+    @GetMapping("/board/category/{category}")
+    public ResponseEntity<GetBoardListByCategoryResDto> getBoardByCategory(@PathVariable("category") @Schema(description = "카테고리명", defaultValue = "CRANE") String category){
+        // 카테고리 존재 여부 검증
+        dtoValidationUtils.validateCategory(category);
+
+        // [프로젝트 아이디 + 기수] 반환
+        List<GetGenerationAndIdResDto> generationList = boardService.getGenerationList(category);
+
+        // 기수가 없는 경우 -> 프로젝트가 없는 경우 : 에러 반환
+        if(generationList == null || generationList.size() == 0){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+
+        GetBoardDetailResDto boardDetail = null;
+        try{
+            // 최근 공지글이 존재하는 경우
+            boardDetail = boardService.getBoardDetailByProject(generationList.get(0).getId());
+        } catch (CustomException e){
+            // 프로젝트가 존재하지만 그에 따른 공지글이 없는 경우
+            return new ResponseEntity<>(new GetBoardListByCategoryResDto(generationList, null), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(new GetBoardListByCategoryResDto(generationList, boardDetail), HttpStatus.OK);
     }
 
     @Operation(summary = "공지사항 상세조회", description = "특정 공지사항을 상세 조회합니다.")
-    @GetMapping("/board/{boardid}")
-    public ResponseEntity<?> getBoardDetails(@PathVariable("boardid") int boardId){
-        if(!boardService.existsById((long) boardId)){
-            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+    @GetMapping("/board/{projectid}")
+    public ResponseEntity<?> getBoardDetails(@PathVariable("projectid") int projectId){
+        
+        GetBoardDetailResDto boardDetail = null;
+        try{
+            // 공지글이 존재하는 경우
+            boardDetail = boardService.getBoardDetailByProject((long) projectId);
+        } catch (CustomException e){
+            // 공지글이 존재하지 않는 경우 -> null 반환
+            return new ResponseEntity<>(null, HttpStatus.OK);
         }
-        return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
+
+        return new ResponseEntity<>(boardDetail, HttpStatus.OK);
     }
 
     @Operation(summary = "[관리자] 공지사항 수정", description = "관리자가 공지사항을 수정합니다.")
-    @PutMapping("/board/{boardid}")
-    public ResponseEntity<?> updateBoardDetails(@PathVariable("boardid") int boardId){
-        if(!boardService.existsById((long) boardId)){
+    @PutMapping("/board")
+    public ResponseEntity<?> updateBoardDetails(
+        @RequestBody UpdateBoardReqDto updateBoardReqDto,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        // 관리자 토큰 검증
+        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+
+        Long boardId = updateBoardReqDto.getId();
+
+        // 보드 고유 아이디 필드 검증
+        if(boardId == null || boardId <= 0) {
+            throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
+        }
+
+        // 해당 보드 아이디가 존재하지 않는 경우 예외 처리
+        if(!boardService.existsById(boardId)){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
+
+        // 공지사항 내용 수정
+        boardService.updateBoard(updateBoardReqDto);
+
         return new ResponseEntity<>("[관리자] 공지사항 수정 완료", HttpStatus.OK);
     }
 
@@ -156,27 +208,60 @@ public class ArticleController {
         if(!articleService.existsById((long) articleId)){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
-        return new ResponseEntity<>(articleService.findById((long) articleId), HttpStatus.OK);
+        return new ResponseEntity<>(articleService.getArticleDetailById((long) articleId), HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 인증글 삭제", description = "특정 사용자 인증글을 삭제합니다.")
     @DeleteMapping ("/{articleid}")
-    public ResponseEntity<?> deleteArticle(@PathVariable("articleid") int articleId){
+    public ResponseEntity<?> deleteArticle(
+        @PathVariable("articleid") int articleId,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+
+        // Admin 이거나 사용자가 작성한 글이 맞는 경우에만 삭제 가능
+        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)
+            && loginUser.getId() != articleService.getArticleDetailById((long) articleId).getId()){
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+        }
+
         // 삭제하려는 인증글이 없을 경우 오류 반환(404)
         if(!articleService.existsById((long) articleId)){
-            return new ResponseEntity<>(ErrorCode.DATA_NOT_FOUND.getMessage(), HttpStatus.NOT_FOUND);
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
+
         articleService.delete((long) articleId);
         return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 인증글 수정", description = "사용자가 인증글을 수정합니다.")
-    @PutMapping ("/{articleid}")
-    public ResponseEntity<?> updateArticleDetails(@PathVariable("articleid") int articleId){
+    @PutMapping
+    public ResponseEntity<?> updateArticleDetails(
+        @RequestBody UpdateArticleReqDto updateArticleReqDto,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+
+        // 인증글 고유 아이디 필드 검증
+        Long articleId = updateArticleReqDto.getId();
+        if(articleId == null || articleId <= 0) {
+            throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
+        }
+
         // 수정하려는 인증글이 없을 경우 오류 반환(404)
-        if(!articleService.existsById((long) articleId)){
+        if(!articleService.existsById(updateArticleReqDto.getId())){
             return new ResponseEntity<>(ErrorCode.DATA_NOT_FOUND.getMessage(), HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>("게시물 수정 완료", HttpStatus.OK);
+
+        // 수정하려는 인증글 토큰 확인
+        if(loginUser.getId()
+            != articleService.findById(updateArticleReqDto.getId()).getUsers().getId()){
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+        }
+
+        // 공지사항 내용 수정
+        articleService.updateArticle(updateArticleReqDto);
+
+        return new ResponseEntity<>("게시글 수정 완료", HttpStatus.OK);
     }
 }

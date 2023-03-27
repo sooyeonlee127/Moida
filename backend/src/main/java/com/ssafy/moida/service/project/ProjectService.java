@@ -45,7 +45,7 @@ public class ProjectService {
         프로젝트 데이터베이스에 저장
         저장 시에 generation은 가장 최신 generation 을 찾아 넣어주기
          */
-        List<Project> projectList = projectRepository.findNewestGenerationByCategory(projectReqDto.getCategory());
+        List<Project> projectList = getGenerationListByCategory(projectReqDto.getCategory());
         int generation = 1;
         if(projectList != null && projectList.size() > 0) generation = projectList.get(0).getGeneration() + 1;
 
@@ -79,12 +79,21 @@ public class ProjectService {
     }
 
     /**
+     * [세은] 프로젝트 아이디로 프로젝트 존재 여부 반환
+     * @param projectId
+     * @return
+     */
+    public boolean existsById(Long projectId){
+        return projectRepository.existsById(projectId);
+    }
+
+    /**
      * [세은] 프로젝트 정보 조회(메인 페이지)
      * 현재 카테고리에서 가장 최근 generation 만 select
      * @return
      */
     public List<GetProjectResDto> getProject(){
-        List<Project> projectList = projectRepository.findNewestProjectByCategory();
+        List<Project> projectList = projectRepository.getNewestProjectByCategory();
         List<GetProjectResDto> results = new ArrayList<>();
 
         for (int i = 0; i < projectList.size(); i++) {
@@ -103,5 +112,14 @@ public class ProjectService {
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<String> fileList = projectPictureService.getFileList(project);
         return new GetProjectDetailResDto(project, fileList);
+    }
+
+    /**
+     * [세은] 카테고리에 따른 프로젝트 리스트 반환
+     * @param category
+     * @return
+     */
+    public  List<Project> getGenerationListByCategory(String category){
+        return projectRepository.getNewestProjectByCategory(category);
     }
 }
