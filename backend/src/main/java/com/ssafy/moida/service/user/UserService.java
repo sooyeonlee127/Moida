@@ -206,26 +206,20 @@ public class UserService {
 
         // 기부 내역 저장
         for (UsersDonation donation : usersDonations) {
-            GetUserPointResDto dto = new GetUserPointResDto();
-
-            dto.setPoints(donation.getAmount());
-            dto.setCategory("donation");
-            dto.setPointDate(donation.getRegDate());
-            dto.setProjectSubject(donation.getProject().getSubject());
-            dto.setGeneration(donation.getProject().getGeneration());
-            dto.setTicketCnt(donation.getTicketCnt());
-
+            GetUserPointResDto dto = new GetUserPointResDto(
+                    donation.getAmount(),
+                    "donation",
+                    donation.getRegDate(),
+                    donation.getProject().getSubject(),
+                    donation.getProject().getGeneration(),
+                    donation.getTicketCnt()
+            );
             result.add(dto);
         }
 
         // 충전 내역 저장
         for (PointCharge charge : pointCharges) {
-            GetUserPointResDto dto = new GetUserPointResDto();
-
-            dto.setPoints(charge.getAmount());
-            dto.setCategory("charge");
-            dto.setPointDate(charge.getRegDate());
-
+            GetUserPointResDto dto = new GetUserPointResDto(charge.getAmount(), "charge", charge.getRegDate());
             result.add(dto);
         }
 
