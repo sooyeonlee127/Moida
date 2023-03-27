@@ -4,6 +4,7 @@ import tw from "twin.macro";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import createAccount from "../../ethers/ethers";
 
 //==================
 
@@ -109,33 +110,33 @@ const Form = () => {
       // 디바운싱 (입력 0.5초 뒤 axios 요청)
       const newTimer = setTimeout(() => {
         axios({
-          url: "/api/users/exists/nickname/"+ formInfo.nickname,
+          url: "/api/users/exists/nickname/" + formInfo.nickname,
           method: "POST",
         })
-        .then((res) => {
-          console.log(res)
-          setInputMessage((prevState) => {
-            return { ...prevState, nickname: "사용 가능한 닉네임입니다." };
-          });
-          setValidation((prevState) => {
-            return { ...prevState, nickname: "true" };
-          });
-        })
-        .catch((error) => {
-          console.log(error)
-          setValidation((prevState) => {
-            return { ...prevState, nickname: "false" };
-          });
-          if (error.response.status === 409) {
+          .then((res) => {
+            console.log(res);
             setInputMessage((prevState) => {
-              return { ...prevState, nickname: "이미 존재하는 닉네임입니다" };
+              return { ...prevState, nickname: "사용 가능한 닉네임입니다." };
             });
-          } else if (error.response.status === 500) {
-            setInputMessage((prevState) => {
-              return { ...prevState, nickname: "잘못된 입력입니다" };
+            setValidation((prevState) => {
+              return { ...prevState, nickname: "true" };
             });
-          }
-        });
+          })
+          .catch((error) => {
+            console.log(error);
+            setValidation((prevState) => {
+              return { ...prevState, nickname: "false" };
+            });
+            if (error.response.status === 409) {
+              setInputMessage((prevState) => {
+                return { ...prevState, nickname: "이미 존재하는 닉네임입니다" };
+              });
+            } else if (error.response.status === 500) {
+              setInputMessage((prevState) => {
+                return { ...prevState, nickname: "잘못된 입력입니다" };
+              });
+            }
+          });
       }, 500);
       setTimer(newTimer);
     } else {
@@ -194,6 +195,7 @@ const Form = () => {
       console.log(res);
       if (res.status === 200) {
         console.log("회원가입 완료");
+        //========================================================================= < 여기에 추후 지갑 생성 작업
         navigate("/");
       } else if (res.status === 400) {
         console.log("잘못된 접근입니다.");
