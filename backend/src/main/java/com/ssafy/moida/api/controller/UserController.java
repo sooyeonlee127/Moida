@@ -11,9 +11,11 @@ import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.service.user.UserVolunteerService;
 import com.ssafy.moida.utils.EamailUtils;
+import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -41,13 +43,15 @@ public class UserController {
     private final UserService userService;
     private final UserVolunteerService userVolunteerService;
     private final UserDonationService userDonationService;
+    private final TokenUtils tokenUtils;
     @Autowired
     private EamailUtils eamailUtils;
 
-    public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService) {
+    public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService, TokenUtils tokenUtils) {
         this.userService = userService;
         this.userVolunteerService = userVolunteerService;
         this.userDonationService = userDonationService;
+        this.tokenUtils = tokenUtils;
     }
 
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
@@ -87,6 +91,7 @@ public class UserController {
     }
 
     @Operation(summary = "마이페이지", description = "마이페이지 내에 들어가는 로그인한 사용자의 정보를 반환합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping(
             path = "/me"
     )
@@ -128,6 +133,7 @@ public class UserController {
     }
 
     @Operation(summary = "비밀번호 변경", description = "로그인한 사용자의 비밀번호를 변경합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping(
             path = "/me/password",
             consumes = MediaType.APPLICATION_JSON_VALUE
@@ -146,14 +152,25 @@ public class UserController {
 
     /* [세은] 사용자 봉사 취소 */
     @Operation(summary = "사용자 봉사 취소", description = "사용자가 신청한 봉사를 취소합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PutMapping(path = "/me/volunteer/{volunteerid}")
-    public ResponseEntity<?> updateUserVolunteerStatus(@PathVariable("volunteerid") int volunteerId){
+    public ResponseEntity<?> updateUserVolunteerStatus(
+            @PathVariable("volunteerid") int volunteerId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+
         if(!userVolunteerService.existsById((long) volunteerId)){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
-        // REGISTER 상태인 경우에만 CANCEL로 변경이 가능함
         UsersVolunteer usersVolunteer = userVolunteerService.findUsersVolunteerById((long) volunteerId);
+
+        if(loginUser.getId() != usersVolunteer.getUsers().getId()){
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+        }
+
+        // REGISTER 상태인 경우에만 CANCEL로 변경이 가능함
         if(!usersVolunteer.getStatus().equals(Status.REGISTER)){
             throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
         }
@@ -165,6 +182,7 @@ public class UserController {
     }
 
     @Operation(summary = "사용자 기부 내역", description = "로그인한 사용자의 기부 내역을 반환합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping(
             path = "/me/donation"
     )
@@ -181,6 +199,7 @@ public class UserController {
     }
 
     @Operation(summary = "사용자 봉사 내역", description = "로그인한 사용자의 봉사 내역을 반환합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping(
             path = "/me/volunteer"
     )
@@ -197,6 +216,7 @@ public class UserController {
     }
 
     @Operation(summary = "사용자 포인트 내역", description = "로그인한 사용자의 포인트 사용 내역을 반환합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping(
             path = "/me/points"
     )
@@ -213,6 +233,7 @@ public class UserController {
     }
 
     @Operation(summary = "사용자 포인트 충전", description = "사용자 포인트를 충전합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(
             path = "/me/points/charge"
     )
@@ -233,6 +254,7 @@ public class UserController {
     }
 
     @Operation(summary = "사용자 포인트 내역 필터", description = "사용자의 포인트 사용 내역을 필터링하여 반환합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping(
             path = "/me/points/filters"
     )
@@ -270,6 +292,7 @@ public class UserController {
     }
 
     @Operation(summary = "사용자 봉사 인증글 내역", description = "로그인한 사용자의 봉사 인증글 목록을 반환합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping(
             path = "/me/volunteer-article"
     )
