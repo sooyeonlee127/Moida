@@ -36,11 +36,11 @@ public class Project {
     private String category; //SQUIRREL, CRANE, WILD_ANIMAL
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_donation_id")
+    @JoinColumn(name = "project_donation_id")
     private ProjectDonation projectDonation;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "p_volunteer_id")
+    @JoinColumn(name = "project_volunteer_id")
     private ProjectVolunteer projectVolunteer;
 
     @Builder

@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class DonationService {
+public class ProjectDonationService {
     private final DonationRepository donationRepository;
 
-    public DonationService(DonationRepository donationRepository) {
+    public ProjectDonationService(DonationRepository donationRepository) {
         this.donationRepository = donationRepository;
     }
 

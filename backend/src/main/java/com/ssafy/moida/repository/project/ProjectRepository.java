@@ -1,8 +1,6 @@
 package com.ssafy.moida.repository.project;
 
-import com.ssafy.moida.model.project.Category;
 import com.ssafy.moida.model.project.Project;
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

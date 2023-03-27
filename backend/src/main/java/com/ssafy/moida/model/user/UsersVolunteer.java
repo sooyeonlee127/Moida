@@ -34,7 +34,7 @@ public class UsersVolunteer {
     private Users users;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "v_date_info_id")
+    @JoinColumn(name = "volunteer_date_info_id")
     private VolunteerDateInfo volunteerDateInfo;
 
     @Builder

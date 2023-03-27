@@ -17,7 +17,6 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="p_volunteer")
 public class ProjectVolunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
