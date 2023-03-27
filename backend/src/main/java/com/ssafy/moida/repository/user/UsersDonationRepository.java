@@ -25,5 +25,7 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
     Optional<List<UsersDonation>> findByUsersId(Long userId);
 
     @Query("select sum(ud.amount) from UsersDonation ud where ud.users.id = :userId")
-    OptionalLong findTotalPoint(@Param("userId") Long userId);
+    Long findTotalPoint(@Param("userId") Long userId);
+
+    boolean existsByUsersId(Long userId);
 }
