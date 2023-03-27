@@ -19,6 +19,12 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
+    /**
+     * [세은] 데이터베이스에 공지사항 저장
+     * @param createBoardReqDto
+     * @param admin
+     * @return
+     */
     public Board save(CreateBoardReqDto createBoardReqDto, Users admin){
         Project project = projectService.findById(createBoardReqDto.getProjectId());
         Board board = Board.builder()
@@ -31,8 +37,12 @@ public class BoardService {
         return board;
     }
 
+    /**
+     * [세은] 고유아이디로 존재 여부 확인
+     * @param boardId
+     * @return
+     */
     public boolean existsById(Long boardId){
         return boardRepository.existsById(boardId);
     }
-
 }
