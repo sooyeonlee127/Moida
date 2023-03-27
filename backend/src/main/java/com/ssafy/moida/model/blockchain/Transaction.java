@@ -1,4 +1,4 @@
-package com.ssafy.moida.blockchain.model;
+package com.ssafy.moida.model.blockchain;
 
 import jakarta.persistence.*;
 import lombok.*;

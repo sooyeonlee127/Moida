@@ -1,10 +1,11 @@
-package com.ssafy.moida.service.utils;
+package com.ssafy.moida.utils;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -15,13 +16,13 @@ import java.util.Random;
  * */
 
 @Slf4j
-@Service
-public class EmailService {
+@Component
+public class EamailUtils {
     private final JavaMailSender emailSender;
 
     private String code;
 
-    public EmailService(JavaMailSender emailSender) {
+    public EamailUtils(JavaMailSender emailSender) {
         this.emailSender = emailSender;
     }
 

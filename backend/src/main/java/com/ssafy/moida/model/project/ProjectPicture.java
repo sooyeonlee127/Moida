@@ -12,7 +12,6 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="p_picture")
 public class ProjectPicture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

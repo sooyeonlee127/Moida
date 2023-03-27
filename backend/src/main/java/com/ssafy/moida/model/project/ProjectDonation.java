@@ -14,7 +14,6 @@ import lombok.*;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "p_donation")
 public class ProjectDonation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

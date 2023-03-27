@@ -1,6 +1,6 @@
-package com.ssafy.moida.blockchain.repository;
+package com.ssafy.moida.repository.blockchain;
 
-import com.ssafy.moida.blockchain.model.Transaction;
+import com.ssafy.moida.model.blockchain.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

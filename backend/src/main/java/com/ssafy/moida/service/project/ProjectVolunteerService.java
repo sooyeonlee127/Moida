@@ -25,12 +25,12 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 @Transactional
-public class VolunteerService {
+public class ProjectVolunteerService {
     private final VolunteerRepository volunteerRepository;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
 
-    public VolunteerService(VolunteerRepository volunteerRepository, VolunteerDateInfoRepository volunteerDateInfoRepository,
+    public ProjectVolunteerService(VolunteerRepository volunteerRepository, VolunteerDateInfoRepository volunteerDateInfoRepository,
         UsersVolunteerRepository usersVolunteerRepository){
         this.volunteerRepository = volunteerRepository;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
