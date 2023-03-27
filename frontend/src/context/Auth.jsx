@@ -9,10 +9,9 @@ const Auth = (props) => {
     }
     return false;
   });
-  const [point, setPoint] = useState(0);
-  const [ticket, setTicket] = useState(0);
-  const [role, setRole] = useState("");
-
+  const [point, setPoint] = useState(localStorage.getItem("point") || 0);
+  const [ticket, setTicket] = useState(localStorage.getItem("ticket") || 0);
+  const [role, setRole] = useState(localStorage.getItem("role") || "");
   return (
     <AuthContext.Provider
       value={{
