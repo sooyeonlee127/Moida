@@ -3,9 +3,10 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
+import axios from "axios";
 
 const NavBar = () => {
-  const {isLogin, ticket, point} = useContext(AuthContext);
+  const { isLogin, setIsLogin, ticket, point } = useContext(AuthContext);
   const navigation = [
     { name: "HOME", href: "/" },
     { name: "기부하기", href: "/donation" },
@@ -21,8 +22,32 @@ const NavBar = () => {
     { name: "가챠샵", href: "/gatcha" },
     { name: `${ticket}개`, href: "/gatcha" },
     { name: `${point} P`, href: "/point" },
-    { name: "LOGOUT", href: "#" },
   ];
+  const LogoutSubmit = () => {
+    axios({
+      url: "/api/auth/logout",
+      method: "POST",
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+        refresh: localStorage.getItem("refreshToken"),
+      },
+    })
+      .then((res) => {
+        const data = res.data;
+        console.log(res);
+        console.log(data);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("point");
+        localStorage.removeItem("ticket");
+        localStorage.removeItem("role");
+        setIsLogin(false);
+      })
+      .catch((error) => {
+        const response = error.response.data;
+        console.log(response);
+      });
+  };
   if (isLogin) {
     return (
       <>
@@ -37,6 +62,14 @@ const NavBar = () => {
                   {item.name}
                 </Link>
               ))}
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  LogoutSubmit();
+                }}
+              >
+                LOGOUT
+              </button>
             </Title>
           </Section>
         </Nav>
@@ -65,10 +98,10 @@ const NavBar = () => {
 };
 
 const Nav = styled.div`
-position: fixed;
-top: 0;
-width: 100%;
-z-index: 1;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
   ${tw`
   bg-yellow-100
   px-2
