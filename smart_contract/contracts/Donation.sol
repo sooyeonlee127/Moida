@@ -34,12 +34,6 @@ contract Donation {
         return donationHistories[index];
     }
 
-    // DonationHistory 전체 조회
-    // 기부 내역 배열에 대한 참조를 반환하여 가스량 절약
-    function getDonationHistories() public view returns (DonationHistory[] memory) {
-        return donationHistories;
-    }   
-
     // 기부 내역 조회 - 페이지내이션
     function getDonationHistories(uint256 page, uint256 pageSize) public view returns (DonationHistory[] memory) {
         require(page > 0, "Page number must be greater than 0");
