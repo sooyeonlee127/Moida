@@ -51,10 +51,7 @@ const Form = () => {
   });
 
   const changeInput = (event) => {
-    // console.log("changeInput")
     const { value, id, name } = event.target;
-    // console.log("value :", value)
-    // console.log(value, id, name)
     if (id === "passwordConfirm") {
       setFormInfo((prevState) => {
         return { ...prevState, passwordConfirm: value };
@@ -72,12 +69,10 @@ const Form = () => {
     if (id === "passwordConfirm") {
       console.log(formInfo.password, "+ ", value);
       if (formInfo.password === value) {
-        console.log("일치?");
         setInputMessage((prevState) => {
           return { ...prevState, passwordConfirm: "" };
         });
       } else {
-        console.log("불일치");
         setInputMessage((prevState) => {
           return {
             ...prevState,
@@ -86,7 +81,6 @@ const Form = () => {
         });
       }
     } else if (value.match(regExp[name]["rule"]) !== null) {
-      // console.log("통과")
       if (name !== "email") {
         setValidation((prevState) => {
           return { ...prevState, [name]: "true" };
@@ -112,38 +106,37 @@ const Form = () => {
       clearTimeout(timer);
     }
     if (formInfo.nickname.match(regExp["nickname"]["rule"]) !== null) {
-      // 디바운싱 (입력 1초 뒤 axios 요청)
+      // 디바운싱 (입력 0.5초 뒤 axios 요청)
       const newTimer = setTimeout(() => {
-        console.log("axios 요청");
-        axios
-          .post("/api/user/exists/nickname/" + formInfo.nickname, {
-            headers: { Accept: "*/*" },
-          })
-          .then((res) => {
-            // console.log(res)
-            setInputMessage((prevState) => {
-              return { ...prevState, nickname: "사용 가능한 닉네임입니다." };
-            });
-            setValidation((prevState) => {
-              return { ...prevState, nickname: "true" };
-            });
-          })
-          .catch((error) => {
-            // console.log(error)
-            setValidation((prevState) => {
-              return { ...prevState, nickname: "false" };
-            });
-            if (error.response.status === 409) {
-              setInputMessage((prevState) => {
-                return { ...prevState, nickname: "이미 존재하는 닉네임입니다" };
-              });
-            } else if (error.response.status === 500) {
-              setInputMessage((prevState) => {
-                return { ...prevState, nickname: "잘못된 입력입니다" };
-              });
-            }
+        axios({
+          url: "/api/users/exists/nickname/"+ formInfo.nickname,
+          method: "POST",
+        })
+        .then((res) => {
+          console.log(res)
+          setInputMessage((prevState) => {
+            return { ...prevState, nickname: "사용 가능한 닉네임입니다." };
           });
-      }, 1000);
+          setValidation((prevState) => {
+            return { ...prevState, nickname: "true" };
+          });
+        })
+        .catch((error) => {
+          console.log(error)
+          setValidation((prevState) => {
+            return { ...prevState, nickname: "false" };
+          });
+          if (error.response.status === 409) {
+            setInputMessage((prevState) => {
+              return { ...prevState, nickname: "이미 존재하는 닉네임입니다" };
+            });
+          } else if (error.response.status === 500) {
+            setInputMessage((prevState) => {
+              return { ...prevState, nickname: "잘못된 입력입니다" };
+            });
+          }
+        });
+      }, 500);
       setTimer(newTimer);
     } else {
       setInputMessage((prevState) => {
@@ -175,7 +168,7 @@ const Form = () => {
   const signupMutation = useMutation(async (formdata) => {
     console.log("signupMutation");
     return axios
-      .post("/api/user/join", formdata, {
+      .post("/api/users/join", formdata, {
         headers: {
           "Content-Type": "application/json",
           Accept: "*/*",
@@ -214,7 +207,7 @@ const Form = () => {
     console.log("checkEmail");
     console.log("formInfo.email", formInfo.email);
     axios({
-      url: "/api/user/exists/email/" + formInfo.email,
+      url: "/api/users/exists/email/" + formInfo.email,
       method: "POST",
     })
       .then((res) => {
