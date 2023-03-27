@@ -13,13 +13,13 @@ const DonationForm = () => {
     const [moi, setMoi] = useState(0);
 
 
-    useEffect(() => setMoi(money/1000), [money])    // 원-모이 환율 수정 필요 - 이은혁
+    useEffect(() => setMoney(moi*1400), [moi])    // 원-모이 환율 수정 필요 - 이은혁
 
     
     const SendMoiApi = () => {  // 기부 API: 기부하기 버튼 클릭 시 작동 - 이은혁
         
         if (money<=0) {     // 기부 금액이 없는 경우 - 이은혁
-            return alert("모이는 최소 1개 이상(1000원 이상) 기부가 가능합니다.")
+            return alert("모이는 최소 1개 이상 기부가 가능합니다.")
         } 
         axios({
             url: "/api/project/donation",
@@ -58,16 +58,16 @@ const DonationForm = () => {
                 현재 모금액
             </div>
             <div>
-                <p>{money} 원</p>
+                <p>{moi}개 ({money}원)</p>
                 <CoinButtonGroup>
-                    <CoinButton onClick={() => setMoney(money + 1000)}>1,000원</CoinButton>
-                    <CoinButton onClick={() => setMoney(money + 5000)}>5,000원</CoinButton>
-                    <CoinButton onClick={() => setMoney(money + 10000)}>10,000원</CoinButton>
-                    <CoinButton onClick={() => setMoney(money + 50000)}>50,000원</CoinButton>
+                    <CoinButton onClick={() => setMoi(moi + 1)}>1개</CoinButton>
+                    <CoinButton onClick={() => setMoi(moi + 5)}>5개</CoinButton>
+                    <CoinButton onClick={() => setMoi(moi + 10)}>10개</CoinButton>
+                    <CoinButton onClick={() => setMoi(moi + 50)}>50개</CoinButton>
                 </CoinButtonGroup>
             </div>
             <GroupButton>
-                <Button onClick={() => setMoney(0)}>초기화</Button>
+                <Button onClick={() => setMoi(0)}>초기화</Button>
                 <Button onClick={SendMoiApi}>기부하기</Button>
             </GroupButton>
         </div>
