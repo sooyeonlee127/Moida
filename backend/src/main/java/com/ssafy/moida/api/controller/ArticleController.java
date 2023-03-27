@@ -12,7 +12,7 @@ import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.article.ArticleService;
 import com.ssafy.moida.service.article.BoardDocumentService;
 import com.ssafy.moida.service.article.BoardService;
-import com.ssafy.moida.service.user.UserProjectService;
+import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
@@ -37,16 +37,16 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/article")
 public class ArticleController {
     private final ArticleService articleService;
-    private final UserProjectService userProjectService;
+    private final UserService userService;
     private final TokenUtils tokenUtils;
     private final DtoValidationUtils dtoValidationUtils;
     private final BoardService boardService;
     private final BoardDocumentService boardDocumentService;
 
-    public ArticleController(ArticleService articleService, UserProjectService userProjectService,
-                             TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils, BoardService boardService, BoardDocumentService boardDocumentService) {
+    public ArticleController(ArticleService articleService, UserService userService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils,
+                             BoardService boardService, BoardDocumentService boardDocumentService) {
         this.articleService = articleService;
-        this.userProjectService = userProjectService;
+        this.userService = userService;
         this.tokenUtils = tokenUtils;
         this.dtoValidationUtils = dtoValidationUtils;
         this.boardService = boardService;
@@ -69,7 +69,7 @@ public class ArticleController {
         dtoValidationUtils.validateCreateArticleReqDto(createArticleReqDto);
 
         // DTO로 들어온 UsersVolunteer 안의 user_id와 일치하는지 검증
-        UsersVolunteer usersVolunteer = userProjectService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
+        UsersVolunteer usersVolunteer = userService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
         if(loginUser.getId() != usersVolunteer.getUsers().getId()){
             throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
         }

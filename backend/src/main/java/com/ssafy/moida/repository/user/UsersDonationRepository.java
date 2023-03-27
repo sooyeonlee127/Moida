@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.OptionalLong;
 
 public interface UsersDonationRepository extends JpaRepository<UsersDonation, Long> {
     @Query("SELECT new com.ssafy.moida.api.response.GetUserDonationResDto("
@@ -14,10 +16,14 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
             + "ud.project.subject, "
             + "ud.project.generation, "
             + "ud.regDate, "
-            + "ud.amount, "
+            + "CAST(ud.amount / ud.project.pointPerMoi AS LONG), "
             + "ud.ticketCnt) "
             + "FROM UsersDonation ud "
             + "WHERE ud.users.id = :userId ")
     List<GetUserDonationResDto> findDonationsByUserId(@Param("userId") Long userId);
 
+    Optional<List<UsersDonation>> findByUsersId(Long userId);
+
+    @Query("select sum(ud.amount) from UsersDonation ud where ud.users.id = :userId")
+    OptionalLong findTotalPoint(@Param("userId") Long userId);
 }

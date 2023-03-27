@@ -79,4 +79,8 @@ public class Users {
         this.point = point;
         this.ticketCnt = ticketCnt;
     }
+
+    public void updatePoint(Long point) {
+        this.point = point;
+    }
 }

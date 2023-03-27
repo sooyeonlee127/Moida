@@ -1,13 +1,14 @@
 package com.ssafy.moida.service.user;
 
-import com.ssafy.moida.api.request.ChangePwdReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
+import com.ssafy.moida.api.response.GetUserPointResDto;
+import com.ssafy.moida.api.response.GetUserVolunteerResDto;
 import com.ssafy.moida.model.project.Project;
-import com.ssafy.moida.model.user.Role;
-import com.ssafy.moida.model.user.Users;
-import com.ssafy.moida.model.user.UsersDonation;
-import com.ssafy.moida.repository.project.ProjectRepository;
+import com.ssafy.moida.model.project.Status;
+import com.ssafy.moida.model.user.*;
+import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
+import com.ssafy.moida.repository.user.PointChargeRepository;
 import com.ssafy.moida.repository.user.UserRepository;
 import com.ssafy.moida.repository.user.UsersDonationRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
@@ -22,8 +23,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,24 +38,26 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final ProjectRepository projectRepository;
     private final UsersDonationRepository usersDonationRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
+    private final PointChargeRepository pointChargeRepository;
     private final EmailService emailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final VolunteerDateInfoRepository volunteerDateInfoRepository;
 
-    public UserService(UserRepository userRepository, ProjectRepository projectRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public UserService(UserRepository userRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, PointChargeRepository pointChargeRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder, VolunteerDateInfoRepository volunteerDateInfoRepository) {
         this.userRepository = userRepository;
-        this.projectRepository = projectRepository;
         this.usersDonationRepository = usersDonationRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
+        this.pointChargeRepository = pointChargeRepository;
         this.emailService = emailService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.volunteerDateInfoRepository = volunteerDateInfoRepository;
     }
 
     /**
      * [한선영] 회원가입
-     * 유저 role이 "ROLE_ADMIN"으로 들어 왔을 때만 관리자로 회원가입, 그 외에는 일반유저로 회원가입
+     * 사용자의 role이 "ROLE_ADMIN"으로 들어 왔을 때만 관리자로 회원가입, 그 외에는 일반유저로 회원가입
      * @param userJoinReqDto
      * */
     public void joinUser(UserJoinReqDto userJoinReqDto) {
@@ -155,7 +158,7 @@ public class UserService {
     }
 
     /**
-     * [한선영] 유저가 참여한 봉사의 개수 가져오기
+     * [한선영] 사용자가 참여한 봉사의 개수 가져오기
      * @return
      * */
     public long totalVolunteerCnt() {
@@ -164,7 +167,7 @@ public class UserService {
     }
 
     /**
-     * [한선영] 유저가 참여한 기부 프로젝트 목록(GetUserDonationResDto) 가져오기
+     * [한선영] 사용자가 참여한 기부 프로젝트 목록(GetUserDonationResDto) 가져오기
      * @param userId
      * @return
      * */
@@ -176,12 +179,25 @@ public class UserService {
     }
 
     /**
-     * [한선영] 비밀번호 변경
-     * @param email, changePwdReqDto
+     * [한선영] 사용자가 참여한 봉사 프로젝트 목록(GetUserVolunteerResDto) 가져오기
+     * @param userId
+     * @return
      * */
-    public void changePwd(String email, ChangePwdReqDto changePwdReqDto) {
+    public List<GetUserVolunteerResDto> getUsersVolunteer(Long userId) {
+        List<GetUserVolunteerResDto> result = new ArrayList<>();
+        result = usersVolunteerRepository.findVolunteersByUserId(userId);
+
+        return result;
+    }
+
+    /**
+     * [한선영] 비밀번호 변경
+     * @param email
+     * @param password
+     * */
+    public void changePwd(String email, String password) {
         Users users = findByEmail(email);
-        users.updatePassword(bCryptPasswordEncoder.encode(changePwdReqDto.getPassword()));
+        users.updatePassword(bCryptPasswordEncoder.encode(password));
     }
 
     /**
@@ -205,4 +221,162 @@ public class UserService {
             .build();
         usersDonationRepository.save(usersDonation);
     }
+
+    /**
+     * [한선영] 사용자가 포인트를 충전할 경우, 포인트 증가 업데이트
+     * @param users, points
+     * */
+    @Transactional
+    public void updateAfterPointCharge(Users users, Long amount) {
+        users.updatePoint(users.getPoint() + amount);
+    }
+
+    /**
+     * [한선영] 사용자가 포인트를 충전할 경우, PointCharge 데이터 저장
+     * @param users, points
+     * */
+    @Transactional
+    public void savePointCharge(Users users, Long amount) {
+        PointCharge pointCharge = PointCharge.builder()
+                .regDate(LocalDateTime.now())
+                .amount(amount)
+                .users(users)
+                .build();
+        pointChargeRepository.save(pointCharge);
+    }
+
+    /**
+     * [한선영] 사용자의 포인트 사용 목록(GetUserPointResDto) 가져오기 - 수정필요
+     * @param userId
+     * @return
+     * */
+    public List<GetUserPointResDto> getUsersPoint(Long userId) {
+        List<GetUserPointResDto> result = new ArrayList<>();
+
+        //PointCharge랑 UsersDonation 정보 가져오기
+        List<UsersDonation> usersDonations = usersDonationRepository.findByUsersId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<PointCharge> pointCharges = pointChargeRepository.findByUsersId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 기부 내역 저장
+        for (UsersDonation donation : usersDonations) {
+            GetUserPointResDto dto = new GetUserPointResDto();
+
+            dto.setPoints(donation.getAmount());
+            dto.setCategory("donation");
+            dto.setPointDate(donation.getRegDate());
+            dto.setProjectSubject(donation.getProject().getSubject());
+            dto.setGeneration(donation.getProject().getGeneration());
+            dto.setTicketCnt(donation.getTicketCnt());
+
+            result.add(dto);
+        }
+
+        // 충전 내역 저장
+        for (PointCharge charge : pointCharges) {
+            GetUserPointResDto dto = new GetUserPointResDto();
+
+            dto.setPoints(charge.getAmount());
+            dto.setCategory("charge");
+            dto.setPointDate(charge.getRegDate());
+
+            result.add(dto);
+        }
+
+        // 최신순으로 정렬
+        Collections.sort(result, Comparator.comparing(GetUserPointResDto::getPointDate));
+
+        return result;
+    }
+
+    /**
+     * [한선영] 유저의 포인트 사용 목록 필터링해서 가져오기 - 수정필요
+     * @param filter, userId
+     * @return
+     * */
+    public List<GetUserPointResDto> getPointListFilter(String filter, Long userId) {
+        List<GetUserPointResDto> result = new ArrayList<>();
+
+        if(filter.equals("charge")) { // filter가 충전일때 포인트 내역
+            List<PointCharge> pointCharges = pointChargeRepository.findByUsersId(userId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            for (PointCharge charge : pointCharges) {
+                GetUserPointResDto dto = new GetUserPointResDto();
+
+                dto.setPoints(charge.getAmount());
+                dto.setCategory("charge");
+                dto.setPointDate(charge.getRegDate());
+
+                result.add(dto);
+            }
+        } else if(filter.equals("donation")) { // filter가 기부일때 포인트 내역
+            List<UsersDonation> usersDonations = usersDonationRepository.findByUsersId(userId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            for (UsersDonation donation : usersDonations) {
+                GetUserPointResDto dto = new GetUserPointResDto();
+
+                dto.setPoints(donation.getAmount());
+                dto.setCategory("donation");
+                dto.setPointDate(donation.getRegDate());
+                dto.setProjectSubject(donation.getProject().getSubject());
+                dto.setGeneration(donation.getProject().getGeneration());
+                dto.setTicketCnt(donation.getTicketCnt());
+
+                result.add(dto);
+            }
+        } else { // 나머지 경우에는 전체 포인트 내역
+            return getUsersPoint(userId);
+        }
+
+        return result;
+    }
+
+    /**
+     * [한선영] 기부에 사용한 총 포인트
+     * */
+    public long getTotalPoint(Long userId) {
+        long totalPoint;
+
+        OptionalLong optionalLong = usersDonationRepository.findTotalPoint(userId);
+        if(optionalLong == null) {
+            totalPoint = 0L;
+        } else {
+            totalPoint = optionalLong.getAsLong();
+        }
+
+        return totalPoint;
+    }
+
+    /**
+     * [세은] UsersVolunteer 객체를 id로 찾기
+     * @param id
+     * @return
+     */
+    public UsersVolunteer findUsersVolunteerById(Long id){
+        return usersVolunteerRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+    }
+
+    /**
+     * [세은] UsersVolunteer 객체가 존재하는지 확인
+     * @param id
+     * @return
+     */
+    public boolean existsById(Long id){
+        return usersVolunteerRepository.existsById(id);
+    }
+
+    /**
+     * [세은] 사용자 봉사 신청 취소
+     * @param usersVolunteer
+     * @param status
+     */
+    @Transactional
+    public void updateUserVolunteerStatus(UsersVolunteer usersVolunteer, Status status){
+        usersVolunteer.updateStatus(status);
+    }
+
 }
