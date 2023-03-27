@@ -10,10 +10,10 @@ import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
 import com.ssafy.moida.model.user.Users;
-import com.ssafy.moida.service.project.DonationService;
+import com.ssafy.moida.service.project.ProjectDonationService;
 import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
-import com.ssafy.moida.service.project.VolunteerService;
+import com.ssafy.moida.service.project.ProjectVolunteerService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
@@ -41,8 +41,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProjectController {
     private final ProjectService projectService;
     private final UserService userService;
-    private final VolunteerService volunteerService;
-    private final DonationService donationService;
+    private final ProjectVolunteerService projectVolunteerService;
+    private final ProjectDonationService projectDonationService;
     private final ProjectPictureService projectPictureService;
     @Autowired
     private TokenUtils tokenUtils;
@@ -51,11 +51,11 @@ public class ProjectController {
     private DtoValidationUtils dtoValidationUtils;
 
     public ProjectController(ProjectService projectService, UserService userService,
-        VolunteerService volunteerService, DonationService donationService, ProjectPictureService projectPictureService){
+        ProjectVolunteerService projectVolunteerService, ProjectDonationService projectDonationService, ProjectPictureService projectPictureService){
         this.projectService = projectService;
         this.userService = userService;
-        this.volunteerService = volunteerService;
-        this.donationService = donationService;
+        this.projectVolunteerService = projectVolunteerService;
+        this.projectDonationService = projectDonationService;
         this.projectPictureService = projectPictureService;
     }
 
@@ -77,17 +77,17 @@ public class ProjectController {
         dtoValidationUtils.validateCreateProjectReqDto(createProjectReqDto);
 
         // 기부 데이터베이스에 저장
-        ProjectDonation projectDonation = donationService.save(createProjectReqDto.getDonationReqDto(),
+        ProjectDonation projectDonation = projectDonationService.save(createProjectReqDto.getDonationReqDto(),
             createProjectReqDto.getProjectReqDto().getPointPerMoi());
 
         // 봉사 데이터베이스에 저장
-        ProjectVolunteer projectVolunteer = volunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerReqDto());
+        ProjectVolunteer projectVolunteer = projectVolunteerService.saveProjectVolunteer(createProjectReqDto.getVolunteerReqDto());
 
         // 봉사 데이터베이스 저장
         Project project = projectService.save(createProjectReqDto.getProjectReqDto(), projectVolunteer, projectDonation, thumbnail);
 
         // 봉사일시 데이터베이스 저장
-        volunteerService.saveVolunteerDateInfo(project);
+        projectVolunteerService.saveVolunteerDateInfo(project);
 
         // 프로젝트 상세설명이 들어왔을 때만, 사진 데이터베이스에 저장
         if(fileList != null && fileList.size() > 0){
@@ -155,7 +155,7 @@ public class ProjectController {
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
         // 해당봉사일 정보
-        VolunteerDateInfo volunteerDateInfo = volunteerService.findVolunteerDateInfoById(vDateInfoId);
+        VolunteerDateInfo volunteerDateInfo = projectVolunteerService.findVolunteerDateInfoById(vDateInfoId);
 
         // capacity + 1이 max_capacity 를 넘을 경우 에러 발생(400)
         if(volunteerDateInfo.getCapacity() >= volunteerDateInfo.getMaxCapacity()){
@@ -163,15 +163,15 @@ public class ProjectController {
         }
 
         // 이미 해당 일자에 봉사 신청이 이미 되어있는지 확인
-        if(volunteerService.existsByVolunteerDateInfo(volunteerDateInfo)){
+        if(projectVolunteerService.existsByVolunteerDateInfo(volunteerDateInfo)){
             return new ResponseEntity<>(ErrorCode.DUPLICATE_VOLUNTEER_REGISTER, HttpStatus.BAD_REQUEST);
         }
 
         // UsersVolunteer에 해당 내용 저장
-        volunteerService.saveUsersVolunteer(loginUser, volunteerDateInfo);
+        projectVolunteerService.saveUsersVolunteer(loginUser, volunteerDateInfo);
 
         // 해당 봉사일에 인원 수 추가
-        volunteerService.updateCapacity(volunteerDateInfo);
+        projectVolunteerService.updateCapacity(volunteerDateInfo);
 
         return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
     }
