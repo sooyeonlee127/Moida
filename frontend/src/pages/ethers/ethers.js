@@ -10,7 +10,7 @@ const provider = new ethers.providers.JsonRpcProvider();
 const getAdminAddress = async () => {
   const signer = await provider.getSigner(); // index가 제공되지 않으면 0번째 account 반환
   const coinbase = await signer.getAddress();
-  console.log("관리자 지갑 : " + coinbase);
+  //   console.log("관리자 지갑 : " + coinbase);
   return coinbase;
 };
 
@@ -23,15 +23,15 @@ const createAccount = async () => {
   const signer = ethers.Wallet.createRandom(); // 새 지갑 생성
   const keystore = await signer.encrypt(password); // 해당 지갑의 키스토어 파일
 
-  console.log("signer address : " + signer.address);
+  //   console.log("signer address : " + signer.address);
 
   const wallet = signer.connect(provider);
 
-  const total_bal = await TOKENContract.balanceOf(coinbase);
-  const bal = await TOKENContract.balanceOf(wallet.address);
+  //   const total_bal = await TOKENContract.balanceOf(coinbase);
+  //   const bal = await TOKENContract.balanceOf(wallet.address);
 
-  console.log("송금 전!!! \n코인 베이스 잔액 : " + total_bal);
-  console.log("새 지갑 잔액 : " + bal);
+  //   console.log("송금 전!!! \n코인 베이스 잔액 : " + total_bal);
+  //   console.log("새 지갑 잔액 : " + bal);
 
   // 코인베이스 -> 새 지갑 기본 잔액 전송
   const Eth = ethers.utils.parseEther("10");
@@ -47,11 +47,11 @@ const createAccount = async () => {
   };
   await provider.getSigner().sendTransaction(tx);
 
-  const total_bal2 = await TOKENContract.balanceOf(coinbase);
-  const bal2 = await TOKENContract.balanceOf(wallet.address);
+  //   const total_bal2 = await TOKENContract.balanceOf(coinbase);
+  //   const bal2 = await TOKENContract.balanceOf(wallet.address);
 
-  console.log("송금 후!!! \n코인 베이스 잔액 : " + total_bal2);
-  console.log("새 지갑 잔액 : " + bal2);
+  //   console.log("송금 후!!! \n코인 베이스 잔액 : " + total_bal2);
+  //   console.log("새 지갑 잔액 : " + bal2);
 
   // 지갑 생성 트랜잭션 남기기
   const signed = {
@@ -60,10 +60,20 @@ const createAccount = async () => {
     value: ethers.utils.parseEther("0.01"),
   };
 
-  await wallet.sendTransaction(signed);
+  const transaction = await wallet.sendTransaction(signed);
 
-  console.log(wallet.address + " | " + wallet.privateKey);
-  return [wallet.address, wallet.privateKey];
+  //   console.log(wallet.address + " | " + wallet.privateKey);
+  console.log("새 지갑 생성 완료");
+
+  return wallet.address;
+};
+
+// 기부하기 - 내역 트랜잭션 남기기
+const donate = async () => {
+  /*
+   * transaction 작성
+   * message
+   */
 };
 
 const TOKEN_ABI = [
@@ -363,3 +373,5 @@ const TOKENContract = new ethers.Contract(
   TOKEN_ABI,
   provider.getSigner()
 );
+
+export default createAccount;
