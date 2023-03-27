@@ -35,12 +35,4 @@ public class GetUserPointResDto {
         this.pointDate = pointDate;
     }
 
-    public GetUserPointResDto(Long points, String category, LocalDateTime pointDate, String projectSubject, int generation, int ticketCnt) {
-        this.points = points;
-        this.category = category;
-        this.pointDate = pointDate;
-        this.projectSubject = projectSubject;
-        this.generation = generation;
-        this.ticketCnt = ticketCnt;
-    }
 }
