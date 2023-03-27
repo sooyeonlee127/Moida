@@ -13,12 +13,9 @@ import ReviewDetailPage from "./pages/ReviewDetailPage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
-<<<<<<< Updated upstream
 import AdminPage from "./pages/AdminPage";
 import Auth from "./context/Auth";
-=======
 import NavBar from "./components/NavBar/index.jsx"
->>>>>>> Stashed changes
 
 export default function App() {
   return (
