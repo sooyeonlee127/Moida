@@ -139,7 +139,7 @@ public class DtoValidationUtils {
      * @return
      */
     public void validateCategory(String category){
-        if("CRANE".equals(category) || "SQUIRREL".equals(category) || "WILD_ANIMAL".equals(category)) {
+        if(!"CRANE".equals(category) && "SQUIRREL".equals(category) && "WILD_ANIMAL".equals(category)) {
             throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
         }
     }
