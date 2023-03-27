@@ -23,6 +23,7 @@ const AdminPage = () => {
     category: "",
     projectSubject: "",
     projectDescription: "",
+    pointPerMoi: "",
     DonationStartDate: "",
     DonationEndDate: "",
     targetAmount: "",
@@ -40,6 +41,7 @@ const AdminPage = () => {
     category,
     projectSubject,
     projectDescription,
+    pointPerMoi,
     DonationStartDate,
     DonationEndDate,
     targetAmount,
@@ -59,6 +61,7 @@ const AdminPage = () => {
         category: state.category,
         subject: state.projectSubject,
         description: state.projectDescription,
+        pointPerMoi: state.pointPerMoi,
       },
       donationReqDto: {
         startDate: state.DonationStartDate,
@@ -93,6 +96,7 @@ const AdminPage = () => {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: localStorage.getItem("accessToken"),
+          refresh: localStorage.getItem("refreshToken"),
         },
       })
       .then((res) => {
@@ -145,6 +149,16 @@ const AdminPage = () => {
                   name="projectDescription"
                   type="text"
                   value={projectDescription}
+                  onChange={onChange}
+                />
+              </div>
+              <div>
+                <InputText htmlFor="pointPerMoi">pointPerMoi</InputText>
+                <AdminInput
+                  id="pointPerMoi"
+                  name="pointPerMoi"
+                  type="number"
+                  value={pointPerMoi}
                   onChange={onChange}
                 />
               </div>
