@@ -12,7 +12,7 @@ import com.ssafy.moida.repository.user.PointChargeRepository;
 import com.ssafy.moida.repository.user.UserRepository;
 import com.ssafy.moida.repository.user.UsersDonationRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
-import com.ssafy.moida.service.utils.EmailService;
+import com.ssafy.moida.utils.EamailUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import jakarta.mail.MessagingException;
@@ -41,16 +41,16 @@ public class UserService {
     private final UsersDonationRepository usersDonationRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
     private final PointChargeRepository pointChargeRepository;
-    private final EmailService emailService;
+    private final EamailUtils eamailUtils;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
 
-    public UserService(UserRepository userRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, PointChargeRepository pointChargeRepository, EmailService emailService, BCryptPasswordEncoder bCryptPasswordEncoder, VolunteerDateInfoRepository volunteerDateInfoRepository) {
+    public UserService(UserRepository userRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, PointChargeRepository pointChargeRepository, EamailUtils eamailUtils, BCryptPasswordEncoder bCryptPasswordEncoder, VolunteerDateInfoRepository volunteerDateInfoRepository) {
         this.userRepository = userRepository;
         this.usersDonationRepository = usersDonationRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
         this.pointChargeRepository = pointChargeRepository;
-        this.emailService = emailService;
+        this.eamailUtils = eamailUtils;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
     }
@@ -113,8 +113,8 @@ public class UserService {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         } else {
             // 중복이 아니라면 인증 번호 생성해서 이메일로 전송하기
-            MimeMessage message = emailService.createMessage(email);
-            code = emailService.sendMessage(message);
+            MimeMessage message = eamailUtils.createMessage(email);
+            code = eamailUtils.sendMessage(message);
         }
 
         return code;

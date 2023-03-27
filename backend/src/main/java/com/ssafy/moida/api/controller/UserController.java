@@ -11,7 +11,7 @@ import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.user.UserService;
-import com.ssafy.moida.service.utils.EmailService;
+import com.ssafy.moida.utils.EamailUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,11 +39,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final EmailService emailService;
+    private final EamailUtils emailService;
 
-    public UserController(UserService userService, EmailService emailService) {
+    public UserController(UserService userService, EamailUtils eamailUtils) {
         this.userService = userService;
-        this.emailService = emailService;
+        this.emailService = eamailUtils;
     }
 
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
