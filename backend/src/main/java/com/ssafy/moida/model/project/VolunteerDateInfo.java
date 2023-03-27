@@ -1,6 +1,5 @@
 package com.ssafy.moida.model.project;
 
-import com.ssafy.moida.model.project.Project;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import lombok.*;
@@ -14,7 +13,6 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="v_date_info")
 public class VolunteerDateInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
