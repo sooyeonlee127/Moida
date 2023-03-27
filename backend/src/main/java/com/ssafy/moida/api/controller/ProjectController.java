@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -64,6 +66,7 @@ public class ProjectController {
 
     @Transactional
     @Operation(summary = "[관리자] 프로젝트 생성", description = "관리자가 새 프로젝트를 생성합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
@@ -119,6 +122,7 @@ public class ProjectController {
     }
 
     @Operation(summary = "사용자 기부 신청", description = "사용자가 기부를 신청합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(path = "/donation")
     public ResponseEntity<?> createUserDonation(
         @RequestBody CreateDonationReqDto createDonationReqDto,
@@ -132,7 +136,7 @@ public class ProjectController {
 
         // 기부하려는 금액이 현재 보유 포인트보다 많은 경우 에러 반환
         if(points > loginUser.getPoint()){
-            throw new CustomException(ErrorCode.EXCEED_MAX_CAPACITY);
+            throw new CustomException(ErrorCode.EXCEED_USER_POINT);
         }
 
         // 기부 모이 수에 따른 티켓 발급
@@ -149,6 +153,7 @@ public class ProjectController {
 
     @Transactional
     @Operation(summary = "사용자 봉사 신청", description = "사용자가 봉사를 신청합니다.")
+    @SecurityRequirement(name = "bearerAuth")
     @PostMapping(path = "/volunteer")
     public ResponseEntity<?> createUserVolunteer(
         @Schema(description = "봉사 신청 일시 고유아이디", defaultValue = "1") Long vDateInfoId,

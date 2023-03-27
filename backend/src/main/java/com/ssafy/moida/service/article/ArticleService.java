@@ -1,10 +1,12 @@
 package com.ssafy.moida.service.article;
 
 import com.ssafy.moida.api.request.CreateArticleReqDto;
+import com.ssafy.moida.api.request.UpdateArticleReqDto;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetArticleResDto;
 import com.ssafy.moida.model.article.Article;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
@@ -43,7 +45,6 @@ public class ArticleService {
         // 사진 S3 업로드
         String url = "";
         if(file != null)  url = s3Uploader.uploadFileToS3(file, "static/article");
-        System.out.println("url : " + url);
 
         /*
          * Project DifficultyLevel 업데이트
@@ -51,6 +52,8 @@ public class ArticleService {
          */
         Project project = volunteerDateInfoRepository
                 .findById(usersVolunteer.getVolunteerDateInfo().getId()).get().getProject();
+
+        Users users = usersVolunteer.getUsers();
 
         Article article = Article.builder()
             .subject(createArticleReqDto.getSubject())
@@ -60,6 +63,7 @@ public class ArticleService {
             .url(url)
             .usersVolunteer(usersVolunteer)
             .project(project)
+            .users(users)
             .build();
 
         articleRepository.save(article);
@@ -68,6 +72,17 @@ public class ArticleService {
         Double difficultyLevel = (project.getProjectVolunteer().getDifficultyLevel() + createArticleReqDto.getDifficultyLevel()) / (projectArticleCount + 1);
 
         project.getProjectVolunteer().updateDifficulty(difficultyLevel);
+        users.updateTicket(users.getTicketCnt() + 2);
+    }
+
+    /**
+     * [세은] 고유 아이디로 엔티티 조회
+     * @param articleId
+     * @return
+     */
+    public Article findById(Long articleId){
+        return articleRepository.findById(articleId)
+            .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
 
     /**
@@ -75,7 +90,7 @@ public class ArticleService {
      * @param articleId
      * @return
      */
-    public GetArticleDetailResDto findById(Long articleId){
+    public GetArticleDetailResDto getArticleDetailById(Long articleId){
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         return new GetArticleDetailResDto(article);
@@ -113,5 +128,15 @@ public class ArticleService {
         }
 
         return results;
+    }
+
+    /**
+     * [세은] 인증글 수정
+     * @param updateArticleReqDto
+     */
+    @Transactional
+    public void updateArticle(UpdateArticleReqDto updateArticleReqDto){
+        Article article = findById(updateArticleReqDto.getId());
+        article.updateArticle(updateArticleReqDto.getSubject(), updateArticleReqDto.getDescription());
     }
 }

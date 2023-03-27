@@ -1,8 +1,10 @@
 package com.ssafy.moida.service.user;
 
+import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetUserVolunteerResDto;
 import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.UsersVolunteer;
+import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -19,9 +21,11 @@ import java.util.List;
 public class UserVolunteerService {
 
     private final UsersVolunteerRepository usersVolunteerRepository;
+    private final ArticleRepository articleRepository;
 
-    public UserVolunteerService(UsersVolunteerRepository usersVolunteerRepository) {
+    public UserVolunteerService(UsersVolunteerRepository usersVolunteerRepository, ArticleRepository articleRepository) {
         this.usersVolunteerRepository = usersVolunteerRepository;
+        this.articleRepository = articleRepository;
     }
 
     /**
@@ -72,6 +76,15 @@ public class UserVolunteerService {
     @Transactional
     public void updateUserVolunteerStatus(UsersVolunteer usersVolunteer, Status status){
         usersVolunteer.updateStatus(status);
+    }
+
+    /**
+     * [한선영] 사용자가 작성한 봉사 인증글 목록(GetArticleDetailResDto) 가져오기
+     * */
+    public List<GetArticleDetailResDto> getUsersVolunteerArticle(Long userId) {
+        List<GetArticleDetailResDto> result = new ArrayList<>();
+        result = articleRepository.findByUsersId(userId);
+        return result;
     }
 
 }

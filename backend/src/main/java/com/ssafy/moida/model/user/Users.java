@@ -83,4 +83,8 @@ public class Users {
     public void updatePoint(Long point) {
         this.point = point;
     }
+
+    public void updateTicket(int ticketCnt){
+        this.ticketCnt = ticketCnt;
+    }
 }

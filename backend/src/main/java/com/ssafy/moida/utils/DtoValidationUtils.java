@@ -20,6 +20,8 @@ public class DtoValidationUtils {
             throw new IllegalArgumentException("카테고리는 필수 입력값입니다");
         }
 
+        validateCategory(projectReqDto.getCategory());
+
         if(StringUtils.isBlank(projectReqDto.getSubject())){
             throw new IllegalArgumentException("프로젝트명은 필수 입력값입니다.");
         }
@@ -102,6 +104,7 @@ public class DtoValidationUtils {
         if(StringUtils.isBlank(createArticleReqDto.getCategory())){
             throw new IllegalArgumentException("카테고리은 필수 입력값입니다.");
         }
+        validateCategory(createArticleReqDto.getCategory());
 
         if(createArticleReqDto.getDifficultyLevel() <= 0){
             throw new IllegalArgumentException("봉사 난이도는 필수 입력값이며 양수 값만 가능합니다");
@@ -130,9 +133,19 @@ public class DtoValidationUtils {
         }
     }
 
+    /**
+     * [세은] 카테고리 INPUT 검증
+     * @param category
+     * @return
+     */
+    public void validateCategory(String category){
+        if(!"CRANE".equals(category) && "SQUIRREL".equals(category) && "WILD_ANIMAL".equals(category)) {
+            throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
+        }
+    }
 
     /**
-     * [세은] 프로젝트 생성 시 NOT NULL 검ㅅ
+     * [세은] 프로젝트 생성 시 NOT NULL 검사
      * @param createProjectReqDto
      */
     public void validateCreateProjectReqDto(CreateProjectReqDto createProjectReqDto){

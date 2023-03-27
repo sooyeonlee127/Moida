@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 public class ProjectPictureService {
     private final ProjectPictureRepository projectPictureRepository;
-
     private final S3Uploader s3Uploader;
 
     public ProjectPictureService(ProjectPictureRepository projectPictureRepository,

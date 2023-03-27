@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-// import tw from 'twin.macro'
 import { useState } from 'react'
 import DonationList from './Components/DonationList'
 import VolunteerList from './Components/VolunteerList'
 import PointWallet from './Components/PointWallet';
+
 
 const menuArr = [
     { name: '기부내역', content: 'Tab menu ONE' },
@@ -13,19 +13,17 @@ const menuArr = [
 
 const UserContent = () => {
     const [tabIndex, setTabIndex] = useState(0);
+
     return (
         <div>
             <TabGroup>
                 <Ul>
-                {menuArr.map((element, index)=>{
-                    return (
-                    <Li key={index} className={tabIndex === index ? "submenu focused" : "submenu"}
-                    onClick={()=> setTabIndex(index)}
-                    >
-                    {element.name}
-                    </Li>
-                    )
-                })}
+                  {menuArr.map((element, index)=>{
+                      return (
+                      <Li key={index} className={tabIndex === index ? "submenu focused" : "submenu"}
+                      onClick={()=> setTabIndex(index)}>{element.name}</Li>
+                      )
+                  })}
                 </Ul>
             </TabGroup>
             <Desc>
@@ -38,6 +36,7 @@ const UserContent = () => {
 }
 const TabGroup = styled.div`
 `
+
 
 const Ul = styled.ul`
 background-color: #dcdcdc;

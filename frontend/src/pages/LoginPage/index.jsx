@@ -126,6 +126,15 @@ const LoginPage = () => {
             >
               로그인
             </SubmitButton>
+            <PasswordButton
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/password", { replace: true });
+              }}
+            >
+              비밀번호 찾기
+            </PasswordButton>
           </div>
         </LoginForm>
       </InnerContainer>
@@ -205,6 +214,12 @@ const RememberMeText = styled.label`
 const SubmitButton = styled.button`
   ${tw`
   bg-yellow-300 w-full h-full  py-3 px-10 font-normal text-gray-600
+  `}
+`;
+
+const PasswordButton = styled.button`
+  ${tw`
+  bg-gray-300 w-full h-full mt-3 py-3 px-10 font-normal text-gray-600
   `}
 `;
 

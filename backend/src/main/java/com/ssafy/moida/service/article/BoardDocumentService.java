@@ -2,16 +2,14 @@ package com.ssafy.moida.service.article;
 
 import com.ssafy.moida.model.article.Board;
 import com.ssafy.moida.model.article.BoardDocument;
-import com.ssafy.moida.model.project.Project;
-import com.ssafy.moida.model.project.ProjectPicture;
 import com.ssafy.moida.repository.article.BoardDocumentRepository;
 import com.ssafy.moida.utils.S3Uploader;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,13 +49,8 @@ public class BoardDocumentService {
      */
     public List<String> getFileList(Board board){
         List<BoardDocument> fileList = boardDocumentRepository.findByBoard(board);
-        List<String> results = new ArrayList<>();
-
-        for (int i = 0, size = fileList.size(); i < size; i++) {
-            results.add(fileList.get(i).getUrl());
-        }
-
-        return results;
+        return fileList.stream()
+            .map(document -> document.getUrl())
+            .collect(Collectors.toList());
     }
-
 }
