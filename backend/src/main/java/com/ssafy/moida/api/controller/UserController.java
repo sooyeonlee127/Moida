@@ -223,6 +223,10 @@ public class UserController {
             @AuthenticationPrincipal PrincipalDetails principal,
             @RequestParam(value = "point") Long point
     ) {
+        if(point <= 0L || point >= Long.MAX_VALUE) {
+            throw new CustomException(ErrorCode.INVALID_POINT);
+        }
+
         Users user = userService.findByEmail(principal.getUsername());
 
         userService.updateAfterPointCharge(user, point);
