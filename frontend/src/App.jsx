@@ -1,4 +1,4 @@
-import NavBar from "./components/NavBar";
+
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
@@ -15,6 +15,7 @@ import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
 import AdminPage from "./pages/AdminPage";
 import Auth from "./context/Auth";
+import NavBar from "./components/NavBar/index.jsx"
 
 export default function App() {
   return (
