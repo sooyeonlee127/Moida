@@ -1,13 +1,10 @@
 package com.ssafy.moida.utils.error;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
+
+import static org.springframework.http.HttpStatus.*;
 
 @Getter
 @AllArgsConstructor
@@ -27,6 +24,7 @@ public enum ErrorCode {
     INVALID_PASSWORD(BAD_REQUEST, "유효하지 않은 비밀번호입니다."),
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
+    INVALID_POINT(UNPROCESSABLE_ENTITY, "입력한 포인트가 음수이거나 변수의 범위를 넘었습니다."),
 
     /* [한선영] 404 NOT_FOUND : Resource를 찾을 수 없음 */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
