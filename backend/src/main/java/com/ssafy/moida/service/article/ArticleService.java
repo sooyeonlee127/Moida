@@ -47,7 +47,6 @@ public class ArticleService {
         // 사진 S3 업로드
         String url = "";
         if(file != null)  url = s3Uploader.uploadFileToS3(file, "static/article");
-        System.out.println("url : " + url);
 
         /*
          * Project DifficultyLevel 업데이트
