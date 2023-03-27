@@ -3,15 +3,6 @@ import useListApi from "./api";
 
 const PointWallet = () => {
     const { data: datas, error, loading } = useListApi("points")
-    console.log(datas)
-    /*
-    category: "donation"
-    generation: 1
-    pointDate: "2023-03-27T14:33:24.042474"
-    points: 7000
-    projectSubject: "프로젝트 전체 주제"
-    ticketCnt: 12
-    */
     return (
         <>
         <table>
@@ -27,7 +18,6 @@ const PointWallet = () => {
             </thead>
             <tbody>
                 {datas.map((data, index) => { 
-                    console.log(data)
                     return (
                         <tr key={index}>
                             <td>{data.category}</td>

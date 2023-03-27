@@ -30,7 +30,6 @@ const UserStatus = () => {
         queryFn: getMe,
         refetchOnMount: true, // 데이터가 stale 상태일 경우 마운트 시 마다 refetch를 실행하는 옵션이다.
     })
-    console.log(data)
 
 
     return (

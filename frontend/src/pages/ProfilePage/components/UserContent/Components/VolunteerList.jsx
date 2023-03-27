@@ -19,7 +19,6 @@ const VolunteerList = () => {
             </thead>
             <tbody>
                 {datas.map((data, index) => { 
-                    console.log(data)
                     return (
                         <tr key={index}>
                             <td>{data.generation}</td>

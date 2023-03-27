@@ -3,7 +3,6 @@ import useListApi from "./api"
 
 const DonationList = () => {
     const { data: datas, error, loading } = useListApi("donation")
-    console.log(datas)
     return (
         <>
         <table>
