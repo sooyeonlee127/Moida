@@ -59,22 +59,37 @@ public class UserDonationService {
     }
 
     /**
+     * [한선영] 사용자가 기부를 한 적이 있는지 확인
+     * @param userId
+     * */
+    public boolean existDonation(Long userId) {
+        boolean existDonation = usersDonationRepository.existsByUsersId(userId);
+        return existDonation;
+    }
+
+    /**
      * [한선영] 기부에 사용한 총 포인트
      * @param userId
      * @return
      * */
     public long getTotalPoint(Long userId) {
-        boolean existDonation = usersDonationRepository.existsByUsersId(userId);
         long totalPoint;
 
-        if(existDonation) { // 기부 한 적이 있을 때
+        if(existDonation(userId)) { // 기부 한 적이 있을 때
             totalPoint = usersDonationRepository.findTotalPoint(userId);
-
         } else { // 기부를 한 적이 없을 때
             totalPoint = 0L;
         }
 
         return totalPoint;
+    }
+
+    /**
+     * [한선영] 기부한 포인트를 곡물 가치로 변환
+     * */
+    public int convertPointToMoi(long userId, String category) {
+        int moi = usersDonationRepository.findMoi(userId, category);
+        return moi;
     }
 
 }
