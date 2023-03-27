@@ -15,10 +15,11 @@ contract Donation {
 
     DonationHistory[] public donationHistories; // 기부 내역 배열
 
-    // 배열의 인덱스 값일 구한 뒤 배열에 새로운 값 추가 -> 데이터 무결성 보장
+    // 배열에 새로운 값 추가
     function addDonationHistory(string memory nickname, uint256 projectId, string memory subject, uint generation, string memory date, uint256 amount) public {
-         uint256 length = getDonationHistoriesLength();
-         donationHistories[length] = DonationHistory(nickname, projectId, subject, generation, date, amount);
+         //uint256 length = getDonationHistoriesLength();
+         //donationHistories[length] = DonationHistory(nickname, projectId, subject, generation, date, amount);
+         donationHistories.push(DonationHistory(nickname, projectId, subject, generation, date, amount));
     }
 
     // donationHistories 배열의 길이 구하기
