@@ -273,4 +273,13 @@ public class UserService {
         return result;
     }
 
+    /**
+     * [한선영] 현재 비밀번호와 입력 받은 비밀번호와 일치여부 확인
+     * */
+    public void checkCurrentPassword(Users user, String currentPassword) {
+        if(!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
+    }
+
 }
