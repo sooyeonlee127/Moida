@@ -53,7 +53,7 @@ public class ArticleController {
         this.boardDocumentService = boardDocumentService;
     }
 
-    @Operation(summary = "사용자 봉사 후기 작성", description = "사용자가 봉사 후기를 작성합니다.")
+    @Operation(summary = "사용자 인증글 작성", description = "사용자가 봉사 후기를 작성합니다.")
     @PostMapping(consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
@@ -86,7 +86,7 @@ public class ArticleController {
     }
 
     @Transactional
-    @Operation(summary = "관리자 봉사 인증 작성", description = "관리자가 봉사 인증글(공지)을 작성합니다.")
+    @Operation(summary = "[관리자] 공지사항 작성", description = "관리자가 공지사항을 작성합니다.")
     @PostMapping(path = "/board", consumes = {
         MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
@@ -116,19 +116,28 @@ public class ArticleController {
         return new ResponseEntity<>("공지사항 작성 완료", HttpStatus.OK);
     }
 
-    @Operation(summary = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항) 조회", description = "전체 인증갤러리 글을 조회합니다.")
+    @Operation(summary = "전체 인증갤러리 조회", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
     @GetMapping
     public ResponseEntity<GetArticleResDto> getArticlesAndBoards(){
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @Operation(summary = "봉사 게시글(공지사항) 상세조회", description = "특정 공지사항을 상세 조회합니다.")
+    @Operation(summary = "공지사항 상세조회", description = "특정 공지사항을 상세 조회합니다.")
     @GetMapping("/board/{boardid}")
     public ResponseEntity<?> getBoardDetails(@PathVariable("boardid") int boardId){
         if(!boardService.existsById((long) boardId)){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
+    }
+
+    @Operation(summary = "[관리자] 공지사항 수정", description = "관리자가 공지사항을 수정합니다.")
+    @PutMapping("/board/{boardid}")
+    public ResponseEntity<?> updateBoardDetails(@PathVariable("boardid") int boardId){
+        if(!boardService.existsById((long) boardId)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+        return new ResponseEntity<>("[관리자] 공지사항 수정 완료", HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 인증글 상세조회", description = "특정 사용자 인증글을 상세 조회합니다.")
@@ -149,5 +158,15 @@ public class ArticleController {
         }
         articleService.delete((long) articleId);
         return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 인증글 수정", description = "사용자가 인증글을 수정합니다.")
+    @PutMapping ("/{articleid}")
+    public ResponseEntity<?> updateArticleDetails(@PathVariable("articleid") int articleId){
+        // 수정하려는 인증글이 없을 경우 오류 반환(404)
+        if(!articleService.existsById((long) articleId)){
+            return new ResponseEntity<>(ErrorCode.DATA_NOT_FOUND.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>("게시물 수정 완료", HttpStatus.OK);
     }
 }
