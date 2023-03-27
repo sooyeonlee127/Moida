@@ -23,63 +23,47 @@ const createAccount = async () => {
   const signer = ethers.Wallet.createRandom(); // 새 지갑 생성
   const keystore = await signer.encrypt(password); // 해당 지갑의 키스토어 파일
 
-  console.log("KeyStore : " + keystore);
-
-  // await coinbase.unlock("");
-
-  // const Eth = web3.utils.toWei("10", "ether");
-  const weiValue = 10;
-  const Eth = ethers.utils.formatEther(weiValue);
-
   console.log("signer address : " + signer.address);
 
   const wallet = signer.connect(provider);
 
-  // await TOKENContract.methods.approve(coinbase, 100).send({ from: coinbase });
-  await TOKENContract.approve(coinbase, 100);
-  const result = await TOKENContract.transferFrom(
-    coinbase,
-    wallet.address,
-    100
-  );
-
-  const bal = await TOKENContract.balanceOf(wallet.address);
   const total_bal = await TOKENContract.balanceOf(coinbase);
+  const bal = await TOKENContract.balanceOf(wallet.address);
 
-  console.log("코인 베이스 잔액 : " + total_bal);
+  console.log("송금 전!!! \n코인 베이스 잔액 : " + total_bal);
   console.log("새 지갑 잔액 : " + bal);
 
+  // 코인베이스 -> 새 지갑 기본 잔액 전송
+  const Eth = ethers.utils.parseEther("10");
+
+  await TOKENContract.connect(provider.getSigner()).transfer(
+    wallet.address,
+    Eth
+  );
+  const tx = {
+    from: coinbase,
+    to: wallet.address,
+    value: Eth,
+  };
+  await provider.getSigner().sendTransaction(tx);
+
+  const total_bal2 = await TOKENContract.balanceOf(coinbase);
+  const bal2 = await TOKENContract.balanceOf(wallet.address);
+
+  console.log("송금 후!!! \n코인 베이스 잔액 : " + total_bal2);
+  console.log("새 지갑 잔액 : " + bal2);
+
+  // 지갑 생성 트랜잭션 남기기
   const signed = {
     to: coinbase,
-    from: signer.address,
-    value: ethers.utils.parseEther(Eth),
-    gasLimit: 100,
+    from: wallet.address,
+    value: ethers.utils.parseEther("0.01"),
   };
 
   await wallet.sendTransaction(signed);
 
-  // return [wallet.address, wallet.privateKey];
-  // await TOKENContract.transferFrom(coinbase, wallet.address, 100).send({
-  //   from: coinbase,
-  // });
-
-  // // 트랜잭션 서명
-  // const signed = {
-  //   from: coinbase,
-  //   to: signer.address,
-  //   value: Eth,
-  // };
-
-  // await wallet.sendTransaction(signed);
-
-  // return [wallet.address, wallet.privateKey];
-
-  // web3.eth.sendTransaction(tx).then((receipt) => receipt);
-  // // ERC-20 토큰 보내기 전 허용
-  // await TOKENContract.methods.approve(coinBase, 100).send({ from: coinBase });
-  // // 허용 한 후 ERC-20 토큰 전송 ( 로그인 시 10 잉크 (10잉크 -> 1피드) )
-  // await TOKENContract.methods.transferFrom(coinBase, wallet.address, 100).send({ from: coinBase });
-  // return [wallet.address, wallet.privateKey];
+  console.log(wallet.address + " | " + wallet.privateKey);
+  return [wallet.address, wallet.privateKey];
 };
 createAccount();
 
@@ -373,8 +357,8 @@ const TOKEN_ABI = [
     type: "function",
   },
 ];
-const TOKEN_CA = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"; // localhost
-// const TOKEN_CA = "0x9D7AE7492d040c49a1A4E950d7086b9b1Dea5E44"; // sepolia
+const TOKEN_CA = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // localhost
+// const TOKEN_CA = "0x4f223861e0f5139099bC18CacCbBc0019F487E0a"; // sepolia
 const TOKENContract = new ethers.Contract(
   TOKEN_CA,
   TOKEN_ABI,
