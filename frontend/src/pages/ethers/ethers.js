@@ -65,7 +65,6 @@ const createAccount = async () => {
   console.log(wallet.address + " | " + wallet.privateKey);
   return [wallet.address, wallet.privateKey];
 };
-createAccount();
 
 const TOKEN_ABI = [
   {
