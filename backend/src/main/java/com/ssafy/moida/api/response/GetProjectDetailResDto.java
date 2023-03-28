@@ -25,13 +25,13 @@ public class GetProjectDetailResDto{
     private VolunteerResDto volunteerResDto;
     private List<String> pictures;
 
-    public GetProjectDetailResDto(Project p, List<String> pics){
+    public GetProjectDetailResDto(Project p, List<String> pics, List<DateInfoResDto> dates){
         this.id = p.getId();
         this.thumbnail = p.getThumbnail();
         this.generation = p.getGeneration();
         this.projectReqDto = new ProjectReqDto(p.getCategory(), p.getSubject(), p.getDescription(), p.getPointPerMoi());
         this.donationResDto = new DonationResDto(p.getProjectDonation());
-        this.volunteerResDto = new VolunteerResDto(p.getProjectVolunteer());
+        this.volunteerResDto = new VolunteerResDto(p.getProjectVolunteer(), dates);
         this.pictures = pics;
     }
 }
