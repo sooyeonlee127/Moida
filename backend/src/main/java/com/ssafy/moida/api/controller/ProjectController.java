@@ -134,6 +134,9 @@ public class ProjectController {
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
+        // DTO 유효성 검사
+        dtoValidationUtils.validateCreateDonationReq(createDonationReqDto);
+
         // 프로젝트 존재 여부 확인
         projectService.existsProjectById(createDonationReqDto.getProjectId());
 
@@ -171,6 +174,11 @@ public class ProjectController {
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
+        // DTO 유효성 검사
+        if(vDateInfoId == null || vDateInfoId <= 0){
+            throw new IllegalArgumentException("봉사 일자 고유 아이디는 필수 입력값이며 양수 값만 가능합니다");
+        }
+        
         // 봉사 일자 테이블 데이터 존재여부 확인
         projectVolunteerService.existsVolunteerDateById(vDateInfoId);
 
@@ -206,6 +214,10 @@ public class ProjectController {
         // 관리자 권한 확인
         tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
 
+        /*
+         * 각 DTO 유효성 검사
+         * Project, ProjectDonation, ProjectVolunteer 업데이트
+         */
         projectService.updateProjectDetail(updateProjectReqDto);
 
         return new ResponseEntity<>("프로젝트 수정 완료", HttpStatus.OK);
