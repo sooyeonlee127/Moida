@@ -50,6 +50,14 @@ public class ProjectDonation {
     }
 
     /**
+     * [세은] 현재 기부 금액 변경 
+     * @param amount
+     */
+    public void updateAmount(Long amount){
+        this.amount = amount;
+    }
+
+    /**
      * [세은] 기부 엔티티 데이터 수정
      * @param updateDonationReqDto
      */

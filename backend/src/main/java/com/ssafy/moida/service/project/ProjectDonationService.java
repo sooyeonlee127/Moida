@@ -59,4 +59,9 @@ public class ProjectDonationService {
         return donationRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
+
+    @Transactional
+    public void updateDonationAmount(ProjectDonation projectDonation, Long donationAmount){
+        projectDonation.updateAmount(projectDonation.getAmount() + donationAmount);
+    }
 }

@@ -126,6 +126,7 @@ public class ProjectController {
     @Operation(summary = "사용자 기부 신청", description = "사용자가 기부를 신청합니다.")
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(path = "/donation")
+    @Transactional
     public ResponseEntity<?> createUserDonation(
         @RequestBody CreateDonationReqDto createDonationReqDto,
         @AuthenticationPrincipal PrincipalDetails principalDetails
@@ -152,6 +153,9 @@ public class ProjectController {
 
         // UsersDonation 테이블 업데이트
         userDonationService.saveUsersDonation(points, tickets, createDonationReqDto.getMoi(), loginUser, project);
+
+        // ProjectDonation 현재 기부 금액 업데이트
+        projectDonationService.updateDonationAmount(project.getProjectDonation(), points);
 
         return new ResponseEntity<>("사용자 기부 신청 완료", HttpStatus.OK);
     }
