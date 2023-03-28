@@ -37,42 +37,36 @@ const createAccount = async () => {
     const filepath = path.join(dir, filename);    
     
     fs.writeFileSync(filepath, keystore);
-    console.log(filepath);
-    //   console.log("signer address : " + signer.address);
 
     const wallet = signer.connect(provider);
-
-    //   const total_bal = await TOKENContract.balanceOf(coinbase);
-    //   const bal = await TOKENContract.balanceOf(wallet.address);
-
-    //   console.log("송금 전!!! \n코인 베이스 잔액 : " + total_bal);
-    //   console.log("새 지갑 잔액 : " + bal);
-
-    // 코인베이스 -> 새 지갑 기본 잔액 전송
-    const Eth = ethers.utils.parseEther("10");
-
-    await TOKENContract.connect(provider.getSigner()).transfer(wallet.address, Eth);
     const tx = {
-        from: coinbase,
-        to: wallet.address,
-        value: Eth,
-    };
-    await provider.getSigner().sendTransaction(tx);
+            from: coinbase,
+            to: wallet.address,
+            value: 0,
+        };
+    
+    const transaction = await provider.getSigner().sendTransaction(tx);
+    console.log(transaction);
 
-    //   const total_bal2 = await TOKENContract.balanceOf(coinbase);
-    //   const bal2 = await TOKENContract.balanceOf(wallet.address);
+    // // 코인베이스 -> 새 지갑 수수료 전송
+    // const Eth = ethers.utils.parseEther("10");
 
-    //   console.log("송금 후!!! \n코인 베이스 잔액 : " + total_bal2);
-    //   console.log("새 지갑 잔액 : " + bal2);
+    // await TOKENContract.connect(provider.getSigner()).transfer(wallet.address, Eth);
+    // const tx = {
+    //     from: coinbase,
+    //     to: wallet.address,
+    //     value: Eth,
+    // };
+    // await provider.getSigner().sendTransaction(tx);
 
-    // 지갑 생성 트랜잭션 남기기
-    const signed = {
-        to: coinbase,
-        from: wallet.address,
-        value: ethers.utils.parseEther("0.01"),
-    };
+    // // 지갑 생성 트랜잭션 남기기
+    // const signed = {
+    //     to: coinbase,
+    //     from: wallet.address,
+    //     value: ethers.utils.parseEther("0.01"),
+    // };
 
-    const transaction = await wallet.sendTransaction(signed);
+    // const transaction = await wallet.sendTransaction(signed);
 
     console.log("새 지갑 생성 완료");
 
@@ -386,7 +380,7 @@ const TOKEN_ABI = [
     },
 ];
 const TOKEN_CA = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // localhost
-// const TOKEN_CA = "0x4f223861e0f5139099bC18CacCbBc0019F487E0a"; // sepolia
+// const TOKEN_CA = "0xc7A3863844B8B62a4f58AC3ACfa0eE6dFd66b1Ca"; // sepolia
 const TOKENContract = new ethers.Contract(TOKEN_CA, TOKEN_ABI, provider.getSigner());
 
 const DONATION_ABI = [
@@ -594,6 +588,7 @@ const DONATION_ABI = [
     },
 ];
 const DONATION_CA = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"; // localhost
+// const DONATION_CA = "0x6c721039b1c5D127530A92c9e7C8434b32b29bFc"; // sepolia
 const DONATIONContract = new ethers.Contract(DONATION_CA, DONATION_ABI, provider.getSigner());
 
-export default createAccount;
+// export default createAccount;
