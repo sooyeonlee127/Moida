@@ -1,6 +1,6 @@
 // 리뷰상세페이지. aka 카드
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
@@ -25,6 +25,11 @@ const ReviewDetailPage = () => {
     })
   },[])
   
+
+  const navigate = useNavigate();
+  const onClickUd = () => {
+    navigate(`/review/update/${reviewid}`)
+  }
 
 
   return (
@@ -75,11 +80,24 @@ const ReviewDetailPage = () => {
         </button>
     </Div> */}
 
-    <img src={review.url}></img>
-    {review.description}
-    {review.difficultyLevel}
-    {review.subject}
-    {review.regDate}
+    <MainDiv>
+      <div>
+      <ReviewImg src={review.url} alt=""></ReviewImg>
+      </div>
+      <h4>{review.description}</h4>
+      
+      
+      
+      <h4>{review.difficultyLevel}</h4>
+      <h4>{review.subject}</h4>
+      <h4>{review.regDate}</h4>
+      
+
+      <ButtonWrapper>
+        <Button type="button" onClick={onClickUd}>수정</Button>
+        <Button type="button">삭제</Button>
+      </ButtonWrapper>
+    </MainDiv>
 
 
     </>
@@ -133,6 +151,21 @@ ${tw`w-3 h-3 rounded-full`}`
 
 const Astyle = styled.svg`
 ${tw`w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800`}
+
+`
+
+const MainDiv = styled.div`
+display: flex;
+flex-direction : column;
+`
+
+const ReviewImg = styled.img`
+opacity: 0.8;
+display : block
+`
+
+const ButtonWrapper = styled.div`
+flex-direction : row;
 
 `
 
