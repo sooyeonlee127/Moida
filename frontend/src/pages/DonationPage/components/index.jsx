@@ -32,7 +32,7 @@ const DonationCard = (props) => {
   return (
     <>
       <Card>
-        <CardImage src={imageList[id].image}></CardImage>
+        <CardImage src={imageList[id]?.image}></CardImage>
         <CardTitle>{donationResDto.subject}</CardTitle>
         <CardContent>{donationResDto.description}</CardContent>
         <CardContent>목표금액: {donationResDto.targetAmount}원</CardContent>
@@ -47,7 +47,7 @@ const DonationCard = (props) => {
           {donationResDto.endDate.slice(8, 10)}일
         </CardContent>
         <WrapBtn>
-          <Button href={imageList[id].href}>자세히</Button>
+          <Button href={imageList[id]?.href}>자세히</Button>
         </WrapBtn>
       </Card>
     </>
