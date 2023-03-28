@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   // 은혁: useQuery
@@ -35,20 +36,30 @@ const NavBar = () => {
   const { isLogin, setIsLogin } = useContext(AuthContext);
   useEffect(() => {
     refetch(); // data.point 값이 변경될 때마다 쿼리를 다시 실행 - 수연
-  }, [isLogin]); 
-  
+  }, [isLogin]);
+
+  const navigate = useNavigate();
+
+  const goHome = () => {
+    navigate("/", { replace: false });
+  };
+
+  const goSignup = () => {
+    navigate("/signup", { replace: false });
+  };
+
+  const goLogin = () => {
+    navigate("/login", { replace: false });
+  };
+
   const navigation = [
     // 로그아웃 상태의 navbar
-    { name: "HOME", href: "/" },
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
-    { name: "SIGNUP", href: "/signup" },
-    { name: "LOGIN", href: "/login" },
   ];
   const userNavigation = [
     // 로그인 상태의 navbar
-    { name: "HOME", href: "/" },
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
@@ -84,24 +95,38 @@ const NavBar = () => {
     return (
       <>
         <Nav>
+          <Logo>
+            <p>우리 로고</p>
+          </Logo>
           <Section>
-            <Logo>
-              <p>우리 로고</p>
-            </Logo>
+            <Home>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  goHome();
+                }}
+              >
+                HOME
+              </button>
+            </Home>
             <Title>
               {userNavigation.map((item, index) => (
                 <Link on={item.name} key={index} to={item.href}>
                   {item.name}
                 </Link>
               ))}
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  LogoutSubmit();
-                }}
-              >
-                LOGOUT
-              </button>
+            </Title>
+            <Title>
+              <LogoutButton>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    LogoutSubmit();
+                  }}
+                >
+                  LOGOUT
+                </button>
+              </LogoutButton>
             </Title>
           </Section>
         </Nav>
@@ -111,16 +136,50 @@ const NavBar = () => {
     return (
       <>
         <Nav>
+          <Logo>
+            <p>우리 로고</p>
+          </Logo>
           <Section>
-            <Logo>
-              <p>우리 로고</p>
-            </Logo>
+            <Home>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  goHome();
+                }}
+              >
+                HOME
+              </button>
+            </Home>
             <Title>
               {navigation.map((item) => (
                 <a key={item.name} href={item.href}>
                   {item.name}
                 </a>
               ))}
+            </Title>
+            <Title>
+              <LogoutButton>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goSignup();
+                  }}
+                >
+                  SIGNUP
+                </button>
+              </LogoutButton>
+            </Title>
+            <Title>
+              <LogoutButton>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goLogin();
+                  }}
+                >
+                  LOGIN
+                </button>
+              </LogoutButton>
             </Title>
           </Section>
         </Nav>
@@ -134,31 +193,43 @@ const Nav = styled.div`
   top: 0;
   width: 100%;
   z-index: 1;
+  background-color: rgb(255 214 0);
   ${tw`
-  bg-yellow-100
   px-2
-  text-black
-  h-16
-  flex items-center justify-between
+  py-4
+  flex justify-between
   `}
 `;
 
 const Section = styled.div`
+  word-break: break-all;
   ${tw`
-  flex flex-1 items-center justify-center sm:items-stretch sm:justify-start
+   min-h-full order-last flex flex-1 items-center justify-end mr-20 tracking-tighter font-normal text-base
   `}
 `;
 
 const Logo = styled.div`
   ${tw`
-  flex flex-shrink-0 items-center px-7
+    ml-20
   `}
 `;
 
 const Title = styled.div`
   ${tw`
-  flex space-x-4
+  flex space-x-9
   `}
 `;
 
+const LogoutButton = styled.div`
+  ${tw`
+  ml-9 font-black tracking-tighter
+  `}
+`;
+
+const Home = styled.div`
+  color: rgb(254 98 76);
+  ${tw`
+  mr-9 font-black 
+  `}
+`;
 export default NavBar;
