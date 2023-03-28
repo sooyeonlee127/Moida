@@ -71,13 +71,16 @@ const PointPage = () => {
       </LeftSide>
       <RightSide>
         <PointForm>
-          <Box>
-            <InnerBox>
-              <Text>금액</Text>
-              <Text>{currentPoint} 원</Text>
-            </InnerBox>
-          </Box>
-          <Box>
+          <Title>충전할 금액 설정</Title>
+          <InnerBox>
+            <Text>충전 금액</Text>
+            <PointText>{currentPoint}</PointText>
+          </InnerBox>
+          <InnerBox>
+            <Text>VAT (10%)</Text>
+            <PointText>{parseInt(currentPoint / 10)}</PointText>
+          </InnerBox>
+          <GroupButton>
             <PointButton
               onClick={(e) => {
                 e.preventDefault();
@@ -85,7 +88,7 @@ const PointPage = () => {
                 SetKakaoUrl("");
               }}
             >
-              초기화
+              <Text>초기화</Text>
             </PointButton>
             <PointButton
               onClick={(e) => {
@@ -93,7 +96,7 @@ const PointPage = () => {
                 donate(50000);
               }}
             >
-              +50000
+              <Text>+50,000</Text>
             </PointButton>
 
             <PointButton
@@ -102,7 +105,7 @@ const PointPage = () => {
                 donate(10000);
               }}
             >
-              +10000
+              <Text>+10,000</Text>
             </PointButton>
 
             <PointButton
@@ -111,7 +114,7 @@ const PointPage = () => {
                 donate(5000);
               }}
             >
-              +5000
+              <Text>+5,000</Text>
             </PointButton>
 
             <PointButton
@@ -120,15 +123,20 @@ const PointPage = () => {
                 donate(1000);
               }}
             >
-              +1000
+              <Text>+1,000</Text>
             </PointButton>
-          </Box>
-
+          </GroupButton>
+          <Line></Line>
+          <Title>최종 결제 금액</Title>
           <Box>
-            <InnerBox>
-              <Text>최종 결제 금액</Text>
-            </InnerBox>
-            <Text>카카오페이 API</Text>
+            <div>
+              <Text>간편결제</Text>
+              <PointText>카카오페이</PointText>
+            </div>
+            <div>
+              <PayText>{parseInt(currentPoint * 1.1)} 원</PayText>
+              <PayTextBottom>(VAT 포함)</PayTextBottom>
+            </div>
           </Box>
           <SubmitButton
             type="submit"
@@ -147,22 +155,27 @@ const PointPage = () => {
 
 const PointContainer = styled.div`
   ${tw`
-  mx-auto max-w-2xl px-4 pt-10 pb-16
-  grid grid-cols-2 gap-2
+  mx-auto max-w-2xl px-4 pt-40 pb-16
+  grid grid-cols-2
+  `}
+`;
+
+const Title = styled.h2`
+  ${tw`
+  text-left	text-lg font-bold text-gray-900 mb-3
   `}
 `;
 
 const LeftSide = styled.div`
   ${tw`
   row-span-3
-
 `}
 `;
 
 const RightSide = styled.div`
   ${tw`
-  row-span-3
-mt-4 lg:row-span-3 lg:mt-0
+  row-span-2
+  mt-4 row-span-3 lg:mt-0
 `}
 `;
 
@@ -174,7 +187,8 @@ flex items-center justify-between
 
 const Box = styled.div`
   ${tw`
-mt-10
+  grid grid-cols-2 bg-slate-100 h-20
+  flex items-center justify-between 
 `}
 `;
 
@@ -189,21 +203,51 @@ const PointForm = styled.form`
   mt-10
 `}
 `;
+
+const GroupButton = styled.div`
+  ${tw`
+  grid grid-cols-5 gap-1 mt-5 
+  `}
+`;
+
 const PointButton = styled.button`
   ${tw`
-  bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-1
+  border hover:bg-sky-500 active:bg-sky-600
   `}
 `;
 
 const Text = styled.h3`
   ${tw`
-text-sm font-medium text-gray-900
+text-sm text-gray-600 font-extralight
 `}
+`;
+
+const PointText = styled.h3`
+  ${tw`
+  text-sm text-gray-900 font-bold	
+
+  `}
+`;
+
+const PayText = styled.h3`
+  ${tw`
+  text-sm text-indigo-500 font-bold	
+  `}
+`;
+const PayTextBottom = styled.h3`
+  ${tw`
+  text-sm text-gray-600 font-extralight
+  `}
 `;
 
 const SubmitButton = styled.button`
   ${tw`
-  border px-2 py-2 hover:bg-sky-500 active:bg-sky-600
+  bg-sky-600 w-full h-full mt-3 py-3 px-10 font-light text-white
+  `}
+`;
+const Line = styled.hr`
+  ${tw`
+  my-10
   `}
 `;
 
