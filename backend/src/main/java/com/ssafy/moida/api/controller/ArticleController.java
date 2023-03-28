@@ -102,15 +102,10 @@ public class ArticleController {
     public ResponseEntity<List<GetArticleResDto>> getArticles(
         @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
         @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-        @RequestParam(name = "category", defaultValue = "ALL") String category,
-        @RequestParam(name = "sort", defaultValue = "latest") String sort
+        @RequestParam(name = "category", defaultValue = "ALL") @Schema(allowableValues = {"ALL", "CRANE", "SQUIRREL", "WILD_ANIMAL"}) String category,
+        @RequestParam(name = "sort", defaultValue = "latest") @Schema(allowableValues = {"LATEST", "DIFFICULTY_HIGEST", "DIFFICULTY_LOWEST"}) String sort
     ){
         pageNumber -= 1;
-
-        // DTO 유효성 검사
-        if(pageNumber < 0 || pageSize <= 0) {
-            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
-        }
 
         ArticleSortDto articleSortDto = new ArticleSortDto(pageNumber, pageSize, category, sort);
         dtoValidationUtils.validateArticleSortDto(articleSortDto);
