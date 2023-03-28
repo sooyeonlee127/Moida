@@ -4,11 +4,8 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
 import ReviewCard from './ReviewCard'
-import Review from "../../../ReviewDetailPage/review"
-
 
 const ReviewList = () => {
-  let [review, SetReview] = useState(Review);
   let [card, setCard] = useState([]);
 
   useEffect(() => {
