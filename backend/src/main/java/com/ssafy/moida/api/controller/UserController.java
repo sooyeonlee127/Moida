@@ -146,15 +146,15 @@ public class UserController {
             @AuthenticationPrincipal PrincipalDetails principal,
             @RequestBody ChangePwdReqDto changePwdReqDto
     ) {
-        // 로그인한 유저 정보 가져오기
-        Users user = userService.findByEmail(principal.getUsername());
+        // 토큰 유효성 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
 
         // 로그인된 비밀번호와 입력한 현재 비밀번호가 맞는지 확인 -> 아니라면 에러 뱉기
-        userService.checkCurrentPassword(user, changePwdReqDto.getCurrentPassword());
+        userService.checkCurrentPassword(loginUser, changePwdReqDto.getCurrentPassword());
 
         // 새로 입력한 비밀번호 검증과 새 비밀번호로 변경
         userService.vaildUserByPassword(changePwdReqDto.getNewPassword());
-        userService.changePwd(user.getEmail(), changePwdReqDto.getNewPassword());
+        userService.changePwd(loginUser.getEmail(), changePwdReqDto.getNewPassword());
 
         return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
     }
