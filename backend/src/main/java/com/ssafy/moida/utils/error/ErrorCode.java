@@ -21,6 +21,7 @@ public enum ErrorCode {
     DATA_NOT_FOUND(NOT_FOUND, "일치하는 데이터가 없습니다."),
     CATEGORY_NOT_FOUND(NOT_FOUND, "유효하지 않은 카테고리 값입니다."),
     STATUS_NOT_FOUND(NOT_FOUND, "유효하지 않은 상태 값입니다."),
+    SORT_NOT_FOUND(NOT_FOUND, "유효하지 않은 상태 값입니다."),
     /*[세은] 409 CONFLICT : */
     DUPLICATE_VOLUNTEER_REGISTER(CONFLICT, "해당 일자에 이미 봉사를 신청하였습니다"),
     INVALID_DTO_STATUS(CONFLICT, "서버 동작 상태와 클라이언트 요청 상태가 일치하지 않아 작업을 처리할 수 없습니다"),
