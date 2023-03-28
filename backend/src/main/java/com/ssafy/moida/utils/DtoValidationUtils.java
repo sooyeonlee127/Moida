@@ -1,5 +1,6 @@
 package com.ssafy.moida.utils;
 
+import com.ssafy.moida.api.common.PaginationDto;
 import com.ssafy.moida.api.request.*;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -158,7 +159,15 @@ public class DtoValidationUtils {
         }
     }
 
-
+    /**
+     * [세은] 페이지네이션 DTO 검증
+     * @param paginationDto
+     */
+    public void validatePaginationDto(PaginationDto paginationDto){
+        if(paginationDto.getPageNumber() <= 0 || paginationDto.getPagePerPageNumber() <= 0) {
+            throw new IllegalArgumentException("요청 페이지 번호는 양수값만 가능합니다.");
+        }
+    }
 
     /**
      * [세은] 프로젝트 생성 시 NOT NULL 검사

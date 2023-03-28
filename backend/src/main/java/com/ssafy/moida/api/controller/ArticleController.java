@@ -1,5 +1,6 @@
 package com.ssafy.moida.api.controller;
 
+import com.ssafy.moida.api.common.PaginationDto;
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.CreateBoardReqDto;
 import com.ssafy.moida.api.request.UpdateArticleReqDto;
@@ -128,7 +129,14 @@ public class ArticleController {
 
     @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<GetArticleResDto>> getArticlesAndBoards(){
+    public ResponseEntity<List<GetArticleResDto>> getArticlesAndBoards(
+        @RequestBody PaginationDto paginationDto
+    ){
+        // DTO 유효성 검사
+        dtoValidationUtils.validatePaginationDto(paginationDto);
+
+
+
         List<GetArticleResDto> articleList = articleService.getArticleList();
         return new ResponseEntity<>(articleList, HttpStatus.OK);
     }
