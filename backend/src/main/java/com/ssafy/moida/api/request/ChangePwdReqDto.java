@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * [한선영] 변경된 비밀번호를 받는 Dto
- * 비밀번호
+ * 현재 비밀번호, 새로운 비밀번호
  * */
 
 @Data
@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ChangePwdReqDto {
 
-    private String password;
+    private String currentPassword;
+    private String newPassword;
 
 }
