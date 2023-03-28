@@ -242,12 +242,7 @@ public class UserService {
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
             for (PointCharge charge : pointCharges) {
-                GetUserPointResDto dto = new GetUserPointResDto();
-
-                dto.setPoints(charge.getAmount());
-                dto.setCategory("charge");
-                dto.setPointDate(charge.getRegDate());
-
+                GetUserPointResDto dto = new GetUserPointResDto(charge.getAmount(), "charge", charge.getRegDate());
                 result.add(dto);
             }
         } else if(filter.equals("donation")) { // filter가 기부일때 포인트 내역
@@ -255,15 +250,14 @@ public class UserService {
                     .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
             for (UsersDonation donation : usersDonations) {
-                GetUserPointResDto dto = new GetUserPointResDto();
-
-                dto.setPoints(donation.getAmount());
-                dto.setCategory("donation");
-                dto.setPointDate(donation.getRegDate());
-                dto.setProjectSubject(donation.getProject().getSubject());
-                dto.setGeneration(donation.getProject().getGeneration());
-                dto.setTicketCnt(donation.getTicketCnt());
-
+                GetUserPointResDto dto = new GetUserPointResDto(
+                        donation.getAmount(),
+                        "donation",
+                        donation.getRegDate(),
+                        donation.getProject().getSubject(),
+                        donation.getProject().getGeneration(),
+                        donation.getTicketCnt()
+                );
                 result.add(dto);
             }
         } else { // 나머지 경우에는 전체 포인트 내역
@@ -271,6 +265,15 @@ public class UserService {
         }
 
         return result;
+    }
+
+    /**
+     * [한선영] 현재 비밀번호와 입력 받은 비밀번호와 일치여부 확인
+     * */
+    public void checkCurrentPassword(Users user, String currentPassword) {
+        if(!bCryptPasswordEncoder.matches(currentPassword, user.getPassword())) {
+            throw new CustomException(ErrorCode.INVALID_PASSWORD);
+        }
     }
 
 }

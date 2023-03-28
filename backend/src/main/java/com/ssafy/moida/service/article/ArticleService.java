@@ -15,6 +15,7 @@ import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -122,12 +123,9 @@ public class ArticleService {
         List<Article> articleList = articleRepository.findAll();
         List<GetArticleResDto> results = new ArrayList<>();
 
-        for (int i = 0; i < articleList.size(); i++) {
-            Article a = articleList.get(i);
-            results.add(new GetArticleResDto(a.getId(), a.getSubject(), a.getUrl(), a.getDifficultyLevel()));
-        }
-
-        return results;
+        return articleList.stream()
+            .map(article -> new GetArticleResDto(article.getId(), article.getSubject(), article.getUrl(),article.getDifficultyLevel()))
+            .collect(Collectors.toList());
     }
 
     /**

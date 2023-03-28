@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -6,7 +7,29 @@ const VolunteerForm = () => {
     const [value, onChange] = useState(new Date());
     const day = value.getDate() 
     const month = value.getMonth() 
-    const year = value.getFullYear() 
+    const year = value.getFullYear()
+    
+    const ParticipateApi = () => {  // 기부 API: 기부하기 버튼 클릭 시 작동 - 이은혁
+        
+        axios({
+            url: "/api/project/donation",
+            method: "POST",
+            data: {
+            },
+            headers: {
+                "accept": "*/*",
+                "Authorization": localStorage.getItem("accessToken"),
+                "Content-Type": "application/json"
+            }
+        })
+        .then((res) => {
+            console.log(res.data)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    } 
+    
     return (
         <div>
             <p>Title</p>
