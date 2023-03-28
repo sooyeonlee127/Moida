@@ -6,13 +6,16 @@ import com.ssafy.moida.model.user.UsersVolunteer;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsersVolunteerRepository extends JpaRepository<UsersVolunteer, Long> {
+public interface UsersVolunteerRepository extends JpaRepository<UsersVolunteer, Long>,
+    PagingAndSortingRepository<UsersVolunteer, Long> {
     Long countBy();
     boolean existsByVolunteerDateInfo(VolunteerDateInfo volunteerDateInfo);
     boolean existsById(UsersVolunteer usersVolunteer);
@@ -27,5 +30,5 @@ public interface UsersVolunteerRepository extends JpaRepository<UsersVolunteer, 
             "uv.status)" +
             "from UsersVolunteer uv " +
             "where uv.users.id = :userId")
-    List<GetUserVolunteerResDto> findVolunteersByUserId(@Param("userId") Long userId);
+    List<GetUserVolunteerResDto> findVolunteersByUserId(@Param("userId") Long userId, Pageable pageable);
 }
