@@ -3,8 +3,8 @@ import tw from "twin.macro";
 import { useReducer, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-
-const AdminNoticePage = () => {
+// 수연: 관리자 공지글 생성 페이지
+const NoticeCreatePage = () => {
   const reducer = (state, action) => {
     return {
       ...state,
@@ -67,7 +67,7 @@ const AdminNoticePage = () => {
           <AdminForm action="#" method="POST">
             <InputGroup>
               <div>
-                <Heading>공지글 생성 페이지</Heading>
+                <Title>공지글 생성 페이지</Title>
               </div>
               <div>
                 <InputText htmlFor="subject">subject</InputText>
@@ -81,18 +81,19 @@ const AdminNoticePage = () => {
               </div>
               <div>
                 <InputText htmlFor="description">description</InputText>
-                <AdminInput
+                <AdminLargeInput
                   id="description"
                   name="description"
                   type="text"
+                  rows="4"
                   value={description}
                   onChange={onChange}
-                />
+                ></AdminLargeInput>
               </div>
             </InputGroup>
             <InputGroup>
               <div>
-                <Heading>files</Heading>
+                <Title>files</Title>
               </div>
               <div>
                 <InputText htmlFor="files">files</InputText>
@@ -173,7 +174,13 @@ const AdminNoticePage = () => {
 
 const Heading = styled.h2`
   ${tw`
-  mt-6 text-center text-3xl font-bold tracking-tight text-gray-900
+  mt-6 text-center text-xl font-normal text-indigo-500
+  `}
+`;
+
+const Title = styled.h2`
+  ${tw`
+  text-center text-lg font-normal text-gray-900
   `}
 `;
 
@@ -185,7 +192,7 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
   ${tw`
-  w-full max-w-md space-y-8
+  bg-gray-200 w-full max-w-md mt-8 px-5 py-5
   `}
 `;
 
@@ -203,15 +210,20 @@ const InputGroup = styled.div`
 
 const InputText = styled.label`
   ${tw`
-  block text-sm font-medium leading-6 text-gray-900
+  px-1 mt-4 flex text-sm font-light leading-6 text-gray-500
   `}
 `;
 
 const AdminInput = styled.input`
   ${tw`
-  relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
+  relative block w-full border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
   
   `}
+`;
+
+const AdminLargeInput = styled.textarea`
+  ${tw`
+  block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500  `}
 `;
 
 const SubmitButton = styled.button`
@@ -219,4 +231,4 @@ const SubmitButton = styled.button`
   w-full h-full bg-yellow-600 py-2 px-10 font-semibold text-black
   `}
 `;
-export default AdminNoticePage;
+export default NoticeCreatePage;

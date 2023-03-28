@@ -1,4 +1,3 @@
-
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
@@ -13,12 +12,13 @@ import ReviewDetailPage from "./pages/ReviewDetailPage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
-import AdminPage from "./pages/AdminPage";
 import Auth from "./context/Auth";
-import NavBar from "./components/NavBar/index.jsx"
+import NavBar from "./components/NavBar/index.jsx";
 import PasswordPage from "./pages/PasswordPage";
-import AdminNoticePage from "./pages/AdminNoticePage";
-import NoticeUpdatePage from "./pages/AdminNoticePage/NoticeUpdatePage";
+import ProjectCreatePage from "./pages/Admin/ProjectCreatePage";
+import NoticeUpdatePage from "./pages/Admin/NoticeUpdatePage";
+import NoticeCreatePage from "./pages/Admin/NoticeCreatePage";
+
 export default function App() {
   return (
     <Auth>
@@ -40,10 +40,19 @@ export default function App() {
           <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
           <Route path={"/signup"} element={<SignupPage />} />
           <Route path={"/payresult"} element={<PayResult />} />
-          <Route path={"/admin"} element={<AdminPage />} />
+          <Route
+            path={"/admin/project/create"}
+            element={<ProjectCreatePage />}
+          />
           <Route path={"/password"} element={<PasswordPage />} />
-          <Route path={"/admin/notice/:projectid"} element={<AdminNoticePage />} />
-          <Route path={"/admin/notice/update/:boardid"} element={<NoticeUpdatePage />} />
+          <Route
+            path={"/admin/notice/:projectid"}
+            element={<NoticeCreatePage />}
+          />
+          <Route
+            path={"/admin/notice/update/:boardid"}
+            element={<NoticeUpdatePage />}
+          />
         </Routes>
       </div>
     </Auth>
