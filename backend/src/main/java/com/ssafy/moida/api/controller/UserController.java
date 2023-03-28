@@ -188,34 +188,46 @@ public class UserController {
 
     @Operation(summary = "사용자 기부 내역", description = "로그인한 사용자의 기부 내역을 반환합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping(
-            path = "/me/donation"
-    )
+    @GetMapping(path = "/me/donation")
     public ResponseEntity<?> getUserDonationList(
-            @AuthenticationPrincipal PrincipalDetails principal
+        @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+        @AuthenticationPrincipal PrincipalDetails principal
     ) {
         Users user = userService.findByEmail(principal.getUsername());
         Long userId = user.getId();
 
+        // DTO 유효성 검사
+        pageNumber -= 1;
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
+
         List<GetUserDonationResDto> userDonationList = new ArrayList<>();
-        userDonationList = userDonationService.getUsersDonation(userId);
+        userDonationList = userDonationService.getUsersDonation(userId, pageNumber, pageSize);
 
         return new ResponseEntity<>(userDonationList, HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 봉사 내역", description = "로그인한 사용자의 봉사 내역을 반환합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping(
-            path = "/me/volunteer"
-    )
+    @GetMapping(path = "/me/volunteer")
     public ResponseEntity<?> getUserVolunteerList(
-            @AuthenticationPrincipal PrincipalDetails principal
+        @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+        @AuthenticationPrincipal PrincipalDetails principal
     ) {
         Users user = userService.findByEmail(principal.getUsername());
         Long userId = user.getId();
 
-        List<GetUserVolunteerResDto> userVolunteerList = new ArrayList<>();
-        userVolunteerList = userVolunteerService.getUsersVolunteer(userId);
+        // DTO 유효성 검사
+        pageNumber -= 1;
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
+
+        List<GetUserVolunteerResDto> userVolunteerList
+            = userVolunteerService.getUsersVolunteer(userId, pageNumber, pageSize);
 
         return new ResponseEntity<>(userVolunteerList, HttpStatus.OK);
     }
