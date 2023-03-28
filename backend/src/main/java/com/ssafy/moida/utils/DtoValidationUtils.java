@@ -145,6 +145,22 @@ public class DtoValidationUtils {
     }
 
     /**
+     * [세은] 사용자 기부 신청 INPUT 검증
+     * @param createDonationReqDto
+     */
+    public void validateCreateDonationReq(CreateDonationReqDto createDonationReqDto){
+        if(createDonationReqDto.getProjectId() == null || createDonationReqDto.getProjectId() <= 0){
+            throw new IllegalArgumentException("프로젝트 아이디는 필수 입력값이며 양수 값만 가능합니다");
+        }
+
+        if(createDonationReqDto.getMoi() <= 0) {
+            throw new IllegalArgumentException("기부 모이는 양수값만 가능합니다.");
+        }
+    }
+
+
+
+    /**
      * [세은] 프로젝트 생성 시 NOT NULL 검사
      * @param createProjectReqDto
      */
