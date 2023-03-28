@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
-import { useReducer, useContext } from "react";
+import { useReducer, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
 
+// 수연: 로그인 페이지
 const LoginPage = () => {
   const { setIsLogin, setRole } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -22,11 +23,17 @@ const LoginPage = () => {
     return [state, onChange];
   };
   const [state, onChange] = useInputs({
-    email: "",
+    email: localStorage.getItem("email") || "",
     password: "",
     remember: false,
   });
-
+  useEffect(() => {
+    if (localStorage.getItem("email")) {
+      state.remember = true;
+      const checkbox = document.getElementById("remember-me");
+      checkbox.checked = true;
+    }
+  }, []);
   const { email, password, remember } = state;
 
   const checkedRemeberMe = () => {
@@ -48,6 +55,15 @@ const LoginPage = () => {
       },
     })
       .then((res) => {
+        // remember-me data 저장
+        const checkbox = document.getElementById("remember-me");
+        if (checkbox.checked) {
+          localStorage.setItem("email", state.email);
+        } else {
+          if (localStorage.getItem("email")) {
+            localStorage.removeItem("email");
+          }
+        }
         const data = res.data;
         const token = res.headers.authorization;
         localStorage.setItem("accessToken", token);
@@ -113,7 +129,9 @@ const LoginPage = () => {
                   checkedRemeberMe();
                 }}
               />
-              <RememberMeText htmlFor="remember-me">Remember me</RememberMeText>
+              <RememberMeText htmlFor="remember-me">
+                이메일 기억하기
+              </RememberMeText>
             </RememberMeBox>
           </RememberMeContainer>
           <div>
