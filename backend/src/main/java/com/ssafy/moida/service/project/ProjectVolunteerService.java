@@ -11,6 +11,7 @@ import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.project.VolunteerRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
+import com.ssafy.moida.utils.RandomNumberGenerator;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.time.LocalDate;
@@ -30,12 +31,15 @@ public class ProjectVolunteerService {
     private final VolunteerRepository volunteerRepository;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
+    private final RandomNumberGenerator randomNumberGenerator;
 
     public ProjectVolunteerService(VolunteerRepository volunteerRepository, VolunteerDateInfoRepository volunteerDateInfoRepository,
-        UsersVolunteerRepository usersVolunteerRepository){
+        UsersVolunteerRepository usersVolunteerRepository,
+        RandomNumberGenerator randomNumberGenerator){
         this.volunteerRepository = volunteerRepository;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
+        this.randomNumberGenerator = randomNumberGenerator;
     }
 
     /**
@@ -79,6 +83,7 @@ public class ProjectVolunteerService {
                 .capacity(0)
                 .maxCapacity(pv.getCapacityPerDate())
                 .project(p)
+                .authenticationCode(randomNumberGenerator.generateRandomNumber())
                 .build();
             volunteerDateInfoRepository.save(volunteerDateInfo);
         }
