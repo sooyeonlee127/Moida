@@ -204,8 +204,9 @@ public class UserController {
         @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
         @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
         // DTO 유효성 검사
         pageNumber -= 1;
@@ -213,8 +214,8 @@ public class UserController {
             throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
         }
 
-        List<GetUserDonationResDto> userDonationList = new ArrayList<>();
-        userDonationList = userDonationService.getUsersDonation(userId, pageNumber, pageSize);
+        List<GetUserDonationResDto> userDonationList
+                = userDonationService.getUsersDonation(userId, pageNumber, pageSize);
 
         return new ResponseEntity<>(userDonationList, HttpStatus.OK);
     }
@@ -227,8 +228,9 @@ public class UserController {
         @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
         @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
         // DTO 유효성 검사
         pageNumber -= 1;
@@ -248,11 +250,11 @@ public class UserController {
     public ResponseEntity<?> getUserPointList(
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
-        List<GetUserPointResDto> userPointList = new ArrayList<>();
-        userPointList = userService.getUsersPoint(userId);
+        List<GetUserPointResDto> userPointList = userService.getUsersPoint(userId);
 
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
@@ -270,10 +272,11 @@ public class UserController {
             throw new CustomException(ErrorCode.INVALID_POINT);
         }
 
-        Users user = userService.findByEmail(principal.getUsername());
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
 
-        userService.updateAfterPointCharge(user, point);
-        userService.savePointCharge(user, point);
+        userService.updateAfterPointCharge(loginUser, point);
+        userService.savePointCharge(loginUser, point);
 
         return new ResponseEntity<>("포인트 충전 완료", HttpStatus.OK);
     }
@@ -287,11 +290,12 @@ public class UserController {
             @AuthenticationPrincipal PrincipalDetails principal,
             @RequestParam(value = "category") String category
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
-        List<GetUserPointResDto> userPointList = new ArrayList<>();
-        userPointList = userService.getPointListFilter(category, userId);
+        List<GetUserPointResDto> userPointList
+                = userService.getPointListFilter(category, userId);
 
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
@@ -324,11 +328,12 @@ public class UserController {
     public ResponseEntity<?> getUserVolunteerArticleList(
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
-        List<GetArticleDetailResDto> userVolunteerArticleList = new ArrayList<>();
-        userVolunteerArticleList = userVolunteerService.getUsersVolunteerArticle(userId);
+        List<GetArticleDetailResDto> userVolunteerArticleList
+                = userVolunteerService.getUsersVolunteerArticle(userId);
 
         return new ResponseEntity<>(userVolunteerArticleList, HttpStatus.OK);
     }
