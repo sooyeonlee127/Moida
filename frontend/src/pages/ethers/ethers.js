@@ -1,4 +1,7 @@
+const { create } = require("domain");
 const ethers = require("ethers");
+const fs = require("fs");
+const path = require("path");
 // const { TOKENContract, TOKEN_CA } = require("./SmartContract.js");
 
 const PRIVATE_NODE = "http://127.0.0.1:8545"; // 나중에 환경변수 처리 및 주소 변경
@@ -21,8 +24,20 @@ const createAccount = async () => {
     console.log(password);
     const coinbase = await getAdminAddress();
     const signer = ethers.Wallet.createRandom(); // 새 지갑 생성
-    const keystore = await signer.encrypt(password); // 해당 지갑의 키스토어 파일
+    const keystore = await signer.encrypt(password); // 해당 지갑의 키스토어 파일 ~ 확장자 : json
 
+    // 키스토어 파일을 ./public/keystores에 저장
+    const dir = path.join('./', '..', '..', '..', 'public', 'keystores');
+
+    if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    }
+
+    const filename ="UTC" + new Date(Date.now()).toISOString().replace(/:/g, '-') + '-' + signer.address + ".json";
+    const filepath = path.join(dir, filename);    
+    
+    fs.writeFileSync(filepath, keystore);
+    console.log(filepath);
     //   console.log("signer address : " + signer.address);
 
     const wallet = signer.connect(provider);
@@ -59,11 +74,13 @@ const createAccount = async () => {
 
     const transaction = await wallet.sendTransaction(signed);
 
-    //   console.log(wallet.address + " | " + wallet.privateKey);
     console.log("새 지갑 생성 완료");
 
+    // 지갑주소(wallet.address), 키스토어 파일 경로(filepath) 반환해야 함 
     return wallet.address;
 };
+
+createAccount();
 
 // 기부하기 - 내역 트랜잭션 남기기
 const donate = async () => {
@@ -574,4 +591,4 @@ const DONATION_ABI = [
 const DONATION_CA = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"; // localhost
 const DONATIONContract = new ethers.Contract(DONATION_CA, DONATION_ABI, provider.getSigner());
 
-export default createAccount;
+// export default createAccount;
