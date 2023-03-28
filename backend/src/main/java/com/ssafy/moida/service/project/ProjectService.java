@@ -1,6 +1,7 @@
 package com.ssafy.moida.service.project;
 
 import com.ssafy.moida.api.request.ProjectReqDto;
+import com.ssafy.moida.api.response.DateInfoResDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
 import com.ssafy.moida.model.project.Project;
@@ -12,6 +13,7 @@ import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +25,15 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final S3Uploader s3Uploader;
     private final ProjectPictureService projectPictureService;
+    private final ProjectVolunteerService projectVolunteerService;
 
     public ProjectService(ProjectRepository projectRepository, S3Uploader s3Uploader,
-        ProjectPictureService projectPictureService){
+        ProjectPictureService projectPictureService,
+        ProjectVolunteerService projectVolunteerService){
         this.projectRepository = projectRepository;
         this.s3Uploader = s3Uploader;
         this.projectPictureService = projectPictureService;
+        this.projectVolunteerService = projectVolunteerService;
     }
 
     /**
@@ -94,13 +99,9 @@ public class ProjectService {
      */
     public List<GetProjectResDto> getProject(){
         List<Project> projectList = projectRepository.getNewestProjectByCategory();
-        List<GetProjectResDto> results = new ArrayList<>();
-
-        for (int i = 0; i < projectList.size(); i++) {
-            results.add(new GetProjectResDto(projectList.get(i)));
-        }
-
-        return results;
+        return projectList.stream()
+            .map(project -> new GetProjectResDto(project))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -111,7 +112,8 @@ public class ProjectService {
         Project project = projectRepository.findById(projectId)
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         List<String> fileList = projectPictureService.getFileList(project);
-        return new GetProjectDetailResDto(project, fileList);
+        List<DateInfoResDto> dates = projectVolunteerService.getVolunteerDateInfoByProject(project);
+        return new GetProjectDetailResDto(project, fileList, dates);
     }
 
     /**
