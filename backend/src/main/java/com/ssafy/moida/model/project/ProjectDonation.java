@@ -1,9 +1,11 @@
 package com.ssafy.moida.model.project;
 
+import com.ssafy.moida.api.request.UpdateDonationReqDto;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * [프로젝트 기부 섹션에 해당하는 엔티티]
@@ -45,5 +47,23 @@ public class ProjectDonation {
         this.endDate = endDate;
         this.subject = subject;
         this.description = description;
+    }
+
+    /**
+     * [세은] 현재 기부 금액 변경 
+     * @param amount
+     */
+    public void updateAmount(Long amount){
+        this.amount = amount;
+    }
+
+    /**
+     * [세은] 기부 엔티티 데이터 수정
+     * @param updateDonationReqDto
+     */
+    public void updateProjectDonationDetails(UpdateDonationReqDto updateDonationReqDto){
+        if(!StringUtils.isBlank(updateDonationReqDto.getSubject())) this.subject = updateDonationReqDto.getSubject();
+        if(!StringUtils.isBlank(updateDonationReqDto.getDescription())) this.description = updateDonationReqDto.getDescription();
+        if(updateDonationReqDto.getTargetAmount() != null && updateDonationReqDto.getTargetAmount() > 0) this.targetAmount = updateDonationReqDto.getTargetAmount();
     }
 }

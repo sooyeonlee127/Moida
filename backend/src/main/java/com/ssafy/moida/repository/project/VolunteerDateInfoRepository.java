@@ -14,4 +14,5 @@ import org.springframework.stereotype.Repository;
 public interface VolunteerDateInfoRepository extends JpaRepository<VolunteerDateInfo, Long> {
     Optional<VolunteerDateInfo> findById(Long id);
     List<VolunteerDateInfo> findByProject(Project project);
+    boolean existsById(Long id);
 }

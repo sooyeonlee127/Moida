@@ -1,13 +1,11 @@
 package com.ssafy.moida.model.project;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ssafy.moida.api.request.UpdateVolunteerReqDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * [프로젝트 봉사 섹션에 해당하는 엔티티]
@@ -55,7 +53,20 @@ public class ProjectVolunteer {
         this.description = description;
     }
 
+    /**
+     * [세은] 프로젝트별 봉사 난이도 수정
+     * @param difficultyLevel
+     */
     public void updateDifficulty(Double difficultyLevel){
         this.difficultyLevel = difficultyLevel;
+    }
+
+    /**
+     * [세은] 기부 엔티티 데이터 수정
+     * @param updateVolunteerReqDto
+     */
+    public void updateProjectVolunteerDetails(UpdateVolunteerReqDto updateVolunteerReqDto){
+        if(!StringUtils.isBlank(updateVolunteerReqDto.getSubject())) this.subject = updateVolunteerReqDto.getSubject();
+        if(!StringUtils.isBlank(updateVolunteerReqDto.getDescription())) this.description = updateVolunteerReqDto.getDescription();
     }
 }
