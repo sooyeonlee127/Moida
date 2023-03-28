@@ -66,6 +66,9 @@ public class UserController {
     public ResponseEntity<?> join(
             @RequestBody UserJoinReqDto userJoinReqDto
     ) {
+        // DTO NOT NULL 검증
+        dtoValidationUtils.validateUserJoinReqDto(userJoinReqDto);
+
         userService.vaildUserByPassword(userJoinReqDto.getPassword());  // 비밀번호 정규식 검사
         userService.joinUser(userJoinReqDto);                           // 회원 가입
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
