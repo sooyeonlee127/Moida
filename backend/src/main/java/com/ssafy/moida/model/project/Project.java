@@ -1,7 +1,9 @@
 package com.ssafy.moida.model.project;
 
+import com.ssafy.moida.api.request.UpdateProjectReqDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * [프로젝트 전체 정보 엔티티]
@@ -54,5 +56,14 @@ public class Project {
         this.pointPerMoi = pointPerMoi;
         this.projectDonation = projectDonation;
         this.projectVolunteer = projectVolunteer;
+    }
+
+    /**
+     * [세은] 프로젝트 엔티티 정보 수정
+     * @param updateProjectReqDto
+     */
+    public void updateProjectDetails(UpdateProjectReqDto updateProjectReqDto){
+        if(!StringUtils.isBlank(updateProjectReqDto.getDescription())) this.description = updateProjectReqDto.getDescription();
+        if(!StringUtils.isBlank(updateProjectReqDto.getSubject())) this.subject = updateProjectReqDto.getSubject();
     }
 }
