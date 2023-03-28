@@ -1,5 +1,6 @@
 package com.ssafy.moida.service.user;
 
+import com.ssafy.moida.api.request.UpdateUserVolunteerStatusReqDto;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetUserVolunteerResDto;
 import com.ssafy.moida.model.project.Status;
@@ -8,9 +9,11 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
+import com.ssafy.moida.service.project.ProjectVolunteerService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,10 +28,12 @@ import java.util.List;
 public class UserVolunteerService {
 
     private final UsersVolunteerRepository usersVolunteerRepository;
+    private final ProjectVolunteerService projectVolunteerService;
     private final ArticleRepository articleRepository;
 
-    public UserVolunteerService(UsersVolunteerRepository usersVolunteerRepository, ArticleRepository articleRepository) {
+    public UserVolunteerService(UsersVolunteerRepository usersVolunteerRepository, ProjectVolunteerService projectVolunteerService, ArticleRepository articleRepository) {
         this.usersVolunteerRepository = usersVolunteerRepository;
+        this.projectVolunteerService = projectVolunteerService;
         this.articleRepository = articleRepository;
     }
 
@@ -87,13 +92,28 @@ public class UserVolunteerService {
     }
 
     /**
-     * [세은] 사용자 봉사 신청 취소
+     * [세은] 사용자 봉사 상태 변경
+     * @param updateDto
      * @param usersVolunteer
-     * @param status
      */
     @Transactional
-    public void updateUserVolunteerStatus(UsersVolunteer usersVolunteer, Status status){
-        usersVolunteer.updateStatus(status);
+    public void updateUserVolunteerStatus(UpdateUserVolunteerStatusReqDto updateDto, UsersVolunteer usersVolunteer){
+        // 봉사 취소인 경우
+        if(updateDto.getStatus().equals(Status.CANCEL)){
+            usersVolunteer.updateStatus(Status.CANCEL);
+        } else if(updateDto.getStatus().equals(Status.DONE)){
+            // 봉사 완료인 경우
+            if(!StringUtils.isBlank(updateDto.getCode())){
+                throw new IllegalArgumentException("봉사 상태 완료 변경 시 인증 코드는 필수값입니다.");
+            }
+
+            VolunteerDateInfo volunteerDateInfo = projectVolunteerService.findVolunteerDateInfoById(usersVolunteer.getVolunteerDateInfo().getId());
+            if(volunteerDateInfo.getAuthenticationCode() != updateDto.getCode()){
+                throw new CustomException(ErrorCode.INVALID_AUTH_CODE);
+            }
+
+            usersVolunteer.updateStatus(Status.DONE);
+        }
     }
 
     /**
