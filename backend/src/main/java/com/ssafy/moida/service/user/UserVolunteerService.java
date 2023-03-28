@@ -41,9 +41,9 @@ public class UserVolunteerService {
      * [한선영] 사용자가 참여한 봉사의 개수 가져오기
      * @return
      * */
-    public long totalVolunteerCnt() {
+    public long totalVolunteerCnt(Long userId) {
         // 봉사 프로젝트 개수 가져오기
-        return usersVolunteerRepository.countBy();
+        return usersVolunteerRepository.countByUsersId(userId);
     }
 
     /**
