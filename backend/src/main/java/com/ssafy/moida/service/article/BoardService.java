@@ -71,9 +71,7 @@ public class BoardService {
      * @return
      */
     public GetBoardDetailResDto getBoardDetailByProject(Long projectId){
-        if(!projectService.existsById(projectId)){
-            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
-        }
+        projectService.existsProjectById(projectId);
 
         Board board = boardRepository.getBoardByProject(projectId)
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
