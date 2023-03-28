@@ -7,7 +7,7 @@ import "hardhat/console.sol";
 // ERC20을 상속받아서 HeeToken 생성
 // ERC20 : fungible token의 표준
 contract HeeToken is ERC20 {
-    uint public INITIAL_SUPPLY = 100 * 10**18;
+    uint public INITIAL_SUPPLY = 100000 * 10**18;
 
 
     // 생성자 : 배포될 때 호출
