@@ -141,4 +141,16 @@ public class DtoValidationUtils {
             throw new IllegalArgumentException(name + "은/는 필수 입력값입니다.");
         }
     }
+
+    /**
+     * [한선영] UserJoinReqDto NOT NULL 검증 함수
+     * @param userJoinReqDto
+     */
+    public void validateUserJoinReqDto(UserJoinReqDto userJoinReqDto) {
+        checkStringType(userJoinReqDto.getEmail(), "이메일");
+        checkStringType(userJoinReqDto.getPhone(), "전화번호");
+        checkStringType(userJoinReqDto.getNickname(), "닉네임");
+        checkStringType(userJoinReqDto.getNftUrl(), "기본 NFT");
+        checkStringType(userJoinReqDto.getWalletUrl(), "지갑주소");
+    }
 }
