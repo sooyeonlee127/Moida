@@ -13,25 +13,11 @@ public class DtoValidationUtils {
      * @param projectReqDto
      */
     public  void validateProjectReqDto(ProjectReqDto projectReqDto){
-        // String 타입에 대해서는 null, 빈 문자열, 공백 검사
-        if(StringUtils.isBlank(projectReqDto.getCategory())){
-            throw new IllegalArgumentException("카테고리는 필수 입력값입니다");
-        }
-
+        checkStringType(projectReqDto.getSubject(), "프로젝트명");
+        checkStringType(projectReqDto.getCategory(), "카테고리");
         validateCategory(projectReqDto.getCategory());
-
-        if(StringUtils.isBlank(projectReqDto.getSubject())){
-            throw new IllegalArgumentException("프로젝트명은 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(projectReqDto.getDescription())){
-            throw new IllegalArgumentException("상세설명은 필수 입력값입니다.");
-        }
-
-        // Long 타입에 대해서는 null, 범위 검사
-        if(projectReqDto.getPointPerMoi() == null || projectReqDto.getPointPerMoi() <= 0){
-            throw new IllegalArgumentException("곡물가치는 필수 입력값이며 0 이상의 값을 입력해주세요.");
-        }
+        checkStringType(projectReqDto.getDescription(), "상세 설명");
+        checkLongType(projectReqDto.getPointPerMoi(), "곡물 가치");
     }
 
     /**
@@ -39,21 +25,11 @@ public class DtoValidationUtils {
      * @param donationReqDto
      */
     public void validateDonationReqDto(DonationReqDto donationReqDto){
-        if(StringUtils.isBlank(donationReqDto.getStartDate()) || StringUtils.isBlank(donationReqDto.getEndDate())){
-            throw new IllegalArgumentException("기부일시는 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(donationReqDto.getSubject())){
-            throw new IllegalArgumentException("소제목은 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(donationReqDto.getDescription())){
-            throw new IllegalArgumentException("상세설명은 필수 입력값입니다.");
-        }
-
-        if(donationReqDto.getTargetAmount() == null || donationReqDto.getTargetAmount() <= 0){
-            throw new IllegalArgumentException("목표 기부금은 필수 입력값이며 양수 값만 가능합니다");
-        }
+        checkStringType(donationReqDto.getStartDate(), "봉사 일시");
+        checkStringType(donationReqDto.getEndDate(), "봉사 일시");
+        checkStringType(donationReqDto.getSubject(), "소제목");
+        checkStringType(donationReqDto.getDescription(), "상세 설명");
+        checkLongType(donationReqDto.getTargetAmount(), "목표 기부금");
     }
 
     /**
@@ -61,28 +37,14 @@ public class DtoValidationUtils {
      * @param volunteerReqDto
      */
     public void validateVolunteerReqDto(VolunteerReqDto volunteerReqDto){
-        if(StringUtils.isBlank(volunteerReqDto.getStartDate()) || StringUtils.isBlank(volunteerReqDto.getEndDate())){
-            throw new IllegalArgumentException("봉사일시는 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(volunteerReqDto.getSubject())){
-            throw new IllegalArgumentException("소제목은 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(volunteerReqDto.getDescription())){
-            throw new IllegalArgumentException("상세설명은 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(volunteerReqDto.getLocation())){
-            throw new IllegalArgumentException("위치값은 필수 입력값입니다.");
-        }
-
+        checkStringType(volunteerReqDto.getStartDate(), "봉사 일시");
+        checkStringType(volunteerReqDto.getEndDate(), "봉사 일시");
+        checkStringType(volunteerReqDto.getSubject(), "소제목");
+        checkStringType(volunteerReqDto.getDescription(), "상세 설명");
+        checkStringType(volunteerReqDto.getLocation(), "위치");
+        checkIntType(volunteerReqDto.getCapacityPerDate(), "최대 봉사 인원수");
         if(volunteerReqDto.getDifficultyLevel() <= 0){
             throw new IllegalArgumentException("초기 봉사 난이도는 필수 입력값이며 양수 값만 가능합니다");
-        }
-
-        if(volunteerReqDto.getCapacityPerDate() <= 0){
-            throw new IllegalArgumentException("최대 봉사 인원수는 필수 입력값이며 양수 값만 가능합니다");
         }
     }
 
@@ -91,25 +53,13 @@ public class DtoValidationUtils {
      * @param createArticleReqDto
      */
     public void validateCreateArticleReqDto(CreateArticleReqDto createArticleReqDto){
-        if(StringUtils.isBlank(createArticleReqDto.getSubject())){
-            throw new IllegalArgumentException("제목은 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(createArticleReqDto.getDescription())){
-            throw new IllegalArgumentException("내용은 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(createArticleReqDto.getCategory())){
-            throw new IllegalArgumentException("카테고리은 필수 입력값입니다.");
-        }
+        checkStringType(createArticleReqDto.getSubject(), "제목");
+        checkStringType(createArticleReqDto.getDescription(), "내용");
+        checkStringType(createArticleReqDto.getCategory(), "카테고리");
         validateCategory(createArticleReqDto.getCategory());
-
+        checkLongType(createArticleReqDto.getUsersVolunteerProjectId(), "사용자 봉사 아이디");
         if(createArticleReqDto.getDifficultyLevel() <= 0){
             throw new IllegalArgumentException("봉사 난이도는 필수 입력값이며 양수 값만 가능합니다");
-        }
-
-        if(createArticleReqDto.getUsersVolunteerProjectId() == null || createArticleReqDto.getUsersVolunteerProjectId() <= 0){
-            throw new IllegalArgumentException("사용자 봉사 아이디는 필수 입력값이며 양수 값만 가능합니다");
         }
     }
 
@@ -118,17 +68,9 @@ public class DtoValidationUtils {
      * @param createBoardReqDto
      */
     public void validateCreateBoardReqDto(CreateBoardReqDto createBoardReqDto){
-        if(StringUtils.isBlank(createBoardReqDto.getSubject())){
-            throw new IllegalArgumentException("제목은 필수 입력값입니다.");
-        }
-
-        if(StringUtils.isBlank(createBoardReqDto.getDescription())){
-            throw new IllegalArgumentException("내용은 필수 입력값입니다.");
-        }
-
-        if(createBoardReqDto.getProjectId() == null || createBoardReqDto.getProjectId() <= 0){
-            throw new IllegalArgumentException("프로젝트 아이디는 필수 입력값이며 양수 값만 가능합니다");
-        }
+        checkStringType(createBoardReqDto.getSubject(), "제목");
+        checkStringType(createBoardReqDto.getDescription(), "내용");
+        checkLongType(createBoardReqDto.getProjectId(), "프로젝트 아이디");
     }
 
     /**
@@ -147,22 +89,44 @@ public class DtoValidationUtils {
      * @param createDonationReqDto
      */
     public void validateCreateDonationReq(CreateDonationReqDto createDonationReqDto){
-        if(createDonationReqDto.getProjectId() == null || createDonationReqDto.getProjectId() <= 0){
-            throw new IllegalArgumentException("프로젝트 아이디는 필수 입력값이며 양수 값만 가능합니다");
-        }
-
-        if(createDonationReqDto.getMoi() <= 0) {
-            throw new IllegalArgumentException("기부 모이는 양수값만 가능합니다.");
-        }
+        checkLongType(createDonationReqDto.getProjectId(), "프로젝트 아이디");
+        checkIntType(createDonationReqDto.getMoi(),"기부 모이");
     }
 
     /**
-     * [세은] 프로젝트 생성 시 NOT NULL 검사
+     * [세은] 사용자 봉사 상태 변경 시 NOT NULL 검증
+     * @param updateUserVolunteerStatusReqDto
+     */
+    public void validateUpdateUserVolunteerStatusReqDto(UpdateUserVolunteerStatusReqDto updateUserVolunteerStatusReqDto){
+        checkLongType(updateUserVolunteerStatusReqDto.getVolunteerId(), "아이디");
+        checkStringType(updateUserVolunteerStatusReqDto.getStatus(), "변경할 상태");
+    }
+
+    /**
+     * [세은] 프로젝트 생성 시 NOT NULL 검증
      * @param createProjectReqDto
      */
     public void validateCreateProjectReqDto(CreateProjectReqDto createProjectReqDto){
         validateProjectReqDto(createProjectReqDto.getProjectReqDto());
         validateDonationReqDto(createProjectReqDto.getDonationReqDto());
         validateVolunteerReqDto(createProjectReqDto.getVolunteerReqDto());
+    }
+
+    public void checkLongType(Long value, String name){
+        if(value == null || value <= 0){
+            throw new IllegalArgumentException(name + "은/는 필수 입력값이며 양수 값만 가능합니다.");
+        }
+    }
+
+    public void checkIntType(int value, String name){
+        if(value <= 0){
+            throw new IllegalArgumentException(name + "은/는 필수 입력값이며 양수 값만 가능합니다.");
+        }
+    }
+
+    public void checkStringType(String value, String name){
+        if(StringUtils.isBlank(value)){
+            throw new IllegalArgumentException(name + "은/는 필수 입력값입니다.");
+        }
     }
 }
