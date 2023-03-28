@@ -1,5 +1,6 @@
 package com.ssafy.moida.api.controller;
 
+import com.ssafy.moida.api.common.ArticleSortDto;
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.CreateBoardReqDto;
 import com.ssafy.moida.api.request.UpdateArticleReqDto;
@@ -61,6 +62,8 @@ public class ArticleController {
         this.userVolunteerService = userVolunteerService;
     }
 
+    /* Article 관련 */
+
     @Operation(summary = "사용자 인증글 작성", description = "사용자가 봉사 후기를 작성합니다.")
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = {
@@ -94,16 +97,106 @@ public class ArticleController {
         return new ResponseEntity<>("게시물 작성 완료", HttpStatus.OK);
     }
 
+    @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
+    @GetMapping
+    public ResponseEntity<List<GetArticleResDto>> getArticles(
+        @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+        @RequestParam(name = "category", defaultValue = "ALL") String category,
+        @RequestParam(name = "sort", defaultValue = "latest") String sort
+    ){
+        pageNumber -= 1;
+
+        // DTO 유효성 검사
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
+
+        ArticleSortDto articleSortDto = new ArticleSortDto(pageNumber, pageSize, category, sort);
+        dtoValidationUtils.validateArticleSortDto(articleSortDto);
+
+        List<GetArticleResDto> articleList = articleService.getArticleList(articleSortDto);
+        return new ResponseEntity<>(articleList, HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 인증글 상세조회", description = "특정 사용자 인증글을 상세 조회합니다.")
+    @GetMapping("/{articleid}")
+    public ResponseEntity<GetArticleDetailResDto> getArticleDetails(@PathVariable("articleid") int articleId){
+        if(!articleService.existsById((long) articleId)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+        return new ResponseEntity<>(articleService.getArticleDetailById((long) articleId), HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 인증글 삭제", description = "특정 사용자 인증글을 삭제합니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping ("/{articleid}")
+    public ResponseEntity<?> deleteArticle(
+            @PathVariable("articleid") int articleId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+
+        // Admin 이거나 사용자가 작성한 글이 맞는 경우에만 삭제 가능
+        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)
+                && loginUser.getId() != articleService.getArticleDetailById((long) articleId).getId()){
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        // 삭제하려는 인증글이 없을 경우 오류 반환(404)
+        if(!articleService.existsById((long) articleId)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+
+        articleService.delete((long) articleId);
+        return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 인증글 수정", description = "사용자가 인증글을 수정합니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    @PutMapping
+    public ResponseEntity<?> updateArticleDetails(
+            @RequestBody UpdateArticleReqDto updateArticleReqDto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+
+        // 인증글 고유 아이디 필드 검증
+        Long articleId = updateArticleReqDto.getId();
+        if(articleId == null || articleId <= 0) {
+            throw new IllegalArgumentException("인증글 아이디 필드가 존재하지 않거나 유효하지 않은 아이디입니다.");
+        }
+
+        // 수정하려는 인증글이 없을 경우 오류 반환(404)
+        if(!articleService.existsById(updateArticleReqDto.getId())){
+            return new ResponseEntity<>(ErrorCode.DATA_NOT_FOUND.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+        // 수정하려는 인증글 토큰 확인
+        if(loginUser.getId()
+                != articleService.findById(updateArticleReqDto.getId()).getUsers().getId()){
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        // 공지사항 내용 수정
+        articleService.updateArticle(updateArticleReqDto);
+
+        return new ResponseEntity<>("게시글 수정 완료", HttpStatus.OK);
+
+    }
+
+    /* Board 관련 */
+
     @Transactional
     @Operation(summary = "[관리자] 공지사항 작성", description = "관리자가 공지사항을 작성합니다.")
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(path = "/board", consumes = {
-        MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
+            MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
     public ResponseEntity<?> createBoard(
-        @RequestPart(value = "board") CreateBoardReqDto createBoardReqDto,
-        @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
-        @AuthenticationPrincipal PrincipalDetails principalDetails
+            @RequestPart(value = "board") CreateBoardReqDto createBoardReqDto,
+            @RequestPart(value = "files", required = false) List<MultipartFile> fileList,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 토큰 유효성 검증 및 관리자 확인
         Users admin = tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
@@ -124,23 +217,6 @@ public class ArticleController {
         }
 
         return new ResponseEntity<>("공지사항 작성 완료", HttpStatus.OK);
-    }
-
-    @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
-    @GetMapping
-    public ResponseEntity<List<GetArticleResDto>> getArticlesAndBoards(
-        @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
-    ){
-        pageNumber -= 1;
-
-        // DTO 유효성 검사
-        if(pageNumber < 0 || pageSize <= 0) {
-            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
-        }
-
-        List<GetArticleResDto> articleList = articleService.getArticleList(pageNumber, pageSize);
-        return new ResponseEntity<>(articleList, HttpStatus.OK);
     }
 
     @Operation(summary = "카테고리별 공지사항 조회", description = "공지사항을 카테고리별 조회합니다. 카테고리별 공지사항 기수 리스트와 가장 최신 공지사항을 반환합니다.")
@@ -215,69 +291,5 @@ public class ArticleController {
         return new ResponseEntity<>("[관리자] 공지사항 수정 완료", HttpStatus.OK);
     }
 
-    @Operation(summary = "사용자 인증글 상세조회", description = "특정 사용자 인증글을 상세 조회합니다.")
-    @GetMapping("/{articleid}")
-    public ResponseEntity<GetArticleDetailResDto> getArticleDetails(@PathVariable("articleid") int articleId){
-        if(!articleService.existsById((long) articleId)){
-            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
-        }
-        return new ResponseEntity<>(articleService.getArticleDetailById((long) articleId), HttpStatus.OK);
-    }
 
-    @Operation(summary = "사용자 인증글 삭제", description = "특정 사용자 인증글을 삭제합니다.")
-    @SecurityRequirement(name = "bearerAuth")
-    @DeleteMapping ("/{articleid}")
-    public ResponseEntity<?> deleteArticle(
-        @PathVariable("articleid") int articleId,
-        @AuthenticationPrincipal PrincipalDetails principalDetails
-    ){
-        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
-
-        // Admin 이거나 사용자가 작성한 글이 맞는 경우에만 삭제 가능
-        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)
-            && loginUser.getId() != articleService.getArticleDetailById((long) articleId).getId()){
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
-
-        // 삭제하려는 인증글이 없을 경우 오류 반환(404)
-        if(!articleService.existsById((long) articleId)){
-            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
-        }
-
-        articleService.delete((long) articleId);
-        return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
-    }
-
-    @Operation(summary = "사용자 인증글 수정", description = "사용자가 인증글을 수정합니다.")
-    @SecurityRequirement(name = "bearerAuth")
-    @PutMapping
-    public ResponseEntity<?> updateArticleDetails(
-        @RequestBody UpdateArticleReqDto updateArticleReqDto,
-        @AuthenticationPrincipal PrincipalDetails principalDetails
-    ){
-        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
-
-        // 인증글 고유 아이디 필드 검증
-        Long articleId = updateArticleReqDto.getId();
-        if(articleId == null || articleId <= 0) {
-            throw new IllegalArgumentException("인증글 아이디 필드가 존재하지 않거나 유효하지 않은 아이디입니다.");
-        }
-
-        // 수정하려는 인증글이 없을 경우 오류 반환(404)
-        if(!articleService.existsById(updateArticleReqDto.getId())){
-            return new ResponseEntity<>(ErrorCode.DATA_NOT_FOUND.getMessage(), HttpStatus.NOT_FOUND);
-        }
-
-        // 수정하려는 인증글 토큰 확인
-        if(loginUser.getId()
-            != articleService.findById(updateArticleReqDto.getId()).getUsers().getId()){
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
-
-        // 공지사항 내용 수정
-        articleService.updateArticle(updateArticleReqDto);
-
-        return new ResponseEntity<>("게시글 수정 완료", HttpStatus.OK);
-
-    }
 }
