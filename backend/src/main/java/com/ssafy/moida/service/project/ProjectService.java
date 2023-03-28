@@ -1,6 +1,9 @@
 package com.ssafy.moida.service.project;
 
 import com.ssafy.moida.api.request.ProjectReqDto;
+import com.ssafy.moida.api.request.UpdateDonationReqDto;
+import com.ssafy.moida.api.request.UpdateProjectReqDto;
+import com.ssafy.moida.api.request.UpdateVolunteerReqDto;
 import com.ssafy.moida.api.response.DateInfoResDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
@@ -26,14 +29,17 @@ public class ProjectService {
     private final S3Uploader s3Uploader;
     private final ProjectPictureService projectPictureService;
     private final ProjectVolunteerService projectVolunteerService;
+    private final ProjectDonationService projectDonationService;
 
     public ProjectService(ProjectRepository projectRepository, S3Uploader s3Uploader,
         ProjectPictureService projectPictureService,
-        ProjectVolunteerService projectVolunteerService){
+        ProjectVolunteerService projectVolunteerService,
+        ProjectDonationService projectDonationService){
         this.projectRepository = projectRepository;
         this.s3Uploader = s3Uploader;
         this.projectPictureService = projectPictureService;
         this.projectVolunteerService = projectVolunteerService;
+        this.projectDonationService = projectDonationService;
     }
 
     /**
@@ -84,12 +90,13 @@ public class ProjectService {
     }
 
     /**
-     * [세은] 프로젝트 아이디로 프로젝트 존재 여부 반환
+     * [세은] 프로젝트 아이디로 데이터 존재 여부 확인 후 예외 처리
      * @param projectId
-     * @return
      */
-    public boolean existsById(Long projectId){
-        return projectRepository.existsById(projectId);
+    public void existsProjectById(Long projectId){
+        if(!projectRepository.existsById(projectId)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
     }
 
     /**
@@ -123,5 +130,40 @@ public class ProjectService {
      */
     public  List<Project> getGenerationListByCategory(String category){
         return projectRepository.getNewestProjectByCategory(category);
+    }
+
+    /**
+     * [세은] 프로젝트 정보 수정
+     * @param updateProjectReqDto
+     */
+    @Transactional
+    public void updateProjectDetail(UpdateProjectReqDto updateProjectReqDto){
+        UpdateDonationReqDto updateDonationReqDto = updateProjectReqDto.getUpdateDonationReqDto();
+        UpdateVolunteerReqDto updateVolunteerReqDto = updateProjectReqDto.getUpdateVolunteerReqDto();
+
+        if(updateProjectReqDto.getId() == null || updateProjectReqDto.getId() <= 0){
+            throw new IllegalArgumentException("프로젝트 아이디 필드가 존재하지 않거나 유효하지 않은 아이디입니다.");
+        }
+
+        // 프로젝트 정보 수정
+        Project project = projectRepository.findById(updateProjectReqDto.getId())
+            .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        project.updateProjectDetails(updateProjectReqDto);
+
+        // 기부 정보 수정 요청이 들어올 경우
+        if(updateDonationReqDto != null){
+            // 기부 고유 아이디가 데이터베이스에 존재하는지 확인
+            projectDonationService.existsDonationById(updateDonationReqDto.getId());
+            ProjectDonation projectDonation = projectDonationService.findDonationById(updateDonationReqDto.getId());
+            projectDonation.updateProjectDonationDetails(updateDonationReqDto);
+        }
+
+        // 봉사 정보를 수정할 경우
+        if(updateVolunteerReqDto != null){
+            // 봉사 고유 아이디가 데이터베이스에 존재하는지 확인
+            projectVolunteerService.existsVolunteerById(updateVolunteerReqDto.getId());
+            ProjectVolunteer projectVolunteer = projectVolunteerService.findVolunteerById(updateVolunteerReqDto.getId());
+            projectVolunteer.updateProjectVolunteerDetails(updateVolunteerReqDto);
+        }
     }
 }

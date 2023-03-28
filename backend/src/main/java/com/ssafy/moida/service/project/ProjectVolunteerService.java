@@ -94,6 +94,21 @@ public class ProjectVolunteerService {
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
 
+    /**
+     * [세은] Volunteer에 해당 데이터 존재 여부 확인
+     * @param id
+     */
+    public void existsVolunteerById(Long id){
+        if(!volunteerRepository.existsById(id)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+    }
+
+    /**
+     * [세은] 프로젝트 별 봉사 일자 리스트 조회
+     * @param project
+     * @return
+     */
     public List<DateInfoResDto> getVolunteerDateInfoByProject(Project project){
         List<VolunteerDateInfo> dateList = volunteerDateInfoRepository.findByProject(project);
         return dateList.stream()
@@ -132,5 +147,25 @@ public class ProjectVolunteerService {
             .volunteerDateInfo(volunteerDateInfo)
             .build();
         usersVolunteerRepository.save(usersVolunteer);
+    }
+
+    /**
+     * [세은] 봉사 일자 아이디로 데이터 존재 여부 확인 후 예외 처리
+     * @param volunteerInfoId
+     */
+    public void existsVolunteerDateById(Long volunteerInfoId){
+        if(!volunteerDateInfoRepository.existsById(volunteerInfoId)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+    }
+
+    /**
+     * [세은] 고유 아이디로 Volunteer 엔티티 데이터 조회
+     * @param id
+     * @return
+     */
+    public ProjectVolunteer findVolunteerById(Long id) {
+        return volunteerRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
 }

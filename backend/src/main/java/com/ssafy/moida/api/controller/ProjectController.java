@@ -2,6 +2,7 @@ package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.CreateDonationReqDto;
 import com.ssafy.moida.api.request.CreateProjectReqDto;
+import com.ssafy.moida.api.request.UpdateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
@@ -26,9 +27,7 @@ import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,20 +47,20 @@ public class ProjectController {
     private final ProjectDonationService projectDonationService;
     private final ProjectPictureService projectPictureService;
     private final UserDonationService userDonationService;
-    @Autowired
-    private TokenUtils tokenUtils;
-
-    @Autowired
-    private DtoValidationUtils dtoValidationUtils;
+    private final TokenUtils tokenUtils;
+    private final DtoValidationUtils dtoValidationUtils;
 
     public ProjectController(ProjectService projectService, UserService userService,
-                             ProjectVolunteerService projectVolunteerService, ProjectDonationService projectDonationService, ProjectPictureService projectPictureService, UserDonationService userDonationService){
+                             ProjectVolunteerService projectVolunteerService, ProjectDonationService projectDonationService, ProjectPictureService projectPictureService, UserDonationService userDonationService,
+        TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils){
         this.projectService = projectService;
         this.userService = userService;
         this.projectVolunteerService = projectVolunteerService;
         this.projectDonationService = projectDonationService;
         this.projectPictureService = projectPictureService;
         this.userDonationService = userDonationService;
+        this.tokenUtils = tokenUtils;
+        this.dtoValidationUtils = dtoValidationUtils;
     }
 
     @Transactional
@@ -119,6 +118,7 @@ public class ProjectController {
     public ResponseEntity<GetProjectDetailResDto> getProjectDetail(
         @PathVariable(value = "projectid") @Schema(description = "프로젝트 아이디", defaultValue = "1") int projectId
     ){
+        projectService.existsProjectById((long) projectId);
         GetProjectDetailResDto getProjectDetailResDto = projectService.getProjectDetail((long) projectId);
         return new ResponseEntity<>(getProjectDetailResDto, HttpStatus.OK);
     }
@@ -132,6 +132,9 @@ public class ProjectController {
     ){
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+
+        // 프로젝트 존재 여부 확인
+        projectService.existsProjectById(createDonationReqDto.getProjectId());
 
         Project project = projectService.findById(createDonationReqDto.getProjectId());
         Long points = project.getPointPerMoi() * createDonationReqDto.getMoi();
@@ -164,17 +167,20 @@ public class ProjectController {
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
+        // 봉사 일자 테이블 데이터 존재여부 확인
+        projectVolunteerService.existsVolunteerDateById(vDateInfoId);
+
         // 해당봉사일 정보
         VolunteerDateInfo volunteerDateInfo = projectVolunteerService.findVolunteerDateInfoById(vDateInfoId);
 
         // capacity + 1이 max_capacity 를 넘을 경우 에러 발생(400)
         if(volunteerDateInfo.getCapacity() >= volunteerDateInfo.getMaxCapacity()){
-            return new ResponseEntity<>(ErrorCode.EXCEED_MAX_CAPACITY, HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.EXCEED_MAX_CAPACITY);
         }
 
         // 이미 해당 일자에 봉사 신청이 이미 되어있는지 확인
         if(projectVolunteerService.existsByVolunteerDateInfo(volunteerDateInfo)){
-            return new ResponseEntity<>(ErrorCode.DUPLICATE_VOLUNTEER_REGISTER, HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.DUPLICATE_VOLUNTEER_REGISTER);
         }
 
         // UsersVolunteer에 해당 내용 저장
@@ -184,5 +190,20 @@ public class ProjectController {
         projectVolunteerService.updateCapacity(volunteerDateInfo);
 
         return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
+    }
+
+    @Operation(summary = "[관리자] 프로젝트 수정", description = "이미 생성한 프로젝트를 수정합니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    @PutMapping
+    public ResponseEntity<?> updateProjectDetails(
+        @RequestBody UpdateProjectReqDto updateProjectReqDto,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        // 관리자 권한 확인
+        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+
+        projectService.updateProjectDetail(updateProjectReqDto);
+
+        return new ResponseEntity<>("프로젝트 수정 완료", HttpStatus.OK);
     }
 }
