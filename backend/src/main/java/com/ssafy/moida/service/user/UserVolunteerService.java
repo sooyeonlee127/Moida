@@ -9,6 +9,8 @@ import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,10 +44,9 @@ public class UserVolunteerService {
      * @param userId
      * @return
      * */
-    public List<GetUserVolunteerResDto> getUsersVolunteer(Long userId) {
-        List<GetUserVolunteerResDto> result = new ArrayList<>();
-        result = usersVolunteerRepository.findVolunteersByUserId(userId);
-
+    public List<GetUserVolunteerResDto> getUsersVolunteer(Long userId, int pageNumber, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        List<GetUserVolunteerResDto> result = usersVolunteerRepository.findVolunteersByUserId(userId, pageable);
         return result;
     }
 
