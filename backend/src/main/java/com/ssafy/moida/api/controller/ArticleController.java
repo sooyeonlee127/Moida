@@ -189,7 +189,7 @@ public class ArticleController {
 
         // 보드 고유 아이디 필드 검증
         if(boardId == null || boardId <= 0) {
-            throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
+            throw new IllegalArgumentException("공지 아이디 필드가 존재하지 않거나 유효하지 않은 아이디입니다.");
         }
 
         // 해당 보드 아이디가 존재하지 않는 경우 예외 처리
@@ -248,7 +248,7 @@ public class ArticleController {
         // 인증글 고유 아이디 필드 검증
         Long articleId = updateArticleReqDto.getId();
         if(articleId == null || articleId <= 0) {
-            throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
+            throw new IllegalArgumentException("인증글 아이디 필드가 존재하지 않거나 유효하지 않은 아이디입니다.");
         }
 
         // 수정하려는 인증글이 없을 경우 오류 반환(404)
@@ -266,5 +266,6 @@ public class ArticleController {
         articleService.updateArticle(updateArticleReqDto);
 
         return new ResponseEntity<>("게시글 수정 완료", HttpStatus.OK);
+
     }
 }

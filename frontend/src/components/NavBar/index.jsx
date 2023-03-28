@@ -28,16 +28,15 @@ const NavBar = () => {
   const { data, refetch } = useQuery({
     queryKey: ["getMe"],
     queryFn: getMe,
-    refetchOnMount: true,
+    refetchOnMount: false,
   });
 
-  
   // 수연: 로그인 상태에 따라 navbar 변경
   const { isLogin, setIsLogin } = useContext(AuthContext);
   useEffect(() => {
-    // data.point 값이 변경될 때마다 쿼리를 다시 실행
-    refetch();
-  }, [isLogin]);
+    refetch(); // data.point 값이 변경될 때마다 쿼리를 다시 실행 - 수연
+  }, [isLogin]); 
+  
   const navigation = [
     // 로그아웃 상태의 navbar
     { name: "HOME", href: "/" },
@@ -55,6 +54,7 @@ const NavBar = () => {
     { name: "가챠샵", href: "/gatcha" },
     { name: `${data ? data.ticketCnt : "  "}개`, href: "/gatcha" },
     { name: `${data ? data.point : "  "} P`, href: "/point" },
+    { name: "MYPAGE", href: "/profile" },
   ];
   // 수연: 로그아웃 호출
   const LogoutSubmit = () => {

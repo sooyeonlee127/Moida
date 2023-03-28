@@ -3,7 +3,8 @@ import tw from "twin.macro";
 import { useReducer, useState } from "react";
 import axios from "axios";
 
-const AdminPage = () => {
+// 수연: 프로젝트 생성 페이지
+const ProjectCreatePage = () => {
   const reducer = (state, action) => {
     return {
       ...state,
@@ -113,15 +114,17 @@ const AdminPage = () => {
       <Container>
         <InnerContainer>
           <div>
-            <Heading>Admin Page</Heading>
+            <Heading>관리자 페이지</Heading>
           </div>
           <AdminForm action="#" method="POST">
             <InputGroup>
               <div>
-                <Heading>project</Heading>
+                <Title>project</Title>
               </div>
               <div>
-                <InputText htmlFor="category">프로젝트 카테고리</InputText>
+                <InputText htmlFor="category">
+                  프로젝트 카테고리( SQUIRREL / CRANE / WILD_ANIMAL )
+                </InputText>
                 <AdminInput
                   id="category"
                   name="category"
@@ -144,13 +147,14 @@ const AdminPage = () => {
                 <InputText htmlFor="projectDescription">
                   프로젝트 개요
                 </InputText>
-                <AdminInput
+                <AdminLargeInput
                   id="projectDescription"
                   name="projectDescription"
                   type="text"
+                  rows="4"
                   value={projectDescription}
                   onChange={onChange}
-                />
+                ></AdminLargeInput>
               </div>
               <div>
                 <InputText htmlFor="pointPerMoi">pointPerMoi</InputText>
@@ -165,7 +169,7 @@ const AdminPage = () => {
             </InputGroup>
             <InputGroup>
               <div>
-                <Heading>donation</Heading>
+                <Title>donation</Title>
               </div>
               <div>
                 <InputText htmlFor="DonationStartDate">
@@ -211,18 +215,19 @@ const AdminPage = () => {
               </div>
               <div>
                 <InputText htmlFor="DonationDescription">기부 개요</InputText>
-                <AdminInput
+                <AdminLargeInput
                   id="DonationDescription"
                   name="DonationDescription"
                   type="text"
+                  rows="4"
                   value={DonationDescription}
                   onChange={onChange}
-                />
+                ></AdminLargeInput>
               </div>
             </InputGroup>
             <InputGroup>
               <div>
-                <Heading>volunteer</Heading>
+                <Title>volunteer</Title>
               </div>
               <div>
                 <InputText htmlFor="volunteerStartDate">
@@ -290,18 +295,19 @@ const AdminPage = () => {
               </div>
               <div>
                 <InputText htmlFor="volunteeDescription">봉사개요</InputText>
-                <AdminInput
+                <AdminLargeInput
                   id="volunteeDescription"
                   name="volunteeDescription"
                   type="text"
+                  rows="4"
                   value={volunteeDescription}
                   onChange={onChange}
-                />
+                ></AdminLargeInput>
               </div>
             </InputGroup>
             <InputGroup>
               <div>
-                <Heading>files</Heading>
+                <Title>files</Title>
               </div>
               <div>
                 <InputText htmlFor="files">files</InputText>
@@ -364,7 +370,7 @@ const AdminPage = () => {
             </InputGroup>
             <InputGroup>
               <div>
-                <Heading>thumbnail</Heading>
+                <Title>thumbnail</Title>
               </div>
               <div>
                 <InputText htmlFor="thumbnail">thumbnail</InputText>
@@ -400,7 +406,13 @@ const AdminPage = () => {
 
 const Heading = styled.h2`
   ${tw`
-  mt-6 text-center text-3xl font-bold tracking-tight text-gray-900
+  mt-6 text-center text-xl font-normal text-indigo-500
+  `}
+`;
+
+const Title = styled.h2`
+  ${tw`
+  text-center text-lg font-normal text-gray-900
   `}
 `;
 
@@ -412,7 +424,7 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
   ${tw`
-  w-full max-w-md space-y-8
+  bg-gray-200 w-full max-w-md mt-8 px-5 py-5
   `}
 `;
 
@@ -424,21 +436,25 @@ const AdminForm = styled.form`
 
 const InputGroup = styled.div`
   ${tw`
-  -space-y-px rounded-md shadow-sm
+  -space-y-px shadow-sm
   `}
 `;
 
 const InputText = styled.label`
   ${tw`
-  block text-sm font-medium leading-6 text-gray-900
+  px-1 mt-4 flex text-sm font-light leading-6 text-gray-500
   `}
 `;
 
 const AdminInput = styled.input`
   ${tw`
-  relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-  
+  relative block w-full border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
   `}
+`;
+
+const AdminLargeInput = styled.textarea`
+  ${tw`
+  block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500  `}
 `;
 
 const SubmitButton = styled.button`
@@ -447,4 +463,4 @@ const SubmitButton = styled.button`
   `}
 `;
 
-export default AdminPage;
+export default ProjectCreatePage;
