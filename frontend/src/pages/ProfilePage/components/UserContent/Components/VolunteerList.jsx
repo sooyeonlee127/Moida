@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import useListApi from "./api"
 
 const VolunteerList = () => {
@@ -15,6 +16,7 @@ const VolunteerList = () => {
                     <th>봉사 날짜</th>
                     <th>상태</th>
                     <th>봉사 id</th>
+                    <th>내가 작성한 리뷰</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +29,7 @@ const VolunteerList = () => {
                             <td>{data.regDate}</td>
                             <td>{data.status}</td>
                             <td>{data.volunteerId}</td>
+                            <td><Link to={"/review/"+data.volunteerId}>리뷰 작성하기</Link></td>
                         </tr>
                     )
                 })}

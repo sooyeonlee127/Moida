@@ -60,6 +60,7 @@ const VolunteerForm = (props) => {
     }
 
     const ParticipateApi = () => {  // 기부 API: 기부하기 버튼 클릭 시 작동 - 이은혁
+        console.log("axios 요청")
         const id = String(dateMap[dateFormat(value)].id)
         axios({
             url: "/api/project/volunteer",

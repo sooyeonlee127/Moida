@@ -34,7 +34,7 @@ const MainPage = () => {
 const Wrapper = styled.div`
   width: 100vw;
   position: absolute;
-  top: 64px;
+  top: 56px;
   left: 0;
 `;
 
