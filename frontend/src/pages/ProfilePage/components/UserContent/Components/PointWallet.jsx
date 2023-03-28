@@ -8,7 +8,7 @@ const PointWallet = () => {
         <table>
             <thead>
                 <tr>
-                    <th>분류</th>
+                    <th>분류(기부/적립)</th>
                     <th>프로젝트 차수</th>
                     <th>포인트 적립/사용일</th>
                     <th>포인트</th>
