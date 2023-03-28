@@ -3,6 +3,7 @@ package com.ssafy.moida.repository.article;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.model.article.Article;
 import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,4 +36,19 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
     @Override
     @Query("SELECT a FROM Article a ORDER BY a.regDate DESC")
     Page<Article> findAll(Pageable pageable);
+
+    @Query("SELECT a FROM Article a where a.category = :category ORDER BY a.regDate DESC")
+    Page<Article> findByCategory(@Param("category") String category, Pageable pageable);
+
+    @Query("SELECT a FROM Article a ORDER BY a.difficultyLevel DESC")
+    Page<Article> findAllDifficultyLevelDesc(Pageable pageable);
+
+    @Query("SELECT a FROM Article a ORDER BY a.difficultyLevel DESC")
+    Page<Article> findAllDifficultyLevelAsc(Pageable pageable);
+
+    @Query("SELECT a FROM Article a where a.category = :category ORDER BY a.difficultyLevel DESC")
+    Page<Article> findByCategoryDifficultyLevelDesc(@Param("category") String category, Pageable pageable);
+
+    @Query("SELECT a FROM Article a where a.category = :category ORDER BY a.difficultyLevel ASC")
+    Page<Article> findByCategoryDifficultyLevelAsc(@Param("category") String category, Pageable pageable);
 }
