@@ -85,6 +85,17 @@ public class DtoValidationUtils {
     }
 
     /**
+     * [세은] 상태 INPUT 검증
+     * @param status
+     */
+    public void validateStatus(String status){
+        if(!"DONE".equals(status) && !"REGISTER".equals(status) && !"CANCEL".equals(status)){
+            throw new CustomException(ErrorCode.STATUS_NOT_FOUND);
+        }
+
+    }
+
+    /**
      * [세은] 사용자 기부 신청 INPUT 검증
      * @param createDonationReqDto
      */
@@ -100,6 +111,7 @@ public class DtoValidationUtils {
     public void validateUpdateUserVolunteerStatusReqDto(UpdateUserVolunteerStatusReqDto updateUserVolunteerStatusReqDto){
         checkLongType(updateUserVolunteerStatusReqDto.getVolunteerId(), "아이디");
         checkStringType(updateUserVolunteerStatusReqDto.getStatus(), "변경할 상태");
+        validateStatus(updateUserVolunteerStatusReqDto.getStatus());
     }
 
     /**
