@@ -4,8 +4,6 @@ import com.ssafy.moida.api.request.*;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -157,8 +155,6 @@ public class DtoValidationUtils {
             throw new IllegalArgumentException("기부 모이는 양수값만 가능합니다.");
         }
     }
-
-
 
     /**
      * [세은] 프로젝트 생성 시 NOT NULL 검사
