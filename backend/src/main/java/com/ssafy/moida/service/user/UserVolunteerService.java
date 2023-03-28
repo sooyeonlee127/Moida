@@ -3,6 +3,8 @@ package com.ssafy.moida.service.user;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetUserVolunteerResDto;
 import com.ssafy.moida.model.project.Status;
+import com.ssafy.moida.model.project.VolunteerDateInfo;
+import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
@@ -67,6 +69,21 @@ public class UserVolunteerService {
      */
     public boolean existsById(Long id){
         return usersVolunteerRepository.existsById(id);
+    }
+
+    /**
+     * [세은] UsersVolunteer에 사용자 봉사 신청 추가
+     * @param users
+     * @param volunteerDateInfo
+     */
+    @Transactional
+    public void saveUsersVolunteer(Users users, VolunteerDateInfo volunteerDateInfo){
+        UsersVolunteer usersVolunteer = UsersVolunteer.builder()
+                .status(Status.REGISTER)
+                .users(users)
+                .volunteerDateInfo(volunteerDateInfo)
+                .build();
+        usersVolunteerRepository.save(usersVolunteer);
     }
 
     /**

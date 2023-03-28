@@ -17,6 +17,7 @@ import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.ProjectVolunteerService;
 import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.service.user.UserVolunteerService;
 import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
@@ -47,18 +48,20 @@ public class ProjectController {
     private final ProjectDonationService projectDonationService;
     private final ProjectPictureService projectPictureService;
     private final UserDonationService userDonationService;
+    private final UserVolunteerService userVolunteerService;
     private final TokenUtils tokenUtils;
     private final DtoValidationUtils dtoValidationUtils;
 
     public ProjectController(ProjectService projectService, UserService userService,
                              ProjectVolunteerService projectVolunteerService, ProjectDonationService projectDonationService, ProjectPictureService projectPictureService, UserDonationService userDonationService,
-        TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils){
+                             UserVolunteerService userVolunteerService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils){
         this.projectService = projectService;
         this.userService = userService;
         this.projectVolunteerService = projectVolunteerService;
         this.projectDonationService = projectDonationService;
         this.projectPictureService = projectPictureService;
         this.userDonationService = userDonationService;
+        this.userVolunteerService = userVolunteerService;
         this.tokenUtils = tokenUtils;
         this.dtoValidationUtils = dtoValidationUtils;
     }
@@ -196,7 +199,7 @@ public class ProjectController {
         }
 
         // UsersVolunteer에 해당 내용 저장
-        projectVolunteerService.saveUsersVolunteer(loginUser, volunteerDateInfo);
+        userVolunteerService.saveUsersVolunteer(loginUser, volunteerDateInfo);
 
         // 해당 봉사일에 인원 수 추가
         projectVolunteerService.updateCapacity(volunteerDateInfo);
