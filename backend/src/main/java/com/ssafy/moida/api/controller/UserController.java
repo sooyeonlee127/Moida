@@ -102,30 +102,30 @@ public class UserController {
     public ResponseEntity<UserInfoResDto> getUserDetail (
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        // 로그인 된 유저 정보 가져오기
-        Users user = userService.findByEmail(principal.getUsername());
+        // 토큰 유효성 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
 
         // 유저가 참여한 봉사 개수 가져오기
         long totalVolunteerCnt = userVolunteerService.totalVolunteerCnt();
         log.info("volunteer Cnt : {}", totalVolunteerCnt);
 
         // 총 포인트 확인하기
-        long totalPoint = userDonationService.getTotalPoint(user.getId());
+        long totalPoint = userDonationService.getTotalPoint(loginUser.getId());
         log.info("total Point : {}", totalPoint);
 
         // 기부한 포인트를 곡물 가치로 변환하여 가져오기
-        long userId = user.getId();
+        long userId = loginUser.getId();
         int moiAcorn = userDonationService.convertPointToMoi(userId, "SQUIRREL");
         int moiSeed = userDonationService.convertPointToMoi(userId, "CRANE");
         int moiCorn = userDonationService.convertPointToMoi(userId, "WILD_ANIMAL");
 
         // Dto에 유저 정보 저장
         UserInfoResDto userInfoResDto = UserInfoResDto.builder()
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .ticketCnt(user.getTicketCnt())
-                .point(user.getPoint())
-                .nftUrl(user.getNftUrl())
+                .email(loginUser.getEmail())
+                .nickname(loginUser.getNickname())
+                .ticketCnt(loginUser.getTicketCnt())
+                .point(loginUser.getPoint())
+                .nftUrl(loginUser.getNftUrl())
                 .volunteerCnt(totalVolunteerCnt)
                 .totalPoint(totalPoint)
                 .moiAcorn(moiAcorn)
