@@ -4,6 +4,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
 import ReviewCard from './ReviewCard'
+import ReviewCreateForm from './ReivewCreateForm'
 
 const ReviewList = () => {
   let [card, setCard] = useState([]);
@@ -27,6 +28,7 @@ const ReviewList = () => {
   return (
     <Div className="Wrapper">
       <Div className="SubWrapper">
+        <ReviewCreateForm/>
         {/* 유저후기 */}
         <Title>Gallery</Title>
         <Div className="ReviewWrapper">

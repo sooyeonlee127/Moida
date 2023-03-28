@@ -2,15 +2,67 @@ import { useState } from "react"
 import styled from "styled-components";
 import tw from "twin.macro";
 import Notice from "../../../NoticeDetailPage/notice";
+import axios from "axios";
 
 const NoticeList = () => {
     let [notice, setNotice] = useState(Notice);
+
+    const f1 = () => {
+      axios({
+        url:"api/article/board/category/CRANE",
+        method: "GET",
+      })
+      .then((res)=> {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
+
+    const f2 = () => {
+      axios({
+        url:"api/article/board/category/SQUIRREL",
+        method: "GET",
+      })
+      .then((res)=> {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
+
+    const f3 = () => {
+      axios({
+        url:"api/article/board/category/WILD_ANIMAL",
+        method: "GET",
+      })
+      .then((res)=> {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
 
     return (
         <Div className="Wrapper">
         <Div className="SubWrapper">
           {/* 기업후기 */}
           <Title>Notice</Title>
+
+          <ImageWrapper>
+            <img src="/img/CRANE.png" alt="" onClick={f1}/>
+            <img src="/img/SQUIRREL.png" alt="" onClick={f2}/>
+            <img src="/img/BADGER.png" alt="" onClick={f3}/>
+          </ImageWrapper>
+
+
+          <div>
+            <img src="src\assets\img\free-icon-badger-3819407.png" alt="" />
+          </div>
+
   
           <Div className="ReviewWrapper">
           {
@@ -33,7 +85,7 @@ function NoticeCard(props) {
         <img src={props.notice.imageSrc} alt={props.notice.imageAlt}/>
         <Div className="ReviewContent">
           <CardName>
-              <h4>{props.notice.title}</h4>
+              <span>{props.notice.title}</span>
           </CardName>
         <Div className="ReivewPrice">{props.notice.date}</Div>
         </Div>
@@ -78,5 +130,11 @@ ${tw`absolute inset-0`}`
 
 const CardName= styled.h3`
 ${tw`text-lg text-gray-700`}`
+
+const ImageWrapper = styled.div`
+display : flex;
+width: 150px
+
+`
 
 export default NoticeList;
