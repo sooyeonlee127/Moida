@@ -1,6 +1,7 @@
 package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.ChangePwdReqDto;
+import com.ssafy.moida.api.request.UpdateUserVolunteerStatusReqDto;
 import com.ssafy.moida.api.request.UserJoinReqDto;
 import com.ssafy.moida.api.response.*;
 import com.ssafy.moida.auth.PrincipalDetails;
@@ -10,6 +11,7 @@ import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.service.user.UserVolunteerService;
+import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.EamailUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
@@ -44,14 +46,16 @@ public class UserController {
     private final UserVolunteerService userVolunteerService;
     private final UserDonationService userDonationService;
     private final TokenUtils tokenUtils;
+    private final DtoValidationUtils dtoValidationUtils;
     @Autowired
     private EamailUtils eamailUtils;
 
-    public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService, TokenUtils tokenUtils) {
+    public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils) {
         this.userService = userService;
         this.userVolunteerService = userVolunteerService;
         this.userDonationService = userDonationService;
         this.tokenUtils = tokenUtils;
+        this.dtoValidationUtils = dtoValidationUtils;
     }
 
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
@@ -156,35 +160,41 @@ public class UserController {
     }
 
     /* [세은] 사용자 봉사 취소 */
-    @Operation(summary = "사용자 봉사 취소", description = "사용자가 신청한 봉사를 취소합니다.")
+    @Operation(summary = "사용자 봉사 상태를 변경합니다.", description = "사용자가 신청한 봉사를 취소 상태로 변경하거나 인증번호 일치 여부를 확인해 완료 상태로 변경합니다..")
     @SecurityRequirement(name = "bearerAuth")
-    @PutMapping(path = "/me/volunteer/{volunteerid}")
-    public ResponseEntity<?> updateUserVolunteerStatus(
-            @PathVariable("volunteerid") int volunteerId,
+    @PutMapping(path = "/me/volunteer")
+    public ResponseEntity<?> updateUserVolunteerStatusToCancel(
+            @RequestBody UpdateUserVolunteerStatusReqDto updateDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
+        // 로그인한 사용자 토큰 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+        // DTO 값 겁증
+        dtoValidationUtils.validateUpdateUserVolunteerStatusReqDto(updateDto);
 
-        if(!userVolunteerService.existsById((long) volunteerId)){
+        // 해당 봉사 아이디 존재 확인
+        if(!userVolunteerService.existsById(updateDto.getVolunteerId())){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
-        UsersVolunteer usersVolunteer = userVolunteerService.findUsersVolunteerById((long) volunteerId);
+        UsersVolunteer usersVolunteer = userVolunteerService.findUsersVolunteerById(updateDto.getVolunteerId());
 
+        // 요구 봉사 아이디와 로그인 아이디 일치 여부 확인
         if(loginUser.getId() != usersVolunteer.getUsers().getId()){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
-        // REGISTER 상태인 경우에만 CANCEL로 변경이 가능함
+        // REGISTER 상태인 경우에만 CANCEL이나 DONE으로 변경이 가능함
         if(!usersVolunteer.getStatus().equals(Status.REGISTER)){
             throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
         }
 
-        // REGISTER  -> CANCEL로 변경
-        userVolunteerService.updateUserVolunteerStatus(usersVolunteer, Status.CANCEL);
+        // 상태 변경
+        userVolunteerService.updateUserVolunteerStatus(updateDto, usersVolunteer);
 
         return new ResponseEntity<>("봉사 취소가 완료되었습니다", HttpStatus.OK);
     }
+
 
     @Operation(summary = "사용자 기부 내역", description = "로그인한 사용자의 기부 내역을 반환합니다.")
     @SecurityRequirement(name = "bearerAuth")
@@ -234,9 +244,7 @@ public class UserController {
 
     @Operation(summary = "사용자 포인트 내역", description = "로그인한 사용자의 포인트 사용 내역을 반환합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping(
-            path = "/me/points"
-    )
+    @GetMapping(path = "/me/points")
     public ResponseEntity<?> getUserPointList(
             @AuthenticationPrincipal PrincipalDetails principal
     ) {

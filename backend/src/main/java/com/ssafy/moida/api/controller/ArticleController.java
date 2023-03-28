@@ -80,7 +80,7 @@ public class ArticleController {
         // DTO로 들어온 UsersVolunteer 안의 user_id와 일치하는지 검증
         UsersVolunteer usersVolunteer = userVolunteerService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
         if(loginUser.getId() != usersVolunteer.getUsers().getId()){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
         // 해당 usersVolunteer.state 가 DONE인지 검증
@@ -236,7 +236,7 @@ public class ArticleController {
         // Admin 이거나 사용자가 작성한 글이 맞는 경우에만 삭제 가능
         if(!loginUser.getRole().equals(Role.ROLE_ADMIN)
             && loginUser.getId() != articleService.getArticleDetailById((long) articleId).getId()){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
         // 삭제하려는 인증글이 없을 경우 오류 반환(404)
@@ -271,7 +271,7 @@ public class ArticleController {
         // 수정하려는 인증글 토큰 확인
         if(loginUser.getId()
             != articleService.findById(updateArticleReqDto.getId()).getUsers().getId()){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
         // 공지사항 내용 수정
