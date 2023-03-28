@@ -1,6 +1,7 @@
 package com.ssafy.moida.service.project;
 
 import com.ssafy.moida.api.request.VolunteerReqDto;
+import com.ssafy.moida.api.response.DateInfoResDto;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.project.Status;
@@ -91,6 +92,13 @@ public class ProjectVolunteerService {
     public VolunteerDateInfo findVolunteerDateInfoById(Long id){
         return volunteerDateInfoRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+    }
+
+    public List<DateInfoResDto> getVolunteerDateInfoByProject(Project project){
+        List<VolunteerDateInfo> dateList = volunteerDateInfoRepository.findByProject(project);
+        return dateList.stream()
+            .map(date -> new DateInfoResDto(date.getId(), date.getVolunteerDate().toString(), date.getMaxCapacity(), date.getCapacity()))
+            .collect(Collectors.toList());
     }
 
     /**

@@ -7,6 +7,7 @@ import com.ssafy.moida.utils.S3Uploader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,12 +51,8 @@ public class ProjectPictureService {
      */
     public List<String> getFileList(Project project){
         List<ProjectPicture> fileList = projectPictureRepository.findByProject(project);
-        List<String> results = new ArrayList<>();
-
-        for (int i = 0, size = fileList.size(); i < size; i++) {
-            results.add(fileList.get(i).getUrl());
-        }
-
-        return results;
+        return fileList.stream()
+            .map(picture -> picture.getUrl())
+            .collect(Collectors.toList());
     }
 }
