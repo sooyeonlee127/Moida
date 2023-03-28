@@ -36,7 +36,7 @@ public class TokenUtils {
         }
 
         if(checkAdmin && !loginUser.getRole().equals(Role.ROLE_ADMIN)){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
         return loginUser;
