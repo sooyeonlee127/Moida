@@ -17,6 +17,7 @@ import com.ssafy.moida.service.project.ProjectService;
 import com.ssafy.moida.service.project.ProjectVolunteerService;
 import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
+import com.ssafy.moida.service.user.UserVolunteerService;
 import com.ssafy.moida.utils.DtoValidationUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
@@ -47,18 +48,20 @@ public class ProjectController {
     private final ProjectDonationService projectDonationService;
     private final ProjectPictureService projectPictureService;
     private final UserDonationService userDonationService;
+    private final UserVolunteerService userVolunteerService;
     private final TokenUtils tokenUtils;
     private final DtoValidationUtils dtoValidationUtils;
 
     public ProjectController(ProjectService projectService, UserService userService,
                              ProjectVolunteerService projectVolunteerService, ProjectDonationService projectDonationService, ProjectPictureService projectPictureService, UserDonationService userDonationService,
-        TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils){
+                             UserVolunteerService userVolunteerService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils){
         this.projectService = projectService;
         this.userService = userService;
         this.projectVolunteerService = projectVolunteerService;
         this.projectDonationService = projectDonationService;
         this.projectPictureService = projectPictureService;
         this.userDonationService = userDonationService;
+        this.userVolunteerService = userVolunteerService;
         this.tokenUtils = tokenUtils;
         this.dtoValidationUtils = dtoValidationUtils;
     }
@@ -134,6 +137,9 @@ public class ProjectController {
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
+        // DTO 유효성 검사
+        dtoValidationUtils.validateCreateDonationReq(createDonationReqDto);
+
         // 프로젝트 존재 여부 확인
         projectService.existsProjectById(createDonationReqDto.getProjectId());
 
@@ -171,6 +177,11 @@ public class ProjectController {
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
+        // DTO 유효성 검사
+        if(vDateInfoId == null || vDateInfoId <= 0){
+            throw new IllegalArgumentException("봉사 일자 고유 아이디는 필수 입력값이며 양수 값만 가능합니다");
+        }
+        
         // 봉사 일자 테이블 데이터 존재여부 확인
         projectVolunteerService.existsVolunteerDateById(vDateInfoId);
 
@@ -188,7 +199,7 @@ public class ProjectController {
         }
 
         // UsersVolunteer에 해당 내용 저장
-        projectVolunteerService.saveUsersVolunteer(loginUser, volunteerDateInfo);
+        userVolunteerService.saveUsersVolunteer(loginUser, volunteerDateInfo);
 
         // 해당 봉사일에 인원 수 추가
         projectVolunteerService.updateCapacity(volunteerDateInfo);
@@ -206,8 +217,31 @@ public class ProjectController {
         // 관리자 권한 확인
         tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
 
+        /*
+         * 각 DTO 유효성 검사
+         * Project, ProjectDonation, ProjectVolunteer 업데이트
+         */
         projectService.updateProjectDetail(updateProjectReqDto);
 
         return new ResponseEntity<>("프로젝트 수정 완료", HttpStatus.OK);
+    }
+
+    @Operation(summary = "[관리자] 봉사 확인 인증코드 조회", description = "봉사일에 사용자 봉사 확인 인증 코드를 조회합니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/volunteer/{volunteerdateinfoid}/auth-code")
+    public ResponseEntity<String> getAdminAuthCode(
+        @PathVariable("volunteerdateinfoid") Long dateinfoId,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+
+        if(dateinfoId == null || dateinfoId <= 0){
+            throw new IllegalArgumentException("고유 아이디 필드가 존재하지 않거나 음수값입니다.");
+        }
+
+        projectVolunteerService.existsVolunteerDateById(dateinfoId);
+        String code = projectVolunteerService.getAdminAuthCode(dateinfoId);
+
+        return new ResponseEntity<>(code, HttpStatus.OK);
     }
 }

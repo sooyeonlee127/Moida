@@ -11,6 +11,7 @@ import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.project.VolunteerRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
+import com.ssafy.moida.utils.RandomNumberGenerator;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.time.LocalDate;
@@ -30,16 +31,21 @@ public class ProjectVolunteerService {
     private final VolunteerRepository volunteerRepository;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
+    private final RandomNumberGenerator randomNumberGenerator;
 
     public ProjectVolunteerService(VolunteerRepository volunteerRepository, VolunteerDateInfoRepository volunteerDateInfoRepository,
-        UsersVolunteerRepository usersVolunteerRepository){
+        UsersVolunteerRepository usersVolunteerRepository,
+        RandomNumberGenerator randomNumberGenerator){
         this.volunteerRepository = volunteerRepository;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
+        this.randomNumberGenerator = randomNumberGenerator;
     }
 
+    /* ProjectVolunteer 엔티티 관련 */
+
     /**
-     * 봉사 테이블 데이터 추가
+     * [세은] 봉사 테이블 데이터 추가
      * @param vd
      * @return ProjectVolunteer(엔티티)
      */
@@ -58,7 +64,29 @@ public class ProjectVolunteerService {
     }
 
     /**
-     * 봉사 일시 테이블 데이터 추가 : 봉사 일자 사이의 LocalDate 정보를 v_date_info 테이블에 추가
+     * [세은] Volunteer에 해당 데이터 존재 여부 확인
+     * @param id
+     */
+    public void existsVolunteerById(Long id){
+        if(!volunteerRepository.existsById(id)){
+            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
+        }
+    }
+
+    /**
+     * [세은] 고유 아이디로 Volunteer 엔티티 데이터 조회
+     * @param id
+     * @return
+     */
+    public ProjectVolunteer findVolunteerById(Long id) {
+        return volunteerRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+    }
+
+    /* VolunteerDateInfo 엔티티 관련 */
+
+    /**
+     * [세은] 봉사 일시 테이블 데이터 추가 : 봉사 일자 사이의 LocalDate 정보를 v_date_info 테이블에 추가
      * @param p
      */
     @Transactional
@@ -79,6 +107,7 @@ public class ProjectVolunteerService {
                 .capacity(0)
                 .maxCapacity(pv.getCapacityPerDate())
                 .project(p)
+                .authenticationCode(randomNumberGenerator.generateRandomNumber())
                 .build();
             volunteerDateInfoRepository.save(volunteerDateInfo);
         }
@@ -94,15 +123,6 @@ public class ProjectVolunteerService {
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
 
-    /**
-     * [세은] Volunteer에 해당 데이터 존재 여부 확인
-     * @param id
-     */
-    public void existsVolunteerById(Long id){
-        if(!volunteerRepository.existsById(id)){
-            throw new CustomException(ErrorCode.DATA_NOT_FOUND);
-        }
-    }
 
     /**
      * [세은] 프로젝트 별 봉사 일자 리스트 조회
@@ -134,20 +154,6 @@ public class ProjectVolunteerService {
         return usersVolunteerRepository.existsByVolunteerDateInfo(volunteerDateInfo);
     }
 
-    /**
-     * [세은] UsersVolunteer에 사용자 봉사 신청 추가
-     * @param users
-     * @param volunteerDateInfo
-     */
-    @Transactional
-    public void saveUsersVolunteer(Users users, VolunteerDateInfo volunteerDateInfo){
-        UsersVolunteer usersVolunteer = UsersVolunteer.builder()
-            .status(Status.REGISTER)
-            .users(users)
-            .volunteerDateInfo(volunteerDateInfo)
-            .build();
-        usersVolunteerRepository.save(usersVolunteer);
-    }
 
     /**
      * [세은] 봉사 일자 아이디로 데이터 존재 여부 확인 후 예외 처리
@@ -160,12 +166,11 @@ public class ProjectVolunteerService {
     }
 
     /**
-     * [세은] 고유 아이디로 Volunteer 엔티티 데이터 조회
-     * @param id
+     * [세은] 해당 봉사 일자의 인증코드 조회
+     * @param volunteerDateInfoId
      * @return
      */
-    public ProjectVolunteer findVolunteerById(Long id) {
-        return volunteerRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+    public String getAdminAuthCode(Long volunteerDateInfoId){
+        return findVolunteerDateInfoById(volunteerDateInfoId).getAuthenticationCode();
     }
 }

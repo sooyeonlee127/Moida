@@ -80,7 +80,7 @@ public class ArticleController {
         // DTO로 들어온 UsersVolunteer 안의 user_id와 일치하는지 검증
         UsersVolunteer usersVolunteer = userVolunteerService.findUsersVolunteerById(createArticleReqDto.getUsersVolunteerProjectId());
         if(loginUser.getId() != usersVolunteer.getUsers().getId()){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
         // 해당 usersVolunteer.state 가 DONE인지 검증
@@ -128,14 +128,26 @@ public class ArticleController {
 
     @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<GetArticleResDto>> getArticlesAndBoards(){
-        List<GetArticleResDto> articleList = articleService.getArticleList();
+    public ResponseEntity<List<GetArticleResDto>> getArticlesAndBoards(
+        @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
+    ){
+        pageNumber -= 1;
+
+        // DTO 유효성 검사
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
+
+        List<GetArticleResDto> articleList = articleService.getArticleList(pageNumber, pageSize);
         return new ResponseEntity<>(articleList, HttpStatus.OK);
     }
 
     @Operation(summary = "카테고리별 공지사항 조회", description = "공지사항을 카테고리별 조회합니다. 카테고리별 공지사항 기수 리스트와 가장 최신 공지사항을 반환합니다.")
     @GetMapping("/board/category/{category}")
-    public ResponseEntity<GetBoardListByCategoryResDto> getBoardByCategory(@PathVariable("category") @Schema(description = "카테고리명", defaultValue = "CRANE") String category){
+    public ResponseEntity<GetBoardListByCategoryResDto> getBoardByCategory(
+        @PathVariable("category") @Schema(description = "카테고리명", defaultValue = "CRANE") String category
+    ){
         // 카테고리 존재 여부 검증
         dtoValidationUtils.validateCategory(category);
 
@@ -224,7 +236,7 @@ public class ArticleController {
         // Admin 이거나 사용자가 작성한 글이 맞는 경우에만 삭제 가능
         if(!loginUser.getRole().equals(Role.ROLE_ADMIN)
             && loginUser.getId() != articleService.getArticleDetailById((long) articleId).getId()){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
         // 삭제하려는 인증글이 없을 경우 오류 반환(404)
@@ -259,7 +271,7 @@ public class ArticleController {
         // 수정하려는 인증글 토큰 확인
         if(loginUser.getId()
             != articleService.findById(updateArticleReqDto.getId()).getUsers().getId()){
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER);
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
         // 공지사항 내용 수정
