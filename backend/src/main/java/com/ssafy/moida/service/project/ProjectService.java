@@ -12,6 +12,7 @@ import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import java.util.*;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -94,13 +95,9 @@ public class ProjectService {
      */
     public List<GetProjectResDto> getProject(){
         List<Project> projectList = projectRepository.getNewestProjectByCategory();
-        List<GetProjectResDto> results = new ArrayList<>();
-
-        for (int i = 0; i < projectList.size(); i++) {
-            results.add(new GetProjectResDto(projectList.get(i)));
-        }
-
-        return results;
+        return projectList.stream()
+            .map(project -> new GetProjectResDto(project))
+            .collect(Collectors.toList());
     }
 
     /**
