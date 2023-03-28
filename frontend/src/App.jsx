@@ -29,10 +29,10 @@ export default function App() {
           <Route path={"/"} element={<MainPage />} />
           <Route path={"/donation"} element={<DonationPage />} />
           <Route
-            path={"/donation/:donationid"}
+            path={"/donation/:projectId"}
             element={<DonationDetailPage />}
           />
-          <Route path={"/gatcha"} element={<GatchaPage />} />
+          <Route path={"/gatcha"} element={<GatchaPage />} />W
           <Route path={"/point"} element={<PointPage />} />
           <Route path={"/profile"} element={<ProfilePage />} />
           <Route path={"/review"} element={<ReviewPage />} />
