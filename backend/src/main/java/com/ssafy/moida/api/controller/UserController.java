@@ -109,7 +109,7 @@ public class UserController {
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
 
         // 유저가 참여한 봉사 개수 가져오기
-        long totalVolunteerCnt = userVolunteerService.totalVolunteerCnt();
+        long totalVolunteerCnt = userVolunteerService.totalVolunteerCnt(loginUser.getId());
         log.info("volunteer Cnt : {}", totalVolunteerCnt);
 
         // 총 포인트 확인하기
