@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
+import point01 from "../../assets/img/point01.png";
+import point02 from "../../assets/img/point02.png";
 
 const PointPage = () => {
   const [currentPoint, setCurrentPoint] = useState(0);
@@ -67,7 +69,9 @@ const PointPage = () => {
   return (
     <PointContainer>
       <LeftSide>
-        <Heading>블록체인 사진</Heading>
+        <div>
+          <img className="h-auto max-w-full rounded-lg" src={point02} alt="" />
+        </div>
       </LeftSide>
       <RightSide>
         <PointForm>
@@ -129,10 +133,10 @@ const PointPage = () => {
           <Line></Line>
           <Title>최종 결제 금액</Title>
           <Box>
-            <div>
+            <KakaoBox>
               <Text>간편결제</Text>
               <PointText>카카오페이</PointText>
-            </div>
+            </KakaoBox>
             <div>
               <PayText>{parseInt(currentPoint * 1.1)} 원</PayText>
               <PayTextBottom>(VAT 포함)</PayTextBottom>
@@ -147,6 +151,13 @@ const PointPage = () => {
           >
             결제하기
           </SubmitButton>
+          <ImageBox>
+            <img
+              className="h-auto max-w-full rounded-lg"
+              src={point01}
+              alt=""
+            />
+          </ImageBox>
         </PointForm>
       </RightSide>
     </PointContainer>
@@ -155,26 +166,25 @@ const PointPage = () => {
 
 const PointContainer = styled.div`
   ${tw`
-  mx-auto max-w-2xl px-4 pt-40 pb-16
+  mx-auto max-w-4xl px-4 pt-40 pb-16
   grid grid-cols-2
   `}
 `;
 
 const Title = styled.h2`
   ${tw`
-  text-left	text-lg font-bold text-gray-900 mb-3
+  text-left	text-lg font-black text-gray-900 mb-3
   `}
 `;
 
 const LeftSide = styled.div`
   ${tw`
-  row-span-3
+  row-span-3  flex items-center justify-between pr-20
 `}
 `;
 
 const RightSide = styled.div`
   ${tw`
-  row-span-2
   mt-4 row-span-3 lg:mt-0
 `}
 `;
@@ -192,10 +202,16 @@ const Box = styled.div`
 `}
 `;
 
-const Heading = styled.h1`
+const ImageBox = styled.div`
   ${tw`
-  text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl
+  m-3
 `}
+`;
+
+const KakaoBox = styled.div`
+  ${tw`
+  text-left pl-5
+  `}
 `;
 
 const PointForm = styled.form`
@@ -218,8 +234,8 @@ const PointButton = styled.button`
 
 const Text = styled.h3`
   ${tw`
-text-sm text-gray-600 font-extralight
-`}
+  text-sm text-gray-600 font-extralight
+  `}
 `;
 
 const PointText = styled.h3`
