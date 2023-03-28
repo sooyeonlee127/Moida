@@ -18,6 +18,7 @@ import Auth from "./context/Auth";
 import NavBar from "./components/NavBar/index.jsx"
 import PasswordPage from "./pages/PasswordPage";
 import AdminNoticePage from "./pages/AdminNoticePage";
+import NoticeUpdatePage from "./pages/AdminNoticePage/NoticeUpdatePage";
 export default function App() {
   return (
     <Auth>
@@ -42,6 +43,7 @@ export default function App() {
           <Route path={"/admin"} element={<AdminPage />} />
           <Route path={"/password"} element={<PasswordPage />} />
           <Route path={"/admin/notice/:projectid"} element={<AdminNoticePage />} />
+          <Route path={"/admin/notice/update/:boardid"} element={<NoticeUpdatePage />} />
         </Routes>
       </div>
     </Auth>
