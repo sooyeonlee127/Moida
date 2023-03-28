@@ -222,4 +222,23 @@ public class ProjectController {
 
         return new ResponseEntity<>("프로젝트 수정 완료", HttpStatus.OK);
     }
+
+    @Operation(summary = "[관리자] 봉사 확인 인증코드 조회", description = "봉사일에 사용자 봉사 확인 인증 코드를 조회합니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/volunteer/{volunteerdateinfoid}/auth-code")
+    public ResponseEntity<String> getAdminAuthCode(
+        @PathVariable("volunteerdateinfoid") Long dateinfoId,
+        @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+
+        if(dateinfoId == null || dateinfoId <= 0){
+            throw new IllegalArgumentException("고유 아이디 필드가 존재하지 않거나 음수값입니다.");
+        }
+
+        projectVolunteerService.existsVolunteerDateById(dateinfoId);
+        String code = projectVolunteerService.getAdminAuthCode(dateinfoId);
+
+        return new ResponseEntity<>(code, HttpStatus.OK);
+    }
 }

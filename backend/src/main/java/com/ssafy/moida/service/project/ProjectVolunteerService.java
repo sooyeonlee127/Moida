@@ -173,4 +173,13 @@ public class ProjectVolunteerService {
         return volunteerRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
+
+    /**
+     * [세은] 해당 봉사 일자의 인증코드 조회
+     * @param volunteerDateInfoId
+     * @return
+     */
+    public String getAdminAuthCode(Long volunteerDateInfoId){
+        return findVolunteerDateInfoById(volunteerDateInfoId).getAuthenticationCode();
+    }
 }
