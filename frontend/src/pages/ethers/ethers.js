@@ -87,6 +87,11 @@ const donate = async () => {
     /*
      * transaction 작성
      * function addDonationHistory(string memory nickname, uint256 projectId, string memory subject, uint generation, string memory date, uint256 amount)
+     * 1. singer = 사용자 지갑
+     * 2. 트랜잭션 만들기(사용자 -> 관리자)
+     * 3. 프라이빗 키 구해서 서명
+     * 4. 트랜잭션 보내기
+     * 6. 트랜잭션 결과 반환 -> DB에 저장
      */
 };
 
@@ -591,4 +596,4 @@ const DONATION_ABI = [
 const DONATION_CA = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"; // localhost
 const DONATIONContract = new ethers.Contract(DONATION_CA, DONATION_ABI, provider.getSigner());
 
-// export default createAccount;
+export default createAccount;
