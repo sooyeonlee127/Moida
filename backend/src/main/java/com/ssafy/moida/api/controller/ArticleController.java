@@ -1,6 +1,5 @@
 package com.ssafy.moida.api.controller;
 
-import com.ssafy.moida.api.common.PaginationDto;
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.CreateBoardReqDto;
 import com.ssafy.moida.api.request.UpdateArticleReqDto;
@@ -130,20 +129,25 @@ public class ArticleController {
     @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
     @GetMapping
     public ResponseEntity<List<GetArticleResDto>> getArticlesAndBoards(
-        @RequestBody PaginationDto paginationDto
+        @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize
     ){
+        pageNumber -= 1;
+
         // DTO 유효성 검사
-        dtoValidationUtils.validatePaginationDto(paginationDto);
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
 
-
-
-        List<GetArticleResDto> articleList = articleService.getArticleList();
+        List<GetArticleResDto> articleList = articleService.getArticleList(pageNumber, pageSize);
         return new ResponseEntity<>(articleList, HttpStatus.OK);
     }
 
     @Operation(summary = "카테고리별 공지사항 조회", description = "공지사항을 카테고리별 조회합니다. 카테고리별 공지사항 기수 리스트와 가장 최신 공지사항을 반환합니다.")
     @GetMapping("/board/category/{category}")
-    public ResponseEntity<GetBoardListByCategoryResDto> getBoardByCategory(@PathVariable("category") @Schema(description = "카테고리명", defaultValue = "CRANE") String category){
+    public ResponseEntity<GetBoardListByCategoryResDto> getBoardByCategory(
+        @PathVariable("category") @Schema(description = "카테고리명", defaultValue = "CRANE") String category
+    ){
         // 카테고리 존재 여부 검증
         dtoValidationUtils.validateCategory(category);
 

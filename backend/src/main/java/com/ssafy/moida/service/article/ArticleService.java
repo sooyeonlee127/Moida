@@ -13,9 +13,11 @@ import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -119,9 +121,9 @@ public class ArticleService {
      * [세은] 사용자 인증글 전체 가져오기(인증갤러리 조회용)
      * @return
      */
-    public List<GetArticleResDto> getArticleList(){
-        List<Article> articleList = articleRepository.findAll();
-        List<GetArticleResDto> results = new ArrayList<>();
+    public List<GetArticleResDto> getArticleList(int pageNumber, int pageSize){
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Article> articleList = articleRepository.findAll(pageable);
 
         return articleList.stream()
             .map(article -> new GetArticleResDto(article.getId(), article.getSubject(), article.getUrl(),article.getDifficultyLevel()))
