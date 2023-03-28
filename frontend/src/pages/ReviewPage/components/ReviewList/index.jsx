@@ -1,16 +1,14 @@
-// 리뷰 리스트
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
 import ReviewCard from './ReviewCard'
-import ReviewCreateForm from './ReivewCreateForm'
 
+//혜수: 사용자 리뷰 전체 조회
 const ReviewList = () => {
   let [card, setCard] = useState([]);
 
   useEffect(() => {
-    //전체 인증갤러리 조회
     axios({
       url: "/api/article",
       method: "GET",
@@ -23,19 +21,23 @@ const ReviewList = () => {
       console.log(error);
     })
   }, []);
+
+
   
 
   return (
     <Div className="Wrapper">
       <Div className="SubWrapper">
-        <ReviewCreateForm/>
+
         {/* 유저후기 */}
         <Title>Gallery</Title>
         <Div className="ReviewWrapper">
         {
           card?.map((element,index) => {
             return (
-              <ReviewCard review={element} index={index} key={index}/>
+              <ReviewCard
+
+              review={element} index={index} key={index} />
             )
           })
         }
