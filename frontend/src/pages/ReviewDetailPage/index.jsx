@@ -1,6 +1,4 @@
 // 리뷰상세페이지. aka 카드
-import { useState } from "react"
-import Review from "./review";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
@@ -8,7 +6,7 @@ import tw from "twin.macro";
 
 const ReviewDetailPage = () => {
   const { reviewid } = useParams(); // const 변수명 = useParams().파라미터명;
-  // let [review, SetReview] = useState(Review);
+
   return (
     <>
     <Box></Box>
