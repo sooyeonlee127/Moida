@@ -197,7 +197,6 @@ const Nav = styled.div`
   ${tw`
   px-2
   py-4
-  h-16
   flex justify-between
   `}
 `;
@@ -205,7 +204,7 @@ const Nav = styled.div`
 const Section = styled.div`
   word-break: break-all;
   ${tw`
-   h-16 min-h-full order-last flex flex-1 items-center justify-end mr-20 tracking-tighter font-normal text-base
+   min-h-full order-last flex flex-1 items-center justify-end mr-20 tracking-tighter font-normal text-base
   `}
 `;
 
@@ -217,20 +216,20 @@ const Logo = styled.div`
 
 const Title = styled.div`
   ${tw`
-  h-16 flex space-x-9
+  flex space-x-9
   `}
 `;
 
 const LogoutButton = styled.div`
   ${tw`
-  h-16 ml-9 font-black tracking-tighter
+  ml-9 font-black tracking-tighter
   `}
 `;
 
 const Home = styled.div`
   color: rgb(254 98 76);
   ${tw`
-  h-16 mr-9 font-black 
+  mr-9 font-black 
   `}
 `;
 export default NavBar;
