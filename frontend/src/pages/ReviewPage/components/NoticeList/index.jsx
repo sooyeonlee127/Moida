@@ -53,9 +53,9 @@ const NoticeList = () => {
           <Title>Notice</Title>
 
           <ImageWrapper>
-            <img src="/img/CRANE.png" alt="" onClick={f1}/>
+            {/* <img src="/img/CRANE.png" alt="" onClick={f1}/>
             <img src="/img/SQUIRREL.png" alt="" onClick={f2}/>
-            <img src="/img/BADGER.png" alt="" onClick={f3}/>
+            <img src="/img/BADGER.png" alt="" onClick={f3}/> */}
           </ImageWrapper>
 
 

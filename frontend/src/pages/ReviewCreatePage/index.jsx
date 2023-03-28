@@ -2,8 +2,8 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer, useState } from "react";
 import axios from "axios";
-
-const ReviewCreateForm = () => {
+// 혜수: 사용자 인증글 생성 페이지
+const ReviewCreatePage = () => {
     const reducer = (state, action) => {
         return {
           ...state,
@@ -228,7 +228,7 @@ const ReviewCreateForm = () => {
 }
 
 
-export default ReviewCreateForm;
+export default ReviewCreatePage;
 
 const Container = styled.div`
   ${tw`
