@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DonationRepository extends JpaRepository<ProjectDonation, Long> {
-
+    boolean existsById(Long id);
 }
