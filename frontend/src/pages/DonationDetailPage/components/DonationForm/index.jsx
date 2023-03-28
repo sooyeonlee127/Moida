@@ -31,7 +31,7 @@ const DonationForm = (props) => {
         const endDate = new Date(data.endDate)
         const startDate = new Date(data.startDate)
         const now = new Date();
-        if (now > new Date(endDate)) { // 마감기한이 지난 경우 isDisabled true -> 버튼 비활성화 목적 - 이은혁
+        if (now < new Date(endDate)) { // 마감기한이 지난 경우 isDisabled true -> 버튼 비활성화 목적 - 이은혁
             setIsDisabled(true)
         } else {
             setIsDisabled(false)
@@ -51,7 +51,7 @@ const DonationForm = (props) => {
             url: "/api/project/donation", 
             method: "POST",
             data: {
-                projectId: data.id,     // 하드코딩 수정 필요 - 이은혁
+                projectId: data.id,
                 moi: moi
             },
             headers: {
