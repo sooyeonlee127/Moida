@@ -20,7 +20,7 @@ public class GetUserDonationResDto {
     private String projectSubject;
     private int generation;
     private LocalDateTime regDate;
-    private Long point;
+    private Long Moi;
     private int ticketCnt;
 
 }

@@ -17,6 +17,6 @@ public interface UsersVolunteerRepository extends JpaRepository<UsersVolunteer, 
     boolean existsByVolunteerDateInfoAndUsers(VolunteerDateInfo volunteerDateInfo, Users user);
     boolean existsById(UsersVolunteer usersVolunteer);
     Optional<UsersVolunteer> findById(Long id);
-    Page<UsersVolunteer> findByUsers(Users users, Pageable pageable);
+    Page<UsersVolunteer> findByUsersOrderByRegDateDesc(Users users, Pageable pageable);
     long countByUsersId(Long userId);
 }

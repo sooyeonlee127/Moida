@@ -3,6 +3,7 @@ package com.ssafy.moida.repository.user;
 import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersDonation;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,8 @@ import java.util.OptionalLong;
 
 public interface UsersDonationRepository extends JpaRepository<UsersDonation, Long>,
     PagingAndSortingRepository<UsersDonation, Long> {
-    @Query("SELECT new com.ssafy.moida.api.response.GetUserDonationResDto("
+    @Query(
+        value = "SELECT new com.ssafy.moida.api.response.GetUserDonationResDto("
             + "ud.project.id, "
             + "ud.project.subject, "
             + "ud.project.generation, "
@@ -23,8 +25,11 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
             + "CAST(ud.amount / ud.project.pointPerMoi AS LONG), "
             + "ud.ticketCnt) "
             + "FROM UsersDonation ud "
-            + "WHERE ud.users.id = :userId ")
-    List<GetUserDonationResDto> findDonationsByUserId(@Param("userId") Long userId, Pageable pageable);
+            + "WHERE ud.users.id = :userId "
+            + "ORDER BY ud.regDate DESC ",
+        countQuery = "SELECT COUNT(*) from UsersDonation u where u.id = :userId"
+    )
+    Page<GetUserDonationResDto> findDonationsByUserId(@Param("userId") Long userId, Pageable pageable);
 
     List<UsersDonation> findByUsersOrderByRegDate(Users user);
 

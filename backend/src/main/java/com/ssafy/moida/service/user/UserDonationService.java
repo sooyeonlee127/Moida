@@ -6,6 +6,7 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersDonation;
 import com.ssafy.moida.repository.user.UsersDonationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,8 @@ public class UserDonationService {
      * */
     public List<GetUserDonationResDto> getUsersDonation(Long userId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        List<GetUserDonationResDto> result = usersDonationRepository.findDonationsByUserId(userId, pageable);
-        return result;
+        Page<GetUserDonationResDto> result = usersDonationRepository.findDonationsByUserId(userId, pageable);
+        return result.getContent();
     }
 
     /**

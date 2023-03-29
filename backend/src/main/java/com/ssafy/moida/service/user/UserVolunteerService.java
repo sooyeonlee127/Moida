@@ -59,7 +59,7 @@ public class UserVolunteerService {
     public List<GetUserVolunteerResDto> getUsersVolunteer(Users users, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        List<UsersVolunteer> list = usersVolunteerRepository.findByUsers(users, pageable)
+        List<UsersVolunteer> list = usersVolunteerRepository.findByUsersOrderByRegDateDesc(users, pageable)
             .getContent();
 
         return list.stream()
