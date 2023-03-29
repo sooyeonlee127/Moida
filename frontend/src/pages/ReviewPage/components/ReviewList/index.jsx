@@ -7,27 +7,66 @@ import ReviewCard from './ReviewCard'
 //혜수: 사용자 리뷰 전체 조회
 const ReviewList = () => {
   let [card, setCard] = useState([]);
+  const category = ["ALL", "흑두루미", "다람쥐", "야생동물"];
+  const [selected1, setSelected1] = useState("ALL");
+
+  const sort = ["LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"]
+  const [selected2, setSelected2] = useState("LATEST");
+
+ 
+  const getReviews = async(category, sort) => {
+    try {
+      console.log(category, sort)
+      const res = await axios({
+        url: "/api/article",
+        method: "GET",
+        params: {
+          pageNumber: 1,
+          pageSize: 10,
+          category: category,
+          sort: sort
+        },
+        headers: {
+          accept: "*/*"
+        }
+      })
+      if(res){
+        setCard(res.data);
+        console.log(res.data)
+      }
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
   useEffect(() => {
-    axios({
-      url: "/api/article",
-      method: "GET",
-    })
-    .then((res) => {
-      // console.log(res);
-      setCard(res.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-  }, []);
-
-
-  
+    getReviews(selected1, selected2)
+  }, [selected1, selected2])
 
   return (
     <Div className="Wrapper">
       <Div className="SubWrapper">
+
+        {/* 셀렉트박스 */}
+        {/* 카테고리 */}
+        <div>
+          <select onChange={(e)=>setSelected1(e.target.value)}>
+            {category.map((element,index) => (
+              <option key={index}>{element}</option>
+            ))}
+          </select>
+
+        </div>
+        {/* 정렬 */}
+        <div>
+          <select onChange={(e)=> setSelected2(e.target.value)}>
+            {sort.map((element,index) => (
+              <option key={index}>{element}</option>
+            ))}
+            </select>
+        </div>
+        
+
 
         {/* 유저후기 */}
         <Title>Gallery</Title>
@@ -36,7 +75,6 @@ const ReviewList = () => {
           card?.map((element,index) => {
             return (
               <ReviewCard
-
               review={element} index={index} key={index} />
             )
           })
@@ -81,7 +119,26 @@ const ReviewList = () => {
   )
 }
 
+const SelectBox1 = () => {
 
+  const category = ["ALL", "흑두루미", "다람쥐", "야생동물"];
+  return (<>
+        <div>
+          <select>
+            {category.map((element,index) => (
+              <option key={index+1}>{element}</option>
+            ))}
+          </select>
+
+        </div>
+  </>)
+}
+
+const SelectBox2 = () => {
+  return (<>
+
+  </>)
+}
 
 
 
