@@ -32,6 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
 
+import java.util.Map;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,7 +100,7 @@ public class ArticleController {
 
     @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
     @GetMapping
-    public ResponseEntity<List<GetArticleResDto>> getArticles(
+    public ResponseEntity<?> getArticles(
         @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
         @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
         @RequestParam(name = "category", defaultValue = "ALL") @Schema(allowableValues = {"ALL", "CRANE", "SQUIRREL", "WILD_ANIMAL"}) String category,
@@ -111,7 +112,10 @@ public class ArticleController {
         dtoValidationUtils.validateArticleSortDto(articleSortDto);
 
         List<GetArticleResDto> articleList = articleService.getArticleList(articleSortDto);
-        return new ResponseEntity<>(articleList, HttpStatus.OK);
+        Long length = articleService.countArticleList(articleSortDto);
+
+        return ResponseEntity.ok()
+            .body(Map.of("articleList", articleList, "length", length));
     }
 
     @Operation(summary = "사용자 인증글 상세조회", description = "특정 사용자 인증글을 상세 조회합니다.")

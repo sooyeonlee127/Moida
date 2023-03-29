@@ -12,7 +12,7 @@ const useScroll = (threshold=0.05) => {
     if (element.current) {
       observer = new IntersectionObserver((entries) => {
         const entry = entries[0]
-        console.log(entry.target.className)
+        // console.log(entry.target.className)
         setInView(entry.isIntersecting)
         if (entry.isIntersecting) {
           setIsShown(true)

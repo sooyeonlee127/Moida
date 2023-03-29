@@ -17,10 +17,10 @@ const Projects = (props) => {
   const [value, setValue] = useState();
   const handleScroll = () => {
     setValue(parseInt(window.scrollY));
-    console.log(value);
+    // console.log(value);
   };
   useEffect(() => {
-    console.log(target.current.offsetTop);
+    // console.log(target.current.offsetTop);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

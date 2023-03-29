@@ -11,7 +11,7 @@ const ReviewCard = (props) => {
     }
 
     return (
-      <div onClick={onClickDiv} className="group relative">
+      <Review onClick={onClickDiv} className="group relative">
         {review.id}
         <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
           <Image src={review.url}
@@ -24,9 +24,14 @@ const ReviewCard = (props) => {
               <span>{review.difficultyLevel}</span>
           </CardName>
         </ReviewContent>
-      </div>
+      </Review>
     )
   }
+
+const Review = styled.div`
+width: 200px;
+height: 500px;
+`
 
 const Image = styled.img`
 border-radius: 10px;
