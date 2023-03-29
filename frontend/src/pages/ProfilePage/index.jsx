@@ -35,9 +35,9 @@ const ProfilePage = () => {
 
 
     // 유효성 검사 관련 state - 이은혁
-    const [curPw, setCurPw ] = useState("");      // 기존 비밀번호 인풋값
-    const [curPwMsg, setcurPwMMsg ] = useState();     // 기존 비밀번호 일치 여부 메시지 
-    const [confirmPw, setConfirmPw ] = useState("");      // 새로운 비밀번호 확인 인풋값
+    const [curPw, setCurPw ] = useState("");            // 기존 비밀번호 인풋값
+    const [curPwMsg, setcurPwMMsg ] = useState();       // 기존 비밀번호 일치 여부 메시지 
+    const [confirmPw, setConfirmPw ] = useState("");    // 새로운 비밀번호 확인 인풋값
     const [confirmMsg, setConfirmMsg ] = useState();    // 새로운 비밀번호 확인 유효성 검사 메시지
     
     const {fn: Validator, inputValue:newPw='', isValid, Msg} = useValidator() // newPw 기본값 지정. 안하면 오류 undefined 발생 - 이은혁
