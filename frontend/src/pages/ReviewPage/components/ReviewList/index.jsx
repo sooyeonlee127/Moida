@@ -45,6 +45,25 @@ const ReviewList = () => {
 
   return (
     <div>
+       {/* 셀렉트박스 */}
+        {/* 카테고리 */}
+        <div>
+          <select onChange={(e)=>setSelected1(e.target.value)}>
+            {category.map((element,index) => (
+              <option key={index}>{element}</option>
+            ))}
+          </select>
+
+        </div>
+        {/* 정렬 */}
+        <div>
+          <select onChange={(e)=> setSelected2(e.target.value)}>
+            {sort.map((element,index) => (
+              <option key={index}>{element}</option>
+            ))}
+            </select>
+        </div>
+
       {/* 유저후기 */}
       <Title>Gallery</Title>
       <div>
@@ -102,7 +121,6 @@ ${tw`px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover
     ${tw`block ml-0 rounded-l-lg `}
   }
 `
-
 const Pagination1 = styled.a`
 ${tw`block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
 `
