@@ -194,7 +194,7 @@ public class ProjectController {
         }
 
         // 이미 해당 일자에 봉사 신청이 이미 되어있는지 확인
-        if(projectVolunteerService.existsByVolunteerDateInfo(volunteerDateInfo)){
+        if(projectVolunteerService.existsByVolunteerDateInfo(loginUser, volunteerDateInfo)){
             throw new CustomException(ErrorCode.DUPLICATE_VOLUNTEER_REGISTER);
         }
 
