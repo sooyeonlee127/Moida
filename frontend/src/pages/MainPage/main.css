@@ -1,5 +1,7 @@
+
+
 .intro {
-    height: calc(100vh - 64px);
+    height: calc(100vh - 56px);
     width: 100vw;
 }
 .nft {
@@ -24,8 +26,8 @@
 
 .card {
     position: sticky;
-    top: 64px;
-    min-height: calc(100vh - 64px);
+    top: 56px;
+    min-height: calc(100vh - 56px);
     color: #fff;
     display: flex;
     align-items: start;

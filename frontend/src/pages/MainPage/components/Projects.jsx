@@ -53,7 +53,7 @@ const StickyContainer = styled.div`
 
 const Sticky = styled.div`
   position: sticky;
-  top: 64px;
+  top: 56px;
 `;
 const Heading = styled.h2`
   ${tw`
