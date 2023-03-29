@@ -7,14 +7,14 @@ import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
-import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
+import com.ssafy.moida.service.article.ArticleService;
 import com.ssafy.moida.service.project.ProjectVolunteerService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,12 +30,13 @@ public class UserVolunteerService {
 
     private final UsersVolunteerRepository usersVolunteerRepository;
     private final ProjectVolunteerService projectVolunteerService;
-    private final ArticleRepository articleRepository;
+    private final ArticleService articleService;
 
-    public UserVolunteerService(UsersVolunteerRepository usersVolunteerRepository, ProjectVolunteerService projectVolunteerService, ArticleRepository articleRepository) {
+    public UserVolunteerService(UsersVolunteerRepository usersVolunteerRepository, ProjectVolunteerService projectVolunteerService,
+        ArticleService articleService) {
         this.usersVolunteerRepository = usersVolunteerRepository;
         this.projectVolunteerService = projectVolunteerService;
-        this.articleRepository = articleRepository;
+        this.articleService = articleService;
     }
 
     /**
@@ -49,13 +50,22 @@ public class UserVolunteerService {
 
     /**
      * [한선영] 사용자가 참여한 봉사 프로젝트 목록(GetUserVolunteerResDto) 가져오기
-     * @param userId
+     * [세은] articleId 추가
+     * @param users
+     * @param pageNumber
+     * @param pageSize
      * @return
-     * */
-    public List<GetUserVolunteerResDto> getUsersVolunteer(Long userId, int pageNumber, int pageSize) {
+     */
+    public List<GetUserVolunteerResDto> getUsersVolunteer(Users users, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<GetUserVolunteerResDto> volunteerList = usersVolunteerRepository.findVolunteersByUserId(userId, pageable);
-        return volunteerList.getContent();
+
+        List<UsersVolunteer> list = usersVolunteerRepository.findByUsers(users, pageable)
+            .getContent();
+
+        return list.stream()
+            .map(uv -> uv.getStatus() == Status.WRITTEN? new GetUserVolunteerResDto(uv, articleService.findByUsersVolunteer(uv))
+                : new GetUserVolunteerResDto(uv, null))
+            .collect(Collectors.toList());
     }
 
     /**
@@ -119,9 +129,6 @@ public class UserVolunteerService {
      * [한선영] 사용자가 작성한 봉사 인증글 목록(GetArticleDetailResDto) 가져오기
      * */
     public List<GetArticleDetailResDto> getUsersVolunteerArticle(Long userId) {
-        List<GetArticleDetailResDto> result = new ArrayList<>();
-        result = articleRepository.findByUsersId(userId);
-        return result;
+        return articleService.findByUsersId(userId);
     }
-
 }

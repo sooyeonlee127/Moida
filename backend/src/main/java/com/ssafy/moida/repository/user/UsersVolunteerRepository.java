@@ -1,40 +1,22 @@
 package com.ssafy.moida.repository.user;
 
-import com.ssafy.moida.api.response.GetUserVolunteerResDto;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
+import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UsersVolunteerRepository extends JpaRepository<UsersVolunteer, Long>,
     PagingAndSortingRepository<UsersVolunteer, Long> {
-    boolean existsByVolunteerDateInfo(VolunteerDateInfo volunteerDateInfo);
+    boolean existsByVolunteerDateInfoAndUsers(VolunteerDateInfo volunteerDateInfo, Users user);
     boolean existsById(UsersVolunteer usersVolunteer);
     Optional<UsersVolunteer> findById(Long id);
-
-    @Query(
-        value = "select new com.ssafy.moida.api.response.GetUserVolunteerResDto(" +
-            "uv.id," +
-            "a.id," +
-            "uv.volunteerDateInfo.project.id," +
-            "uv.volunteerDateInfo.project.subject," +
-            "uv.volunteerDateInfo.project.generation," +
-            "uv.regDate," +
-            "uv.status)" +
-            "from UsersVolunteer uv join Article a " +
-            "on uv.id = a.usersVolunteer.id " +
-            "where uv.users.id = :userId",
-        countQuery = "SELECT count(*) FROM UsersVolunteer u WHERE u.users.id = :userId"
-    )
-    Page<GetUserVolunteerResDto> findVolunteersByUserId(@Param("userId") Long userId, Pageable pageable);
-
+    Page<UsersVolunteer> findByUsers(Users users, Pageable pageable);
     long countByUsersId(Long userId);
 }
