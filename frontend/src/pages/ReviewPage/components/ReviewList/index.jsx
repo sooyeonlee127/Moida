@@ -32,7 +32,7 @@ const ReviewList = () => {
       })
       if(res){
         setCard(res.data);
-        console.log(res.data)
+        // console.log(res.data)
       }
     } catch(err) {
       console.log(err)
@@ -48,15 +48,13 @@ const ReviewList = () => {
       {/* 유저후기 */}
       <Title>Gallery</Title>
       <div>
-      {
-        card?.map((element,index) => {
-          return (
-            <ReviewCard
-
-            review={element} index={index} key={index} />
-          )
-        })
-      }
+        {
+          card?.map((element,index) => {
+            return (
+              <ReviewCard review={element} index={index} key={index} />
+            )
+          })
+        }
       </div>
 
       

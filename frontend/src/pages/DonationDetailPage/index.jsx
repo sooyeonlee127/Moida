@@ -45,44 +45,6 @@ const DonationDetailPage = () => {
         refetchOnMount: true,
     });
     
-    // console.log(projectInfo?.donationResDto)
-    // console.log(projectInfo?.projectReqDto)
-    // console.log(projectInfo?.volunteerResDto)
-    // data : 
-    // {
-    //     "id": 0,
-    //     "thumbnail": "string",
-    //     "generation": 0,
-    //     "projectReqDto": {
-    //       "category": "CRANE",
-    //       "subject": "다람쥐와 도토리",
-    //       "description": "다람쥐는 오늘도 도토리를 찾아 헤맵니다...",
-    //       "pointPerMoi": 1400
-    //     },
-    //     "donationResDto": {
-    //       "startDate": "2023-03-24",
-    //       "endDate": "2023-03-27",
-    //       "targetAmount": 2500,
-    //       "subject": "다람쥐에게 도토리를 주세요",
-    //       "description": "먹이가 필요한 다람쥐에게 도토리를 전달하는 기부입니다",
-    //       "id": 0,
-    //       "amount": 0
-    //     },
-    //     "volunteerResDto": {
-    //       "startDate": "2023-03-28",
-    //       "endDate": "2023-04-10",
-    //       "difficultyLevel": 5,
-    //       "location": "제주특별자치도 제주시 첨단로 242",
-    //       "capacityPerDate": 15,
-    //       "subject": "다람쥐에게 도토리를 전달해요",
-    //       "description": "먹이가 필요한 다람쥐에게 도토리를 전달하는 봉사입니다",
-    //       "id": 0
-    //     },
-    //     "pictures": [
-    //       "string"
-    //     ]
-    //   }
-
     return (
         <div>
             <Main>

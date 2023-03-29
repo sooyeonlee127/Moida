@@ -36,7 +36,7 @@ const VolunteerForm = (props) => {
     useEffect(()=> {    // 
         const d = new Date(value)
         setStringValue(dateFormat(d))
-        console.log(dateMap[dateFormat(d)])
+        // console.log(dateMap[dateFormat(d)])
     }, [value])
 
     const selectedDay = value?.getDate()

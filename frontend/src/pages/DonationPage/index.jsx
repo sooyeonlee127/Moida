@@ -27,8 +27,8 @@ import DonationCard from "./components";
 
 const DonationPage = () => {
   const [cards, setCards] = useState([]);
-  const cardList = cards.map((card) => (
-    <DonationCard card={card}></DonationCard>
+  const cardList = cards.map((card, index) => (
+    <DonationCard card={card} key={index}></DonationCard>
   ));
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const DonationPage = () => {
       method: "GET",
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setCards(res.data);
       })
       .catch((error) => {
