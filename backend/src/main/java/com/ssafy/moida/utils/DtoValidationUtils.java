@@ -1,5 +1,6 @@
 package com.ssafy.moida.utils;
 
+import com.ssafy.moida.api.common.ArticleSortDto;
 import com.ssafy.moida.api.request.*;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -78,10 +79,13 @@ public class DtoValidationUtils {
      * @param category
      * @return
      */
-    public void validateCategory(String category){
+    public boolean validateCategory(String category){
+        boolean flag = true;
         if(!"CRANE".equals(category) && "SQUIRREL".equals(category) && "WILD_ANIMAL".equals(category)) {
+            flag = false;
             throw new CustomException(ErrorCode.CATEGORY_NOT_FOUND);
         }
+        return flag;
     }
 
     /**
@@ -102,6 +106,29 @@ public class DtoValidationUtils {
     public void validateCreateDonationReq(CreateDonationReqDto createDonationReqDto){
         checkLongType(createDonationReqDto.getProjectId(), "프로젝트 아이디");
         checkIntType(createDonationReqDto.getMoi(),"기부 모이");
+    }
+
+    /**
+     * [세은] 인증글 전체 조회 필터 DTO 적용
+     * @param articleSortDto
+     */
+    public void validateArticleSortDto(ArticleSortDto articleSortDto){
+        if(articleSortDto.getPageNumber() < 0 || articleSortDto.getPageSize() <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
+
+        System.out.println("--- " + articleSortDto);
+        // 카테고리는 ALL, SQUIRREL, WILD_ANIMAL, CRANE
+        if(!"ALL".equals(articleSortDto.getCategory()) && !validateCategory(articleSortDto.getCategory())){
+            throw new CustomException(ErrorCode.STATUS_NOT_FOUND);
+        }
+
+        System.out.println("--- " + articleSortDto);
+        // 정렬은 LATEST(최신순), DIFFICULTY_HIGHEST(난이도 높은순), DIFFICULTY_LOWEST(난이도 낮은순)
+        if(!"LATEST".equals(articleSortDto.getSort()) && !"DIFFICULTY_HIGHEST".equals(articleSortDto.getSort())
+        && !"DIFFICULTY_LOWEST".equals(articleSortDto.getSort())){
+            throw new CustomException(ErrorCode.SORT_NOT_FOUND);
+        }
     }
 
     /**
