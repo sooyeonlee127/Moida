@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import useListApi from "./api"
 
 const VolunteerList = () => {
-    const { data:datas, error, loading } = useListApi("volunteer")
+    const { data:datas, length, error, loading } = useListApi("volunteer") // length는 페이지네이션 활용 용도 - 이은혁
 
     return (
         <>

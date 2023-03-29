@@ -2,7 +2,7 @@ import React from 'react';
 import useListApi from "./api"
 
 const DonationList = () => {
-    const { data: datas, error, loading } = useListApi("donation")
+    const { data: datas, length, error, loading } = useListApi("donation") // length는 페이지네이션 활용 용도 - 이은혁
     return (
         <>
         <table>
