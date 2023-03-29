@@ -3,6 +3,7 @@ import axios from "axios";
 
 const useListApi = (type) => {
   const [data, setData] = useState([]);
+  const [dataLength, setDataLength] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -15,7 +16,9 @@ const useListApi = (type) => {
             Authorization: localStorage.getItem("accessToken"),
           },
         });
-        setData(response.data);
+        console.log(response.data)
+        setData(response.data.donationList);
+        setDataLength(response.data.length);
       } catch (error) {
         setError(error);
       } finally {
@@ -25,7 +28,7 @@ const useListApi = (type) => {
     fetchData();
   }, [type]);
 
-  return { data, error, loading };
+  return { data, length: dataLength, error, loading };
 };
 
 export default useListApi;

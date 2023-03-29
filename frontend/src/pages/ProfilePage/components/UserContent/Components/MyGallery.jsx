@@ -3,7 +3,7 @@ import useListApi from "./api"
 
 
 const MyGallery = () => {
-  const { data: datas, error, loading } = useListApi("volunteer-article")
+  const { data: datas, length, error, loading } = useListApi("volunteer-article") // length는 페이지네이션 활용 용도 - 이은혁
 
   return (
     <>
