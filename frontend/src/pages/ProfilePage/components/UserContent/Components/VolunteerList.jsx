@@ -1,12 +1,98 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useReducer, useState } from 'react'
 import useListApi from "./api"
+import axios from 'axios'
+
 
 const VolunteerList = () => {
-    const { data:datas, length, error, loading } = useListApi("volunteer") // length는 페이지네이션 활용 용도 - 이은혁
+    const { data:datas, error, loading } = useListApi("volunteer")
+    const [visible, setVisible] = useState(false);
+    const [value, setValue] = useState('');
+    const [doneId, setDoneId] = useState();
+
+    // 취소코드
+    const cancel = async (cancelId) => {
+      await axios
+      .put("/api/users/me/volunteer", {
+        volunteerId: cancelId,
+        status: "CANCEL",
+      }, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          refresh: localStorage.getItem("refreshToken"),
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        alert("취소되었습니다.")
+      })
+      .catch((error) => {
+        console.log(error.response.data.message)
+      })
+    }
+
+
+    
+    // 완료 코드 입력 모달 
+    const Modal = () => {
+
+      const saveValue = (e) => {
+        console.log(e.currentTarget.value)
+        e.preventDefault()
+        setValue(e.currentTarget.value)
+      }
+      return (
+        <>
+        <form>
+          <input
+          type="string"
+          placeholder='코드를 입력하세요'
+          value={value}
+          onBlur={saveValue}
+          />
+          <button
+          type="button"
+          onClick={() => {done(value,doneId)}}
+          >확인</button>
+        </form>
+        </>
+      )
+    }
+
+
+
+    //완료코드
+    const done = async (value, doneId) => {
+      console.log('아아아ㅏ');
+      try {
+      //1. 모달창 열림    
+
+      //2. 버튼클릭시 axios 실행
+      const res = await axios
+      .put("/api/users/me/volunteer", {
+        volunteerId: doneId,
+        status: "DONE",
+        code: value,
+      }, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          refresh: localStorage.getItem("refreshToken"),
+        }
+      })
+      if (res) {
+        console.log(res)
+        alert("완료되었습니다.")
+      }
+
+      } catch(error) {
+        console.log(error.response.data.message)
+        // alert("인증코드가 다릅니다.")
+      }
+
+    }
 
     return (
         <>
+        {visible && <Modal/>}
         <table>
             <thead>
                 <tr>
@@ -14,9 +100,11 @@ const VolunteerList = () => {
                     <th>프로젝트 id</th>
                     <th>프로젝트 제목</th>
                     <th>봉사 날짜</th>
-                    <th>상태</th>
                     <th>봉사 id</th>
-                    <th>내가 작성한 리뷰</th>
+                    <th>상태</th>
+                    <th>취소 버튼</th>
+                    <th>완료 버튼</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -27,9 +115,10 @@ const VolunteerList = () => {
                             <td>{data.projectId}</td>
                             <td>{data.projectSubject}</td>
                             <td>{data.regDate}</td>
-                            <td>{data.status}</td>
                             <td>{data.volunteerId}</td>
-                            <td><Link to={"/review/"+data.volunteerId}>리뷰 작성하기</Link></td>
+                            <td>{data.status}</td>
+                            <td onClick={() => {cancel(data.volunteerId);}}>취소</td>
+                            <td onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}}>완료</td>
                         </tr>
                     )
                 })}
@@ -42,4 +131,4 @@ const VolunteerList = () => {
 }
 
 export default React.memo(VolunteerList);
-// React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은혁
+// React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은
