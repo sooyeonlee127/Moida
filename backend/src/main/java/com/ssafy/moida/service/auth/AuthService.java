@@ -93,11 +93,12 @@ public class AuthService {
             throw new CustomException(ErrorCode.MISMATCH_REFRESH_TOKEN);
         }
 
-        // 토큰 새로 생성
-        tokenDto = jwtTokenProvider.generateTokenDto(authentication);
-
+        // 이전 정보 지우기
         ValueOperations<String, String> logoutValueOperations = redisTemplate.opsForValue();
         logoutValueOperations.set(tokenDto.getAccessToken(), tokenDto.getAccessToken());
+
+        // 토큰 새로 생성
+        tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
         // Redis에 refreshToken 저장
         RefreshRedisToken newRedisToken = RefreshRedisToken.createToken(authentication.getName(), tokenDto.getRefreshToken());
