@@ -1,6 +1,7 @@
 package com.ssafy.moida.repository.user;
 
 import com.ssafy.moida.api.response.GetUserDonationResDto;
+import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersDonation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,7 +26,7 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
             + "WHERE ud.users.id = :userId ")
     List<GetUserDonationResDto> findDonationsByUserId(@Param("userId") Long userId, Pageable pageable);
 
-    Optional<List<UsersDonation>> findByUsersId(Long userId);
+    List<UsersDonation> findByUsersOrderByRegDate(Users user);
 
     @Query("select sum(ud.amount) from UsersDonation ud where ud.users.id = :userId")
     Long findTotalPoint(@Param("userId") Long userId);

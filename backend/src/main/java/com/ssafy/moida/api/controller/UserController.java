@@ -17,6 +17,7 @@ import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
@@ -232,7 +233,6 @@ public class UserController {
     ) {
         // 로그인한 사용자 토큰 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
-        Long userId = loginUser.getId();
 
         // DTO 유효성 검사
         pageNumber -= 1;
@@ -250,13 +250,21 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping(path = "/me/points")
     public ResponseEntity<?> getUserPointList(
+        @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
         // 로그인한 사용자 토큰 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
         Long userId = loginUser.getId();
 
-        List<GetUserPointResDto> userPointList = userService.getUsersPoint(userId);
+        // DTO 유효성 검사
+        pageNumber -= 1;
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
+
+        List<GetUserPointResDto> userPointList = userService.getUsersPoint(loginUser, pageSize, pageNumber);
 
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
@@ -285,19 +293,24 @@ public class UserController {
 
     @Operation(summary = "사용자 포인트 내역 필터", description = "사용자의 포인트 사용 내역을 필터링하여 반환합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping(
-            path = "/me/points/filters"
-    )
+    @GetMapping(path = "/me/points/filters")
     public ResponseEntity<?> pointFilter(
             @AuthenticationPrincipal PrincipalDetails principal,
-            @RequestParam(value = "category") String category
+            @RequestParam(value = "category") @Schema(description = "카테고리", allowableValues = {"DONATION", "CHARGE", "ALL"}) String category,
+            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize
     ) {
         // 로그인한 사용자 토큰 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
-        Long userId = loginUser.getId();
+
+        // DTO 유효성 검사
+        pageNumber -= 1;
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
 
         List<GetUserPointResDto> userPointList
-                = userService.getPointListFilter(category, userId);
+                = userService.getPointListFilter(category, loginUser, pageSize, pageNumber);
 
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }

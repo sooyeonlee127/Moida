@@ -13,6 +13,8 @@ import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -187,40 +189,41 @@ public class UserService {
     }
 
     /**
-     * [한선영] 사용자의 포인트 사용 목록(GetUserPointResDto) 가져오기 - 수정필요
-     * @param userId
+     * [세은] 사용자 페이지 목록 페이지네이션
      * @return
      * */
-    public List<GetUserPointResDto> getUsersPoint(Long userId) {
-        List<GetUserPointResDto> result = new ArrayList<>();
+    public List<GetUserPointResDto> getUsersPoint(Users user, int pageSize, int pageNumber) {
+        List<GetUserPointResDto> results = getPointList(user);
 
-        //PointCharge랑 UsersDonation 정보 가져오기
-        List<UsersDonation> usersDonations = usersDonationRepository.findByUsersId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        List<PointCharge> pointCharges = pointChargeRepository.findByUsersId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        int startIndex = pageSize * pageNumber;
+        int endIndex = Math.min(startIndex + pageSize, results.size());
 
-        // 기부 내역 저장
-        for (UsersDonation donation : usersDonations) {
-            GetUserPointResDto dto = new GetUserPointResDto(
+        return results.subList(startIndex, endIndex);
+    }
+
+    /**
+     * [한선영] 포인트 내역 전체 조회
+     * @param user
+     * @return
+     */
+    public List<GetUserPointResDto> getPointList(Users user) {
+        List<UsersDonation> usersDonations = usersDonationRepository.findByUsersOrderByRegDate(user);
+        List<PointCharge> pointCharges = pointChargeRepository.findByUsersOrderByRegDateDesc(user);
+
+        List<GetUserPointResDto> result = Stream.concat(
+                usersDonations.stream().map(donation -> new GetUserPointResDto(
                     donation.getAmount(),
-                    "donation",
+                    "DONATION",
                     donation.getRegDate(),
                     donation.getProject().getSubject(),
                     donation.getProject().getGeneration(),
-                    donation.getTicketCnt()
-            );
-            result.add(dto);
-        }
-
-        // 충전 내역 저장
-        for (PointCharge charge : pointCharges) {
-            GetUserPointResDto dto = new GetUserPointResDto(charge.getAmount(), "charge", charge.getRegDate());
-            result.add(dto);
-        }
-
-        // 최신순으로 정렬
-        Collections.sort(result, Comparator.comparing(GetUserPointResDto::getPointDate));
+                    donation.getTicketCnt())),
+                pointCharges.stream().map(charge -> new GetUserPointResDto(
+                    charge.getAmount(),
+                    "CHARGE",
+                    charge.getRegDate())))
+            .sorted(Comparator.comparing(GetUserPointResDto::getPointDate).reversed())
+            .collect(Collectors.toList());
 
         return result;
     }
@@ -230,37 +233,37 @@ public class UserService {
      * @param filter, userId
      * @return
      * */
-    public List<GetUserPointResDto> getPointListFilter(String filter, Long userId) {
-        List<GetUserPointResDto> result = new ArrayList<>();
+    public List<GetUserPointResDto> getPointListFilter(String filter, Users user, int pageSize, int pageNumber) {
+        List<GetUserPointResDto> results = new ArrayList<>();
 
-        if(filter.equals("charge")) { // filter가 충전일때 포인트 내역
-            List<PointCharge> pointCharges = pointChargeRepository.findByUsersId(userId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        if(filter.equals("CHARGE")) { // filter가 충전일때 포인트 내역
+            List<PointCharge> pointCharges = pointChargeRepository.findByUsersOrderByRegDateDesc(user);
 
-            for (PointCharge charge : pointCharges) {
-                GetUserPointResDto dto = new GetUserPointResDto(charge.getAmount(), "charge", charge.getRegDate());
-                result.add(dto);
-            }
-        } else if(filter.equals("donation")) { // filter가 기부일때 포인트 내역
-            List<UsersDonation> usersDonations = usersDonationRepository.findByUsersId(userId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+            results = pointCharges.stream()
+                .map(p -> new GetUserPointResDto(p.getAmount(), "CHARGE", p.getRegDate()))
+                .sorted(Comparator.comparing(GetUserPointResDto::getPointDate).reversed())
+                .collect(Collectors.toList());
 
-            for (UsersDonation donation : usersDonations) {
-                GetUserPointResDto dto = new GetUserPointResDto(
-                        donation.getAmount(),
-                        "donation",
-                        donation.getRegDate(),
-                        donation.getProject().getSubject(),
-                        donation.getProject().getGeneration(),
-                        donation.getTicketCnt()
-                );
-                result.add(dto);
-            }
+        } else if(filter.equals("DONATION")) { // filter가 기부일때 포인트 내역
+            List<UsersDonation> usersDonations = usersDonationRepository.findByUsersOrderByRegDate(user);
+
+            results = usersDonations.stream()
+                .map(ud -> new GetUserPointResDto(
+                    ud.getAmount(),
+                    "DONATION",
+                    ud.getRegDate(),
+                    ud.getProject().getSubject(),
+                    ud.getProject().getGeneration(),
+                    ud.getTicketCnt()
+                )).sorted().collect(Collectors.toList());
         } else { // 나머지 경우에는 전체 포인트 내역
-            return getUsersPoint(userId);
+            return getPointList(user);
         }
 
-        return result;
+        int startIndex = pageSize * pageNumber;
+        int endIndex = Math.min(startIndex + pageSize, results.size());
+
+        return results.subList(startIndex, endIndex);
     }
 
     /**
