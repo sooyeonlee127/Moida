@@ -7,6 +7,7 @@ import ReviewCard from './ReviewCard'
 //혜수: 사용자 리뷰 전체 조회
 const ReviewList = () => {
   let [card, setCard] = useState([]);
+  let [cardsLength, setCardsLength] = useState(0); // 카드 갯수 저장(페이지네이션) - 이은혁
   const category = ["ALL", "흑두루미", "다람쥐", "야생동물"];
   const [selected1, setSelected1] = useState("ALL");
 
@@ -31,8 +32,9 @@ const ReviewList = () => {
         }
       })
       if(res){
-        setCard(res.data);
-        // console.log(res.data)
+        setCard(res.data.articleList);
+        setCardsLength(res.data.length);
+        console.log(res.data.articleList)
       }
     } catch(err) {
       console.log(err)

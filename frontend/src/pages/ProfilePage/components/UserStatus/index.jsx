@@ -23,7 +23,7 @@ const UserStatus = () => {
         }
     };
     
-    // useQuery 이용 시 자동으로 정보를 리패치 가능(자세한 useQuery 내용은 아래 링크 참조)
+    // useQuery 이용 시 자동으로 정보를 리패치 가능(자세한 useQuery 내용은 아래 링크 참조) - 이은혁
     // https://velog.io/@kimhyo_0218/React-Query-리액트-쿼리-시작하기-useQuery
     const { data, isError, isLoading } = useQuery({ queryKey: ["getMe"],  // useState와 함께 쓸 경우 무한루프 발생할 수도 있으니 바로 컴포넌트에 참조할 것
         queryFn: getMe,
@@ -32,7 +32,6 @@ const UserStatus = () => {
 
 
     return (
-        <>
         <Wrapper>
             <Nickname>닉네임</Nickname>
             <Email>ssafy@gmail.com</Email>
@@ -43,9 +42,6 @@ const UserStatus = () => {
             <p>총 기부 금액 {data? data.totalPoint : "0"} P</p>
             <p>총 봉사 횟수 {data? data.volunteerCnt : "0"} 회</p>
         </Wrapper>
-        
-        
-        </>
     )
 }
 const Wrapper = styled.div`
