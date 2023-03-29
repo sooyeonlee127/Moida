@@ -16,7 +16,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UsersVolunteerRepository extends JpaRepository<UsersVolunteer, Long>,
     PagingAndSortingRepository<UsersVolunteer, Long> {
-    Long countBy();
     boolean existsByVolunteerDateInfo(VolunteerDateInfo volunteerDateInfo);
     boolean existsById(UsersVolunteer usersVolunteer);
     Optional<UsersVolunteer> findById(Long id);
@@ -31,4 +30,6 @@ public interface UsersVolunteerRepository extends JpaRepository<UsersVolunteer, 
             "from UsersVolunteer uv " +
             "where uv.users.id = :userId")
     List<GetUserVolunteerResDto> findVolunteersByUserId(@Param("userId") Long userId, Pageable pageable);
+
+    long countByUsersId(Long userId);
 }
