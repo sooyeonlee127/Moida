@@ -20,12 +20,14 @@ import NoticeUpdatePage from "./pages/Admin/NoticeUpdatePage";
 import NoticeCreatePage from "./pages/Admin/NoticeCreatePage";
 import ReviewUpdatePage from "./pages/ReviewUpdatePage";
 import AuthCordPage from "./pages/Admin/AuthCodePage";
+import MetaMaskPage from "./pages/ethers/MetaMaskPage";
+import Web3 from "web3";
 
 export default function App() {
   return (
     <Auth>
       <div className="App">
-        <NavBar />
+        {/* <NavBar /> */}
         <Routes>
           <Route path={"/login"} element={<LoginPage />} />
           <Route path={"/"} element={<MainPage />} />
@@ -39,7 +41,10 @@ export default function App() {
           <Route path={"/profile"} element={<ProfilePage />} />
           <Route path={"/review"} element={<ReviewPage />} />
           <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
-          <Route path={"/review/update/:reviewid"} element={<ReviewUpdatePage />} />
+          <Route
+            path={"/review/update/:reviewid"}
+            element={<ReviewUpdatePage />}
+          />
           <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
           <Route path={"/signup"} element={<SignupPage />} />
           <Route path={"/payresult"} element={<PayResult />} />
@@ -58,6 +63,7 @@ export default function App() {
           />
           <Route path={"/admin/authcord"} element={<AuthCordPage />} />
         </Routes>
+        <MetaMaskPage></MetaMaskPage>
       </div>
     </Auth>
   );
