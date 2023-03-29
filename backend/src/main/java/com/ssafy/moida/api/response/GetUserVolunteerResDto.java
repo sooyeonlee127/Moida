@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class GetUserVolunteerResDto {
     private Long volunteerId;
     private Long projectId;
+    private Long articleId;
     private String projectSubject;
     private int generation;
     private LocalDateTime regDate;
