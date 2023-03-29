@@ -14,7 +14,8 @@ const ProfilePage = () => {
             url: "/api/users/me/password",
             method: "PUT",
             data: {
-                password: confirmPw
+                currentPassword: curPw,
+                newPassword: confirmPw
             },
             headers: {
                 "accept": "*/*",
@@ -28,37 +29,41 @@ const ProfilePage = () => {
         })
         .catch((err) => {
             console.log(err)
-            setPrevPwMMsg("기존의 비밀번호와 일치하지 않습니다.")
+            setcurPwMMsg("기존의 비밀번호와 일치하지 않습니다.")
         })
     }
 
 
     // 유효성 검사 관련 state - 이은혁
-    const [prevPwMsg, setPrevPwMMsg ] = useState();     // 기존 비밀번호 일치 여부 메시지 
-    const [confirmPw, setConfirmPw ] = useState();      // 새로운 비밀번호 확인 인풋값
+    const [curPw, setCurPw ] = useState("");            // 기존 비밀번호 인풋값
+    const [curPwMsg, setcurPwMMsg ] = useState();       // 기존 비밀번호 일치 여부 메시지 
+    const [confirmPw, setConfirmPw ] = useState("");    // 새로운 비밀번호 확인 인풋값
     const [confirmMsg, setConfirmMsg ] = useState();    // 새로운 비밀번호 확인 유효성 검사 메시지
     
-    const {fn: Validator, inputValue='', isValid, Msg} = useValidator() // inputValue 기본값 지정. 안하면 오류 undefined 발생 - 이은혁
+    const {fn: Validator, inputValue:newPw='', isValid, Msg} = useValidator() // newPw 기본값 지정. 안하면 오류 undefined 발생 - 이은혁
     // 순서대로 [유효성검사 메서드, input값, isvalid, 출력메시지]를 반환
     // 유효성검사 메서드는 인자로 'input type'과 'input value'을 받음
+
 
     return (
         <>
         <Modal isOpen={isOpen} title={"비밀번호 변경"}>
         <Form action="">
-            <label htmlFor="prevpw">기존 비밀번호</label>
-            <Input type="password" id="prevpw" name="prevPw" />
-            <p>{prevPwMsg}</p>
+            <label htmlFor="curpw">기존 비밀번호</label>
+            <Input type="password" id="curpw" name="curpw" value={curPw} onChange={(e)=>setCurPw(e.target.value)} />
+            <p>{curPwMsg}</p>
             <br/>
 
             <label htmlFor="newpw">새로운 비밀번호</label>
-            <Input type="password" id="newpw" name="newpw" value={inputValue} onChange={(e) => Validator("password",e.target.value)}/>
+            <Input type="password" id="newpw" name="newpw" value={newPw} onChange={(e) => Validator("password",e.target.value)} />
             <p>{!isValid? Msg: ""}</p>
 
             <label htmlFor="confirmpw">새로운 비밀번호 확인</label>
             <Input type="password" id="confirmpw" name="confirmPw" 
                 value={confirmPw} 
-                onChange={(e) => inputValue!==e.target.value ? setConfirmMsg("비밀번호가 서로 다릅니다."):setConfirmMsg("")}/>
+                onChange={(e) => {
+                    setConfirmPw(e.target.value);
+                    newPw!==e.target.value ? setConfirmMsg("비밀번호가 서로 다릅니다."):setConfirmMsg("")}}/>
             <p>{confirmMsg}</p>
             <ModalBtn type="submit" onClick={(e) => {e.preventDefault(); submit()}}>비밀번호 변경</ModalBtn>
             <ModalBtn onClick={() => setIsOpen(false)}>취소</ModalBtn>
