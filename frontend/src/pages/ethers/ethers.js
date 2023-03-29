@@ -1,7 +1,5 @@
-const { create } = require("domain");
 const ethers = require("ethers");
 const fs = require("fs");
-const { get } = require("http");
 const path = require("path");
 // const { TOKENContract, TOKEN_CA } = require("./SmartContract.js");
 
@@ -82,13 +80,13 @@ const chargePoint = async (address, value) => {
     /*
      * address : 사용자 지갑 주소
      * value : 충전 금액
-     * 충전한 금액 비례하여 사용자의 지갑에 Moi   전송
+     * 충전한 금액 비례하여 사용자의 지갑에 Moi 전송
      */
     const coinbase = await getAdminAddress();
     const Eth = ethers.utils.parseEther(value.toString());
     const tx = await TOKENContract.connect(provider.getSigner()).transfer(address, Eth);
 
-    return tx;
+    return "충전 완료"
 }
 
 // 기부하기
@@ -404,8 +402,7 @@ const TOKEN_ABI = [
       },
 ];
 
-// export default createAccount;
-
+export default createAccount;
 
 const TOKEN_CA = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"; // localhost
 // const TOKEN_CA = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // sepolia
