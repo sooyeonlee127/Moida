@@ -31,7 +31,7 @@ const PointWallet = () => {
                 })}
             </tbody>
         </table>
-        <p> {datas.length === 0 && !loading? "빈 값":""}{loading? "로딩 중":""}</p>
+        <p> {datas?.length === 0 && !loading? "빈 값":""}{loading? "로딩 중":""}</p>
             
         </>
     )
