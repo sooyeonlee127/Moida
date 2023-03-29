@@ -7,6 +7,7 @@ import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetArticleResDto;
 import com.ssafy.moida.model.article.Article;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
@@ -72,11 +73,16 @@ public class ArticleService {
 
         articleRepository.save(article);
 
+        // 프로젝트 난이도 변경
         Long projectArticleCount = articleRepository.countByProjectId(project.getId());
         Double difficultyLevel = (project.getProjectVolunteer().getDifficultyLevel() + createArticleReqDto.getDifficultyLevel()) / (projectArticleCount + 1);
-
         project.getProjectVolunteer().updateDifficulty(difficultyLevel);
+
+        // 사용자 티켓 갯수 변경
         users.updateTicket(users.getTicketCnt() + 2);
+
+        // UsersVolunteer Status 변경
+        usersVolunteer.updateStatus(Status.WRITTEN);
     }
 
     /**
