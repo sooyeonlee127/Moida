@@ -9,6 +9,7 @@ import PointPage from "./pages/PointPage";
 import ProfilePage from "./pages/ProfilePage";
 import ReviewPage from "./pages/ReviewPage";
 import ReviewDetailPage from "./pages/ReviewDetailPage";
+import ReviewCreatePage from "./pages/ReviewCreatePage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
@@ -40,6 +41,7 @@ export default function App() {
           <Route path={"/review"} element={<ReviewPage />} />
           <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
           <Route path={"/review/update/:reviewid"} element={<ReviewUpdatePage />} />
+          <Route path={"/review/create"} element={<ReviewCreatePage />} />
           <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
           <Route path={"/signup"} element={<SignupPage />} />
           <Route path={"/payresult"} element={<PayResult />} />

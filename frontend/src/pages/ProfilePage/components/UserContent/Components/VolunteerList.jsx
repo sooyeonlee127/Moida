@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import useListApi from "./api"
 import axios from 'axios'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 
 const VolunteerList = () => {
@@ -8,6 +9,8 @@ const VolunteerList = () => {
     const [visible, setVisible] = useState(false);
     const [value, setValue] = useState('');
     const [doneId, setDoneId] = useState();
+    const navigate = useNavigate();
+
 
     // 취소코드
     const cancel = async (cancelId) => {
@@ -62,11 +65,7 @@ const VolunteerList = () => {
 
     //완료코드
     const done = async (value, doneId) => {
-      console.log('아아아ㅏ');
       try {
-      //1. 모달창 열림    
-
-      //2. 버튼클릭시 axios 실행
       const res = await axios
       .put("/api/users/me/volunteer", {
         volunteerId: doneId,
@@ -104,6 +103,7 @@ const VolunteerList = () => {
                     <th>상태</th>
                     <th>취소 버튼</th>
                     <th>완료 버튼</th>
+                    <th>리뷰 작성</th>
                     
                 </tr>
             </thead>
@@ -119,6 +119,8 @@ const VolunteerList = () => {
                             <td>{data.status}</td>
                             <td onClick={() => {cancel(data.volunteerId);}}>취소</td>
                             <td onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}}>완료</td>
+                            <td onClick={()=>{navigate('/review/create')}}>리뷰 작성</td>
+
                         </tr>
                     )
                 })}
