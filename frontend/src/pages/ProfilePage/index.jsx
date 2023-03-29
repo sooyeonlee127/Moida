@@ -5,13 +5,13 @@ import UserContent from './components/UserContent'
 import Modal from '../../components/Modal';
 import { useState } from 'react'
 import useValidator from "../../components/Validator";
-import axios from "axios";
+import api from "../../api/auth";
 
 const ProfilePage = () => {
     const [ isOpen, setIsOpen ] = useState(false); // 비밀번호 변경 모달용 - 이은혁
     const submit = () => { // 비밀번호 변경 제출 - 이은혁
-        axios({
-            url: "/api/users/me/password",
+        api({
+            url: "/users/me/password",
             method: "PUT",
             data: {
                 currentPassword: curPw,

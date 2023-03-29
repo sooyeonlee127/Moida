@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-
+import api from "../../api/auth";
 // 혜수: 사용자 인증글 수정 페이지
 const ReviewUpdatePage = () => {
   const reducer = (state, action) => {
@@ -35,8 +34,8 @@ const ReviewUpdatePage = () => {
       description: description,
     };
     console.log("formData", data);
-    axios
-      .put("/api/article", data, {
+    api
+      .put("/article", data, {
           headers: {
             id: reviewid,
             Authorization: localStorage.getItem("accessToken"),

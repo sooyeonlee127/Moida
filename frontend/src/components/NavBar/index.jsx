@@ -6,13 +6,14 @@ import { AuthContext } from "../../context/Auth";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/auth";
 
 const NavBar = () => {
   // 은혁: useQuery
   const getMe = async () => {
     try {
-      const response = await axios({
-        url: "/api/users/me",
+      const response = await api({
+        url: "/users/me",
         method: "GET",
         headers: {
           accept: "*/*",
@@ -69,8 +70,8 @@ const NavBar = () => {
   ];
   // 수연: 로그아웃 호출
   const LogoutSubmit = () => {
-    axios({
-      url: "/api/auth/logout",
+    api({
+      url: "/auth/logout",
       method: "POST",
       headers: {
         Authorization: localStorage.getItem("accessToken"),

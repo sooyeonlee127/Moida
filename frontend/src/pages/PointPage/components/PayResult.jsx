@@ -5,6 +5,7 @@ import tw from "twin.macro";
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import api from "../../../api/auth";
 
 const PayResult = () => {
   const navigate = useNavigate();
@@ -35,8 +36,8 @@ const PayResult = () => {
   // 수연: refetch 위해서 useQuery 가져옴. 리팩토링 필요
   const getMe = async () => {
     try {
-      const response = await axios({
-        url: "/api/users/me",
+      const response = await api({
+        url: "/users/me",
         method: "GET",
         headers: {
           accept: "*/*",
@@ -60,8 +61,8 @@ const PayResult = () => {
   const ChargePoint = (amount) => {
     console.log("로컬 포인트", localStorage.getItem("point"));
     console.log("amount:", amount);
-    axios({
-      url: "/api/users/me/points/charge",
+    api({
+      url: "/users/me/points/charge",
       method: "POST",
       headers: {
         Authorization: localStorage.getItem("accessToken"),
