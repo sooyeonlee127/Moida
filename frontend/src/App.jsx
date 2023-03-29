@@ -18,6 +18,7 @@ import PasswordPage from "./pages/PasswordPage";
 import ProjectCreatePage from "./pages/Admin/ProjectCreatePage";
 import NoticeUpdatePage from "./pages/Admin/NoticeUpdatePage";
 import NoticeCreatePage from "./pages/Admin/NoticeCreatePage";
+import ReviewUpdatePage from "./pages/ReviewUpdatePage";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
           <Route path={"/profile"} element={<ProfilePage />} />
           <Route path={"/review"} element={<ReviewPage />} />
           <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
+          <Route path={"/review/update/:reviewid"} element={<ReviewUpdatePage />} />
           <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
           <Route path={"/signup"} element={<SignupPage />} />
           <Route path={"/payresult"} element={<PayResult />} />

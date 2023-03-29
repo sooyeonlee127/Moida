@@ -27,16 +27,20 @@ public class VolunteerDateInfo {
     @Column(nullable = false)
     private int maxCapacity;
 
+    @Column(nullable = false)
+    private String authenticationCode;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     private Project project;
 
     @Builder
     public VolunteerDateInfo(LocalDate volunteerDate, int capacity, int maxCapacity,
-        Project project) {
+        String authenticationCode, Project project) {
         this.volunteerDate = volunteerDate;
         this.capacity = capacity;
         this.maxCapacity = maxCapacity;
+        this.authenticationCode = authenticationCode;
         this.project = project;
     }
 
