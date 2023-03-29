@@ -95,27 +95,6 @@ const ReviewList = () => {
   )
 }
 
-const SelectBox1 = () => {
-
-  const category = ["ALL", "흑두루미", "다람쥐", "야생동물"];
-  return (<>
-        <div>
-          <select>
-            {category.map((element,index) => (
-              <option key={index+1}>{element}</option>
-            ))}
-          </select>
-
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-        </div>
-  </>)
-}
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-
 const Title = styled.h2`
 ${tw`text-2xl font-bold tracking-tight text-gray-900`}`
 
