@@ -107,9 +107,12 @@ const SelectBox1 = () => {
           </select>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         </div>
   </>)
 }
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 
