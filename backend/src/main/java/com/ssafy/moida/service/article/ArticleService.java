@@ -1,5 +1,6 @@
 package com.ssafy.moida.service.article;
 
+import com.ssafy.moida.api.common.ArticleSortDto;
 import com.ssafy.moida.api.request.CreateArticleReqDto;
 import com.ssafy.moida.api.request.UpdateArticleReqDto;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
@@ -119,15 +120,52 @@ public class ArticleService {
 
     /**
      * [세은] 사용자 인증글 전체 가져오기(인증갤러리 조회용)
+     * @param articleSortDto
      * @return
      */
-    public List<GetArticleResDto> getArticleList(int pageNumber, int pageSize){
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Article> articleList = articleRepository.findAll(pageable);
+    public List<GetArticleResDto> getArticleList(ArticleSortDto articleSortDto){
+        Pageable pageable = PageRequest.of(articleSortDto.getPageNumber(), articleSortDto.getPageSize());
+        Page<Article> articleList = null;
+
+        if("LATEST".equals(articleSortDto.getSort())){
+            articleList = getArticleListLATEST(pageable, articleSortDto.getCategory());
+        } else {
+            articleList = getArticleListDIFFICULTY(pageable, articleSortDto.getCategory(), articleSortDto.getSort());
+        }
 
         return articleList.stream()
             .map(article -> new GetArticleResDto(article.getId(), article.getSubject(), article.getUrl(),article.getDifficultyLevel()))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * [세은] 사용자 인증글 카테고리별 최신순 조회
+     * @param pageable
+     * @param category
+     * @return
+     */
+    public Page<Article> getArticleListLATEST(Pageable pageable, String category){
+        if("ALL".equals(category)){
+            return articleRepository.findAll(pageable);
+        }
+        return articleRepository.findByCategory(category, pageable);
+    }
+
+    /**
+     * [세은] 사용자 인증글 카테고리별 난이도순 정렬 조회
+     * @param pageable
+     * @param category
+     * @param dir 오름차순, 내림차순
+     * @return
+     */
+    public Page<Article> getArticleListDIFFICULTY(Pageable pageable, String category, String dir){
+        if("ALL".equals(category)){
+            if("DIFFICULTY_HIGHEST".equals(dir)) return articleRepository.findAllDifficultyLevelDesc(pageable);
+            else return articleRepository.findAllDifficultyLevelAsc(pageable);
+        } else {
+            if("DIFFICULTY_HIGHEST".equals(dir)) return articleRepository.findByCategoryDifficultyLevelDesc(category, pageable);
+            else return articleRepository.findByCategoryDifficultyLevelAsc(category, pageable);
+        }
     }
 
     /**

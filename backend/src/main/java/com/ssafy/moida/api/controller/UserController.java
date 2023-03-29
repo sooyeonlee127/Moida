@@ -66,6 +66,9 @@ public class UserController {
     public ResponseEntity<?> join(
             @RequestBody UserJoinReqDto userJoinReqDto
     ) {
+        // DTO NOT NULL 검증
+        dtoValidationUtils.validateUserJoinReqDto(userJoinReqDto);
+
         userService.vaildUserByPassword(userJoinReqDto.getPassword());  // 비밀번호 정규식 검사
         userService.joinUser(userJoinReqDto);                           // 회원 가입
         return new ResponseEntity<>("회원가입 완료", HttpStatus.OK);
@@ -102,30 +105,30 @@ public class UserController {
     public ResponseEntity<UserInfoResDto> getUserDetail (
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        // 로그인 된 유저 정보 가져오기
-        Users user = userService.findByEmail(principal.getUsername());
+        // 토큰 유효성 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
 
         // 유저가 참여한 봉사 개수 가져오기
-        long totalVolunteerCnt = userVolunteerService.totalVolunteerCnt();
+        long totalVolunteerCnt = userVolunteerService.totalVolunteerCnt(loginUser.getId());
         log.info("volunteer Cnt : {}", totalVolunteerCnt);
 
         // 총 포인트 확인하기
-        long totalPoint = userDonationService.getTotalPoint(user.getId());
+        long totalPoint = userDonationService.getTotalPoint(loginUser.getId());
         log.info("total Point : {}", totalPoint);
 
         // 기부한 포인트를 곡물 가치로 변환하여 가져오기
-        long userId = user.getId();
+        long userId = loginUser.getId();
         int moiAcorn = userDonationService.convertPointToMoi(userId, "SQUIRREL");
         int moiSeed = userDonationService.convertPointToMoi(userId, "CRANE");
         int moiCorn = userDonationService.convertPointToMoi(userId, "WILD_ANIMAL");
 
         // Dto에 유저 정보 저장
         UserInfoResDto userInfoResDto = UserInfoResDto.builder()
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .ticketCnt(user.getTicketCnt())
-                .point(user.getPoint())
-                .nftUrl(user.getNftUrl())
+                .email(loginUser.getEmail())
+                .nickname(loginUser.getNickname())
+                .ticketCnt(loginUser.getTicketCnt())
+                .point(loginUser.getPoint())
+                .nftUrl(loginUser.getNftUrl())
                 .volunteerCnt(totalVolunteerCnt)
                 .totalPoint(totalPoint)
                 .moiAcorn(moiAcorn)
@@ -146,15 +149,15 @@ public class UserController {
             @AuthenticationPrincipal PrincipalDetails principal,
             @RequestBody ChangePwdReqDto changePwdReqDto
     ) {
-        // 로그인한 유저 정보 가져오기
-        Users user = userService.findByEmail(principal.getUsername());
+        // 토큰 유효성 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
 
         // 로그인된 비밀번호와 입력한 현재 비밀번호가 맞는지 확인 -> 아니라면 에러 뱉기
-        userService.checkCurrentPassword(user, changePwdReqDto.getCurrentPassword());
+        userService.checkCurrentPassword(loginUser, changePwdReqDto.getCurrentPassword());
 
         // 새로 입력한 비밀번호 검증과 새 비밀번호로 변경
         userService.vaildUserByPassword(changePwdReqDto.getNewPassword());
-        userService.changePwd(user.getEmail(), changePwdReqDto.getNewPassword());
+        userService.changePwd(loginUser.getEmail(), changePwdReqDto.getNewPassword());
 
         return new ResponseEntity<>("비밀번호 변경 성공", HttpStatus.OK);
     }
@@ -204,8 +207,9 @@ public class UserController {
         @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
         @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
         // DTO 유효성 검사
         pageNumber -= 1;
@@ -213,8 +217,8 @@ public class UserController {
             throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
         }
 
-        List<GetUserDonationResDto> userDonationList = new ArrayList<>();
-        userDonationList = userDonationService.getUsersDonation(userId, pageNumber, pageSize);
+        List<GetUserDonationResDto> userDonationList
+                = userDonationService.getUsersDonation(userId, pageNumber, pageSize);
 
         return new ResponseEntity<>(userDonationList, HttpStatus.OK);
     }
@@ -227,8 +231,9 @@ public class UserController {
         @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
         @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
         // DTO 유효성 검사
         pageNumber -= 1;
@@ -248,11 +253,11 @@ public class UserController {
     public ResponseEntity<?> getUserPointList(
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
-        List<GetUserPointResDto> userPointList = new ArrayList<>();
-        userPointList = userService.getUsersPoint(userId);
+        List<GetUserPointResDto> userPointList = userService.getUsersPoint(userId);
 
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
@@ -270,10 +275,11 @@ public class UserController {
             throw new CustomException(ErrorCode.INVALID_POINT);
         }
 
-        Users user = userService.findByEmail(principal.getUsername());
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
 
-        userService.updateAfterPointCharge(user, point);
-        userService.savePointCharge(user, point);
+        userService.updateAfterPointCharge(loginUser, point);
+        userService.savePointCharge(loginUser, point);
 
         return new ResponseEntity<>("포인트 충전 완료", HttpStatus.OK);
     }
@@ -287,11 +293,12 @@ public class UserController {
             @AuthenticationPrincipal PrincipalDetails principal,
             @RequestParam(value = "category") String category
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
-        List<GetUserPointResDto> userPointList = new ArrayList<>();
-        userPointList = userService.getPointListFilter(category, userId);
+        List<GetUserPointResDto> userPointList
+                = userService.getPointListFilter(category, userId);
 
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
@@ -324,11 +331,12 @@ public class UserController {
     public ResponseEntity<?> getUserVolunteerArticleList(
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
-        Users user = userService.findByEmail(principal.getUsername());
-        Long userId = user.getId();
+        // 로그인한 사용자 토큰 검증
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
+        Long userId = loginUser.getId();
 
-        List<GetArticleDetailResDto> userVolunteerArticleList = new ArrayList<>();
-        userVolunteerArticleList = userVolunteerService.getUsersVolunteerArticle(userId);
+        List<GetArticleDetailResDto> userVolunteerArticleList
+                = userVolunteerService.getUsersVolunteerArticle(userId);
 
         return new ResponseEntity<>(userVolunteerArticleList, HttpStatus.OK);
     }
