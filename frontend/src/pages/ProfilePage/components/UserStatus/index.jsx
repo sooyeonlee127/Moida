@@ -2,15 +2,14 @@ import styled from 'styled-components'
 import tw from 'twin.macro'
 import { useQuery } from "@tanstack/react-query";
 import React from 'react';
-import axios from 'axios';
-
+import api from '../../../../api/auth';
 
 const UserStatus = () => {
    
     const getMe = async () => { // 사용자 정보 가져오기 - 이은혁
         try {
-            const response = await axios({
-                url: "/api/users/me",
+            const response = await api({
+                url: "/users/me",
                 method: "GET",
                 headers: {
                 accept: "*/*",

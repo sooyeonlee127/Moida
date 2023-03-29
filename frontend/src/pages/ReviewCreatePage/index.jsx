@@ -1,232 +1,233 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer, useState } from "react";
-import axios from "axios";
+import api from "../../api/auth";
 // 혜수: 사용자 인증글 생성 페이지
 const ReviewCreatePage = () => {
-    const reducer = (state, action) => {
-        return {
-          ...state,
-          [action.name]: action.value,
-        };
-      };
+  const reducer = (state, action) => {
+    return {
+      ...state,
+      [action.name]: action.value,
+    };
+  };
 
-      const useInputs = (initialForm) => {
-        const [state, dispatch] = useReducer(reducer, initialForm);
-        const onChange = (e) => {
-          dispatch(e.target);
-        };
-        return [state, onChange];
-      };
-      const [files, setFiles] = useState([]);
-      const [state, onChange] = useInputs({
-        subject: "",
-        description: "",
-        difficultyLevel: "",
-        category: "",
-        usersVolunteerProjectId: ""
-      });
+  const useInputs = (initialForm) => {
+    const [state, dispatch] = useReducer(reducer, initialForm);
+    const onChange = (e) => {
+      dispatch(e.target);
+    };
+    return [state, onChange];
+  };
+  const [files, setFiles] = useState([]);
+  const [state, onChange] = useInputs({
+    subject: "",
+    description: "",
+    difficultyLevel: "",
+    category: "",
+    usersVolunteerProjectId: "",
+  });
 
-      const {
-        subject,
-        description,
-        difficultyLevel,
-        category,
-        usersVolunteerProjectId,
-      } = state;
+  const {
+    subject,
+    description,
+    difficultyLevel,
+    category,
+    usersVolunteerProjectId,
+  } = state;
 
-      const reviewSubmit = () => {
-        let testData = {
-            subject: state.subject,
-            description: state.description,
-            difficultyLevel: state.difficultyLevel,
-            category: state.category,
-            usersVolunteerProjectId: state.usersVolunteerProjectId,
-          };
-
-      const formData = new FormData();
-      formData.append(
-        "article",
-        new Blob([JSON.stringify(testData)], {
-          type: "application/json",
-        })
-      );
-      formData.append("file", files);
-      console.log('폼데이터',formData);
-      axios
-        .post("/api/article", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: localStorage.getItem("accessToken"),
-            refresh: localStorage.getItem("refreshToken"),
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          alert("작성되었습니다");
-        })
-        .catch((error) => {
-          const response = error.response.data;
-          console.log(response);
-        });
+  const reviewSubmit = () => {
+    let testData = {
+      subject: state.subject,
+      description: state.description,
+      difficultyLevel: state.difficultyLevel,
+      category: state.category,
+      usersVolunteerProjectId: state.usersVolunteerProjectId,
     };
 
-        
-    return (<>
-        <Container>
-            <InnerContainer>
-                <div>
-                    <Heading>인증후기작성</Heading>
-                </div>
+    const formData = new FormData();
+    formData.append(
+      "article",
+      new Blob([JSON.stringify(testData)], {
+        type: "application/json",
+      })
+    );
+    formData.append("file", files);
+    console.log("폼데이터", formData);
+    api
+      .post("/article", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.getItem("accessToken"),
+          refresh: localStorage.getItem("refreshToken"),
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        alert("작성되었습니다");
+      })
+      .catch((error) => {
+        const response = error.response.data;
+        console.log(response);
+      });
+  };
 
-                <ReviewForm action="#" method="POST">
-                    <div>
-                    <Heading>글작성</Heading>
-                    </div>
-                    <InputGroup>
-                        <InputDiv>
-                        <InputText htmlFor="subject">제목 : </InputText>
-                        <ReviewInput
-                        id="subject"
-                        name="subject"
-                        type="text"
-                          value={subject}
-                          onChange={onChange}
-                          />
-                        </InputDiv>
-                    </InputGroup>
-                    <InputGroup>
-                        <InputDiv>
-                        <InputText htmlFor="description">내용 : </InputText>
-                        <ReviewInput
-                        id="description"
-                        name="description"
-                        type="text"
-                          value={description}
-                          onChange={onChange}
-                        />
-                        </InputDiv>
-                    </InputGroup>
-                    <InputGroup>
-                    <InputDiv>
-                        <InputText htmlFor="difficultyLevel">난이도 </InputText>
-                        <ReviewInput
-                        id="difficultyLevel"
-                        name="difficultyLevel"
-                        type="int"
-                          value={difficultyLevel}
-                          onChange={onChange}
-                        />
-                        </InputDiv>
-                    </InputGroup>
-                    <InputGroup>
-                    <InputDiv>
-                        <InputText htmlFor="category">카테고리 : </InputText>
-                        <ReviewInput
-                        id="category"
-                        name="category"
-                        type="text"
-                          value={category}
-                          onChange={onChange}
-                        />
-                        </InputDiv>
-                    </InputGroup>
-                    <InputGroup>
-                    <InputDiv>
-                        <InputText htmlFor="usersVolunteerProjectId">userVolunteerPJTID : </InputText>
-                        <ReviewInput
-                        id="usersVolunteerProjectId"
-                        name="usersVolunteerProjectId"
-                        type="int"
-                          value={usersVolunteerProjectId}
-                          onChange={onChange}
-                        />
-                        </InputDiv>
-                    </InputGroup>
+  return (
+    <>
+      <Container>
+        <InnerContainer>
+          <div>
+            <Heading>인증후기작성</Heading>
+          </div>
 
-                    <InputGroup>
-                    <div>
-                    <Heading>파일 첨부</Heading>
-                    </div>
-                    {/* <InputText htmlFor="files">files</InputText> */}
-                      <ReviewInput
-                        id="files"
-                        name="files"
-                        type="file"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            setFiles([...files, e.target.files[0]]);
-                            console.log(files);
-                          }
-                        }}
-                      />
-                      <ReviewInput
-                        id="files"
-                        name="files"
-                        type="file"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            setFiles([...files, e.target.files[0]]);
-                            console.log(files);
-                          }
-                        }}
-                      />
-                      <ReviewInput
-                        id="files"
-                        name="files"
-                        type="file"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            setFiles([...files, e.target.files[0]]);
-                            console.log(files);
-                          }
-                        }}
-                      />
-                      <ReviewInput
-                        id="files"
-                        name="files"
-                        type="file"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            setFiles([...files, e.target.files[0]]);
-                            console.log(files);
-                          }
-                        }}
-                      />
-                      <ReviewInput
-                        id="files"
-                        name="files"
-                        type="file"
-                        onChange={(e) => {
-                          if (e.target.files) {
-                            setFiles([...files, e.target.files[0]]);
-                            console.log(files);
-                          }
-                        }}
-                      />
-                      </InputGroup>
+          <ReviewForm action="#" method="POST">
+            <div>
+              <Heading>글작성</Heading>
+            </div>
+            <InputGroup>
+              <InputDiv>
+                <InputText htmlFor="subject">제목 : </InputText>
+                <ReviewInput
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  value={subject}
+                  onChange={onChange}
+                />
+              </InputDiv>
+            </InputGroup>
+            <InputGroup>
+              <InputDiv>
+                <InputText htmlFor="description">내용 : </InputText>
+                <ReviewInput
+                  id="description"
+                  name="description"
+                  type="text"
+                  value={description}
+                  onChange={onChange}
+                />
+              </InputDiv>
+            </InputGroup>
+            <InputGroup>
+              <InputDiv>
+                <InputText htmlFor="difficultyLevel">난이도 </InputText>
+                <ReviewInput
+                  id="difficultyLevel"
+                  name="difficultyLevel"
+                  type="int"
+                  value={difficultyLevel}
+                  onChange={onChange}
+                />
+              </InputDiv>
+            </InputGroup>
+            <InputGroup>
+              <InputDiv>
+                <InputText htmlFor="category">카테고리 : </InputText>
+                <ReviewInput
+                  id="category"
+                  name="category"
+                  type="text"
+                  value={category}
+                  onChange={onChange}
+                />
+              </InputDiv>
+            </InputGroup>
+            <InputGroup>
+              <InputDiv>
+                <InputText htmlFor="usersVolunteerProjectId">
+                  userVolunteerPJTID :{" "}
+                </InputText>
+                <ReviewInput
+                  id="usersVolunteerProjectId"
+                  name="usersVolunteerProjectId"
+                  type="int"
+                  value={usersVolunteerProjectId}
+                  onChange={onChange}
+                />
+              </InputDiv>
+            </InputGroup>
 
-                    <div>
-                    <SubmitButton
-                      type="submit"
-                      onClick={(e) => {
-                        console.log(e)
-                        e.preventDefault();
-                        reviewSubmit();
-                      }}
-                    >
-                      제출하기
-                    </SubmitButton>
-                  </div>
-                </ReviewForm>
-            </InnerContainer>
-        </Container>
+            <InputGroup>
+              <div>
+                <Heading>파일 첨부</Heading>
+              </div>
+              {/* <InputText htmlFor="files">files</InputText> */}
+              <ReviewInput
+                id="files"
+                name="files"
+                type="file"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setFiles([...files, e.target.files[0]]);
+                    console.log(files);
+                  }
+                }}
+              />
+              <ReviewInput
+                id="files"
+                name="files"
+                type="file"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setFiles([...files, e.target.files[0]]);
+                    console.log(files);
+                  }
+                }}
+              />
+              <ReviewInput
+                id="files"
+                name="files"
+                type="file"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setFiles([...files, e.target.files[0]]);
+                    console.log(files);
+                  }
+                }}
+              />
+              <ReviewInput
+                id="files"
+                name="files"
+                type="file"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setFiles([...files, e.target.files[0]]);
+                    console.log(files);
+                  }
+                }}
+              />
+              <ReviewInput
+                id="files"
+                name="files"
+                type="file"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setFiles([...files, e.target.files[0]]);
+                    console.log(files);
+                  }
+                }}
+              />
+            </InputGroup>
 
-        <hr></hr>
+            <div>
+              <SubmitButton
+                type="submit"
+                onClick={(e) => {
+                  console.log(e);
+                  e.preventDefault();
+                  reviewSubmit();
+                }}
+              >
+                제출하기
+              </SubmitButton>
+            </div>
+          </ReviewForm>
+        </InnerContainer>
+      </Container>
 
-    </>)
-}
-
+      <hr></hr>
+    </>
+  );
+};
 
 export default ReviewCreatePage;
 
@@ -274,9 +275,9 @@ const ReviewInput = styled.input`
 `;
 
 const InputDiv = styled.div`
-    display:flex;
-    flex-direction : row;
-`
+  display: flex;
+  flex-direction: row;
+`;
 
 const SubmitButton = styled.button`
   ${tw`

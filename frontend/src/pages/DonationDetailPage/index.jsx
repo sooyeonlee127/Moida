@@ -5,8 +5,7 @@ import VolunteerForm from "./components/VolunteerForm"
 import { useState } from "react"
 import { useParams } from 'react-router-dom';
 import { useQuery } from "@tanstack/react-query"
-import axios from "axios"
-
+import api from "../../api/auth"
 
 const DonationDetailPage = () => {
     const { projectId } = useParams(); // const 변수명 = useParams().파라미터명 - 이은혁
@@ -24,8 +23,8 @@ const DonationDetailPage = () => {
     
     const GetInfoApi = async () => {
         try{
-            const response = await axios({
-                url: "/api/project/"+projectId,
+            const response = await api({
+                url: "/project/"+projectId,
                 method: "GET",
                 headers: {
                     accept: "*/*",

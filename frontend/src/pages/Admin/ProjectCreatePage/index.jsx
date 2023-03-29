@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer, useState } from "react";
-import axios from "axios";
-
+import api from "../../../api/auth";
 // 수연: 프로젝트 생성 페이지
 const ProjectCreatePage = () => {
   const reducer = (state, action) => {
@@ -92,8 +91,8 @@ const ProjectCreatePage = () => {
     formData.append("thumbnail", thumbnail);
     console.log(formData);
     console.log(state.thumbnail);
-    axios
-      .post("/api/project", formData, {
+    api
+      .post("/project", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: localStorage.getItem("accessToken"),

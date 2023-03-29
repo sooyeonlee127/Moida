@@ -2,6 +2,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer, useState } from "react";
 import axios from "axios";
+
 // 수연: 비밀번호 찾기 페이지
 const PasswordPage = () => {
   const reducer = (state, action) => {

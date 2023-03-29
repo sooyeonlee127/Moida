@@ -10,7 +10,8 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 const queryClient = new QueryClient();
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <>
     <GlobalStyles />
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={true} />
@@ -18,5 +19,6 @@ root.render(
         <App />
       </BrowserRouter>
     </QueryClientProvider>
-  </React.StrictMode>
+  </>
+  // </React.StrictMode>
 );

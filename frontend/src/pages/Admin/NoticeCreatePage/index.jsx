@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer, useState } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+import api from "../../../api/auth";
 // 수연: 관리자 공지글 생성 페이지
 const NoticeCreatePage = () => {
   const reducer = (state, action) => {
@@ -41,8 +41,8 @@ const NoticeCreatePage = () => {
       })
     );
     formData.append("files", files);
-    axios
-      .post("/api/article/board", formData, {
+    api
+      .post("/article/board", formData, {
         headers: {
           Authorization: localStorage.getItem("accessToken"),
           refresh: localStorage.getItem("refreshToken"),
@@ -51,11 +51,11 @@ const NoticeCreatePage = () => {
       .then((res) => {
         console.log(res);
         alert("공지글 생성 완료했습니다.");
-      })
-      .catch((error) => {
-        const response = error.response.data;
-        console.log(response);
       });
+    // .catch((error) => {
+    //   const response = error.response.data;
+    //   console.log(response);
+    // });
   };
   return (
     <>

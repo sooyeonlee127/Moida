@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useState, useReducer } from "react";
-import axios from "axios";
+import api from "../../../api/auth";
 
 // 수연: 관리자 봉사 인증코드 조회 페이지
 const AuthCordPage = () => {
@@ -33,8 +33,8 @@ const AuthCordPage = () => {
       alert("봉사 id를 입력해주세요.");
     } else {
       console.log(volunteerdateinfoid);
-      axios
-        .get(`/api/project/volunteer/${volunteerdateinfoid}/auth-code`, {
+      api
+        .get(`/project/volunteer/${volunteerdateinfoid}/auth-code`, {
           headers: {
             Authorization: localStorage.getItem("accessToken"),
             refresh: localStorage.getItem("refreshToken"),
@@ -43,7 +43,7 @@ const AuthCordPage = () => {
         .then((res) => {
           console.log(res);
           setCode(res.data);
-          console.log("완료"); // 완료되나, data가 ""로 나옴
+          console.log("완료");
         })
         .catch((error) => {
           const response = error.response.data;

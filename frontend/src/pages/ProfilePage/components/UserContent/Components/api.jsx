@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../../../../../api/auth";
 
 const useListApi = (type) => {
   const [data, setData] = useState([]);
@@ -10,7 +10,7 @@ const useListApi = (type) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/api/users/me/${type}`, {
+        const response = await api.get(`/users/me/${type}`, {
           headers: {
             accept: "*/*",
             Authorization: localStorage.getItem("accessToken"),

@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
-
+import api from "../../../api/auth";
 // 수연: 관리자 공지글 수정 페이지
 const NoticeUpdatePage = () => {
   const reducer = (state, action) => {
@@ -35,8 +34,8 @@ const NoticeUpdatePage = () => {
       description: description,
     };
     console.log("formData", data);
-    axios
-      .put("/api/article/board", data, {
+    api
+      .put("/article/board", data, {
         headers: {
           Authorization: localStorage.getItem("accessToken"),
           refresh: localStorage.getItem("refreshToken"),
