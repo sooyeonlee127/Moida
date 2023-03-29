@@ -32,17 +32,12 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
     Page<GetUserDonationResDto> findDonationsByUserId(@Param("userId") Long userId, Pageable pageable);
     @Query("SELECT COUNT(*) FROM UsersDonation ud WHERE ud.users.id = :userId")
     Long CountFindDonationsByUserId(@Param("userId") Long userId);
-
     List<UsersDonation> findByUsersOrderByRegDate(Users user);
-
     @Query("select sum(ud.amount) from UsersDonation ud where ud.users.id = :userId")
     Long findTotalPoint(@Param("userId") Long userId);
-
     boolean existsByUsersId(Long userId);
-
     @Query("select sum(ud.moi) from UsersDonation ud where ud.users.id = :userId and ud.project.category like :category")
     int findMoi(@Param("userId") Long userId, @Param("category") String category);
-
     @Query("select count(ud.id) > 0 from UsersDonation ud where ud.users.id = :userId and ud.project.category like :category")
     boolean existsByuserIdAndProjectCategory(@Param("userId") Long userId, @Param("category") String category);
 }
