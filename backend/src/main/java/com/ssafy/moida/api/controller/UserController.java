@@ -241,7 +241,7 @@ public class UserController {
         }
 
         List<GetUserVolunteerResDto> userVolunteerList
-            = userVolunteerService.getUsersVolunteer(userId, pageNumber, pageSize);
+            = userVolunteerService.getUsersVolunteer(loginUser, pageNumber, pageSize);
 
         return new ResponseEntity<>(userVolunteerList, HttpStatus.OK);
     }

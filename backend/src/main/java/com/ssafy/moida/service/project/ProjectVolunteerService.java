@@ -149,8 +149,8 @@ public class ProjectVolunteerService {
      * @param volunteerDateInfo
      * @return
      */
-    public boolean existsByVolunteerDateInfo(VolunteerDateInfo volunteerDateInfo){
-        return usersVolunteerRepository.existsByVolunteerDateInfo(volunteerDateInfo);
+    public boolean existsByVolunteerDateInfo(Users user, VolunteerDateInfo volunteerDateInfo){
+        return usersVolunteerRepository.existsByVolunteerDateInfoAndUsers(volunteerDateInfo, user);
     }
 
 
