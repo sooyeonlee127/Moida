@@ -14,6 +14,7 @@ import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -53,8 +54,8 @@ public class UserVolunteerService {
      * */
     public List<GetUserVolunteerResDto> getUsersVolunteer(Long userId, int pageNumber, int pageSize) {
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        List<GetUserVolunteerResDto> result = usersVolunteerRepository.findVolunteersByUserId(userId, pageable);
-        return result;
+        Page<GetUserVolunteerResDto> volunteerList = usersVolunteerRepository.findVolunteersByUserId(userId, pageable);
+        return volunteerList.getContent();
     }
 
     /**
@@ -98,17 +99,15 @@ public class UserVolunteerService {
      */
     @Transactional
     public void updateUserVolunteerStatus(UpdateUserVolunteerStatusReqDto updateDto, UsersVolunteer usersVolunteer){
-        // 봉사 취소인 경우
-        if(updateDto.getStatus().equals(Status.CANCEL)){
+        if(updateDto.getStatus().equals(Status.CANCEL.toString())){
             usersVolunteer.updateStatus(Status.CANCEL);
-        } else if(updateDto.getStatus().equals(Status.DONE)){
-            // 봉사 완료인 경우
-            if(!StringUtils.isBlank(updateDto.getCode())){
+        } else if(updateDto.getStatus().equals(Status.DONE.toString())){
+            if(StringUtils.isBlank(updateDto.getCode())){
                 throw new IllegalArgumentException("봉사 상태 완료 변경 시 인증 코드는 필수값입니다.");
             }
 
             VolunteerDateInfo volunteerDateInfo = projectVolunteerService.findVolunteerDateInfoById(usersVolunteer.getVolunteerDateInfo().getId());
-            if(volunteerDateInfo.getAuthenticationCode() != updateDto.getCode()){
+            if(!volunteerDateInfo.getAuthenticationCode().equals(updateDto.getCode())){
                 throw new CustomException(ErrorCode.INVALID_AUTH_CODE);
             }
 
