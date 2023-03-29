@@ -12,6 +12,7 @@ import com.ssafy.moida.service.article.ArticleService;
 import com.ssafy.moida.service.project.ProjectVolunteerService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -66,6 +66,15 @@ public class UserVolunteerService {
             .map(uv -> uv.getStatus() == Status.WRITTEN? new GetUserVolunteerResDto(uv, articleService.findByUsersVolunteer(uv))
                 : new GetUserVolunteerResDto(uv, null))
             .collect(Collectors.toList());
+    }
+
+    /**
+     * [세은] 사용자 봉사 내역 갯수 조회
+     * @param users
+     * @return
+     */
+    public Long countGetUsersVolunteer(Users users){
+        return usersVolunteerRepository.countUsersOrderByRegDateDesc(users.getId());
     }
 
     /**
@@ -128,7 +137,16 @@ public class UserVolunteerService {
     /**
      * [한선영] 사용자가 작성한 봉사 인증글 목록(GetArticleDetailResDto) 가져오기
      * */
-    public List<GetArticleDetailResDto> getUsersVolunteerArticle(Long userId) {
-        return articleService.findByUsersId(userId);
+    public HashMap<String, Object> getUsersVolunteerArticle(Long userId, int pageNumber, int pageSize) {
+        List<GetArticleDetailResDto> results = articleService.findByUsersId(userId);
+
+        int startIndex = pageSize * pageNumber;
+        int endIndex = Math.min(startIndex + pageSize, results.size());
+
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("articleList", results.subList(startIndex, endIndex));
+        resultMap.put("length", results.size());
+
+        return resultMap;
     }
 }
