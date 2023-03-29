@@ -12,7 +12,7 @@ import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.service.user.UserVolunteerService;
 import com.ssafy.moida.utils.DtoValidationUtils;
-import com.ssafy.moida.utils.EamailUtils;
+import com.ssafy.moida.utils.EmailUtils;
 import com.ssafy.moida.utils.TokenUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -30,7 +30,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,7 +47,7 @@ public class UserController {
     private final TokenUtils tokenUtils;
     private final DtoValidationUtils dtoValidationUtils;
     @Autowired
-    private EamailUtils eamailUtils;
+    private EmailUtils emailUtils;
 
     public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils) {
         this.userService = userService;
@@ -195,7 +194,7 @@ public class UserController {
         // 상태 변경
         userVolunteerService.updateUserVolunteerStatus(updateDto, usersVolunteer);
 
-        return new ResponseEntity<>("봉사 취소가 완료되었습니다", HttpStatus.OK);
+        return new ResponseEntity<>("사용자 봉사 상태 변경이 완료되었습니다.", HttpStatus.OK);
     }
 
 
@@ -314,8 +313,8 @@ public class UserController {
         userService.findByEmail(email);
 
         // 임시 비밀번호가 담긴 메일 전송
-        MimeMessage message = eamailUtils.createForgotPwdMessage(email);
-        String tempPwd = eamailUtils.sendMessage(message);
+        MimeMessage message = emailUtils.createForgotPwdMessage(email);
+        String tempPwd = emailUtils.sendMessage(message);
 
         // 임시 비밀번호로 변경
         userService.changePwd(email, tempPwd);

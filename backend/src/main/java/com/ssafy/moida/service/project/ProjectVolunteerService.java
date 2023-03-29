@@ -123,7 +123,6 @@ public class ProjectVolunteerService {
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
     }
 
-
     /**
      * [세은] 프로젝트 별 봉사 일자 리스트 조회
      * @param project

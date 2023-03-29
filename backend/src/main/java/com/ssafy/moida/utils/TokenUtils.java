@@ -6,7 +6,6 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,8 +13,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TokenUtils {
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public TokenUtils(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * [세은] 토큰의 유효성을 검사하고 관리자인지 확인한 후 토큰 유저 반환

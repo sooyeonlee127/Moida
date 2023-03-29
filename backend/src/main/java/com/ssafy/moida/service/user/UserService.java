@@ -1,18 +1,14 @@
 package com.ssafy.moida.service.user;
 
 import com.ssafy.moida.api.request.UserJoinReqDto;
-import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.api.response.GetUserPointResDto;
-import com.ssafy.moida.api.response.GetUserVolunteerResDto;
-import com.ssafy.moida.model.project.Project;
-import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.*;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.user.PointChargeRepository;
 import com.ssafy.moida.repository.user.UserRepository;
 import com.ssafy.moida.repository.user.UsersDonationRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
-import com.ssafy.moida.utils.EamailUtils;
+import com.ssafy.moida.utils.EmailUtils;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import jakarta.mail.MessagingException;
@@ -41,16 +37,16 @@ public class UserService {
     private final UsersDonationRepository usersDonationRepository;
     private final UsersVolunteerRepository usersVolunteerRepository;
     private final PointChargeRepository pointChargeRepository;
-    private final EamailUtils eamailUtils;
+    private final EmailUtils emailUtils;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
 
-    public UserService(UserRepository userRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, PointChargeRepository pointChargeRepository, EamailUtils eamailUtils, BCryptPasswordEncoder bCryptPasswordEncoder, VolunteerDateInfoRepository volunteerDateInfoRepository) {
+    public UserService(UserRepository userRepository, UsersDonationRepository usersDonationRepository, UsersVolunteerRepository usersVolunteerRepository, PointChargeRepository pointChargeRepository, EmailUtils emailUtils, BCryptPasswordEncoder bCryptPasswordEncoder, VolunteerDateInfoRepository volunteerDateInfoRepository) {
         this.userRepository = userRepository;
         this.usersDonationRepository = usersDonationRepository;
         this.usersVolunteerRepository = usersVolunteerRepository;
         this.pointChargeRepository = pointChargeRepository;
-        this.eamailUtils = eamailUtils;
+        this.emailUtils = emailUtils;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
     }
@@ -113,8 +109,8 @@ public class UserService {
             throw new CustomException(ErrorCode.DUPLICATE_RESOURCE);
         } else {
             // 중복이 아니라면 인증 번호 생성해서 이메일로 전송하기
-            MimeMessage message = eamailUtils.createMessage(email);
-            code = eamailUtils.sendMessage(message);
+            MimeMessage message = emailUtils.createMessage(email);
+            code = emailUtils.sendMessage(message);
         }
 
         return code;
