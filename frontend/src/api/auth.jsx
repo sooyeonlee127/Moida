@@ -12,7 +12,6 @@ api.interceptors.request.use(
     // 요청이 전달되기 전에 작업 수행
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-    console.log("재요청");
     if (accessToken && refreshToken) {
       config.headers["Authorization"] = accessToken;
       config.headers["refresh"] = refreshToken;
