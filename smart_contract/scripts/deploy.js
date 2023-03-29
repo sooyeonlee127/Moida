@@ -7,18 +7,6 @@
 const hre = require("hardhat");
 
 async function main() {
-    const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-    const unlockTime = currentTimestampInSeconds + 60;
-
-    const lockedAmount = hre.ethers.utils.parseEther("0.001");
-
-    const Lock = await hre.ethers.getContractFactory("Lock");
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-    await lock.deployed();
-
-    console.log(`Lock with ${ethers.utils.formatEther(lockedAmount)}ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`);
-
     // 배포할 컨트랙트 이름을 getContractfactory의 매개변수로 주면 된다.
     const HeeToken = await hre.ethers.getContractFactory("HeeToken");
     const heeToken = await HeeToken.deploy(); // 생성자의 매개변수를 deploy에 넣는다.
