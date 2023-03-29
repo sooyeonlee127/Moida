@@ -30,6 +30,8 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
         countQuery = "SELECT COUNT(*) from UsersDonation u where u.id = :userId"
     )
     Page<GetUserDonationResDto> findDonationsByUserId(@Param("userId") Long userId, Pageable pageable);
+    @Query("SELECT COUNT(*) FROM UsersDonation ud WHERE ud.users.id = :userId")
+    Long CountFindDonationsByUserId(@Param("userId") Long userId);
 
     List<UsersDonation> findByUsersOrderByRegDate(Users user);
 

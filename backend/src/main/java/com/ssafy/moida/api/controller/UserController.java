@@ -8,6 +8,7 @@ import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
+import com.ssafy.moida.repository.user.RefreshRedisRepository;
 import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.service.user.UserVolunteerService;
@@ -22,6 +23,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +45,8 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+    private final RefreshRedisRepository refreshRedisRepository;
+
     private final UserService userService;
     private final UserVolunteerService userVolunteerService;
     private final UserDonationService userDonationService;
@@ -50,12 +55,14 @@ public class UserController {
     @Autowired
     private EmailUtils emailUtils;
 
-    public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils) {
+    public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils,
+        RefreshRedisRepository refreshRedisRepository) {
         this.userService = userService;
         this.userVolunteerService = userVolunteerService;
         this.userDonationService = userDonationService;
         this.tokenUtils = tokenUtils;
         this.dtoValidationUtils = dtoValidationUtils;
+        this.refreshRedisRepository = refreshRedisRepository;
     }
 
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
@@ -219,8 +226,10 @@ public class UserController {
 
         List<GetUserDonationResDto> userDonationList
                 = userDonationService.getUsersDonation(userId, pageNumber, pageSize);
+        Long length = userDonationService.countFindDonationsByUSerId(userId);
 
-        return new ResponseEntity<>(userDonationList, HttpStatus.OK);
+        return ResponseEntity.ok()
+            .body(Map.of("donationList", userDonationList, "length", length));
     }
 
     @Operation(summary = "사용자 봉사 내역", description = "로그인한 사용자의 봉사 내역을 반환합니다.")
@@ -242,8 +251,10 @@ public class UserController {
 
         List<GetUserVolunteerResDto> userVolunteerList
             = userVolunteerService.getUsersVolunteer(loginUser, pageNumber, pageSize);
+        Long length = userVolunteerService.countGetUsersVolunteer(loginUser);
 
-        return new ResponseEntity<>(userVolunteerList, HttpStatus.OK);
+        return ResponseEntity.ok()
+            .body(Map.of("volunteerList", userVolunteerList, "length", length));
     }
 
     @Operation(summary = "사용자 포인트 내역", description = "로그인한 사용자의 포인트 사용 내역을 반환합니다.")
@@ -256,7 +267,6 @@ public class UserController {
     ) {
         // 로그인한 사용자 토큰 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
-        Long userId = loginUser.getId();
 
         // DTO 유효성 검사
         pageNumber -= 1;
@@ -264,16 +274,13 @@ public class UserController {
             throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
         }
 
-        List<GetUserPointResDto> userPointList = userService.getUsersPoint(loginUser, pageSize, pageNumber);
-
+        HashMap<String, Object> userPointList = userService.getUsersPoint(loginUser, pageSize, pageNumber);
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
 
     @Operation(summary = "사용자 포인트 충전", description = "사용자 포인트를 충전합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping(
-            path = "/me/points/charge"
-    )
+    @PostMapping("/me/points/charge")
     public ResponseEntity<?> chargePoint(
             @AuthenticationPrincipal PrincipalDetails principal,
             @RequestParam(value = "point") Long point
@@ -309,10 +316,10 @@ public class UserController {
             throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
         }
 
-        List<GetUserPointResDto> userPointList
+        Map<String, Object> resultMap
                 = userService.getPointListFilter(category, loginUser, pageSize, pageNumber);
 
-        return new ResponseEntity<>(userPointList, HttpStatus.OK);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @Operation(summary = "비밀번호 찾기", description = "가입된 이메일로 임시 비밀번호를 보냅니다.")
@@ -337,20 +344,26 @@ public class UserController {
 
     @Operation(summary = "사용자 봉사 인증글 내역", description = "로그인한 사용자의 봉사 인증글 목록을 반환합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping(
-            path = "/me/volunteer-article"
-    )
+    @GetMapping("/me/volunteer-article")
     public ResponseEntity<?> getUserVolunteerArticleList(
+            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
         // 로그인한 사용자 토큰 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
         Long userId = loginUser.getId();
 
-        List<GetArticleDetailResDto> userVolunteerArticleList
-                = userVolunteerService.getUsersVolunteerArticle(userId);
+        // DTO 유효성 검사
+        pageNumber -= 1;
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
 
-        return new ResponseEntity<>(userVolunteerArticleList, HttpStatus.OK);
+        HashMap<String, Object> results
+                = userVolunteerService.getUsersVolunteerArticle(userId, pageNumber, pageSize);
+
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
 }
