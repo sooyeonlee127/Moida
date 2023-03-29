@@ -86,6 +86,16 @@ public class ArticleService {
     }
 
     /**
+     * [세은] 사용자 봉사 아이디로 인증글 테이블의 인증글 조회
+     * @param usersVolunteer
+     * @return
+     */
+    public Long findByUsersVolunteer(UsersVolunteer usersVolunteer){
+        return articleRepository.findByUsersVolunteer(usersVolunteer)
+            .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)).getId();
+    }
+
+    /**
      * [세은] 고유 아이디로 엔티티 조회
      * @param articleId
      * @return
@@ -93,6 +103,15 @@ public class ArticleService {
     public Article findById(Long articleId){
         return articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+    }
+
+    /**
+     * [세은] 사용자가 작성한 봉사 인증글 목록(GetArticleDetailResDto) 가져오기
+     * @param userId
+     * @return
+     */
+    public List<GetArticleDetailResDto> findByUsersId(Long userId){
+        return articleRepository.findByUsersId(userId);
     }
 
     /**
