@@ -12,6 +12,7 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
+import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -30,12 +31,15 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final S3Uploader s3Uploader;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
+    private final UsersVolunteerRepository usersVolunteerRepository;
 
     public ArticleService(ArticleRepository articleRepository,S3Uploader s3Uploader,
-        VolunteerDateInfoRepository volunteerDateInfoRepository) {
+        VolunteerDateInfoRepository volunteerDateInfoRepository,
+        UsersVolunteerRepository usersVolunteerRepository) {
         this.articleRepository = articleRepository;
         this.s3Uploader = s3Uploader;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
+        this.usersVolunteerRepository = usersVolunteerRepository;
     }
 
     /**
@@ -163,6 +167,14 @@ public class ArticleService {
             .collect(Collectors.toList());
     }
 
+    public Long countArticleList(ArticleSortDto articleSortDto){
+        if("ALL".equals(articleSortDto.getCategory())){
+            return articleRepository.countAll();
+        } else{
+            return countArticleListByCategory(articleSortDto.getCategory());
+        }
+    }
+
     /**
      * [세은] 사용자 인증글 카테고리별 최신순 조회
      * @param pageable
@@ -174,6 +186,18 @@ public class ArticleService {
             return articleRepository.findAll(pageable);
         }
         return articleRepository.findByCategory(category, pageable);
+    }
+
+    /**
+     * [세은] 카테고리별 게시글 갯수 조회
+     * @param category
+     * @return
+     */
+    public Long countArticleListByCategory(String category){
+        if("ALL".equals(category)){
+            return articleRepository.countAll();
+        }
+        return articleRepository.countByCategory(category);
     }
 
     /**

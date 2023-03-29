@@ -39,6 +39,15 @@ public class UserDonationService {
     }
 
     /**
+     * [세은] 사용자가 참여한 기부 프로젝트 목록 갯수 조회
+     * @param userId
+     * @return
+     */
+    public Long countFindDonationsByUSerId(Long userId){
+        return usersDonationRepository.CountFindDonationsByUserId(userId);
+    }
+
+    /**
      * [세은] 사용자가 기부할 경우, 포인트 차감 & 티켓 갯수 업데이트
      */
     @Transactional

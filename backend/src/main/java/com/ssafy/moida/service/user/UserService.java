@@ -192,13 +192,17 @@ public class UserService {
      * [세은] 사용자 페이지 목록 페이지네이션
      * @return
      * */
-    public List<GetUserPointResDto> getUsersPoint(Users user, int pageSize, int pageNumber) {
+    public HashMap<String, Object> getUsersPoint(Users user, int pageSize, int pageNumber) {
         List<GetUserPointResDto> results = getPointList(user);
 
         int startIndex = pageSize * pageNumber;
         int endIndex = Math.min(startIndex + pageSize, results.size());
 
-        return results.subList(startIndex, endIndex);
+        HashMap<String, Object> resultsMap = new HashMap<>();
+        resultsMap.put("pointList", results.subList(startIndex, endIndex));
+        resultsMap.put("length", results.size());
+
+        return resultsMap;
     }
 
     /**
@@ -233,7 +237,7 @@ public class UserService {
      * @param filter, userId
      * @return
      * */
-    public List<GetUserPointResDto> getPointListFilter(String filter, Users user, int pageSize, int pageNumber) {
+    public Map<String, Object> getPointListFilter(String filter, Users user, int pageSize, int pageNumber) {
         List<GetUserPointResDto> results = new ArrayList<>();
 
         if(filter.equals("CHARGE")) { // filter가 충전일때 포인트 내역
@@ -255,15 +259,21 @@ public class UserService {
                     ud.getProject().getSubject(),
                     ud.getProject().getGeneration(),
                     ud.getTicketCnt()
-                )).sorted().collect(Collectors.toList());
+                ))
+                .sorted(Comparator.comparing(GetUserPointResDto::getPointDate).reversed())
+                .collect(Collectors.toList());
         } else { // 나머지 경우에는 전체 포인트 내역
-            return getPointList(user);
+            results = getPointList(user);
         }
 
         int startIndex = pageSize * pageNumber;
         int endIndex = Math.min(startIndex + pageSize, results.size());
 
-        return results.subList(startIndex, endIndex);
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("pointList", results.subList(startIndex, endIndex));
+        resultMap.put("length", results.size());
+
+        return resultMap;
     }
 
     /**

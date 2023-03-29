@@ -33,14 +33,20 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
             "a.category," +
             "a.url)" +
             "from Article a " +
-            "where a.usersVolunteer.users.id = :userId")
+            "where a.usersVolunteer.users.id = :userId " +
+            "order by a.regDate desc ")
     List<GetArticleDetailResDto> findByUsersId(@Param("userId") Long userId);
     @Override
     @Query("SELECT a FROM Article a ORDER BY a.regDate DESC")
     Page<Article> findAll(Pageable pageable);
 
+    @Query("SELECT COUNT(*) FROM Article a")
+    Long countAll();
+
     @Query("SELECT a FROM Article a where a.category = :category ORDER BY a.regDate DESC")
     Page<Article> findByCategory(@Param("category") String category, Pageable pageable);
+    @Query("SELECT COUNT(*) FROM Article a WHERE a.category = :category")
+    Long countByCategory(@Param("category") String category);
 
     @Query("SELECT a FROM Article a ORDER BY a.difficultyLevel DESC")
     Page<Article> findAllDifficultyLevelDesc(Pageable pageable);
