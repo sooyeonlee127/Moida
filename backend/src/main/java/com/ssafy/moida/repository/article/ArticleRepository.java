@@ -2,6 +2,7 @@ package com.ssafy.moida.repository.article;
 
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.model.article.Article;
+import com.ssafy.moida.model.user.UsersVolunteer;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
     PagingAndSortingRepository<Article, Long> {
     void deleteById(Long id);
     boolean existsById(Long id);
+    Optional<Article> findByUsersVolunteer(UsersVolunteer usersVolunteer);
     Optional<Article> findById(Long id);
     @Query("SELECT COUNT(a) FROM Article a WHERE a.project.id = :projectId")
     Long countByProjectId(@Param("projectId") Long projectId);
