@@ -7,10 +7,12 @@ import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetArticleResDto;
 import com.ssafy.moida.model.article.Article;
 import com.ssafy.moida.model.project.Project;
+import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
+import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -29,12 +31,15 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final S3Uploader s3Uploader;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
+    private final UsersVolunteerRepository usersVolunteerRepository;
 
     public ArticleService(ArticleRepository articleRepository,S3Uploader s3Uploader,
-        VolunteerDateInfoRepository volunteerDateInfoRepository) {
+        VolunteerDateInfoRepository volunteerDateInfoRepository,
+        UsersVolunteerRepository usersVolunteerRepository) {
         this.articleRepository = articleRepository;
         this.s3Uploader = s3Uploader;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
+        this.usersVolunteerRepository = usersVolunteerRepository;
     }
 
     /**
@@ -72,11 +77,26 @@ public class ArticleService {
 
         articleRepository.save(article);
 
+        // 프로젝트 난이도 변경
         Long projectArticleCount = articleRepository.countByProjectId(project.getId());
         Double difficultyLevel = (project.getProjectVolunteer().getDifficultyLevel() + createArticleReqDto.getDifficultyLevel()) / (projectArticleCount + 1);
-
         project.getProjectVolunteer().updateDifficulty(difficultyLevel);
+
+        // 사용자 티켓 갯수 변경
         users.updateTicket(users.getTicketCnt() + 2);
+
+        // UsersVolunteer Status 변경
+        usersVolunteer.updateStatus(Status.WRITTEN);
+    }
+
+    /**
+     * [세은] 사용자 봉사 아이디로 인증글 테이블의 인증글 조회
+     * @param usersVolunteer
+     * @return
+     */
+    public Long findByUsersVolunteer(UsersVolunteer usersVolunteer){
+        return articleRepository.findByUsersVolunteer(usersVolunteer)
+            .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND)).getId();
     }
 
     /**
@@ -87,6 +107,15 @@ public class ArticleService {
     public Article findById(Long articleId){
         return articleRepository.findById(articleId)
             .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+    }
+
+    /**
+     * [세은] 사용자가 작성한 봉사 인증글 목록(GetArticleDetailResDto) 가져오기
+     * @param userId
+     * @return
+     */
+    public List<GetArticleDetailResDto> findByUsersId(Long userId){
+        return articleRepository.findByUsersId(userId);
     }
 
     /**
@@ -138,6 +167,14 @@ public class ArticleService {
             .collect(Collectors.toList());
     }
 
+    public Long countArticleList(ArticleSortDto articleSortDto){
+        if("ALL".equals(articleSortDto.getCategory())){
+            return articleRepository.countAll();
+        } else{
+            return countArticleListByCategory(articleSortDto.getCategory());
+        }
+    }
+
     /**
      * [세은] 사용자 인증글 카테고리별 최신순 조회
      * @param pageable
@@ -149,6 +186,18 @@ public class ArticleService {
             return articleRepository.findAll(pageable);
         }
         return articleRepository.findByCategory(category, pageable);
+    }
+
+    /**
+     * [세은] 카테고리별 게시글 갯수 조회
+     * @param category
+     * @return
+     */
+    public Long countArticleListByCategory(String category){
+        if("ALL".equals(category)){
+            return articleRepository.countAll();
+        }
+        return articleRepository.countByCategory(category);
     }
 
     /**

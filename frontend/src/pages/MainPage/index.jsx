@@ -5,7 +5,7 @@ import axios from "axios";
 
 const MainPage = () => {
   const [cards, setCards] = useState([]);
-  const cardList = cards.map((card) => <Projects card={card}></Projects>);
+  const cardList = cards.map((card, index) => <Projects card={card} key={index}></Projects>);
   useEffect(() => {
     // 수연: project 받아오기
     axios({
@@ -13,7 +13,7 @@ const MainPage = () => {
       method: "GET",
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setCards(res.data);
       })
       .catch((error) => {

@@ -3,12 +3,14 @@ import { useState } from 'react'
 import DonationList from './Components/DonationList'
 import VolunteerList from './Components/VolunteerList'
 import PointWallet from './Components/PointWallet';
+import MyGallery from './Components/MyGallery';
 
 
 const menuArr = [
     { name: '기부내역', content: 'Tab menu ONE' },
     { name: '봉사내역', content: 'Tab menu TWO' },
     { name: '포인트 내역', content: 'Tab menu THREE' },
+    { name: '내가 쓴 글', content: 'Tab menu FOUR' },
   ];
 
 const UserContent = () => {
@@ -30,6 +32,7 @@ const UserContent = () => {
               {tabIndex === 0 ? <DonationList/>: "" }
               {tabIndex === 1 ? <VolunteerList/>: "" }
               {tabIndex === 2 ? <PointWallet/>: "" }
+              {tabIndex === 3 ? <MyGallery/>: "" }
             </Desc>
         </div>
     )

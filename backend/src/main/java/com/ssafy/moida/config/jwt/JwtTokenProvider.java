@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider implements InitializingBean {
 
     private static final String AUTHORITIES_KEY = "auth";
-    private static final String BEARER_TYPE = "Bearer ";
+    private static final String BEARER_TYPE = "Bearer";
     // private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;            // 30분
     private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;   // 개발을 위해서 한시적으로 시간 늘리기
     private static final long REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;  // 7일

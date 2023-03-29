@@ -2,6 +2,7 @@ package com.ssafy.moida.repository.article;
 
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.model.article.Article;
+import com.ssafy.moida.model.user.UsersVolunteer;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
     PagingAndSortingRepository<Article, Long> {
     void deleteById(Long id);
     boolean existsById(Long id);
+    Optional<Article> findByUsersVolunteer(UsersVolunteer usersVolunteer);
     Optional<Article> findById(Long id);
     @Query("SELECT COUNT(a) FROM Article a WHERE a.project.id = :projectId")
     Long countByProjectId(@Param("projectId") Long projectId);
@@ -31,14 +33,20 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
             "a.category," +
             "a.url)" +
             "from Article a " +
-            "where a.usersVolunteer.users.id = :userId")
+            "where a.usersVolunteer.users.id = :userId " +
+            "order by a.regDate desc ")
     List<GetArticleDetailResDto> findByUsersId(@Param("userId") Long userId);
     @Override
     @Query("SELECT a FROM Article a ORDER BY a.regDate DESC")
     Page<Article> findAll(Pageable pageable);
 
+    @Query("SELECT COUNT(*) FROM Article a")
+    Long countAll();
+
     @Query("SELECT a FROM Article a where a.category = :category ORDER BY a.regDate DESC")
     Page<Article> findByCategory(@Param("category") String category, Pageable pageable);
+    @Query("SELECT COUNT(*) FROM Article a WHERE a.category = :category")
+    Long countByCategory(@Param("category") String category);
 
     @Query("SELECT a FROM Article a ORDER BY a.difficultyLevel DESC")
     Page<Article> findAllDifficultyLevelDesc(Pageable pageable);
