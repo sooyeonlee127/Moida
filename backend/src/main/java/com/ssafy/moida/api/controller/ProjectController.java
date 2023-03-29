@@ -152,7 +152,11 @@ public class ProjectController {
         }
 
         // 기부 모이 수에 따른 티켓 발급
-        int tickets = (int) (Math.log(points) / Math.log(2));
+        int tickets = 0;
+        if(points >= 10000){
+            tickets = (int) Math.round((points / 10000.000) * 1.1);
+            if(tickets > 10) tickets = 10;
+        }
 
         // Users 테이블 업데이트 : 포인트 차감, 티켓 발급
         userDonationService.updateAfterDonation(loginUser, points, tickets);
