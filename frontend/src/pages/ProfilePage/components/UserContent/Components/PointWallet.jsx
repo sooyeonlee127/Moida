@@ -17,7 +17,7 @@ const PointWallet = () => {
                 </tr>
             </thead>
             <tbody>
-                {datas.map((data, index) => { 
+                {datas?.map((data, index) => { 
                     return (
                         <tr key={index}>
                             <td>{data.category}</td>
