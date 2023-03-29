@@ -17,7 +17,18 @@ const useListApi = (type) => {
           },
         });
         console.log(response.data)
-        setData(response.data.donationList);
+        if(type==="donation") { // type별 데이터 저장 - 이은혁
+          setData(response.data.donationList);
+
+        } else if (type==="volunteer") {
+          setData(response.data.volunteerList);
+
+        } else if (type==="points") {
+          setData(response.data.pointList);
+
+        } else if (type==="volunteer-article") {
+          setData(response.data.articleList);
+        }
         setDataLength(response.data.length);
       } catch (error) {
         setError(error);
