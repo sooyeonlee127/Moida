@@ -2,6 +2,7 @@ package com.ssafy.moida.service.project;
 
 import com.ssafy.moida.api.request.VolunteerReqDto;
 import com.ssafy.moida.api.response.DateInfoResDto;
+import com.ssafy.moida.api.response.GetVolunteerDateInfoResDto;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.project.Status;
@@ -153,7 +154,6 @@ public class ProjectVolunteerService {
         return usersVolunteerRepository.existsByVolunteerDateInfoAndUsers(volunteerDateInfo, user);
     }
 
-
     /**
      * [세은] 봉사 일자 아이디로 데이터 존재 여부 확인 후 예외 처리
      * @param volunteerInfoId
@@ -162,6 +162,14 @@ public class ProjectVolunteerService {
         if(!volunteerDateInfoRepository.existsById(volunteerInfoId)){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
+    }
+
+    /**
+     * [세은] 전체 봉사 일자 정보 조회 - 관리자용
+     * @return
+     */
+    public List<GetVolunteerDateInfoResDto> getVolunteerDateList(){
+        return volunteerDateInfoRepository.getVolunteerDateDetails();
     }
 
     /**

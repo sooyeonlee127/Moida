@@ -5,6 +5,7 @@ import com.ssafy.moida.api.request.CreateProjectReqDto;
 import com.ssafy.moida.api.request.UpdateProjectReqDto;
 import com.ssafy.moida.api.response.GetProjectDetailResDto;
 import com.ssafy.moida.api.response.GetProjectResDto;
+import com.ssafy.moida.api.response.GetVolunteerDateInfoResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.ProjectDonation;
@@ -209,6 +210,17 @@ public class ProjectController {
         projectVolunteerService.updateCapacity(volunteerDateInfo);
 
         return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
+    }
+
+    @Operation(summary = "[관리자] 전체 봉사 일자 정보 조회", description = "전체 봉사 일자 정보를 조회합니다.(인증코드 확인용)")
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/volunteer-date-info")
+    public ResponseEntity<List<GetVolunteerDateInfoResDto>> getVolunteerDateInfo(
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ){
+        // 관리자 확인
+        tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
+        return new ResponseEntity<>(projectVolunteerService.getVolunteerDateList(), HttpStatus.OK);
     }
 
     @Operation(summary = "[관리자] 프로젝트 수정", description = "이미 생성한 프로젝트를 수정합니다.")
