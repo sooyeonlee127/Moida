@@ -9,7 +9,6 @@ import PointPage from "./pages/PointPage";
 import ProfilePage from "./pages/ProfilePage";
 import ReviewPage from "./pages/ReviewPage";
 import ReviewDetailPage from "./pages/ReviewDetailPage";
-import ReviewCreatePage from "./pages/ReviewCreatePage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
@@ -24,6 +23,8 @@ import AuthCordPage from "./pages/Admin/AuthCodePage";
 import AdminPage from "./pages/Admin";
 import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
+import HjooPage from "./pages/ethers/HjooPage";
+
 
 export default function App() {
   return (
@@ -72,6 +73,7 @@ export default function App() {
           <Route path={"/review"} element={<ReviewPage />} />
           <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
           <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
+          <Route path={"/hjooo"} element={<HjooPage />} />
         </Routes>
       </div>
     </Auth>
