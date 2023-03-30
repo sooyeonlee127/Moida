@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - moida
+    restart: always
+  front:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - back
+    container_name: front
+    networks:
+      - moida
+  back:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    container_name: back
+    depends_on:
+      - redis
+      - mariadb
+    networks:
+      - moida
+  jenkins:
+    image: jenkins/jenkins
+    container_name: jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - jenkins_home:/var/jenkins_home
+  mariadb:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - moida
+volumes:
+  jenkins_home:
+
+networks:
+  moida:
+    driver: bridge
+    external:
+      name: moida
