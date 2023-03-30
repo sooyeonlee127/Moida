@@ -2,12 +2,13 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import Form from "./components/form";
-
+import MetamaskCheck from "./components/MetamaskCheck";
 const SignupPage = () => {
   return (
     <Container>
       <InnerContainer>
         <Heading>회원가입</Heading>
+        <MetamaskCheck />
         <Form />
       </InnerContainer>
     </Container>
