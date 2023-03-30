@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import useListApi from "./api"
-import axios from 'axios'
-import { Navigate, useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import useListApi from "./api";
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 const VolunteerList = () => {
@@ -105,7 +105,12 @@ const VolunteerList = () => {
                             <td>{data.status}</td>
                             <td onClick={() =>{volunteerCancel(data.volunteerId);}}>취소</td>
                             <td onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}}>완료</td>
-                            <td onClick={()=>{navigate('/review/create')}}>리뷰 작성</td>
+                            <td onClick={()=>{navigate('/review/create',
+                            {state:{
+                              volunteerId: data.volunteerId,
+                              projectId : data.projectId,
+                            }});
+                              }}>리뷰 작성</td>
 
                         </tr>
                     )
