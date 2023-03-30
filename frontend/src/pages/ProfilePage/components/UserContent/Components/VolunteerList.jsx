@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import useListApi from "./api";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import "./volunteerList.css";
 
 
 const VolunteerList = () => {
@@ -103,14 +104,22 @@ const VolunteerList = () => {
                             <td>{data.regDate}</td>
                             <td>{data.volunteerId}</td>
                             <td>{data.status}</td>
-                            <td onClick={() =>{volunteerCancel(data.volunteerId);}}>취소</td>
-                            <td onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}}>완료</td>
-                            <td onClick={()=>{navigate('/review/create',
+                            <td
+                            className={ data.status === "REGISTER" ? "" : "Disable"}
+                            onClick={()=>{volunteerCancel(data.volunteerId);}}>취소</td>
+                            <td
+                            className={ data.status === "REGISTER" ? "" : "Disable"}
+                            onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}}>완료</td>
+                            <td
+                            className={ data.status === "DONE" || data.status === "WRITTEN" ? "" : "Disable"}
+                            onClick={()=>{
+                              const path = data.status === "DONE" ? "/review/create" : "/review/"+ data.articleId;
+                              navigate(path,
                             {state:{
                               volunteerId: data.volunteerId,
                               projectId : data.projectId,
                             }});
-                              }}>리뷰 작성</td>
+                              }}>{ data.status === "WRITTEN" ? "상세 보기" : "리뷰 작성"}</td>
 
                         </tr>
                     )
@@ -125,3 +134,5 @@ const VolunteerList = () => {
 
 export default React.memo(VolunteerList);
 // React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은혁
+
+
