@@ -106,169 +106,77 @@ const NavBar = () => {
       });
   };
 
-  if (isLogin) {
-    return (
-      <>
-        <Nav>
-          <Logo>
-            <p>우리 로고</p>
-          </Logo>
-          <Section>
-            <div>
-              {role === "ROLE_ADMIN" ? (
-                <>
-                  <AdminButton
-                    onClick={(e) => {
-                      e.preventDefault();
-                      goAdmin();
-                    }}
-                  >
-                    Admin 계정입니다.
-                  </AdminButton>
-                </>
-              ) : (
-                <></>
-              )}
-            </div>
-            <Home>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  goHome();
-                }}
-              >
-                HOME
-              </button>
-            </Home>
-
-            <Title>
-              {userNavigation.map((item, index) => (
-                <Link on={item.name} key={index} to={item.href}>
-                  {item.name}
-                </Link>
-              ))}
-            </Title>
-            <Title>
-              <LogoutButton>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    LogoutSubmit();
-                  }}
-                >
-                  LOGOUT
-                </button>
-              </LogoutButton>
-            </Title>
-          </Section>
-        </Nav>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Nav>
-          <Logo>
-            <p>우리 로고</p>
-          </Logo>
-          <Section>
-            <Home>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  goHome();
-                }}
-              >
-                HOME
-              </button>
-            </Home>
-            <Title>
-              {navigation.map((item) => (
-                <a key={item.name} href={item.href}>
-                  {item.name}
-                </a>
-              ))}
-            </Title>
-            <Title>
-              <LogoutButton>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    goSignup();
-                  }}
-                >
-                  SIGNUP
-                </button>
-              </LogoutButton>
-            </Title>
-            <Title>
-              <LogoutButton>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    goLogin();
-                  }}
-                >
-                  LOGIN
-                </button>
-              </LogoutButton>
-            </Title>
-          </Section>
-        </Nav>
-      </>
-    );
-  }
-};
+  return (
+    <Nav>
+      <Logo><p>우리 로고</p></Logo>
+      <Section>
+        <div>
+          {isLogin && role === "ROLE_ADMIN" ? (<AdminButton onClick={(e) => {e.preventDefault(); goAdmin();}}>Admin 계정입니다.</AdminButton>) : ""}
+        </div>
+        <Home>
+          <button onClick={(e) => {e.preventDefault(); goHome();}}>HOME</button>
+        </Home>
+        <Title>
+          {isLogin? 
+          userNavigation.map((item, index) => (<Link on={item.name} key={index} to={item.href}>{item.name}</Link>)): 
+          navigation.map((item) => (<a key={item.name} href={item.href}>{item.name}</a>))}
+        </Title>
+        <Title>
+          <LogoutButton>
+            {isLogin? 
+              (<button onClick={(e) => {e.preventDefault();LogoutSubmit();}}>LOGOUT</button>):
+              (<button onClick={(e) => {e.preventDefault();goSignup();}}>SIGNUP</button>)
+            }
+          </LogoutButton>
+        </Title>
+        {!isLogin? (
+          <Title>
+            <LogoutButton>
+              <button onClick={(e) => {e.preventDefault();goLogin();}}>LOGIN</button>
+            </LogoutButton>
+          </Title>
+        ):""}
+      </Section>
+    </Nav>
+  );
+}
 
 const Nav = styled.div`
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   z-index: 1;
-  background-color: rgb(255 214 0);
-  ${tw`
-  px-2
-  py-4
-  flex justify-between
-  `}
+  background-color: transparent;
+  height: 100px;
+  ${tw`px-2 py-4 flex justify-between`}
 `;
 
 const Section = styled.div`
   word-break: break-all;
-  ${tw`
-   min-h-full order-last flex flex-1 items-center justify-end mr-20 tracking-tighter font-normal text-base
-  `}
+  ${tw` min-h-full order-last flex flex-1 items-center justify-end mr-20 tracking-tighter font-normal text-base`}
 `;
 
 const Logo = styled.div`
-  ${tw`
-    ml-20
-  `}
+  ${tw`ml-20`}
 `;
 
 const Title = styled.div`
-  ${tw`
-  flex space-x-9
-  `}
+  ${tw` flex space-x-9`}
 `;
 
 const LogoutButton = styled.div`
-  ${tw`
-  ml-9 font-black tracking-tighter
-  `}
+  ${tw` ml-9 font-black tracking-tighter`}
 `;
 
 const Home = styled.div`
   color: rgb(254 98 76);
-  ${tw`
-  mr-9 font-black 
-  `}
+  ${tw` mr-9 font-black`}
 `;
 
 const AdminButton = styled.button`
   color: rgb(20 90 200);
-  ${tw`
-  mr-9 font-normal font-black 
-  `}
+  ${tw`mr-9 font-normal font-black`}
 `;
+
 export default NavBar;
