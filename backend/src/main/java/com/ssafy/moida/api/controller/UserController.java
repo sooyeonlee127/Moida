@@ -106,10 +106,8 @@ public class UserController {
 
     @Operation(summary = "마이페이지", description = "마이페이지 내에 들어가는 로그인한 사용자의 정보를 반환합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @GetMapping(
-            path = "/me"
-    )
-    public ResponseEntity<UserInfoResDto> getUserDetail (
+    @GetMapping("/me")
+    public ResponseEntity<?> getUserDetail (
             @AuthenticationPrincipal PrincipalDetails principal
     ) {
         // 토큰 유효성 검증
@@ -143,7 +141,8 @@ public class UserController {
                 .moiCorn(moiCorn)
                 .build();
 
-        return new ResponseEntity<>(userInfoResDto, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .body(Map.of("info", userInfoResDto, "roles", loginUser.getRole()));
     }
 
     @Operation(summary = "비밀번호 변경", description = "로그인한 사용자의 비밀번호를 변경합니다.")
