@@ -24,6 +24,7 @@ public enum ErrorCode {
     SORT_NOT_FOUND(NOT_FOUND, "유효하지 않은 정렬 값입니다."),
     /*[세은] 409 CONFLICT : */
     DUPLICATE_VOLUNTEER_REGISTER(CONFLICT, "해당 일자에 이미 봉사를 신청하였습니다"),
+    DUPLICATE_BOARD_EXISTS(CONFLICT, "해당 프로젝트에 이미 생성된 공지사항이 존재합니다."),
     INVALID_DTO_STATUS(CONFLICT, "서버 동작 상태와 클라이언트 요청 상태가 일치하지 않아 작업을 처리할 수 없습니다"),
 
     /* [한선영] 400 BAD_REQUEST : 클라이언트의 요청이 유효하지 않아 더 이상 작업을 진행하지 않는 경우 */
