@@ -2,7 +2,7 @@ spring:
   datasource:
     password: root
     username: root
-    url: jdbc:mariadb://localhost:3307/moida
+    url: jdbc:mariadb://localhost:3307/moida?useSSL=false
     driver-class-name: org.mariadb.jdbc.Driver
   servlet:
     multipart:
