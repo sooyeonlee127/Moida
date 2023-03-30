@@ -1,4 +1,3 @@
-const { create } = require("domain");
 const ethers = require("ethers");
 const fs = require("fs");
 const path = require("path");
@@ -380,7 +379,7 @@ const TOKEN_ABI = [
         type: "function",
     },
 ];
-const TOKEN_CA = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // localhost
+const TOKEN_CA = "0x84E20180FBAc13A0f0e30A947fF8C46a0eaBF475"; // localhost
 // const TOKEN_CA = "0x4f223861e0f5139099bC18CacCbBc0019F487E0a"; // sepolia
 const TOKENContract = new ethers.Contract(TOKEN_CA, TOKEN_ABI, provider.getSigner());
 

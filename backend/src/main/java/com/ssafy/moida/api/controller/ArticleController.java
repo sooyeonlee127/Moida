@@ -11,6 +11,7 @@ import com.ssafy.moida.api.response.GetBoardDetailResDto;
 import com.ssafy.moida.api.response.GetBoardListByCategoryResDto;
 import com.ssafy.moida.api.response.GetGenerationAndIdResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
+import com.ssafy.moida.model.article.Article;
 import com.ssafy.moida.model.article.Board;
 import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Role;
@@ -68,12 +69,12 @@ public class ArticleController {
     @Operation(summary = "사용자 인증글 작성", description = "사용자가 봉사 후기를 작성합니다.")
     @SecurityRequirement(name = "bearerAuth")
     @PostMapping(consumes = {
-        MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
+            MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE
     })
     public ResponseEntity<?> createArticle(
-        @RequestPart(value = "article") CreateArticleReqDto createArticleReqDto,
-        @RequestPart(value = "file", required = false) MultipartFile file,
-        @AuthenticationPrincipal PrincipalDetails principalDetails
+            @RequestPart(value = "article") CreateArticleReqDto createArticleReqDto,
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 토큰 유효성 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
@@ -101,10 +102,10 @@ public class ArticleController {
     @Operation(summary = "전체 인증갤러리 조회(사용자 인증글만)", description = "전체 인증갤러리 글(사용자 봉사 인증글 + 공지사항)을 조회합니다.")
     @GetMapping
     public ResponseEntity<?> getArticles(
-        @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-        @RequestParam(name = "category", defaultValue = "ALL") @Schema(allowableValues = {"ALL", "CRANE", "SQUIRREL", "WILD_ANIMAL"}) String category,
-        @RequestParam(name = "sort", defaultValue = "latest") @Schema(allowableValues = {"LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"}) String sort
+            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+            @RequestParam(name = "category", defaultValue = "ALL") @Schema(allowableValues = {"ALL", "CRANE", "SQUIRREL", "WILD_ANIMAL"}) String category,
+            @RequestParam(name = "sort", defaultValue = "latest") @Schema(allowableValues = {"LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"}) String sort
     ){
         pageNumber -= 1;
 
@@ -115,7 +116,7 @@ public class ArticleController {
         Long length = articleService.countArticleList(articleSortDto);
 
         return ResponseEntity.ok()
-            .body(Map.of("articleList", articleList, "length", length));
+                .body(Map.of("articleList", articleList, "length", length));
     }
 
     @Operation(summary = "사용자 인증글 상세조회", description = "특정 사용자 인증글을 상세 조회합니다.")
@@ -136,9 +137,11 @@ public class ArticleController {
     ){
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
+        Long userId = articleService.findById((long) articleId).getUsers().getId();
+
         // Admin 이거나 사용자가 작성한 글이 맞는 경우에만 삭제 가능
         if(!loginUser.getRole().equals(Role.ROLE_ADMIN)
-                && loginUser.getId() != articleService.getArticleDetailById((long) articleId).getId()){
+                && loginUser.getId() != userId){
             throw new CustomException(ErrorCode.FORBIDDEN_USER);
         }
 
@@ -203,6 +206,11 @@ public class ArticleController {
         // DTO NOT NULL 검증
         dtoValidationUtils.validateCreateBoardReqDto(createBoardReqDto);
 
+        // 해당 프로젝트에 이미 작성된 공지사항이 있는 경우 충돌 발생
+        if(boardService.existsByProjectId(createBoardReqDto.getProjectId())){
+            throw new CustomException(ErrorCode.DUPLICATE_BOARD_EXISTS);
+        }
+
         // Board 데이터베이스 저장
         Board board = boardService.save(createBoardReqDto, admin);
 
@@ -221,7 +229,7 @@ public class ArticleController {
     @Operation(summary = "카테고리별 공지사항 조회", description = "공지사항을 카테고리별 조회합니다. 카테고리별 공지사항 기수 리스트와 가장 최신 공지사항을 반환합니다.")
     @GetMapping("/board/category/{category}")
     public ResponseEntity<GetBoardListByCategoryResDto> getBoardByCategory(
-        @PathVariable("category") @Schema(description = "카테고리명", defaultValue = "CRANE") String category
+            @PathVariable("category") @Schema(description = "카테고리명", defaultValue = "CRANE") String category
     ){
         // 카테고리 존재 여부 검증
         dtoValidationUtils.validateCategory(category);
@@ -248,8 +256,8 @@ public class ArticleController {
 
     @Operation(summary = "공지사항 상세조회", description = "특정 공지사항을 상세 조회합니다.")
     @GetMapping("/board/{projectid}")
-    public ResponseEntity<?> getBoardDetails(@PathVariable("projectid") int projectId){
-        
+    public ResponseEntity<GetBoardDetailResDto> getBoardDetails(@PathVariable("projectid") int projectId){
+
         GetBoardDetailResDto boardDetail = null;
         try{
             // 공지글이 존재하는 경우
@@ -266,8 +274,8 @@ public class ArticleController {
     @SecurityRequirement(name = "bearerAuth")
     @PutMapping("/board")
     public ResponseEntity<?> updateBoardDetails(
-        @RequestBody UpdateBoardReqDto updateBoardReqDto,
-        @AuthenticationPrincipal PrincipalDetails principalDetails
+            @RequestBody UpdateBoardReqDto updateBoardReqDto,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
     ){
         // 관리자 토큰 검증
         tokenUtils.validateAdminTokenAndGetUser(principalDetails, true);
@@ -289,6 +297,4 @@ public class ArticleController {
 
         return new ResponseEntity<>("[관리자] 공지사항 수정 완료", HttpStatus.OK);
     }
-
-
 }

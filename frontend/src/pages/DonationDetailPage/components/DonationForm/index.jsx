@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../../../api/auth";
+// import Web3 from "web3";
+// import { useWeb3React } from "@web3-react/core";
 
 const DonationForm = (props) => {
   // props 정보 - 이은혁 ----------------------------------------
@@ -27,7 +29,7 @@ const DonationForm = (props) => {
     const endDate = new Date(data.endDate);
     const startDate = new Date(data.startDate);
     const now = new Date();
-    if (now < new Date(endDate)) {
+    if (now > new Date(endDate)) {
       // 마감기한이 지난 경우 isDisabled true -> 버튼 비활성화 목적 - 이은혁
       setIsDisabled(true);
     } else {
@@ -75,6 +77,7 @@ const DonationForm = (props) => {
       .mutateAsync()
       .then((res) => {
         if (res.status === 200) {
+          // donatePoint(10);
           setMoney(0); // 금액 초기화 - 이은혁
           setMoi(0); // 모이 갯수 초기화 - 이은혁
           alert("모이 " + moi + "개가 정상적으로 기부되었습니다.");
@@ -85,6 +88,39 @@ const DonationForm = (props) => {
       });
   };
 
+  // 수연: 블록체인 -----------------------------------------------------------
+  // const web3 = new Web3();
+
+  // web3.setProvider(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+  // const {
+  //   connector,
+  //   library,
+  //   chainId, // DApp에 연결된 account의 chainId
+  //   account, // DApp에 연결된 account address
+  //   active, // DApp 유저가 로그인 된 상태인지 체크
+  //   activate, // DApp 월렛 연결 기능 수행함수
+  //   deactivate, // DApp 월렛 해제 수행함수
+  // } = useWeb3React();
+
+  // const getAdminAddress = async () => {
+  //   const res = await web3.eth.getCoinbase();
+  //   return res;
+  // };
+
+  // const donatePoint = useCallback(async () => {
+  //   console.log("donatePoint");
+  //   const coinbase = await getAdminAddress();
+  //   // value : 숫자.toString()
+  //   const Eth = web3.utils.toWei("1", "ether"); // value를 ether로
+  //   const tx = {
+  //     from: account || localStorage.getItem("acc"),
+  //     to: coinbase,
+  //     value: Eth,
+  //   };
+  //   console.log(tx);
+  //   web3.eth.sendTransaction(tx);
+  // });
+  // ---------------------------------------------------------------------------
   return (
     <div>
       <span>D-{dDay}</span>

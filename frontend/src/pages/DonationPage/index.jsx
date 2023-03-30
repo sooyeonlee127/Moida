@@ -3,6 +3,8 @@ import tw from "twin.macro";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import DonationCard from "./components";
+import { useNavigate } from "react-router-dom";
+
 // {
 //     title: "Apple Watch",
 //     image: "https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/",
@@ -30,7 +32,11 @@ const DonationPage = () => {
   const cardList = cards.map((card, index) => (
     <DonationCard card={card} key={index}></DonationCard>
   ));
-
+  const navigate = useNavigate();
+  const role = localStorage.getItem("role");
+  const goCreateProject = () => {
+    navigate(`/admin/project/create`, { replace: false });
+  };
   useEffect(() => {
     // 수연: project 받아오기
     axios({
@@ -48,7 +54,22 @@ const DonationPage = () => {
 
   return (
     <WrapPage>
-      <p>프로젝트 목록 관련 설명</p>
+      <Box>
+        {role === "ROLE_ADMIN" ? (
+          <>
+            <AdminButton
+              onClick={(e) => {
+                e.preventDefault();
+                goCreateProject();
+              }}
+            >
+              프로젝트 생성하기
+            </AdminButton>
+          </>
+        ) : (
+          <></>
+        )}
+      </Box>
       <WrapCard>{cardList}</WrapCard>
     </WrapPage>
   );
@@ -63,6 +84,21 @@ const WrapCard = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
+`;
+
+const Box = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  ${tw`
+  my-5 mx-10
+  `}
+`;
+
+const AdminButton = styled.button`
+  ${tw`
+  bg-amber-200 rounded px-3 py-1 hover:bg-amber-400 active:bg-amber-500 mx-1
+  `}
 `;
 
 export default DonationPage;
