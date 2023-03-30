@@ -206,6 +206,11 @@ public class ArticleController {
         // DTO NOT NULL 검증
         dtoValidationUtils.validateCreateBoardReqDto(createBoardReqDto);
 
+        // 해당 프로젝트에 이미 작성된 공지사항이 있는 경우 충돌 발생
+        if(boardService.existsByProjectId(createBoardReqDto.getProjectId())){
+            throw new CustomException(ErrorCode.DUPLICATE_BOARD_EXISTS);
+        }
+
         // Board 데이터베이스 저장
         Board board = boardService.save(createBoardReqDto, admin);
 
