@@ -18,5 +18,6 @@ public class GetArticleResDto {
     private Long id;
     private String subject;
     private String url;
+    private String writer;
     private double difficultyLevel;
 }

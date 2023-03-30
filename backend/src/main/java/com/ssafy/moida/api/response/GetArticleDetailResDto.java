@@ -23,6 +23,7 @@ public class GetArticleDetailResDto {
     private LocalDateTime regDate;
     private String category;
     private String url;
+    private String writer;
 
     public GetArticleDetailResDto(Article article){
         this.id = article.getId();
@@ -32,5 +33,6 @@ public class GetArticleDetailResDto {
         this.regDate = article.getRegDate();
         this.category = article.getCategory();
         this.url = article.getUrl();
+        this.writer = article.getUsers().getNickname();
     }
 }

@@ -163,7 +163,7 @@ public class ArticleService {
         }
 
         return articleList.stream()
-            .map(article -> new GetArticleResDto(article.getId(), article.getSubject(), article.getUrl(),article.getDifficultyLevel()))
+            .map(article -> new GetArticleResDto(article.getId(), article.getSubject(), article.getUrl(), article.getUsers().getNickname(), article.getDifficultyLevel()))
             .collect(Collectors.toList());
     }
 

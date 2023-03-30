@@ -56,6 +56,15 @@ public class BoardService {
     }
 
     /**
+     * [세은] 프로젝트 아이디에 이미 작성된 공지사항이 있는지 여부 확인
+     * @param projectId
+     * @return
+     */
+    public boolean existsByProjectId(Long projectId){
+        return boardRepository.countBoardByProject(projectId) > 0 ? true : false;
+    }
+
+    /**
      * [세은] 고유 아이디로 객체 조회
      * @param boardId
      * @return
