@@ -1,4 +1,5 @@
 import "./App.css";
+import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
@@ -31,50 +32,57 @@ export default function App() {
     <Auth>
       <div className="App">
         <NavBar />
-        <Routes>
-          <Route element={<PublicRoute />}>
-            <Route path={"/login"} element={<LoginPage />} />
-            <Route path={"/signup"} element={<SignupPage />} />
-            <Route path={"/password"} element={<PasswordPage />} />
-          </Route>
-          <Route element={<PrivateRoute />}>
+        <Body>
+          <Routes>
+            <Route element={<PublicRoute />}>
+              <Route path={"/login"} element={<LoginPage />} />
+              <Route path={"/signup"} element={<SignupPage />} />
+              <Route path={"/password"} element={<PasswordPage />} />
+            </Route>
+            <Route element={<PrivateRoute />}>
+              <Route
+                path={"/admin/project/create"}
+                element={<ProjectCreatePage />}
+              />
+              <Route
+                path={"/admin/notice/:projectid"}
+                element={<NoticeCreatePage />}
+              />
+              <Route
+                path={"/admin/notice/update/:boardid"}
+                element={<NoticeUpdatePage />}
+              />
+              <Route
+                path={"/review/update/:reviewid"}
+                element={<ReviewUpdatePage />}
+              />
+              <Route path={"/admin/authcord"} element={<AuthCordPage />} />
+              <Route path={"/admin"} element={<AdminPage />} />
+              <Route path={"/payresult"} element={<PayResult />} />
+              <Route path={"/review/create"} element={<ReviewCreatePage />} />
+              <Route path={"/profile"} element={<ProfilePage />} />
+            </Route>
+            <Route path={"/"} element={<MainPage />} />
+            <Route path={"/donation"} element={<DonationPage />} />
             <Route
-              path={"/admin/project/create"}
-              element={<ProjectCreatePage />}
+              path={"/donation/:projectId"}
+              element={<DonationDetailPage />}
             />
-            <Route
-              path={"/admin/notice/:projectid"}
-              element={<NoticeCreatePage />}
-            />
-            <Route
-              path={"/admin/notice/update/:boardid"}
-              element={<NoticeUpdatePage />}
-            />
-            <Route
-              path={"/review/update/:reviewid"}
-              element={<ReviewUpdatePage />}
-            />
-            <Route path={"/admin/authcord"} element={<AuthCordPage />} />
-            <Route path={"/admin"} element={<AdminPage />} />
-            <Route path={"/payresult"} element={<PayResult />} />
-            <Route path={"/review/create"} element={<ReviewCreatePage />} />
-            <Route path={"/profile"} element={<ProfilePage />} />
-          </Route>
-          <Route path={"/"} element={<MainPage />} />
-          <Route path={"/donation"} element={<DonationPage />} />
-          <Route
-            path={"/donation/:projectId"}
-            element={<DonationDetailPage />}
-          />
-          <Route path={"/gatcha"} element={<GatchaPage />} />
-          <Route path={"/point"} element={<PointPage />} />
+            <Route path={"/gatcha"} element={<GatchaPage />} />
+            <Route path={"/point"} element={<PointPage />} />
 
-          <Route path={"/review"} element={<ReviewPage />} />
-          <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
-          <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
-          <Route path={"/hjooo"} element={<HjooPage />} />
-        </Routes>
+            <Route path={"/review"} element={<ReviewPage />} />
+            <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
+            <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
+            <Route path={"/hjooo"} element={<HjooPage />} />
+          </Routes>
+        </Body>
       </div>
     </Auth>
   );
 }
+// nav와 content 분리용 - 이은혁
+const Body = styled.div`
+width: 100%;
+padding-top: 56px;
+`
