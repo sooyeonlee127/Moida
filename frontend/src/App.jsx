@@ -24,7 +24,7 @@ import AdminPage from "./pages/Admin";
 import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import HjooPage from "./pages/ethers/HjooPage";
-
+import ReviewCreatePage from "./pages/ReviewCreatePage";
 
 export default function App() {
   return (
@@ -58,7 +58,6 @@ export default function App() {
             <Route path={"/admin"} element={<AdminPage />} />
             <Route path={"/payresult"} element={<PayResult />} />
             <Route path={"/review/create"} element={<ReviewCreatePage />} />
-
             <Route path={"/profile"} element={<ProfilePage />} />
           </Route>
           <Route path={"/"} element={<MainPage />} />

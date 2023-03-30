@@ -1,4 +1,4 @@
-// 로그인된 사용자만 접근 가능
+// 수연: 로그인된 사용자만 접근 가능
 import { useContext } from "react";
 import { AuthContext } from "../context/Auth";
 import { Navigate, Outlet } from "react-router-dom";
