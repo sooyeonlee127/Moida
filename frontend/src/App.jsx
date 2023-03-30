@@ -21,6 +21,7 @@ import NoticeUpdatePage from "./pages/Admin/NoticeUpdatePage";
 import NoticeCreatePage from "./pages/Admin/NoticeCreatePage";
 import ReviewUpdatePage from "./pages/ReviewUpdatePage";
 import AuthCordPage from "./pages/Admin/AuthCodePage";
+import AdminPage from "./pages/Admin";
 
 export default function App() {
   return (
@@ -40,7 +41,10 @@ export default function App() {
           <Route path={"/profile"} element={<ProfilePage />} />
           <Route path={"/review"} element={<ReviewPage />} />
           <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
-          <Route path={"/review/update/:reviewid"} element={<ReviewUpdatePage />} />
+          <Route
+            path={"/review/update/:reviewid"}
+            element={<ReviewUpdatePage />}
+          />
           <Route path={"/review/create"} element={<ReviewCreatePage />} />
           <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
           <Route path={"/signup"} element={<SignupPage />} />
@@ -59,6 +63,7 @@ export default function App() {
             element={<NoticeUpdatePage />}
           />
           <Route path={"/admin/authcord"} element={<AuthCordPage />} />
+          <Route path={"/admin"} element={<AdminPage />} />
         </Routes>
       </div>
     </Auth>
