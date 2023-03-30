@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
+import api from "../../api/auth"
 
 //혜수: 리뷰 상세 페이지 조회
 const ReviewDetailPage = () => {
@@ -31,6 +32,24 @@ const ReviewDetailPage = () => {
     navigate(`/review/update/${reviewid}`)
   }
 
+  const onClickDl = async () => {
+    try {
+      const confirmed = window.confirm("정말 삭제하시겠습니까?"); // 삭제하기 전에 묻는 Alert 창
+      if (!confirmed) return; // 취소 버튼을 눌렀을 경우 함수 실행 중단
+
+      console.log(reviewid)
+      
+      const response = await api.delete(`/article/${reviewid}`, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          refresh: localStorage.getItem("refreshToken"),
+        },
+    });
+      console.log(response.data, '삭제되었습니다.');
+    } catch (error) {
+      console.error(error.response.data.message);
+    }
+  }
 
   return (
     <>
@@ -49,7 +68,7 @@ const ReviewDetailPage = () => {
 
       <ButtonWrapper>
         <Button type="button" onClick={onClickUd}>수정</Button>
-        <Button type="button">삭제</Button>
+        <Button type="button" onClick={onClickDl}>삭제</Button>
       </ButtonWrapper>
     </MainDiv>
 
