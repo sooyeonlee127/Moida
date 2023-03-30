@@ -2,8 +2,17 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer, useState } from "react";
 import api from "../../api/auth";
+import { useLocation } from "react-router-dom";
+
 // 혜수: 사용자 인증글 생성 페이지
 const ReviewCreatePage = () => {
+  const location = useLocation();
+  const volunteerId = location.state.volunteerId;
+  const projectId = location.state.projectId;
+  
+  const categorys = ['CRANE','SQUIRREL','WILD_ANIMAL']
+  const category = categorys[projectId]
+
   const reducer = (state, action) => {
     return {
       ...state,
@@ -23,16 +32,12 @@ const ReviewCreatePage = () => {
     subject: "",
     description: "",
     difficultyLevel: "",
-    category: "",
-    usersVolunteerProjectId: "",
   });
 
   const {
     subject,
     description,
     difficultyLevel,
-    category,
-    usersVolunteerProjectId,
   } = state;
 
   const reviewSubmit = () => {
@@ -40,9 +45,11 @@ const ReviewCreatePage = () => {
       subject: state.subject,
       description: state.description,
       difficultyLevel: state.difficultyLevel,
-      category: state.category,
-      usersVolunteerProjectId: state.usersVolunteerProjectId,
+      category: category,
+      usersVolunteerProjectId: volunteerId,
     };
+
+    console.log(testData)
 
     const formData = new FormData();
     formData.append(
@@ -50,9 +57,9 @@ const ReviewCreatePage = () => {
       new Blob([JSON.stringify(testData)], {
         type: "application/json",
       })
-    );
+      );
     formData.append("file", files);
-    console.log("폼데이터", formData);
+    // console.log("폼데이터", formData);
     api
       .post("/article", formData, {
         headers: {
@@ -63,11 +70,15 @@ const ReviewCreatePage = () => {
       })
       .then((res) => {
         console.log(res);
-        alert("작성되었습니다");
+        if (window.confirm("작성되었습니다.")) {
+          window.location.href = "/profile";}
+        
+        
       })
       .catch((error) => {
         const response = error.response.data;
         console.log(response);
+        alert("등록을 실패하였습니다.")
       });
   };
 
@@ -119,33 +130,6 @@ const ReviewCreatePage = () => {
                 />
               </InputDiv>
             </InputGroup>
-            <InputGroup>
-              <InputDiv>
-                <InputText htmlFor="category">카테고리 : </InputText>
-                <ReviewInput
-                  id="category"
-                  name="category"
-                  type="text"
-                  value={category}
-                  onChange={onChange}
-                />
-              </InputDiv>
-            </InputGroup>
-            <InputGroup>
-              <InputDiv>
-                <InputText htmlFor="usersVolunteerProjectId">
-                  userVolunteerPJTID :{" "}
-                </InputText>
-                <ReviewInput
-                  id="usersVolunteerProjectId"
-                  name="usersVolunteerProjectId"
-                  type="int"
-                  value={usersVolunteerProjectId}
-                  onChange={onChange}
-                />
-              </InputDiv>
-            </InputGroup>
-
             <InputGroup>
               <div>
                 <Heading>파일 첨부</Heading>

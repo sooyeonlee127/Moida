@@ -9,7 +9,7 @@ const DonationList = () => {
             <thead>
                 <tr>
                     <th>프로젝트 차수</th>
-                    <th>기부한 금액</th>
+                    <th>기부한 모이</th>
                     <th>프로젝트 id</th>
                     <th>프로젝트 제목</th>
                     <th>기부한 날짜</th>
@@ -21,7 +21,7 @@ const DonationList = () => {
                     return (
                         <tr key={index}>
                             <td>{data.generation}</td>
-                            <td>{data.point}</td>
+                            <td>{data.moi}</td>
                             <td>{data.projectId}</td>
                             <td>{data.projectSubject}</td>
                             <td>{data.regDate}</td>

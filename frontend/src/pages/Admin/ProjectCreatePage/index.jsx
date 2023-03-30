@@ -113,7 +113,7 @@ const ProjectCreatePage = () => {
       <Container>
         <InnerContainer>
           <div>
-            <Heading>관리자 페이지</Heading>
+            <Heading>프로젝트 생성 페이지</Heading>
           </div>
           <AdminForm action="#" method="POST">
             <InputGroup>
@@ -405,13 +405,13 @@ const ProjectCreatePage = () => {
 
 const Heading = styled.h2`
   ${tw`
-  mt-6 text-center text-xl font-normal text-indigo-500
+  text-center text-xl text-gray-900 font-black tracking-tighter
   `}
 `;
 
 const Title = styled.h2`
   ${tw`
-  text-center text-lg font-normal text-gray-900
+  text-center text-lg font-normal text-gray-900 tracking-tighter
   `}
 `;
 
@@ -423,7 +423,7 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
   ${tw`
-  bg-gray-200 w-full max-w-md mt-8 px-5 py-5
+  border-2 border-neutral-100 w-full max-w-md mt-8 px-5 py-5
   `}
 `;
 
@@ -458,7 +458,9 @@ const AdminLargeInput = styled.textarea`
 
 const SubmitButton = styled.button`
   ${tw`
-  w-full h-full bg-yellow-600 py-2 px-10 font-semibold text-black
+  w-full h-full py-2 px-10 font-normal text-black
+  bg-amber-200 hover:bg-amber-400 active:bg-amber-500 mx-1
+
   `}
 `;
 

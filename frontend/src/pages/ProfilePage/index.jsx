@@ -6,6 +6,7 @@ import Modal from '../../components/Modal';
 import { useState } from 'react'
 import useValidator from "../../components/Validator";
 import api from "../../api/auth";
+import MyGallery from "./components/UserContent/Components/MyGallery";
 
 const ProfilePage = () => {
     const [ isOpen, setIsOpen ] = useState(false); // 비밀번호 변경 모달용 - 이은혁
@@ -81,6 +82,9 @@ const ProfilePage = () => {
             <WrapUserContent>
                 <UserContent />
             </WrapUserContent>
+            <div>
+              <MyGallery/>
+            </div>
         </Wrapper>
         
         </>
