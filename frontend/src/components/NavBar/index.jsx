@@ -49,7 +49,6 @@ const NavBar = () => {
     }
     // isLogin 값이 변경될 때마다 쿼리를 다시 실행 - 수연
   }, [isLogin]);
-
   const navigate = useNavigate();
 
   const goAdmin = () => {
@@ -78,8 +77,8 @@ const NavBar = () => {
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
-    { name: `${data ? data.info.ticketCnt : "  "}개`, href: "/gatcha" },
-    { name: `${data ? data.info.point : "  "} P`, href: "/point" },
+    { name: `${data?.info ? data?.info.ticketCnt : "  "}개`, href: "/gatcha" },
+    { name: `${data?.info ? data?.info.totalPoint : "  "} P`, href: "/point" },
     { name: "MYPAGE", href: "/profile" },
   ];
   // 수연: 로그아웃 호출
