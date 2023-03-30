@@ -42,6 +42,7 @@ const NavBar = () => {
 
   // 수연: 로그인 상태에 따라 navbar 변경
   const { isLogin, setIsLogin } = useContext(AuthContext);
+
   useEffect(() => {
     if (isLogin) {
       refetch();
@@ -77,8 +78,8 @@ const NavBar = () => {
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
-    { name: `${data ? data.ticketCnt : "  "}개`, href: "/gatcha" },
-    { name: `${data ? data.point : "  "} P`, href: "/point" },
+    { name: `${data ? data.info.ticketCnt : "  "}개`, href: "/gatcha" },
+    { name: `${data ? data.info.point : "  "} P`, href: "/point" },
     { name: "MYPAGE", href: "/profile" },
   ];
   // 수연: 로그아웃 호출
@@ -108,38 +109,90 @@ const NavBar = () => {
 
   return (
     <Nav>
-      <Logo><p>우리 로고</p></Logo>
+      <Logo>
+        <p>우리 로고</p>
+      </Logo>
       <Section>
         <div>
-          {isLogin && role === "ROLE_ADMIN" ? (<AdminButton onClick={(e) => {e.preventDefault(); goAdmin();}}>Admin 계정입니다.</AdminButton>) : ""}
+          {isLogin && role === "ROLE_ADMIN" ? (
+            <AdminButton
+              onClick={(e) => {
+                e.preventDefault();
+                goAdmin();
+              }}
+            >
+              Admin 계정입니다.
+            </AdminButton>
+          ) : (
+            ""
+          )}
         </div>
         <Home>
-          <button onClick={(e) => {e.preventDefault(); goHome();}}>HOME</button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              goHome();
+            }}
+          >
+            HOME
+          </button>
         </Home>
         <Title>
-          {isLogin? 
-          userNavigation.map((item, index) => (<Link on={item.name} key={index} to={item.href}>{item.name}</Link>)): 
-          navigation.map((item) => (<a key={item.name} href={item.href}>{item.name}</a>))}
+          {isLogin
+            ? userNavigation.map((item, index) => (
+                <Link on={item.name} key={index} to={item.href}>
+                  {item.name}
+                </Link>
+              ))
+            : navigation.map((item) => (
+                <a key={item.name} href={item.href}>
+                  {item.name}
+                </a>
+              ))}
         </Title>
         <Title>
           <LogoutButton>
-            {isLogin? 
-              (<button onClick={(e) => {e.preventDefault();LogoutSubmit();}}>LOGOUT</button>):
-              (<button onClick={(e) => {e.preventDefault();goSignup();}}>SIGNUP</button>)
-            }
+            {isLogin ? (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  LogoutSubmit();
+                }}
+              >
+                LOGOUT
+              </button>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  goSignup();
+                }}
+              >
+                SIGNUP
+              </button>
+            )}
           </LogoutButton>
         </Title>
-        {!isLogin? (
+        {!isLogin ? (
           <Title>
             <LogoutButton>
-              <button onClick={(e) => {e.preventDefault();goLogin();}}>LOGIN</button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  goLogin();
+                }}
+              >
+                LOGIN
+              </button>
             </LogoutButton>
           </Title>
-        ):""}
+        ) : (
+          ""
+        )}
       </Section>
     </Nav>
   );
-}
+};
 
 const Nav = styled.div`
   position: fixed;
