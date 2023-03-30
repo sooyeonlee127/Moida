@@ -91,7 +91,6 @@ const VolunteerList = () => {
                     <th>취소 버튼</th>
                     <th>완료 버튼</th>
                     <th>리뷰 작성</th>
-                    
                 </tr>
             </thead>
             <tbody>
