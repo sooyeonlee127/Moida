@@ -12,7 +12,7 @@ const VolunteerList = () => {
     const navigate = useNavigate();
 
     // 취소코드
-    const cancel = async (cancelId) => {
+    const volunteerCancel = async (cancelId) => {
       await axios
       .put("/api/users/me/volunteer", {
         volunteerId: cancelId,
@@ -35,7 +35,7 @@ const VolunteerList = () => {
 
 
     //완료코드
-    const done = async (value, doneId) => {
+    const volunteerDone = async (value, doneId) => {
       try {
       const res = await axios
       .put("/api/users/me/volunteer", {
@@ -55,7 +55,7 @@ const VolunteerList = () => {
 
       } catch(error) {
         console.log(error.response.data.message)
-        // alert("인증코드가 다릅니다.")
+        alert("인증코드가 다릅니다.")
       }
 
     }
@@ -74,7 +74,7 @@ const VolunteerList = () => {
             type="submit"
             onClick={(e) => {
               e.preventDefault()
-              done(value,doneId)
+              volunteerDone(value,doneId)
             }}
             >확인</button>
           </form>
@@ -91,7 +91,6 @@ const VolunteerList = () => {
                     <th>취소 버튼</th>
                     <th>완료 버튼</th>
                     <th>리뷰 작성</th>
-                    
                 </tr>
             </thead>
             <tbody>
@@ -104,7 +103,7 @@ const VolunteerList = () => {
                             <td>{data.regDate}</td>
                             <td>{data.volunteerId}</td>
                             <td>{data.status}</td>
-                            <td onClick={() =>{cancel(data.volunteerId);}}>취소</td>
+                            <td onClick={() =>{volunteerCancel(data.volunteerId);}}>취소</td>
                             <td onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}}>완료</td>
                             <td onClick={()=>{navigate('/review/create')}}>리뷰 작성</td>
 
