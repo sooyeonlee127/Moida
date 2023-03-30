@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/auth";
@@ -12,19 +11,24 @@ import api from "../../api/auth";
 const NavBar = () => {
   // 은혁: useQuery
   const getMe = async () => {
-    try {
-      const response = await api({
-        url: "/users/me",
-        method: "GET",
-        headers: {
-          accept: "*/*",
-          Authorization: localStorage.getItem("accessToken"),
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return null;
+    if (isLogin) {
+      try {
+        const response = await api({
+          url: "/users/me",
+          method: "GET",
+          headers: {
+            accept: "*/*",
+            Authorization: localStorage.getItem("accessToken"),
+          },
+        });
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    } else {
+      // 수연: 로그아웃 상태 예외 처리
+      return new Error("logout");
     }
   };
 
@@ -39,7 +43,10 @@ const NavBar = () => {
   // 수연: 로그인 상태에 따라 navbar 변경
   const { isLogin, setIsLogin } = useContext(AuthContext);
   useEffect(() => {
-    refetch(); // isLogin 값이 변경될 때마다 쿼리를 다시 실행 - 수연
+    if (isLogin) {
+      refetch();
+    }
+    // isLogin 값이 변경될 때마다 쿼리를 다시 실행 - 수연
   }, [isLogin]);
 
   const navigate = useNavigate();

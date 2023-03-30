@@ -9,7 +9,6 @@ import PointPage from "./pages/PointPage";
 import ProfilePage from "./pages/ProfilePage";
 import ReviewPage from "./pages/ReviewPage";
 import ReviewDetailPage from "./pages/ReviewDetailPage";
-import ReviewCreatePage from "./pages/ReviewCreatePage";
 import NoticeDetailPage from "./pages/NoticeDetailPage";
 import SignupPage from "./pages/SignupPage";
 import PayResult from "./pages/PointPage/components/PayResult";
@@ -22,6 +21,10 @@ import NoticeCreatePage from "./pages/Admin/NoticeCreatePage";
 import ReviewUpdatePage from "./pages/ReviewUpdatePage";
 import AuthCordPage from "./pages/Admin/AuthCodePage";
 import AdminPage from "./pages/Admin";
+import PublicRoute from "./routes/PublicRoute";
+import PrivateRoute from "./routes/PrivateRoute";
+import HjooPage from "./pages/ethers/HjooPage";
+import ReviewCreatePage from "./pages/ReviewCreatePage";
 
 export default function App() {
   return (
@@ -29,41 +32,47 @@ export default function App() {
       <div className="App">
         <NavBar />
         <Routes>
-          <Route path={"/login"} element={<LoginPage />} />
+          <Route element={<PublicRoute />}>
+            <Route path={"/login"} element={<LoginPage />} />
+            <Route path={"/signup"} element={<SignupPage />} />
+            <Route path={"/password"} element={<PasswordPage />} />
+          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route
+              path={"/admin/project/create"}
+              element={<ProjectCreatePage />}
+            />
+            <Route
+              path={"/admin/notice/:projectid"}
+              element={<NoticeCreatePage />}
+            />
+            <Route
+              path={"/admin/notice/update/:boardid"}
+              element={<NoticeUpdatePage />}
+            />
+            <Route
+              path={"/review/update/:reviewid"}
+              element={<ReviewUpdatePage />}
+            />
+            <Route path={"/admin/authcord"} element={<AuthCordPage />} />
+            <Route path={"/admin"} element={<AdminPage />} />
+            <Route path={"/payresult"} element={<PayResult />} />
+            <Route path={"/review/create"} element={<ReviewCreatePage />} />
+            <Route path={"/profile"} element={<ProfilePage />} />
+          </Route>
           <Route path={"/"} element={<MainPage />} />
           <Route path={"/donation"} element={<DonationPage />} />
           <Route
             path={"/donation/:projectId"}
             element={<DonationDetailPage />}
           />
-          <Route path={"/gatcha"} element={<GatchaPage />} />W
+          <Route path={"/gatcha"} element={<GatchaPage />} />
           <Route path={"/point"} element={<PointPage />} />
-          <Route path={"/profile"} element={<ProfilePage />} />
+
           <Route path={"/review"} element={<ReviewPage />} />
           <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
-          <Route
-            path={"/review/update/:reviewid"}
-            element={<ReviewUpdatePage />}
-          />
-          <Route path={"/review/create"} element={<ReviewCreatePage />} />
           <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
-          <Route path={"/signup"} element={<SignupPage />} />
-          <Route path={"/payresult"} element={<PayResult />} />
-          <Route
-            path={"/admin/project/create"}
-            element={<ProjectCreatePage />}
-          />
-          <Route path={"/password"} element={<PasswordPage />} />
-          <Route
-            path={"/admin/notice/:projectid"}
-            element={<NoticeCreatePage />}
-          />
-          <Route
-            path={"/admin/notice/update/:boardid"}
-            element={<NoticeUpdatePage />}
-          />
-          <Route path={"/admin/authcord"} element={<AuthCordPage />} />
-          <Route path={"/admin"} element={<AdminPage />} />
+          <Route path={"/hjooo"} element={<HjooPage />} />
         </Routes>
       </div>
     </Auth>
