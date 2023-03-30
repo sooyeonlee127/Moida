@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useState } from 'react'
 import useListApi from "./api"
 import axios from 'axios'
 import { Navigate, useNavigate } from 'react-router-dom'
@@ -10,7 +10,6 @@ const VolunteerList = () => {
     const [value, setValue] = useState('');
     const [doneId, setDoneId] = useState();
     const navigate = useNavigate();
-
 
     // 취소코드
     const cancel = async (cancelId) => {
@@ -31,34 +30,6 @@ const VolunteerList = () => {
       .catch((error) => {
         console.log(error.response.data.message)
       })
-    }
-
-
-    
-    // 완료 코드 입력 모달 
-    const Modal = () => {
-
-      const saveValue = (e) => {
-        console.log(e.currentTarget.value)
-        e.preventDefault()
-        setValue(e.currentTarget.value)
-      }
-      return (
-        <>
-        <form>
-          <input
-          type="string"
-          placeholder='코드를 입력하세요'
-          value={value}
-          onBlur={saveValue}
-          />
-          <button
-          type="button"
-          onClick={() => {done(value,doneId)}}
-          >확인</button>
-        </form>
-        </>
-      )
     }
 
 
@@ -91,7 +62,23 @@ const VolunteerList = () => {
 
     return (
         <>
-        {visible && <Modal/>}
+        {visible && 
+          <form >
+            <input
+            value={value}
+            onChange={(e)=>setValue(e.target.value)}
+            type="text"
+            placeholder='코드를 입력하세요'
+            />
+            <button
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault()
+              done(value,doneId)
+            }}
+            >확인</button>
+          </form>
+          }
         <table>
             <thead>
                 <tr>
@@ -117,7 +104,7 @@ const VolunteerList = () => {
                             <td>{data.regDate}</td>
                             <td>{data.volunteerId}</td>
                             <td>{data.status}</td>
-                            <td onClick={() => {cancel(data.volunteerId);}}>취소</td>
+                            <td onClick={() =>{cancel(data.volunteerId);}}>취소</td>
                             <td onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}}>완료</td>
                             <td onClick={()=>{navigate('/review/create')}}>리뷰 작성</td>
 
@@ -133,4 +120,4 @@ const VolunteerList = () => {
 }
 
 export default React.memo(VolunteerList);
-// React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은
+// React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은혁
