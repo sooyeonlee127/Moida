@@ -27,7 +27,7 @@ const DonationForm = (props) => {
     const endDate = new Date(data.endDate);
     const startDate = new Date(data.startDate);
     const now = new Date();
-    if (now < new Date(endDate)) {
+    if (now > new Date(endDate)) {
       // 마감기한이 지난 경우 isDisabled true -> 버튼 비활성화 목적 - 이은혁
       setIsDisabled(true);
     } else {
