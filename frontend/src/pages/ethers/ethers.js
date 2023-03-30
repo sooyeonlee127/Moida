@@ -5,7 +5,7 @@ const path = require("path");
 
 const PRIVATE_NODE = "http://127.0.0.1:8545"; // 나중에 환경변수 처리 및 주소 변경
 
-const provider = new ethers.providers.JsonRpcProvider();
+const provider = new ethers.providers.JsonRpcProvider(PRIVATE_NODE);
 
 // 코인베이스 주소 가져오기
 // 0번째 account
@@ -17,13 +17,13 @@ const getAdminAddress = async () => {
 };
 
 // 회원가입 - 지갑 만들기
-const createAccount = async () => {
-    const password = "123456"; // 지갑 임시 패스워드 -> 나중에는 회원가입할 때 받은 비밀번호면 좋겠음
-
+export const createAccount = async (password) => {
     console.log(password);
     const coinbase = await getAdminAddress();
     const signer = ethers.Wallet.createRandom(); // 새 지갑 생성
     const keystore = await signer.encrypt(password); // 해당 지갑의 키스토어 파일 ~ 확장자 : json
+
+    console.log("1111");
 
     // 키스토어 파일을 ./public/keystores에 저장
     const dir = path.join('./', '..', '..', '..', 'public', 'keystores');
@@ -32,11 +32,12 @@ const createAccount = async () => {
     fs.mkdirSync(dir, { recursive: true });
     }
 
+    console.log("2222");
     const filename ="UTC" + new Date(Date.now()).toISOString().replace(/:/g, '-') + '-' + signer.address + ".json";
     const filepath = path.join(dir, filename);    
     
     fs.writeFileSync(filepath, keystore);
-
+    console.log("3333");
     const wallet = signer.connect(provider);
     const tx = {
             from: coinbase,
@@ -73,7 +74,7 @@ const createAccount = async () => {
     return wallet.address;
 };
 
-// createAccount();
+createAccount("1234");
 
 // 포인트 충전
 const chargePoint = async (address, value) => {
@@ -402,7 +403,7 @@ const TOKEN_ABI = [
       },
 ];
 
-export default createAccount;
+// export default createAccount;
 
 const TOKEN_CA = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"; // localhost
 // const TOKEN_CA = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"; // sepolia

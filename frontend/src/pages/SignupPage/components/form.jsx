@@ -4,7 +4,7 @@ import tw from "twin.macro";
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-// import createAccount from "../../ethers/ethers";
+import { createAccount } from "../../ethers/ethers";
 
 //==================
 
@@ -196,6 +196,8 @@ const Form = () => {
       if (res.status === 200) {
         console.log("회원가입 완료");
         //========================================================================= < 여기에 추후 지갑 생성 작업
+        createAccount(formData.password);
+
         navigate("/");
       } else if (res.status === 400) {
         console.log("잘못된 접근입니다.");
