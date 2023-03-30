@@ -1,12 +1,84 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
 import useListApi from "./api"
+import axios from 'axios'
+import { Navigate, useNavigate } from 'react-router-dom'
+
 
 const VolunteerList = () => {
-    const { data:datas, length, error, loading } = useListApi("volunteer") // length는 페이지네이션 활용 용도 - 이은혁
+    const { data:datas, error, loading } = useListApi("volunteer")
+    const [visible, setVisible] = useState(false);
+    const [value, setValue] = useState('');
+    const [doneId, setDoneId] = useState();
+    const navigate = useNavigate();
+
+    // 취소코드
+    const cancel = async (cancelId) => {
+      await axios
+      .put("/api/users/me/volunteer", {
+        volunteerId: cancelId,
+        status: "CANCEL",
+      }, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          refresh: localStorage.getItem("refreshToken"),
+        }
+      })
+      .then((res) => {
+        console.log(res)
+        alert("취소되었습니다.")
+      })
+      .catch((error) => {
+        console.log(error.response.data.message)
+      })
+    }
+
+
+
+    //완료코드
+    const done = async (value, doneId) => {
+      try {
+      const res = await axios
+      .put("/api/users/me/volunteer", {
+        volunteerId: doneId,
+        status: "DONE",
+        code: value,
+      }, {
+        headers: {
+          Authorization: localStorage.getItem("accessToken"),
+          refresh: localStorage.getItem("refreshToken"),
+        }
+      })
+      if (res) {
+        console.log(res)
+        alert("완료되었습니다.")
+      }
+
+      } catch(error) {
+        console.log(error.response.data.message)
+        // alert("인증코드가 다릅니다.")
+      }
+
+    }
 
     return (
         <>
+        {visible && 
+          <form >
+            <input
+            value={value}
+            onChange={(e)=>setValue(e.target.value)}
+            type="text"
+            placeholder='코드를 입력하세요'
+            />
+            <button
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault()
+              done(value,doneId)
+            }}
+            >확인</button>
+          </form>
+          }
         <table>
             <thead>
                 <tr>
@@ -14,9 +86,12 @@ const VolunteerList = () => {
                     <th>프로젝트 id</th>
                     <th>프로젝트 제목</th>
                     <th>봉사 날짜</th>
-                    <th>상태</th>
                     <th>봉사 id</th>
-                    <th>내가 작성한 리뷰</th>
+                    <th>상태</th>
+                    <th>취소 버튼</th>
+                    <th>완료 버튼</th>
+                    <th>리뷰 작성</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -27,9 +102,12 @@ const VolunteerList = () => {
                             <td>{data.projectId}</td>
                             <td>{data.projectSubject}</td>
                             <td>{data.regDate}</td>
-                            <td>{data.status}</td>
                             <td>{data.volunteerId}</td>
-                            <td><Link to={"/review/"+data.volunteerId}>리뷰 작성하기</Link></td>
+                            <td>{data.status}</td>
+                            <td onClick={() =>{cancel(data.volunteerId);}}>취소</td>
+                            <td onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}}>완료</td>
+                            <td onClick={()=>{navigate('/review/create')}}>리뷰 작성</td>
+
                         </tr>
                     )
                 })}
