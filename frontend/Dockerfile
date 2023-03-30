@@ -5,6 +5,9 @@ FROM node:latest as build-stage
 # RUN, CMD, ENTRYPOINT의 명령이 실행될 디렉터리 
 WORKDIR /app 
 
+# 로컬 proxy path 설정
+ENV REACT_APP_API_URL http://back
+
 # package*.json이 WORKDIR에 복사된다 
 COPY package*.json ./ 
 
