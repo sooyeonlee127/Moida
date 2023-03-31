@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 const regExp = {
   email: {
     rule: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
-    message: "형식에 맞게 작성",
+    message: "형식에 맞게 작성해주세요",
   },
   nickname: {
     rule: /^[ㄱ-ㅎ가-힣a-zA-Z]{2,8}$/,
@@ -50,6 +50,8 @@ const Form = () => {
     password: "false",
     passwordConfirm: "false",
   });
+
+  const [code, setCode] = useState(); // 이메일 인증코드
 
   const changeInput = (event) => {
     const { value, id, name } = event.target;
@@ -205,30 +207,51 @@ const Form = () => {
     });
   };
 
-  const checkEmail = () => {
+  const checkEmail = async() => {
     console.log("checkEmail");
     console.log("formInfo.email", formInfo.email);
-    axios({
-      url: "/api/users/exists/email/" + formInfo.email,
-      method: "POST",
-    })
-      .then((res) => {
-        console.log(res);
-        setValidation((prevState) => {
-          return { ...prevState, email: "true" };
-        });
-        alert("사용 가능한 이메일입니다.");
+    setInputMessage((prevState) => {
+      return { ...prevState, ["email"]: "로딩중" };
+    });
+    try {
+      const res = await axios({
+        url: "/api/users/exists/email/" + formInfo.email,
+        method: "POST",
       })
-      .catch((err) => {
-        if (err.response.status === 409) {
-          alert("이미 존재하는 이메일입니다");
-        } else if (err.response.status === 500) {
-          alert("잘못된 입력입니다");
-        } else {
-          alert("알 수 없는 오류입니다.");
-        }
+      setInputMessage((prevState) => {
+        return { ...prevState, ["email"]: "이메일로 전송된 인증코드를 입력해주세요" };
       });
-  };
+      setCode(res.data)
+    } catch(err) {
+       if (err.response.status === 409) {
+         setInputMessage((prevState) => {
+           return { ...prevState, ["email"]: "이미 존재하는 이메일입니다." };
+         });
+      } else if (err.response.status === 500) {
+        setInputMessage((prevState) => {
+          return { ...prevState, ["email"]: "잘못된 입력입니다"}});
+      } else {
+        setInputMessage((prevState) => {
+          return { ...prevState, ["email"]: "알 수 없는 오류입니다."}});
+      }
+    }
+  }
+  
+  const CheckEmailCode = (value) => {
+    console.log(code, value)
+    if (value === code) {
+      setValidation((prevState) => {
+        return { ...prevState, email: "true" };
+      });
+      setInputMessage((prevState) => {
+        return { ...prevState, ["email"]: "인증이 완료되었습니다." };
+      });
+    } else {
+      setInputMessage((prevState) => {
+        return { ...prevState, ["email"]: "잘못된 인증코드입니다." };
+      });
+    }
+  }
 
   return (
     <MyForm action="#" method="POST" onSubmit={handleSubmit}>
@@ -249,6 +272,10 @@ const Form = () => {
               중복확인
             </Button>
           </InnerDiv>
+          {
+            code ? (<Input style={{marginTop:"10px"}} type="text" onChange={(e)=>CheckEmailCode(e.target.value)}/>):""
+          }
+          
           <Message>{inputMessage.email}</Message>
         </Div>
         <Div>

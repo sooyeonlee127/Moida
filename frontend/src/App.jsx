@@ -84,5 +84,5 @@ export default function App() {
 // nav와 content 분리용 - 이은혁
 const Body = styled.div`
 width: 100%;
-padding-top: 56px;
+padding-top: 100px;
 `
