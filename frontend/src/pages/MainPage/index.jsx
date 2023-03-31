@@ -2,6 +2,7 @@ import Projects from "./components/Projects";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useWeb3React } from "@web3-react/core";
 
 const MainPage = () => {
   const [cards, setCards] = useState([]);
