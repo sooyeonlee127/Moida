@@ -21,6 +21,7 @@ const NavBar = () => {
             Authorization: localStorage.getItem("accessToken"),
           },
         });
+        localStorage.setItem("nickname",response.data.info.nickname)
         return response.data;
       } catch (error) {
         console.error(error);
