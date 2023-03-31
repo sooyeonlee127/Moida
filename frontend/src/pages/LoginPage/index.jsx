@@ -43,9 +43,6 @@ const LoginPage = () => {
   };
 
   const loginSubmit = () => {
-    console.log("email", state.email);
-    console.log("password:", state.password);
-    console.log("remember", state.remember);
     axios({
       url: "/api/auth/login",
       method: "POST",

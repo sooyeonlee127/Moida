@@ -26,7 +26,7 @@ import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import HjooPage from "./pages/ethers/HjooPage";
 import ReviewCreatePage from "./pages/ReviewCreatePage";
-
+import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
 export default function App() {
   return (
     <Auth>
@@ -57,6 +57,10 @@ export default function App() {
                 element={<ReviewUpdatePage />}
               />
               <Route path={"/admin/authcord"} element={<AuthCordPage />} />
+              <Route
+                path={"/admin/volunteer"}
+                element={<VolunteerCodePage />}
+              />
               <Route path={"/admin"} element={<AdminPage />} />
               <Route path={"/payresult"} element={<PayResult />} />
               <Route path={"/review/create"} element={<ReviewCreatePage />} />
@@ -83,6 +87,6 @@ export default function App() {
 }
 // nav와 content 분리용 - 이은혁
 const Body = styled.div`
-width: 100%;
-padding-top: 56px;
-`
+  width: 100%;
+  padding-top: 56px;
+`;

@@ -9,20 +9,12 @@ const AdminPage = () => {
   const [boardid, setBoardid] = useState("");
   const onChangeBoardid = (e) => setBoardid(e.target.value);
 
-  const goCreateNotice = (projectid) => {
-    navigate(`/admin/notice/${projectid}`, { replace: false });
-  };
-
-  const goUpdateNotice = (boardid) => {
-    navigate(`/admin/notice/update/${boardid}`, { replace: false });
-  };
-
-  const goCreateProject = () => {
-    navigate(`/admin/project/create`, { replace: false });
-  };
-
-  const goAuthCode = () => {
-    navigate(`/admin/authcord`, { replace: false });
+  const goPage = (page, id) => {
+    if (id) {
+      navigate(`/${page}/${id}`, { replace: false });
+    } else {
+      navigate(`/${page}`, { replace: false });
+    }
   };
 
   return (
@@ -36,7 +28,7 @@ const AdminPage = () => {
             <Btn
               onClick={(e) => {
                 e.preventDefault();
-                goCreateProject();
+                goPage("admin/project/create");
               }}
             >
               go
@@ -50,7 +42,7 @@ const AdminPage = () => {
             <Btn
               onClick={(e) => {
                 e.preventDefault();
-                goCreateNotice(1);
+                goPage("admin/notice", 1);
               }}
             >
               go
@@ -61,7 +53,7 @@ const AdminPage = () => {
             <Btn
               onClick={(e) => {
                 e.preventDefault();
-                goCreateNotice(2);
+                goPage("admin/notice", 2);
               }}
             >
               go
@@ -72,7 +64,7 @@ const AdminPage = () => {
             <Btn
               onClick={(e) => {
                 e.preventDefault();
-                goCreateNotice(3);
+                goPage("admin/notice", 3);
               }}
             >
               go
@@ -91,10 +83,10 @@ const AdminPage = () => {
             onClick={(e) => {
               e.preventDefault();
               if (!boardid) {
-                alert("게시글 id를 입력하세요")
+                alert("게시글 id를 입력하세요");
               } else {
                 console.log(boardid);
-                goUpdateNotice(boardid);
+                goPage("admin/notice/update", boardid);
               }
             }}
           >
@@ -108,7 +100,18 @@ const AdminPage = () => {
             <Btn
               onClick={(e) => {
                 e.preventDefault();
-                goAuthCode();
+                goPage("admin/authcord");
+              }}
+            >
+              go
+            </Btn>
+          </InnerBox>
+          <InnerBox>
+            <span>봉사 상세정보 조회하기 </span>
+            <Btn
+              onClick={(e) => {
+                e.preventDefault();
+                goPage("admin/volunteer");
               }}
             >
               go
@@ -165,8 +168,8 @@ const Btn = styled.button`
 `;
 
 const Input = styled.input`
-	${tw`
+  ${tw`
 	border-2 border-gray-200
 	`}
-`
+`;
 export default AdminPage;
