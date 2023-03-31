@@ -29,28 +29,10 @@ services:
     container_name: back
     depends_on:
       - redis
-      # - mariadb
     networks:
       - moida
-  jenkins:
-    image: jenkins/jenkins
-    container_name: jenkins
-    ports:
-      - 8080:8080
-      - 50000:50000
-    volumes:
-      - jenkins_home:/var/jenkins_home
-  # mariadb:
-  #   image: mariadb
-  #   environment:
-  #     MYSQL_ROOT_PASSWORD: root
-  #   networks:
-  #     - moida
-volumes:
-  jenkins_home:
 
 networks:
   moida:
-    driver: bridge
-    # external:
-    #   name: moida
+    external:
+      name: moida
