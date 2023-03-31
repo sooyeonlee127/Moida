@@ -22,6 +22,7 @@ const NavBar = () => {
           },
         });
         localStorage.setItem("nickname",response.data.info.nickname)
+        setRole(response.data.roles);
         return response.data;
       } catch (error) {
         console.error(error);
@@ -33,8 +34,6 @@ const NavBar = () => {
     }
   };
 
-  const role = localStorage.getItem("role");
-
   const { data, refetch } = useQuery({
     queryKey: ["getMe"],
     queryFn: getMe,
@@ -42,7 +41,7 @@ const NavBar = () => {
   });
 
   // 수연: 로그인 상태에 따라 navbar 변경
-  const { isLogin, setIsLogin } = useContext(AuthContext);
+  const { isLogin, setIsLogin, role, setRole } = useContext(AuthContext);
 
   useEffect(() => {
     if (isLogin) {
