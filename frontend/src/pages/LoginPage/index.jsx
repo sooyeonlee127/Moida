@@ -43,9 +43,6 @@ const LoginPage = () => {
   };
 
   const loginSubmit = () => {
-    console.log("email", state.email);
-    console.log("password:", state.password);
-    console.log("remember", state.remember);
     axios({
       url: "/api/auth/login",
       method: "POST",
@@ -68,7 +65,7 @@ const LoginPage = () => {
         const token = res.headers.authorization;
         localStorage.setItem("accessToken", token);
         localStorage.setItem("refreshToken", res.headers.refresh);
-        localStorage.setItem("role", data.role);
+        setRole(data.role)
         setIsLogin(true);
         // 응답값으로 받아오기
         navigate("/", { replace: true });

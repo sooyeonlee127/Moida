@@ -2,6 +2,7 @@ import Projects from "./components/Projects";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Intro from "./components/Intro"
 import { useWeb3React } from "@web3-react/core";
 
 const MainPage = () => {
@@ -24,7 +25,7 @@ const MainPage = () => {
 
   return (
     <Wrapper>
-      <div className="intro"></div>
+      <Intro />
       <ul>{cardList}</ul>
       <div className="nft"></div>
       <div className="footer"></div>
@@ -35,7 +36,7 @@ const MainPage = () => {
 const Wrapper = styled.div`
   width: 100vw;
   position: absolute;
-  top: 56px;
+  top: 0;
   left: 0;
 `;
 

@@ -5,10 +5,12 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
 import api from "../../api/auth"
+import "./index.css"
 
 //혜수: 리뷰 상세 페이지 조회
 const ReviewDetailPage = () => {
   const { reviewid } = useParams(); // const 변수명 = useParams().파라미터명;
+  const nickname = localStorage.getItem("nickname");
   let [review, setReview] = useState([]);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ const ReviewDetailPage = () => {
         },
     });
       console.log(response.data, '삭제되었습니다.');
+      window.history.back()
     } catch (error) {
       console.error(error.response.data.message);
     }
@@ -60,15 +63,24 @@ const ReviewDetailPage = () => {
       <div>
       <ReviewImg src={review.url} alt=""></ReviewImg>
       </div>
-      <h4>{review.description}</h4>
-      <h4>{review.difficultyLevel}</h4>
-      <h4>{review.subject}</h4>
-      <h4>{review.regDate}</h4>
+      <h4>제목 : {review.subject}</h4>
+      <h4>작성일 : {review.regDate}</h4>
+      <h4>작성자 : {review.writer}</h4>
+      <h4>난이도 : {review.difficultyLevel}</h4>
+      <h4>내용 : {review.description}</h4>
       
 
       <ButtonWrapper>
-        <Button type="button" onClick={onClickUd}>수정</Button>
-        <Button type="button" onClick={onClickDl}>삭제</Button>
+        <Button
+        type="button"
+        onClick={onClickUd}
+        className={ nickname === review.writer ? "" : "Disable" }
+        >수정</Button>
+        <Button
+        type="button"
+        onClick={onClickDl}
+        className={ nickname === review.writer ? "" : "Disable" }
+        >삭제</Button>
       </ButtonWrapper>
     </MainDiv>
 

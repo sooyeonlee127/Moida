@@ -12,10 +12,9 @@ contract HeeToken is ERC20 {
         _mint(msg.sender,_totalSupply);
     }
 
-    // 1 ETH를 받으면 100 토큰을 지급하는 함수
+    // 1 ETH를 받으면 1000000 토큰을 지급하는 함수
     receive() external payable {
-        // 1 ETH당 100 토큰 지급
-        uint256 tokenAmount = msg.value * 10000;
+        uint256 tokenAmount = msg.value * 1000000;
         _mint(msg.sender, tokenAmount);
     }
 }
