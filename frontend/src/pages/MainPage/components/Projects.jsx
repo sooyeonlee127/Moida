@@ -6,36 +6,49 @@ import "../main.css";
 import { useEffect } from "react";
 import { useState } from "react";
 
+const nav_height = "52px"; // 네브바 높이 조정 - 이은혁
+
 const Projects = (props) => {
+  // --------- 라우트 관련 - 이은혁
   const navigate = useNavigate();
-  const { ref: target, inView, isShown } = useScroll();
-  const { id, projectReqDto, donationResDto } = props.card;
   const clickCard = (routePath) => {
     navigate("/donation/" + routePath, { replace: false });
   };
+  // -----------------------------
 
-  const [value, setValue] = useState();
-  const handleScroll = () => {
-    setValue(parseInt(window.scrollY));
-    // console.log(value);
-  };
+  // --- 스크롤 이벤트 관련 - 이은혁
+  const { ref: target, inView, isShown } = useScroll();
+  const [scrollY, setScrollY] = useState(); // scrollY: 스크롤량 저장
+
+  const onScroll = () => {
+    const value = window.scrollY
+    setScrollY(value);
+    // setScrollY(parseInt(value))
+    document.body.style.setProperty("--scroll", value/1000);
+  }
+  
   useEffect(() => {
-    // console.log(target.current.offsetTop);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    if (inView){
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }
+  }, [inView]);
+  // -----------------------------
+
+  // -------------- props 정보 관련
+  const { id, projectReqDto, donationResDto } = props.card;
+  // -----------------------------
 
   return (
     <div className="project">
       <StickyContainer ref={target}>
-        <Sticky id={"card_" + id} className={isShown ? "card show" : "card"}>
+        <Sticky id={"card_" + id} className={isShown ? "page card show" : "page card"}>
           <Heading>{projectReqDto.subject}</Heading>
           <Text>{projectReqDto.description}</Text>
-          {/* <p>{value}</p> */}
-          <Button onClick={() => clickCard(id)}>참여하기</Button>
-          {/* <div style={{ marginTop: `${inView2 && value- target2.current?.offsetTop}px` }}>ddd</div> */}
+          
           <div>
-            {inView && value - target.current?.offsetTop}
+            {/* {()=> {return (<Button onClick={() => clickCard(id)} style={}>참여하기</Button>)} } */}
+            {inView && scrollY - target.current?.offsetTop}
             {inView ? "true" : "false"}
           </div>
         </Sticky>
@@ -53,18 +66,14 @@ const StickyContainer = styled.div`
 
 const Sticky = styled.div`
   position: sticky;
-  top: 56px;
+  top: ${nav_height}px;
 `;
 const Heading = styled.h2`
-  ${tw`
-  text-3xl font-bold tracking-tight text-black sm:text-4xl
-`}
+  ${tw`text-3xl font-bold tracking-tight text-black sm:text-4xl`}
 `;
 
 const Text = styled.p`
-  ${tw`
-  mt-6 text-lg leading-8 text-gray-300
-`}
+  ${tw`mt-6 text-lg leading-8 text-gray-300`}
 `;
 
 const Button = styled.button`

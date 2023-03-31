@@ -1,4 +1,3 @@
-
 import { useRef, useEffect, useState } from 'react';
 
 const useScroll = (threshold=0.05) => {
