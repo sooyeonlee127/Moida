@@ -53,8 +53,8 @@ const Intro = () => {
             </TextBox>
           </div>
           <div>
-            {inView && scrollY - target.current?.offsetTop}
-            {inView ? "true" : "false"}
+            {/* {inView && scrollY - target.current?.offsetTop}
+            {inView ? "true" : "false"} */}
           </div>
         </Sticky>
       </StickyContainer>

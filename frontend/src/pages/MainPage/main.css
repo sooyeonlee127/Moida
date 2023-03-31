@@ -109,7 +109,7 @@ body {
     animation-fill-mode: both;
   }
 
-// intro 캐릭터 움직임 - 이은혁
+/* intro 캐릭터 움직임 - 이은혁 */
 
 @keyframes set {
     0% {
@@ -118,13 +118,13 @@ body {
 }
 
 @keyframes ease_out {
-    70% {
+    to {
         transform: translateX(150%);
     }
 }
 
 @keyframes jump_out {
-    50% {
+    to {
         transform: translateY(150%);
     }
 }
