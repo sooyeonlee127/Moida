@@ -26,6 +26,8 @@ import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
 import HjooPage from "./pages/ethers/HjooPage";
 import ReviewCreatePage from "./pages/ReviewCreatePage";
+import Web3 from "web3";
+import { useWeb3React } from "@web3-react/core";
 
 export default function App() {
   return (
