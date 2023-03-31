@@ -48,6 +48,7 @@ const ReviewDetailPage = () => {
         },
     });
       console.log(response.data, '삭제되었습니다.');
+      window.history.back()
     } catch (error) {
       console.error(error.response.data.message);
     }
