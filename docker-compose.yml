@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - moida
+    restart: always
+  front:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - back
+    container_name: front
+    networks:
+      - moida
+  back:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    container_name: back
+    depends_on:
+      - redis
+    networks:
+      - moida
+
+networks:
+  moida:
+    external:
+      name: moida
