@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
@@ -6,9 +6,19 @@ import { AuthContext } from "../../context/Auth";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/auth";
+import logo_white from '../../assets/img/Logo_white.svg'
+import logo from '../../assets/img/Logo.svg'
 
 // 수연: navbar
 const NavBar = () => {
+  // 은혁: 네브바 스크롤 css 적용
+  const [scrollValue, setScrollValue] = useState(0)
+
+  useEffect(()=> {
+    window.addEventListener('scroll', () => {setScrollValue(parseInt(window.scrollY))})
+  })
+  // console.log(scrollValue)
+
   // 은혁: useQuery
   const getMe = async () => {
     if (isLogin) {
@@ -59,15 +69,15 @@ const NavBar = () => {
     // 로그아웃 상태의 navbar
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
-    { name: "가챠샵", href: "/gatcha" },
+    { name: "NFT", href: "/gatcha" },
   ];
   const userNavigation = [
     // 로그인 상태의 navbar
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
-    { name: "가챠샵", href: "/gatcha" },
-    { name: `${data?.info ? data?.info.ticketCnt : "  "}개`, href: "/gatcha" },
-    { name: `${data?.info ? data?.info.totalPoint : "  "} P`, href: "/point" },
+    { name: "NFT", href: "/gatcha" },
+    // { name: `${data ? data.ticketCnt : "  "}개`, href: "/gatcha" },
+    // { name: `${data ? data.point : "  "} P`, href: "/point" },
     { name: "MYPAGE", href: "/profile" },
   ];
   // 수연: 로그아웃 호출
@@ -95,128 +105,86 @@ const NavBar = () => {
   };
 
   return (
-    <Nav>
-      <Logo>
-        <p>우리 로고</p>
-      </Logo>
-      <Section>
-        <div>
-          {isLogin && role === "ROLE_ADMIN" ? (
-            <AdminButton
-              onClick={(e) => {
-                e.preventDefault();
-                goPage("/admin");
-              }}
-            >
-              Admin 계정입니다.
-            </AdminButton>
-          ) : (
-            ""
-          )}
-        </div>
-        <Home>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              goPage("/");
-            }}
-          >
-            HOME
-          </button>
-        </Home>
-        <Title>
-          {isLogin
-            ? userNavigation.map((item, index) => (
-                <Link on={item.name} key={index} to={item.href}>
-                  {item.name}
-                </Link>
-              ))
-            : navigation.map((item) => (
-                <a key={item.name} href={item.href}>
-                  {item.name}
-                </a>
-              ))}
-        </Title>
-        <Title>
-          <LogoutButton>
-            {isLogin ? (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  LogoutSubmit();
-                }}
-              >
-                LOGOUT
-              </button>
-            ) : (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  goPage("/signup");
-                }}
-              >
-                SIGNUP
-              </button>
-            )}
-          </LogoutButton>
-        </Title>
-        {!isLogin ? (
-          <Title>
-            <LogoutButton>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  goPage("/login");
-                }}
-              >
-                LOGIN
-              </button>
-            </LogoutButton>
-          </Title>
-        ) : (
-          ""
-        )}
-      </Section>
+    <Nav className={scrollValue>0? "scrolled":"unscrolled"}>
+      <InnerNav>
+        <Logo className={scrollValue>0? "scrolled":"unscrolled"}></Logo>
+        <GroupMenu>
+          {isLogin && role === "ROLE_ADMIN" ? (<Menu onClick={()=>goPage("/admin")}>Admin 계정입니다.</Menu>) : ""}
+          <Menu onClick={()=>goPage("/")}>HOME</Menu>
+          {isLogin? 
+            <>
+              {userNavigation.map((item, index) => (<Link on={item.name} key={index} to={item.href}><Menu>{item.name}</Menu></Link>))}
+              <Menu onClick={LogoutSubmit}>LOGOUT</Menu>
+            </> : <>
+              {navigation.map((item) => (<Link key={item.name} to={item.href}><Menu>{item.name}</Menu></Link>))}
+              <Menu onClick={()=>goPage("/signup")}>SIGNUP</Menu>
+              <Menu onClick={()=>goPage("/login")}>LOGIN</Menu>
+            </>
+          }
+        </GroupMenu>
+      </InnerNav>
     </Nav>
   );
 };
 
 const Nav = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1;
+position: fixed;
+top: 0px;
+left: 0px;
+width: 100vw;
+z-index: 1;
+padding: 0 50px;
+transition: all 0.3s ease 0s;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+&.scrolled{
+  height: 52px;
+  color: white;
+  background-color: #A0C846;
+  box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 15%);
+}
+&.unscrolled{
+  height: 90px;
+  color: #584E3F;
   background-color: transparent;
-  height: 100px;
-  ${tw`px-2 py-4 flex justify-between`}
+}
 `;
 
-const Section = styled.div`
-  word-break: break-all;
-  ${tw` min-h-full order-last flex flex-1 items-center justify-end mr-20 tracking-tighter font-normal text-base`}
+const InnerNav = styled.div`
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+width: 100%;
+max-width: 1000px;
+`
+const GroupMenu = styled.div`
+font-size: 1rem;
+line-height: 1.5rem;
+letter-spacing: -0.05em;
 `;
 
-const Logo = styled.div`
-  ${tw`ml-20`}
-`;
-
-const Title = styled.div`
-  ${tw` flex space-x-9`}
-`;
-
-const LogoutButton = styled.div`
-  ${tw` ml-9 font-black tracking-tighter`}
-`;
-
-const Home = styled.div`
-  color: rgb(254 98 76);
-  ${tw` mr-9 font-black`}
-`;
-
-const AdminButton = styled.button`
-  color: rgb(20 90 200);
-  ${tw`mr-9 font-normal font-black`}
-`;
+const Logo = styled.span`
+height: 38px;
+width: 39.5px;
+background-size: cover;
+  &.scrolled {
+    background-image: url(${logo_white});
+  }
+  &.unscrolled {
+    background-image: url(${logo});
+  }
+`
+const Menu = styled.span`
+  padding: 0 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  &:hover {
+    color: red;
+  }
+`
 
 export default NavBar;
