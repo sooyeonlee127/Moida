@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import DonationCard from "./components";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/Auth";
 
 // {
 //     title: "Apple Watch",
@@ -33,7 +34,7 @@ const DonationPage = () => {
     <DonationCard card={card} key={index}></DonationCard>
   ));
   const navigate = useNavigate();
-  const role = localStorage.getItem("role");
+  const { role } = useContext(AuthContext);
   const goCreateProject = () => {
     navigate(`/admin/project/create`, { replace: false });
   };

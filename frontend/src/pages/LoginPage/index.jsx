@@ -65,7 +65,7 @@ const LoginPage = () => {
         const token = res.headers.authorization;
         localStorage.setItem("accessToken", token);
         localStorage.setItem("refreshToken", res.headers.refresh);
-        localStorage.setItem("role", data.role);
+        setRole(data.role)
         setIsLogin(true);
         // 응답값으로 받아오기
         navigate("/", { replace: true });
