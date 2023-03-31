@@ -4,7 +4,7 @@ const web3 = new Web3();
 web3.setProvider(
   new Web3.providers.HttpProvider(
     // `${process.env.NODE}`
-    "http://127.0.0.1:8545"
+    "http://127.0.0.1:7545"
   )
 )
 
@@ -310,6 +310,6 @@ const TOKEN_ABI = [
     "payable": true
   },
 ];
-const TOKEN_CA = "0x17E5F2c77c921b1673061eb7bd9a6A9b56054c36"; // localhost
+const TOKEN_CA = "0x7D606d7255434F89cA3c38Ec7bbbe2597c942192"; // localhost
 // const TOKEN_CA = "0x4f223861e0f5139099bC18CacCbBc0019F487E0a"; // sepolia
 export const TOKENContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_CA);
