@@ -114,12 +114,14 @@ body {
 @keyframes set {
     0% {
         transform: translateX(0%) translateY(0%);
+        opacity: 1;
     }
 }
 
 @keyframes ease_out {
     to {
         transform: translateX(150%);
+        opacity: 0;
     }
 }
 
