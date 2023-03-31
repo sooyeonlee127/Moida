@@ -51,19 +51,8 @@ const NavBar = () => {
   }, [isLogin]);
   const navigate = useNavigate();
 
-  const goAdmin = () => {
-    navigate("/admin", { replace: false });
-  };
-  const goHome = () => {
-    navigate("/", { replace: false });
-  };
-
-  const goSignup = () => {
-    navigate("/signup", { replace: false });
-  };
-
-  const goLogin = () => {
-    navigate("/login", { replace: false });
+  const goPage = (page) => {
+    navigate(`${page}`, { replace: false });
   };
 
   const navigation = [
@@ -93,12 +82,11 @@ const NavBar = () => {
     })
       .then((res) => {
         const data = res.data;
-        console.log(res);
-        console.log(data);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("role");
         setIsLogin(false);
+        navigate("/", { replace: false });
       })
       .catch((error) => {
         const response = error.response.data;
@@ -117,7 +105,7 @@ const NavBar = () => {
             <AdminButton
               onClick={(e) => {
                 e.preventDefault();
-                goAdmin();
+                goPage("/admin");
               }}
             >
               Admin 계정입니다.
@@ -130,7 +118,7 @@ const NavBar = () => {
           <button
             onClick={(e) => {
               e.preventDefault();
-              goHome();
+              goPage("/");
             }}
           >
             HOME
@@ -164,7 +152,7 @@ const NavBar = () => {
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  goSignup();
+                  goPage("/signup");
                 }}
               >
                 SIGNUP
@@ -178,7 +166,7 @@ const NavBar = () => {
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  goLogin();
+                  goPage("/login");
                 }}
               >
                 LOGIN
