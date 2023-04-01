@@ -63,8 +63,8 @@ const VolunteerList = () => {
         alert("인증코드가 다릅니다.")
       }
     }
-    const Pagenation = () => {
-      const lastPage = parseInt((length+5)/pageSize)
+    const Pagination = () => {
+      const lastPage = parseInt((length+5)/pageSize) || 1 // 데이터 개수가 한 페이지 분량보다 작은경우에도 1이 뜨도록 처리 - 이은혁
       const tmp = []
       for (let i=1; i<=lastPage; i++) { // 데이터 갯수에 맞게 페이지 목록에 번호 추가 - 이은혁
           tmp.push(i)
@@ -72,7 +72,7 @@ const VolunteerList = () => {
       setPageList(tmp)
     }
     useEffect(() => {
-      Pagenation()
+      Pagination()
     }, [length])
 
     return (
