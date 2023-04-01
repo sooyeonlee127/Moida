@@ -9,6 +9,10 @@ import { useState } from "react";
 const nav_height = "52px"; // 네브바 높이 조정 - 이은혁
 
 const Projects = (props) => {
+  const { id, projectReqDto, donationResDto } = props.card; // props 데이터 - 이은혁
+  const index = props.index; // props 데이터 - 이은혁
+
+
   // --------- 라우트 관련 - 이은혁
   const navigate = useNavigate();
   const clickCard = (routePath) => {
@@ -16,44 +20,64 @@ const Projects = (props) => {
   };
   // -----------------------------
 
+
+
   // --- 스크롤 이벤트 관련 - 이은혁
   const { ref: target, inView, isShown } = useScroll();
   const [scrollY, setScrollY] = useState(); // scrollY: 스크롤량 저장
 
   const onScroll = () => {
     const value = window.scrollY
-    setScrollY(value);
-    // setScrollY(parseInt(value))
+    setScrollY(parseInt(value))
     document.body.style.setProperty("--scroll", value/1000);
   }
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", onScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", onScroll)
+  //   };
+  // }, []);
   
+
   useEffect(() => {
     if (inView){
       window.addEventListener("scroll", onScroll);
       return () => window.removeEventListener("scroll", onScroll);
     }
   }, [inView]);
-  // -----------------------------
 
-  // -------------- props 정보 관련
-  const { id, projectReqDto, donationResDto } = props.card;
-  // -----------------------------
+
 
   return (
-    <div className="project">
-      <StickyContainer ref={target}>
-        <Sticky id={"card_" + id} className={isShown ? "page card show" : "page card"}>
-          <Heading>{projectReqDto.subject}</Heading>
-          <Text>{projectReqDto.description}</Text>
-          
+    <StickyContainer ref={target}>
+      <Sticky id={"card_" + index} className={isShown ? "page card show" : "page card"}>
+        <div className="inner_page">
+          <Image src="" alt=""/>
+          <Subject>{projectReqDto.subject}</Subject>
+          <Content>
+            <p id="desc">{projectReqDto.description}</p>
+            {/* <p>모이 1개당 {projectReqDto.pointPerMoi} point</p> */}
+            <div style={{display:"flex", flexDirection: "row", justifyContent:"space-between", alignItems: "flex-end"}}>
+              <div style={{display: "inline-block"}}>
+                <p id="amount">현재 {donationResDto.amount} 개</p>
+                <p id="target_amount">목표 {donationResDto.targetAmount} 개</p>
+              </div>
+              <div style={{display: "inline-block"}}>
+                <Button>참여하기</Button>
+              </div>
+            </div>
+            {/* <p>{new Date(donationResDto.endDate).getFullYear()}년 ~ {donationResDto.startDate}</p> */}
+            {/* <p>{donationResDto.subject}</p> */}
+          </Content>
           <div>
             {/* {()=> {return (<Button onClick={() => clickCard(id)} style={}>참여하기</Button>)} } */}
-            {inView && scrollY - target.current?.offsetTop}
-            {inView ? "true" : "false"}
+            {/* {inView && scrollY - target.current?.offsetTop}
+            {inView ? "true" : "false"} */}
           </div>
-        </Sticky>
-      </StickyContainer>
-    </div>
+        </div>
+      </Sticky>
+    </StickyContainer>
   );
 };
 
@@ -61,23 +85,77 @@ const StickyContainer = styled.div`
   height: 2000px;
   width: 100%;
   position: relative;
-  background-color: lightgray;
 `;
 
 const Sticky = styled.div`
   position: sticky;
   top: ${nav_height}px;
 `;
-const Heading = styled.h2`
-  ${tw`text-3xl font-bold tracking-tight text-black sm:text-4xl`}
+
+const Image = styled.img`
+  width: 100vh;
+  height: 300px;
+  background: red;
+`
+
+const Subject = styled.h2`
+  font-size: 3rem;
+  font-weight: 900;
+  color: #83BD00;
 `;
 
-const Text = styled.p`
-  ${tw`mt-6 text-lg leading-8 text-gray-300`}
-`;
+const Content = styled.div`
+  width: 100%;
+  text-align: left;
+  & #desc {
+    font-size: 1rem;
+    color: #505050;
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+  & #amount {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #594949;
+  }
+  & #target_amount {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #6A6A6A;
+  }
+`
 
 const Button = styled.button`
-  ${tw`border px-2 py-2 hover:bg-sky-500 active:bg-sky-600`}
-`;
+  padding: 10px 40px;
+  background-color: #8BDF35;
+  color: white;
+  font-weight: 700;
+  border-radius: 5px;
+  box-shadow: 0 5px 10px #00000040;
 
+  &:hover {
+    background-color: #9aea47;
+  }
+  &:active {
+    background-color: #85d236;
+  }
+`
 export default Projects;
+
+
+
+
+// projectReqDto
+  // category: "WILD_ANIMAL"
+  // description: "옥수수는 많은 야생동물에게 도움이 됩니다~"
+  // pointPerMoi: 800
+  // subject: "야생동물에게 옥수수를 선물해주세요"
+
+// donationResDto
+  // amount: 464800
+  // description: "프로젝트 기부 상세 설명~~"
+  // endDate: "2023-03-27T23:59:59.999999"
+  // id: 1
+  // startDate: "2023-03-24T00:00"
+  // subject: "프로젝트 기부 소제목"
+  // targetAmount: 3500000

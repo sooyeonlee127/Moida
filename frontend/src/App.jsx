@@ -77,7 +77,7 @@ export default function App() {
 
             <Route path={"/review"} element={<ReviewPage />} />
             <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
-            <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
+            <Route path={"/notice/:category"} element={<NoticeDetailPage />} />
             <Route path={"/hjooo"} element={<HjooPage />} />
           </Routes>
         </Body>

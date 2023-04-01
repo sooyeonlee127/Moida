@@ -8,31 +8,10 @@ import { useEffect } from "react";
 
 const NoticeDetailPage = () => {
   const { category } = useParams(); // const 변수명 = useParams().파라미터명;
-  console.log(category)
+  const [genList, setGenList] = useState([])
+  console.log("category: ", category)
 
   const [data, setData] = useState({})
-  const getNotice = () => {
-    return axios({
-        url: "/api/article/board/category/"+category,
-        method: "GET",
-        headers: {
-          accept: "*/*"
-        }
-      })
-      .then((res) => {
-        console.log(res)
-        setData(res.data)
-      })
-      .catch((err) => {
-      console.log(err)
-    })
-  }
-
-  
-  useEffect(()=> {
-    getNotice()
-  }, [])
-
   // {
   //   "generationList": [
   //     {
@@ -52,20 +31,57 @@ const NoticeDetailPage = () => {
   //     "projectId": 0
   //   }
   // }
+  const getNotice = async () => {
+    try {
+      const res = await axios({
+        url: "/api/article/board/category/"+category,
+        method: "GET",
+        headers: {
+          accept: "*/*"
+        }
+      })
+      if(res) {
+        setData(res.data.getBoardDetailResDto)
+        setGenList(res.data.generationList)
+        console.log(res.data.getBoardDetailResDto)
+      }
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(()=> {
+    getNotice()
+  }, [])
+
+  const changeOpt = async (projectid) => {
+    try {
+      const res = await axios({
+        url: "/api/article/board/"+projectid,
+        method: "GET",
+        headers: {
+          accept: "*/*"
+        }
+      })
+      console.log(res.data)
+      setData(res.data)
+    } catch(err) {
+      console.log(err)
+    }
+  }
   return (
     <Wrapper>
       {category}번 공지 페이지 입니다
-      {data.generationList?.map((a, index) => {return (<p key={index}>{a.id}</p>)})}
-      <p>{data.getBoardDetailResDto?.subject}</p>
-      <p>{data.getBoardDetailResDto?.description}</p>
-      <p>{data.getBoardDetailResDto?.adminNickname}</p>
-      <p>{data.getBoardDetailResDto?.regDate}</p>
-      <p>{data.getBoardDetailResDto?.fileList}</p>
-      <p>{data.getBoardDetailResDto?.projectId}</p>
+      <p>{data?.subject}</p>
+      <p>{data?.description}</p>
+      <p>{data?.adminNickname}</p>
+      <p>{data?.regDate}</p>
+      <p>{data?.fileList}</p>
+      <p>{data?.projectId}</p>
       <label htmlFor="generation">차수 선택</label>
-      <select name="generation" id="generation">
+      <select name="generation" id="generation" onChange={(e)=>changeOpt(e.target.value)}>
         {
-          data.generationList?.map((option, index) => {
+          genList?.map((option, index) => {
             return(
               <option key={index} value={option?.id}>{option.generation}차</option>
             )
