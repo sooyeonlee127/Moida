@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import tw from "twin.macro";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
 import { useQuery } from "@tanstack/react-query";
@@ -58,7 +57,7 @@ const NavBar = () => {
       refetch();
     }
     // isLogin 값이 변경될 때마다 쿼리를 다시 실행 - 수연
-  }, [isLogin]);
+  }, [isLogin, refetch]);
   const navigate = useNavigate();
 
   const goPage = (page) => {
@@ -107,10 +106,9 @@ const NavBar = () => {
   return (
     <Nav className={scrollValue>0? "scrolled":"unscrolled"}>
       <InnerNav>
-        <Logo className={scrollValue>0? "scrolled":"unscrolled"}></Logo>
+        <Logo onClick={()=>goPage("/")} className={scrollValue>0? "scrolled":"unscrolled"}></Logo>
         <GroupMenu>
           {isLogin && role === "ROLE_ADMIN" ? (<Menu onClick={()=>goPage("/admin")}>Admin 계정입니다.</Menu>) : ""}
-          <Menu onClick={()=>goPage("/")}>HOME</Menu>
           {isLogin? 
             <>
               {userNavigation.map((item, index) => (<Link on={item.name} key={index} to={item.href}><Menu>{item.name}</Menu></Link>))}
@@ -170,6 +168,7 @@ const Logo = styled.span`
 height: 38px;
 width: 39.5px;
 background-size: cover;
+cursor: pointer;
   &.scrolled {
     background-image: url(${logo_white});
   }
