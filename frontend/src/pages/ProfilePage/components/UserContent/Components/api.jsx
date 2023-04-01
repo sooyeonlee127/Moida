@@ -36,6 +36,7 @@ const useListApi = (type, pageNumber=1, pageSize=10) => { // 기본값 지정 - 
         }
         setDataLength(response.data.length);
       } catch (error) {
+        console.log(error)
         setError(error);
       } finally {
         setLoading(false);
