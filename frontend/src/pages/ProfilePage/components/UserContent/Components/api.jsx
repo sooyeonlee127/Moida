@@ -11,9 +11,10 @@ const useListApi = (type, pageNumber=1, pageSize=10) => { // 기본값 지정 - 
     const fetchData = async () => {
       try {
         const response = await api.get(`/users/me/${type}`,
-          {
+          {params:{
             pageNumber: pageNumber,
             pageSize: pageSize
+          }
           },
           {headers: {
             accept: "*/*",
