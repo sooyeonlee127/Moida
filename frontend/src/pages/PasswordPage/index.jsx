@@ -24,8 +24,8 @@ const PasswordPage = () => {
   });
 
   const { email } = state;
+
   const PasswordSubmit = () => {
-    console.log("email", email);
     if (!email) {
       alert("이메일을 입력해주세요.");
     } else {
@@ -35,13 +35,18 @@ const PasswordPage = () => {
         method: "POST",
       })
         .then((res) => {
-          console.log(res);
           setMessage(
             "임시 비밀번호 발송이 완료되었습니다. 메일함을 확인해주세요."
           );
         })
         .catch((err) => {
-          console.log(err);
+          if (err.response && err.response.status === 404) {
+            setMessage("해당 이메일 주소로 가입한 계정이 존재하지 않습니다.");
+          } else {
+            setMessage(
+              "임시 비밀번호 발송이 실패하였습니다. 이메일을 다시 확인해주세요."
+            );
+          }
         });
     }
   };

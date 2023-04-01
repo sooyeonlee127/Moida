@@ -14,7 +14,6 @@ const MainPage = () => {
       method: "GET",
     })
       .then((res) => {
-        console.log(res.data);
         setCards(res.data);
       })
       .catch((error) => {

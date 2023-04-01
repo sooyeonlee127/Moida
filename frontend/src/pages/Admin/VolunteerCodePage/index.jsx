@@ -57,7 +57,6 @@ const VolunteerCodePage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         setDataList(res.data);
       })
       .catch((error) => {

@@ -85,7 +85,6 @@ const AdminPage = () => {
               if (!boardid) {
                 alert("게시글 id를 입력하세요");
               } else {
-                console.log(boardid);
                 goPage("admin/notice/update", boardid);
               }
             }}

@@ -27,8 +27,6 @@ const NoticeCreatePage = () => {
   const { subject, description } = state;
 
   const adminSubmit = () => {
-    console.log(subject, description, projectid);
-    console.log(files, typeof files);
     let testData = {
       subject: subject,
       description: description,
@@ -53,13 +51,10 @@ const NoticeCreatePage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
-        alert("공지글 생성 완료했습니다.");
+        if (res) {
+          alert("공지글 생성 완료했습니다.");
+        }
       });
-    // .catch((error) => {
-    //   const response = error.response.data;
-    //   console.log(response);
-    // });
   };
   return (
     <>
@@ -108,7 +103,6 @@ const NoticeCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -119,7 +113,6 @@ const NoticeCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -130,7 +123,6 @@ const NoticeCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -141,7 +133,6 @@ const NoticeCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -152,7 +143,6 @@ const NoticeCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
