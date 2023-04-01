@@ -1,10 +1,8 @@
-import styled from "styled-components";
-import tw from "twin.macro";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import useScroll from "./useScroll";
 import "../main.css";
-import { useEffect } from "react";
-import { useState } from "react";
 
 const nav_height = "52px"; // 네브바 높이 조정 - 이은혁
 
@@ -31,14 +29,6 @@ const Projects = (props) => {
     setScrollY(parseInt(value))
     document.body.style.setProperty("--scroll", value/1000);
   }
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", onScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", onScroll)
-  //   };
-  // }, []);
-  
 
   useEffect(() => {
     if (inView){
@@ -95,7 +85,7 @@ const Sticky = styled.div`
 const Image = styled.img`
   width: 100vh;
   height: 300px;
-  background: red;
+  background: #c2c2c2;
 `
 
 const Subject = styled.h2`

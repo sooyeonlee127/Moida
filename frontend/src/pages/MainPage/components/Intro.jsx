@@ -2,9 +2,9 @@ import styled from "styled-components";
 import useScroll from "./useScroll";
 import { useEffect } from "react";
 import { useState } from "react";
-import rabbit from "../../../assets/img/토끼.png"
-import squirrel from "../../../assets/img/다람쥐.png"
-import crane from "../../../assets/img/흑두루미.png"
+import rabbit from "../img/토끼.png"
+import squirrel from "../img/다람쥐.png"
+import crane from "../img/흑두루미.png"
 
 
 const nav_height = "52px"; // 네브바 높이 조정 - 이은혁
@@ -104,6 +104,7 @@ const H2 = styled.h2`
 font-size: 2rem;
 font-weight: 700;
 margin-bottom: 0.5rem;
+color: #584E3F;
 `
 const H1 = styled.h1`
 font-size: 3.5rem;
