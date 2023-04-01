@@ -6,7 +6,9 @@ import "./volunteerList.css";
 
 
 const VolunteerList = () => {
-    const { data:datas, error, loading } = useListApi("volunteer")
+    const [pageNum, setPageNum] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const { data:datas, length, error, loading } = useListApi("volunteer", pageNum, pageSize)
     const [visible, setVisible] = useState(false);
     const [value, setValue] = useState('');
     const [doneId, setDoneId] = useState();

@@ -1,8 +1,11 @@
 import React from 'react';
 import useListApi from "./api"
+import { useState } from 'react';
 
 const DonationList = () => {
-    const { data: datas, length, error, loading } = useListApi("donation") // length는 페이지네이션 활용 용도 - 이은혁
+    const [pageNum, setPageNum] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const { data: datas, length, error, loading } = useListApi("donation", pageNum, pageSize) // length는 페이지네이션 활용 용도 - 이은혁
     return (
         <>
         <table>
