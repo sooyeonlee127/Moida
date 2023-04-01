@@ -15,4 +15,9 @@ public class UpdateUserVolunteerStatusReqDto {
     private String status;
     @Schema(description = "DONE으로 변경할 시 인증 코드", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private String code;
+
+    public UpdateUserVolunteerStatusReqDto(Long volunteerId, String status){
+        this.volunteerId = volunteerId;
+        this.status = status;
+    }
 }
