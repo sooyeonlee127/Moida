@@ -93,6 +93,12 @@ public class ArticleController {
             throw new CustomException(ErrorCode.INVALID_DTO_STATUS);
         }
 
+        /*
+         * 해당 UsersVolunteer 아이디에 이미 작성된 게시물이 있는지 검증
+         * 한 UsersVolunteer 아이디에는 하나의 Article만 존재해야 함
+         */
+        articleService.existsByUsersVolunteer(usersVolunteer);
+
         // 게시판에 저장 및 프로젝트 difficultyLevel 업데이트
         articleService.save(createArticleReqDto, usersVolunteer, file);
 

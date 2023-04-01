@@ -20,6 +20,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
     PagingAndSortingRepository<Article, Long> {
     void deleteById(Long id);
     boolean existsById(Long id);
+    boolean existsByUsersVolunteer(UsersVolunteer usersVolunteer);
     Optional<Article> findByUsersVolunteer(UsersVolunteer usersVolunteer);
     Optional<Article> findById(Long id);
     @Query("SELECT COUNT(a) FROM Article a WHERE a.project.id = :projectId")
