@@ -322,9 +322,7 @@ public class UserController {
     }
 
     @Operation(summary = "비밀번호 찾기", description = "가입된 이메일로 임시 비밀번호를 보냅니다.")
-    @PostMapping(
-            path = "/forgot-password/{email}"
-    )
+    @PostMapping( "/forgot-password/{email}")
     public ResponseEntity<?> forgotPassword(
             @PathVariable(value = "email") String email
     ) throws MessagingException, UnsupportedEncodingException {
