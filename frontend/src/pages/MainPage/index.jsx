@@ -1,8 +1,10 @@
 import Projects from "./components/Projects";
+import Intro from "./components/Intro"
+import Nft from "./components/Nft";
+import Footer from "../../components/Footer/Index"
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Intro from "./components/Intro"
 
 const MainPage = () => {
   const [cards, setCards] = useState([]);
@@ -25,7 +27,8 @@ const MainPage = () => {
     <Wrapper>
       <Intro />
       <div>{cardList}</div>
-      <div className="nft"></div>
+      <Nft />
+      <Footer/>
     </Wrapper>
   );
 };
