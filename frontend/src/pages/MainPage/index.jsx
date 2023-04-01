@@ -6,7 +6,7 @@ import Intro from "./components/Intro"
 
 const MainPage = () => {
   const [cards, setCards] = useState([]);
-  const cardList = cards.map((card, index) => <Projects card={card} key={index}></Projects>);
+  const cardList = cards.map((card, index) => <Projects card={card} index={index} key={index}></Projects>);
   useEffect(() => {
     // 수연: project 받아오기
     axios({
@@ -14,7 +14,7 @@ const MainPage = () => {
       method: "GET",
     })
       .then((res) => {
-        // console.log(res);
+        console.log(res.data);
         setCards(res.data);
       })
       .catch((error) => {
@@ -25,7 +25,7 @@ const MainPage = () => {
   return (
     <Wrapper>
       <Intro />
-      <ul>{cardList}</ul>
+      <div>{cardList}</div>
       <div className="nft"></div>
     </Wrapper>
   );
@@ -34,8 +34,12 @@ const MainPage = () => {
 const Wrapper = styled.div`
   width: 100vw;
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   top: 0;
   left: 0;
+  background-color: #FAFAF3;
 `;
 
 export default MainPage;

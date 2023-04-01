@@ -27,9 +27,9 @@ const Intro = () => {
   }, []);
 
   return (
-      <StickyContainer ref={target}>
-        <Sticky className={isShown ? "page show" : "page"}>
-          <div className="inner_page">
+      <StickyContainer ref={target} className="page_container">
+        <Sticky className={isShown ? "page show intro" : "page"}>
+          <div className="inner_page intro">
             <InlineBox>
               <WrapCircle><Circle/><Circle/>
               <Circle className="wrap_animal">
@@ -65,7 +65,6 @@ const StickyContainer = styled.div`
   height: 2000px;
   width: 100%;
   position: relative;
-  background-color: #FAFAF3;
 `;
 
 const Sticky = styled.div`
