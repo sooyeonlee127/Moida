@@ -4,6 +4,7 @@ import axios from "axios";
 import { useReducer, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
+import logo from "../../assets/img/Logo.svg";
 
 // 수연: 로그인 페이지
 const LoginPage = () => {
@@ -65,7 +66,7 @@ const LoginPage = () => {
         const token = res.headers.authorization;
         localStorage.setItem("accessToken", token);
         localStorage.setItem("refreshToken", res.headers.refresh);
-        setRole(data.role)
+        setRole(data.role);
         setIsLogin(true);
         // 응답값으로 받아오기
         navigate("/", { replace: true });
@@ -86,6 +87,9 @@ const LoginPage = () => {
     <Container>
       <InnerContainer>
         <div>
+          <ImageBox>
+            <Image src={logo} alt="" width="100" />
+          </ImageBox>
           <Heading>로그인</Heading>
         </div>
         <LoginForm action="#" method="POST">
@@ -158,22 +162,24 @@ const LoginPage = () => {
 };
 
 const Heading = styled.h2`
+  color: rgb(98, 98, 98);
   ${tw`
-  mt-6 text-center text-4xl font-normal tracking-normal text-gray-700
+  mt-6 text-center text-3xl font-black tracking-tighter
   `}
 `;
 
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
+  background-color: #fafaf3;
   ${tw`
-  flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 
+  flex min-h-full items-center justify-center py-12 px-4
   `}
 `;
 
 const InnerContainer = styled.div`
   ${tw`
-  bg-gray-100 px-20 py-7 w-full max-w-md space-y-8
+  px-10 py-7 w-full max-w-md space-y-9
   `}
 `;
 
@@ -185,20 +191,21 @@ const LoginForm = styled.form`
 
 const InputGroup = styled.div`
   ${tw`
-  -space-y-px rounded-md shadow-sm
+  -space-y-px
   `}
 `;
 
 const InputText = styled.label`
+  color: rgb(98, 98, 98);
   ${tw`
-  px-1 mt-4 flex text-sm font-light leading-6 text-gray-500
+  px-1 mt-4 flex text-sm font-normal leading-6
   `}
 `;
 
 const LoginInput = styled.input`
+  background-color: #fafaf3;
   ${tw`
-  relative block w-full border-0 px-2 py-1.5 text-gray-800 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-  
+  relative block w-full px-2 py-1.5 border-b-2 border-gray-500
   `}
 `;
 
@@ -210,32 +217,45 @@ const RememberMeContainer = styled.div`
 
 const RememberMeBox = styled.div`
   ${tw`
-  flex items-center
+  flex items-center 
   `}
 `;
 
 const RememberMe = styled.input`
   ${tw`
-  h-5 w-5 border-gray-200 text-indigo-600 focus:ring-indigo-600
-  `}
+  h-5 w-5 border-gray-200 
+  `};
 `;
 
 const RememberMeText = styled.label`
+  color: rgb(98, 98, 98);
   ${tw`
-  ml-2 block text-sm text-gray-900 font-light
+  ml-2 block text-sm font-medium
   `}
 `;
 
 const SubmitButton = styled.button`
+  background-color: rgb(160, 200, 70);
+  color: rgb(98, 98, 98);
   ${tw`
-  bg-yellow-300 w-full h-full  py-3 px-10 font-normal text-gray-600
+  w-full h-full py-3 px-10 font-medium tracking-tighter
   `}
 `;
 
 const PasswordButton = styled.button`
+  background-color: rgb(225, 237, 213);
+  color: rgb(98, 98, 98);
   ${tw`
-  bg-gray-300 w-full h-full mt-3 py-3 px-10 font-normal text-gray-600
+  w-full h-full mt-3 py-3 px-10 font-medium tracking-tighter
   `}
 `;
+
+const ImageBox = styled.div`
+  ${tw`
+  flex justify-center my-10
+  `}
+`;
+
+const Image = styled.img``;
 
 export default LoginPage;

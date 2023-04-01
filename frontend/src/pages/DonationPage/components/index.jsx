@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import tw from "twin.macro";
+import { useNavigate } from "react-router-dom";
 
 // 수연: 기부 페이지 카드 출력
 const DonationCard = (props) => {
+  const navigate = useNavigate();
   const { id, donationResDto } = props.card;
   // 수연: 프로젝트별 이미지 하드코딩, 프로젝트 id별로 이미지 입력할 것
   const imageList = [
@@ -29,6 +31,10 @@ const DonationCard = (props) => {
     },
   ];
 
+  const goPage = (id) => {
+    navigate(`/donation/${id}`, { replace: false });
+  };
+
   return (
     <>
       <Card>
@@ -47,7 +53,14 @@ const DonationCard = (props) => {
           {donationResDto.endDate.slice(8, 10)}일
         </CardContent>
         <WrapBtn>
-          <Button href={imageList[id]?.href}>자세히</Button>
+          <Button
+            onClick={(e) => {
+              e.preventDefault();
+              goPage(id);
+            }}
+          >
+            자세히
+          </Button>
         </WrapBtn>
       </Card>
     </>

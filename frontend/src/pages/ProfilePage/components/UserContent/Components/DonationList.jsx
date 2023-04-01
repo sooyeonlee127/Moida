@@ -51,7 +51,7 @@ const DonationList = () => {
         <p> 
         {datas?.length === 0 && !loading? "빈 값":""}
         {loading? "로딩 중":""}
-        {pageList?.map((num, index)=>{ return (<PageBtn onClick={()=> setPageNum(num)}>{num}</PageBtn>) })}
+        {pageList?.map((num, index)=>{ return (<PageBtn key={index} onClick={()=> setPageNum(num)}>{num}</PageBtn>) })}
         </p>
             
         </>
