@@ -24,15 +24,12 @@ const AuthCordPage = () => {
     volunteerdateinfoid: "",
   });
   const { volunteerdateinfoid } = state;
-  const [flag, setFlag] = useState(true); // 봉사일 되면 조회 가능한 것으로 변경해야함.
-
   const [code, setCode] = useState("");
 
   const CheckCode = () => {
     if (!volunteerdateinfoid) {
       alert("봉사 id를 입력해주세요.");
     } else {
-      console.log(volunteerdateinfoid);
       api
         .get(`/project/volunteer/${volunteerdateinfoid}/auth-code`, {
           headers: {
@@ -41,80 +38,56 @@ const AuthCordPage = () => {
           },
         })
         .then((res) => {
-          console.log(res);
           setCode(res.data);
-          console.log("완료");
         })
         .catch((error) => {
           const response = error.response.data;
-          console.log(response);
           setCode(response.message);
         });
     }
   };
-  if (flag) {
-    return (
-      <>
-        <Container>
-          <InnerContainer>
-            <div>
-              <Heading>관리자 페이지</Heading>
-            </div>
-            <AdminForm action="#" method="POST">
-              <InputGroup>
-                <div>
-                  <Title>봉사 확인 인증코드 조회</Title>
-                  <Message>{code}</Message>
-                </div>
-                <div>
-                  <InputText htmlFor="volunteerdateinfoid">
-                    봉사 id를 입력해주세요.
-                  </InputText>
-                  <AdminInput
-                    id="volunteerdateinfoid"
-                    name="volunteerdateinfoid"
-                    type="number"
-                    value={volunteerdateinfoid}
-                    onChange={onChange}
-                  />
-                </div>
-              </InputGroup>
+  return (
+    <>
+      <Container>
+        <InnerContainer>
+          <div>
+            <Heading>관리자 페이지</Heading>
+          </div>
+          <AdminForm action="#" method="POST">
+            <InputGroup>
               <div>
-                <SubmitButton
-                  type="submit"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    CheckCode();
-                  }}
-                >
-                  조회하기
-                </SubmitButton>
+                <Title>봉사 확인 인증코드 조회</Title>
+                <Message>{code}</Message>
               </div>
-            </AdminForm>
-          </InnerContainer>
-        </Container>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Container>
-          <InnerContainer>
+              <div>
+                <InputText htmlFor="volunteerdateinfoid">
+                  봉사 id를 입력해주세요.
+                </InputText>
+                <AdminInput
+                  id="volunteerdateinfoid"
+                  name="volunteerdateinfoid"
+                  type="number"
+                  value={volunteerdateinfoid}
+                  onChange={onChange}
+                />
+              </div>
+            </InputGroup>
             <div>
-              <Heading>관리자 페이지</Heading>
+              <SubmitButton
+                type="submit"
+                onClick={(e) => {
+                  e.preventDefault();
+                  CheckCode();
+                }}
+              >
+                조회하기
+              </SubmitButton>
             </div>
-            <AdminForm action="#" method="POST">
-              <InputGroup>
-                <InnerContainer>
-                  아직 조회 가능한 코드가 없습니다...
-                </InnerContainer>
-              </InputGroup>
-            </AdminForm>
-          </InnerContainer>
-        </Container>
-      </>
-    );
-  }
+          </AdminForm>
+        </InnerContainer>
+      </Container>
+    </>
+  );
 };
 
 const Heading = styled.h2`
