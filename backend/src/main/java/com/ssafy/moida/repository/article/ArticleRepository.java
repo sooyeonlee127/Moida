@@ -31,7 +31,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
             "a.description," +
             "a.regDate," +
             "a.category," +
-            "a.url)" +
+            "a.url, " +
+            "a.users.nickname)" +
             "from Article a " +
             "where a.usersVolunteer.users.id = :userId " +
             "order by a.regDate desc ")
