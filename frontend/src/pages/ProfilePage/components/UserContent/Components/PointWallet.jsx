@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useListApi from "./api";
 
 const PointWallet = () => {
-    const { data: datas, length, error, loading } = useListApi("points") // length는 페이지네이션 활용 용도 - 이은혁
+    const [pageNum, setPageNum] = useState(1)
+    const [pageSize, setPageSize] = useState(10)
+    const { data: datas, length, error, loading } = useListApi("points", pageNum, pageSize) // length는 페이지네이션 활용 용도 - 이은혁
     return (
         <>
         <table>

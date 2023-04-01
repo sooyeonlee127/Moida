@@ -27,7 +27,6 @@ const MainPage = () => {
       <Intro />
       <ul>{cardList}</ul>
       <div className="nft"></div>
-      <div className="footer"></div>
     </Wrapper>
   );
 };

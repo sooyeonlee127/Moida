@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../../../../../api/auth";
 
-const useListApi = (type) => {
+const useListApi = (type, pageNumber=1, pageSize=10) => { // 기본값 지정 - 이은혁
   const [data, setData] = useState([]);
   const [dataLength, setDataLength] = useState(0);
   const [error, setError] = useState(null);
@@ -10,11 +10,15 @@ const useListApi = (type) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get(`/users/me/${type}`, {
-          headers: {
+        const response = await api.get(`/users/me/${type}`,
+          {
+            pageNumber: pageNumber,
+            pageSize: pageSize
+          },
+          {headers: {
             accept: "*/*",
             Authorization: localStorage.getItem("accessToken"),
-          },
+          }
         });
         console.log(response.data)
         if(type==="donation") { // type별 데이터 저장 - 이은혁
@@ -37,7 +41,7 @@ const useListApi = (type) => {
       }
     };
     fetchData();
-  }, [type]);
+  }, [type, pageNumber, pageSize]);
 
   return { data, length: dataLength, error, loading };
 };
