@@ -1,10 +1,7 @@
 package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.common.ArticleSortDto;
-import com.ssafy.moida.api.request.CreateArticleReqDto;
-import com.ssafy.moida.api.request.CreateBoardReqDto;
-import com.ssafy.moida.api.request.UpdateArticleReqDto;
-import com.ssafy.moida.api.request.UpdateBoardReqDto;
+import com.ssafy.moida.api.request.*;
 import com.ssafy.moida.api.response.GetArticleDetailResDto;
 import com.ssafy.moida.api.response.GetArticleResDto;
 import com.ssafy.moida.api.response.GetBoardDetailResDto;
@@ -17,6 +14,7 @@ import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Role;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
+import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.service.article.ArticleService;
 import com.ssafy.moida.service.article.BoardDocumentService;
 import com.ssafy.moida.service.article.BoardService;
@@ -53,15 +51,18 @@ public class ArticleController {
     private final BoardService boardService;
     private final BoardDocumentService boardDocumentService;
     private final UserVolunteerService userVolunteerService;
+    private final ArticleRepository articleRepository;
 
     public ArticleController(ArticleService articleService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils,
-                             BoardService boardService, BoardDocumentService boardDocumentService, UserVolunteerService userVolunteerService) {
+                             BoardService boardService, BoardDocumentService boardDocumentService, UserVolunteerService userVolunteerService,
+                             ArticleRepository articleRepository) {
         this.articleService = articleService;
         this.tokenUtils = tokenUtils;
         this.dtoValidationUtils = dtoValidationUtils;
         this.boardService = boardService;
         this.boardDocumentService = boardDocumentService;
         this.userVolunteerService = userVolunteerService;
+        this.articleRepository = articleRepository;
     }
 
     /* Article 관련 */
@@ -136,6 +137,7 @@ public class ArticleController {
 
     @Operation(summary = "사용자 인증글 삭제", description = "특정 사용자 인증글을 삭제합니다.")
     @SecurityRequirement(name = "bearerAuth")
+    @Transactional
     @DeleteMapping ("/{articleid}")
     public ResponseEntity<?> deleteArticle(
             @PathVariable("articleid") int articleId,
@@ -143,20 +145,25 @@ public class ArticleController {
     ){
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
 
-        Long userId = articleService.findById((long) articleId).getUsers().getId();
-
-        // Admin 이거나 사용자가 작성한 글이 맞는 경우에만 삭제 가능
-        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)
-                && loginUser.getId() != userId){
-            throw new CustomException(ErrorCode.FORBIDDEN_USER);
-        }
-
         // 삭제하려는 인증글이 없을 경우 오류 반환(404)
         if(!articleService.existsById((long) articleId)){
             throw new CustomException(ErrorCode.DATA_NOT_FOUND);
         }
 
+        Article article = articleService.findById((long) articleId);
+
+        // Admin 이거나 사용자가 작성한 글이 맞는 경우에만 삭제 가능
+        if(!loginUser.getRole().equals(Role.ROLE_ADMIN)
+                && loginUser.getId() != article.getUsers().getId()){
+            throw new CustomException(ErrorCode.FORBIDDEN_USER);
+        }
+
+        // 게시글 지우기
         articleService.delete((long) articleId);
+
+        // 기존의 WRITTEN -> WRITTEN_DELETE로 변경
+        userVolunteerService.updateUserVolunteerStatus(new UpdateUserVolunteerStatusReqDto(article.getUsersVolunteer().getId(), "WRITTEN_DELETE"), article.getUsersVolunteer());
+
         return new ResponseEntity<>("게시물 삭제 완료", HttpStatus.OK);
     }
 
