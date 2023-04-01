@@ -59,8 +59,8 @@ public class DtoValidationUtils {
         checkStringType(createArticleReqDto.getCategory(), "카테고리");
         validateCategory(createArticleReqDto.getCategory());
         checkLongType(createArticleReqDto.getUsersVolunteerProjectId(), "사용자 봉사 아이디");
-        if(createArticleReqDto.getDifficultyLevel() <= 0){
-            throw new IllegalArgumentException("봉사 난이도는 필수 입력값이며 양수 값만 가능합니다");
+        if(createArticleReqDto.getDifficultyLevel() <= 0 || createArticleReqDto.getDifficultyLevel() > 5){
+            throw new IllegalArgumentException("봉사 난이도는 필수 입력값이며 0 초과 5 이하인 값만 가능합니다");
         }
     }
 
@@ -117,13 +117,10 @@ public class DtoValidationUtils {
             throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
         }
 
-        System.out.println("--- " + articleSortDto);
         // 카테고리는 ALL, SQUIRREL, WILD_ANIMAL, CRANE
         if(!"ALL".equals(articleSortDto.getCategory()) && !validateCategory(articleSortDto.getCategory())){
             throw new CustomException(ErrorCode.STATUS_NOT_FOUND);
         }
-
-        System.out.println("--- " + articleSortDto);
         // 정렬은 LATEST(최신순), DIFFICULTY_HIGHEST(난이도 높은순), DIFFICULTY_LOWEST(난이도 낮은순)
         if(!"LATEST".equals(articleSortDto.getSort()) && !"DIFFICULTY_HIGHEST".equals(articleSortDto.getSort())
         && !"DIFFICULTY_LOWEST".equals(articleSortDto.getSort())){
