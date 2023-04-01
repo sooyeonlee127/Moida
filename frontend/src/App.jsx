@@ -27,7 +27,11 @@ import PrivateRoute from "./routes/PrivateRoute";
 import HjooPage from "./pages/ethers/HjooPage";
 import ReviewCreatePage from "./pages/ReviewCreatePage";
 import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
+import { useBeforeunload } from "react-beforeunload";
+
 export default function App() {
+  useBeforeunload((event) => event.preventDefault());
+
   return (
     <Auth>
       <div className="App">
