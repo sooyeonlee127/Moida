@@ -100,6 +100,16 @@ public class ArticleService {
     }
 
     /**
+     * [세은] 게시글이 이미 작성되어 있는지 여부 확인
+     * @param usersVolunteer
+     */
+    public void existsByUsersVolunteer(UsersVolunteer usersVolunteer){
+        if(articleRepository.existsByUsersVolunteer(usersVolunteer)){
+            throw new CustomException(ErrorCode.DUPLICATE_ARTICLE_EXISTS);
+        }
+    }
+
+    /**
      * [세은] 고유 아이디로 엔티티 조회
      * @param articleId
      * @return
