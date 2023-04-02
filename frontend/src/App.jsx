@@ -27,6 +27,9 @@ import PrivateRoute from "./routes/PrivateRoute";
 import HjooPage from "./pages/ethers/HjooPage";
 import ReviewCreatePage from "./pages/ReviewCreatePage";
 import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
+import NftPage from "./pages/NftPage/nftPage";
+import NftTestPage from "./pages/NftPage/NftTestPage";
+
 export default function App() {
   return (
     <Auth>
@@ -79,6 +82,8 @@ export default function App() {
             <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
             <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
             <Route path={"/hjooo"} element={<HjooPage />} />
+            <Route path={"/sun"} element={<NftPage />}/>
+            <Route path={"/sunny"} element={<NftTestPage />}/>
           </Routes>
         </Body>
       </div>
