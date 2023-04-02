@@ -1,6 +1,7 @@
 import Web3 from "web3";
 
-const web3 = new Web3();
+// const web3 = new Web3(window.ethereum);
+const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
 
 // // local
 // web3.setProvider(
@@ -10,11 +11,11 @@ const web3 = new Web3();
 // )
 
 // sepolia
-web3.setProvider(
-  new Web3.providers.HttpProvider(
-    process.env.REACT_APP_SEPOLIA_API_URL
-  )
-)
+// web3.setProvider(
+//   new Web3.providers.HttpProvider(
+//     process.env.REACT_APP_SEPOLIA_API_URL
+//   )
+// )
 
 const TOKEN_ABI = [
   {
@@ -316,7 +317,7 @@ const TOKEN_ABI = [
     "stateMutability": "payable",
     "type": "receive",
     "payable": true
-  },
+  }
 ];
 // const TOKEN_CA = "0x4e36A2a9Cae8c33b09de8a8BDddDbc81cbb31812"; // localhost
 const TOKEN_CA = process.env.REACT_APP_SEPOLIA_TOKEN_CONTRACT; // sepolia

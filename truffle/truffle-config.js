@@ -80,9 +80,23 @@ module.exports = {
      },
      sepolia: {
       provider: () => new HDWalletProvider(mnemonic, process.env.SEPOLIA_API_URL),
+      network_id: "11155111",
+      from: process.env.SEPOLIA_ADMIN_PUBLIC_LEY,
+      privateKey: process.env.SEPOLIA_ADMIN_PRIVATE_KEY
+     },
+     gorli: {
+      provider: () => new HDWalletProvider(mnemonic, process.env.GORLI_API_URL),
       network_id: "*",
       from: process.env.SEPOLIA_ADMIN_PUBLIC_LEY,
       privateKey: process.env.SEPOLIA_ADMIN_PRIVATE_KEY
+     },
+     sepolia2: {
+      provider: () => new HDWalletProvider(mnemonic, process.env.SEPOLIA_API_URL),
+      network_id: "*",
+     },
+     gorli2: {
+      provider: () => new HDWalletProvider(mnemonic, process.env.GORLI_API_URL),
+      network_id: "*",
      },
     //
     // An additional network, but with some advanced options…
