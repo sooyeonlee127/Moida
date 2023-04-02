@@ -8,6 +8,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/**
+ * [NFT 정보 엔티티]
+ * PK : NFT 아이디
+ * FK : 사용자 아이디, NFT 이미지 아이디
+ * 메타데이터 주소(IPFS), 이미지 주소(IPFS), NFT 이름, 등록날짜
+ * */
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,16 +24,13 @@ public class Nft {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 500, nullable = false)
-    private String description;
-
-    @Column(name = "external_url", nullable = false, length = 500)
-    private String externalUrl;
+    @Column(nullable = false, length = 500)
+    private String metaDataUrl;
 
     @Column(nullable = false, length = 500)
-    private String image;
+    private String imageUrl;
 
-    @Column(nullable = false, length = 500)
+    @Column(length = 500)
     private String name;
 
     @CreatedDate
@@ -37,4 +41,19 @@ public class Nft {
     @JoinColumn(name="users_id")
     private Users users;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="nft_picture_id")
+    private NftPicture nftPicture;
+
+    @Builder
+
+    public Nft(Long id, String metaDataUrl, String imageUrl, String name, LocalDateTime regDate, Users users, NftPicture nftPicture) {
+        this.id = id;
+        this.metaDataUrl = metaDataUrl;
+        this.imageUrl = imageUrl;
+        this.name = name;
+        this.regDate = regDate;
+        this.users = users;
+        this.nftPicture = nftPicture;
+    }
 }
