@@ -11,7 +11,7 @@ const MainPage = () => {
   const cardList = cards.map((card, index) => <Projects card={card} index={index} key={index}></Projects>);
   useEffect(() => {
     // 수연: project 받아오기
-    
+
   }, []);
 
   return (
