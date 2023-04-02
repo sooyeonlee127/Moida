@@ -8,43 +8,55 @@
     background-color: grey;
 }
 .page {
+    top: 0;
+    width: 100%;
+    height: calc(100vh - 52px);
+    top: 52px;
+    position: sticky;
+    display: none;
+}
+.page.show{
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    height: 100vh;
 }
-.page.show{
-    transform: translateX(0);
+.page_container {
+    animation-delay: calc(var(--scroll) * -1s + 1.2s);
+    animation-name: scroll_intro; 
+    animation-duration: 1s;
+    top: 0px;
 }
 .inner_page {
-    width: 100%;
+    width: auto;
+    min-width: 700px;
     max-width: 1000px;
     display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: baseline;
+}
+.inner_page.intro {
+    width: 100%;
     flex-direction: row;
     justify-content: space-between;
+    align-items: stretch;
 }
 .card {
-    transform: translateX(400%);
-    transition: transform 0.4s ease;
     min-height: calc(100vh - 52px);
-    top: 52px;
+    animation-name: before_card, next_card; 
+    animation-duration: 1s;
 }
 
+
 #card_0 {
-    background-color: blue;
+    animation-delay: calc(var(--scroll) * -1s + 1.85s);
 }
 #card_1 {
-    background-color: green;
+    animation-delay: calc(var(--scroll) * -1s + 3.85s);
 }
 #card_2 {
-    background-color: red;
-}
-.card {
-    align-items: start;
+    animation-delay: calc(var(--scroll) * -1s + 5.85s);
 }
 
 
@@ -83,20 +95,25 @@ body {
     position: relative;
     top: -15px;
     border-radius: 70px;
-    animation-name: set, jump_out;
+}
+.rabbit {
+    animation-name: before_jump_out, jump_out;
     animation-duration: 2s;
     animation-delay: calc(var(--scroll) * -1s + .3s);
-    /* animation-timing-function: ease-in-out; */
+}
+.squirrel {
+    animation-name: before_jump_out, jump_out;
+    animation-duration: 2s;
+    animation-delay: calc(var(--scroll) * -1s + .7s);
 }
 .crane{
     height: 140px;
     position: relative;
     top: -15px;
     border-radius: 70px;
-    animation-name: set, ease_out; 
+    animation-name: before_fly_out, fly_out; 
     animation-duration: 3s;
-    animation-delay: calc(var(--scroll) * -1s + 0.8s);
-    /* animation-timing-function: ease-in-out; */
+    animation-delay: calc(var(--scroll) * -1s + 0.4s);
 }
 
   :root * {
@@ -111,20 +128,210 @@ body {
 
 /* intro 캐릭터 움직임 - 이은혁 */
 
-@keyframes set {
-    0% {
-        transform: translateX(0%) translateY(0%);
-    }
-}
 
-@keyframes ease_out {
+@keyframes scroll_intro {
+    from {
+        transform: translateY(0%);
+        opacity: 1;
+    }
     to {
-        transform: translateX(150%);
+        transform: translateY(-30%);
+        opacity: 0;
     }
 }
 
+@keyframes ease_in {
+    100% {
+        transform: translateX(0%) translateY(0%);
+        opacity: 1;
+    }
+}
+@keyframes ease_out {
+    100% {
+        transform: translateX(100%) translateY(0%);
+        opacity: 0;
+    }
+}
+
+@keyframes before_card {
+    0% {
+        transform: translateX(-50%) ;
+        opacity: 0;
+    }
+}
+
+@keyframes next_card {
+    100% {
+        transform: translateX(0%) translateY(0%);
+        opacity: 1;
+    }
+}
+
+
+
+
+@keyframes before_fly_out {
+    0% {
+        transform: translateX(0%);
+    }
+}
+@keyframes fly_out {
+    to {
+        transform: translateX(200%);
+    }
+}
+
+
+@keyframes before_jump_out {
+    to {
+        transform: translateY(0%);
+    }
+}
 @keyframes jump_out {
+    10% {
+        transform: translateY(-10%);
+    }
     to {
         transform: translateY(150%);
+    }
+}
+
+
+
+/* nft 페이지 */
+.nft_page {
+    top: -70px;
+    position: relative;
+}
+.nft_content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 810px;
+}
+.nft {
+    height: 250px;
+    width: 250px;
+    margin: 0 10px;
+}
+#nft_1 {
+    animation-delay: calc(var(--scroll) * -1s + 8.3s);
+    z-index: 1;
+    position: relative;
+    height: 150px;
+    width: 160px;
+    margin: 45px 45px;
+    animation-name: zoom_in, zoom_out;
+    animation-duration: 1s;
+}
+#nft_2 {
+    animation-delay: calc(var(--scroll) * -1s + 8.8s);
+    z-index: 3;
+    position: relative;
+    height: 190px;
+    width: 190px;
+    margin: 30px;
+    animation-name: zoom_in, zoom_out;
+    animation-duration: 1s;
+}
+#nft_3 {
+    animation-delay: calc(var(--scroll) * -1s + 8.7s);
+    z-index: 2;
+    position: relative;
+    height: 170px;
+    width: 220px;
+    margin: 40px 15px;
+    animation-name: zoom_in, zoom_out;
+    animation-duration: 1s;
+}
+.wrap_nftbox {
+    position: absolute;
+}
+.outer_nftbox {
+    display: inline-block;
+}
+.nftbox {
+    width: 250px;
+    height: 250px;
+    border-radius: 10px;
+    margin: 0 10px;
+    z-index: 0;
+    position: relative;
+    box-shadow: 0 16px 20px -8px rgb(0 0 0 / 25%);
+}
+#nftbox_1 {
+    animation-name: slide_in_btot;
+    animation-duration: 1s;
+    animation-delay: calc(var(--scroll) * -1s + 7.7s);
+    background-color: #FF8080;
+}
+#nftbox_2 {
+    animation-name: slide_in_btot;
+    animation-duration: 1s;
+    animation-delay: calc(var(--scroll) * -1s + 7.9s);
+    background-color: #E2E2E2;
+}
+#nftbox_3 {
+    animation-name: slide_in_btot;
+    animation-duration: 1s;
+    animation-delay: calc(var(--scroll) * -1s + 8.1s);
+    background-color: #D8E7B0;
+}
+.nft_name {
+    font-family: 'Hammersmith One', sans-serif;
+    font-size: 1.8rem;
+    text-align: left;
+    margin: 20px 0 0 15px;
+    animation-name: slide_in_btot;
+    animation-duration: 1s;
+    animation-delay: calc(var(--scroll) * -1s + 9.2s);
+}
+
+.nft_desc {
+    text-align: left;
+    margin: 5px 15px;
+    animation-name: slide_in_btot;
+    animation-duration: 1s;
+    animation-delay: calc(var(--scroll) * -1s + 9.4s);
+}
+
+@keyframes slide_in_btot {
+    from {
+        transform: translateY(30%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
+
+@keyframes zoom_in {
+    0% {
+        transform: scale(4000%) rotate(-20deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    70% {
+        transform: scale(150%) rotate(-10deg);
+    }
+    90% {
+        transform: scale(120%) rotate(-5deg);
+    }
+}
+@keyframes zoom_out {
+    to {
+        transform: scale(100%) rotate(0deg);
+    }
+}
+
+@keyframes idle {
+    from {
+        transform: rotate(20deg);
+    }
+    to {
+        transform: rotate(-20deg);
     }
 }

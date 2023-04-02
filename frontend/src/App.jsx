@@ -29,8 +29,11 @@ import ReviewCreatePage from "./pages/ReviewCreatePage";
 import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
 import NftPage from "./pages/NftPage/nftPage";
 import NftTestPage from "./pages/NftPage/NftTestPage";
+import { useBeforeunload } from "react-beforeunload";
 
 export default function App() {
+  useBeforeunload((event) => event.preventDefault());
+
   return (
     <Auth>
       <div className="App">
@@ -80,7 +83,7 @@ export default function App() {
 
             <Route path={"/review"} element={<ReviewPage />} />
             <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
-            <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
+            <Route path={"/notice/:category"} element={<NoticeDetailPage />} />
             <Route path={"/hjooo"} element={<HjooPage />} />
             <Route path={"/sun"} element={<NftPage />}/>
             <Route path={"/sunny"} element={<NftTestPage />}/>
@@ -93,5 +96,5 @@ export default function App() {
 // nav와 content 분리용 - 이은혁
 const Body = styled.div`
   width: 100%;
-  padding-top: 56px;
+  padding-top: 100px;
 `;

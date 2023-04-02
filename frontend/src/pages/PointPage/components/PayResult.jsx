@@ -100,8 +100,6 @@ const PayResult = () => {
 
   // 수연: 포인트 충전 api 호출
   const ChargePoint = (amount) => {
-    console.log("로컬 포인트", localStorage.getItem("point"));
-    console.log("amount:", amount);
     api({
       url: "/users/me/points/charge",
       method: "POST",
@@ -114,7 +112,6 @@ const PayResult = () => {
       },
     })
       .then((res) => {
-        console.log(res);
         // ChargeBlock(amount);
         refetch();
       })
@@ -141,7 +138,6 @@ const PayResult = () => {
       },
     })
       .then((res) => {
-        console.log(res);
         setPrice(res.data.amount.total);
         setDate(res.data.approved_at);
         setFlag(true);
@@ -166,7 +162,14 @@ const PayResult = () => {
               <Text>기부포인트 {price}P 충전</Text>
               <Text>날짜: {date}</Text>
               <InnerBox>
-                <Button href="/profile">마이페이지</Button>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/", { replace: true });
+                  }}
+                >
+                  마이페이지
+                </Button>
               </InnerBox>
             </Box>
           </Box>
@@ -238,8 +241,9 @@ const Text = styled.p`
 `;
 
 const Button = styled.a`
+  background-color: rgb(160, 200, 70);
   ${tw`
-  rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
+  rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
   `}
 `;
 export default PayResult;

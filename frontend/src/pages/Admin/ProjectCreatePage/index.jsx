@@ -89,8 +89,6 @@ const ProjectCreatePage = () => {
     );
     formData.append("files", files);
     formData.append("thumbnail", thumbnail);
-    console.log(formData);
-    console.log(state.thumbnail);
     api
       .post("/project", formData, {
         headers: {
@@ -100,8 +98,9 @@ const ProjectCreatePage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
-        alert("프로젝트 생성 완료했습니다.");
+        if (res) {
+          alert("프로젝트 생성 완료했습니다.");
+        }
       })
       .catch((error) => {
         const response = error.response.data;
@@ -317,7 +316,6 @@ const ProjectCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -328,7 +326,6 @@ const ProjectCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -339,7 +336,6 @@ const ProjectCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -350,7 +346,6 @@ const ProjectCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -361,7 +356,6 @@ const ProjectCreatePage = () => {
                   onChange={(e) => {
                     if (e.target.files) {
                       setFiles([...files, e.target.files[0]]);
-                      console.log(files);
                     }
                   }}
                 />
@@ -457,9 +451,10 @@ const AdminLargeInput = styled.textarea`
 `;
 
 const SubmitButton = styled.button`
+  background-color: rgb(160, 200, 70);
   ${tw`
-  w-full h-full py-2 px-10 font-normal text-black
-  bg-amber-200 hover:bg-amber-400 active:bg-amber-500 mx-1
+  w-full h-full py-2 px-10 font-normal text-white
+  mx-1
 
   `}
 `;

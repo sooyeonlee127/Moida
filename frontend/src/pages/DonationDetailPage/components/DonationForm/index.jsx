@@ -64,8 +64,15 @@ const DonationForm = (props) => {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => response)
-      .catch((error) => error);
+      .then((response) => {
+        console.log(response)
+        return response
+      })
+      .catch((error) => {
+        console.log(error)
+        alert(error.response.data.message)
+        return error
+      });
   });
 
   const SendMoi = () => {

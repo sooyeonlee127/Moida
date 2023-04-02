@@ -99,11 +99,6 @@ const ReviewList = () => {
         page={currentPage}
         count={cardsLength}
         setPage={setPage} />
-
-      
-
-      
-
     </div>
   )
 }

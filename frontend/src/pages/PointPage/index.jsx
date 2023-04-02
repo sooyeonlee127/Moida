@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
-import point01 from "../../assets/img/point01.png";
-import point02 from "../../assets/img/point02.png";
+
 
 const PointPage = () => {
   const [currentPoint, setCurrentPoint] = useState(0);
@@ -67,125 +66,121 @@ const PointPage = () => {
   };
 
   return (
-    <PointContainer>
-      <LeftSide>
-        <div>
-          <img className="h-auto max-w-full rounded-lg" src={point02} alt="" />
-        </div>
-      </LeftSide>
-      <RightSide>
-        <PointForm>
-          <Title>충전할 금액 설정</Title>
-          <InnerBox>
-            <Text>충전 금액</Text>
-            <PointText>{currentPoint}</PointText>
-          </InnerBox>
-          <InnerBox>
-            <Text>VAT (10%)</Text>
-            <PointText>{parseInt(currentPoint / 10)}</PointText>
-          </InnerBox>
-          <GroupButton>
-            <PointButton
-              onClick={(e) => {
-                e.preventDefault();
-                setCurrentPoint(0);
-                SetKakaoUrl("");
-              }}
-            >
-              <Text>초기화</Text>
-            </PointButton>
-            <PointButton
-              onClick={(e) => {
-                e.preventDefault();
-                donate(50000);
-              }}
-            >
-              <Text>+50,000</Text>
-            </PointButton>
+    <Container>
+      <PointContainer>
+        <RightSide>
+          <PointForm>
+            <Title>충전할 금액 설정</Title>
+            <InnerBox>
+              <Text>충전 금액</Text>
+              <PointText>{currentPoint.toLocaleString("ko-KR")}</PointText>
+            </InnerBox>
+            <InnerBox>
+              <Text>VAT (10%)</Text>
+              <PointText>
+                {parseInt(currentPoint / 10).toLocaleString("ko-KR")}
+              </PointText>
+            </InnerBox>
+            <GroupButton>
+              <PointButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPoint(0);
+                  SetKakaoUrl("");
+                }}
+              >
+                <Text>초기화</Text>
+              </PointButton>
+              <PointButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  donate(50000);
+                }}
+              >
+                <Text>+50,000원</Text>
+              </PointButton>
 
-            <PointButton
-              onClick={(e) => {
-                e.preventDefault();
-                donate(10000);
-              }}
-            >
-              <Text>+10,000</Text>
-            </PointButton>
+              <PointButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  donate(10000);
+                }}
+              >
+                <Text>+10,000원</Text>
+              </PointButton>
 
-            <PointButton
-              onClick={(e) => {
-                e.preventDefault();
-                donate(5000);
-              }}
-            >
-              <Text>+5,000</Text>
-            </PointButton>
+              <PointButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  donate(5000);
+                }}
+              >
+                <Text>+5,000원</Text>
+              </PointButton>
 
-            <PointButton
+              <PointButton
+                onClick={(e) => {
+                  e.preventDefault();
+                  donate(1000);
+                }}
+              >
+                <Text>+1,000원</Text>
+              </PointButton>
+            </GroupButton>
+            <Line></Line>
+            <Title>최종 결제 금액</Title>
+            <Box>
+              <KakaoBox>
+                <Text>간편결제</Text>
+                <PointText>카카오페이</PointText>
+              </KakaoBox>
+              <div>
+                <PayText>
+                  {parseInt(currentPoint * 1.1).toLocaleString("ko-KR")} 원
+                </PayText>
+                <PayTextBottom>(VAT 포함)</PayTextBottom>
+              </div>
+            </Box>
+            <SubmitButton
+              type="submit"
               onClick={(e) => {
                 e.preventDefault();
-                donate(1000);
+                kakaoPay();
               }}
             >
-              <Text>+1,000</Text>
-            </PointButton>
-          </GroupButton>
-          <Line></Line>
-          <Title>최종 결제 금액</Title>
-          <Box>
-            <KakaoBox>
-              <Text>간편결제</Text>
-              <PointText>카카오페이</PointText>
-            </KakaoBox>
-            <div>
-              <PayText>{parseInt(currentPoint * 1.1)} 원</PayText>
-              <PayTextBottom>(VAT 포함)</PayTextBottom>
-            </div>
-          </Box>
-          <SubmitButton
-            type="submit"
-            onClick={(e) => {
-              e.preventDefault();
-              kakaoPay();
-            }}
-          >
-            결제하기
-          </SubmitButton>
-          <ImageBox>
-            <img
-              className="h-auto max-w-full rounded-lg"
-              src={point01}
-              alt=""
-            />
-          </ImageBox>
-        </PointForm>
-      </RightSide>
-    </PointContainer>
+              결제하기
+            </SubmitButton>
+          </PointForm>
+        </RightSide>
+      </PointContainer>
+    </Container>
   );
 };
 
-const PointContainer = styled.div`
+const Container = styled.div`
+  height: 100vh;
+  width: 100vw;
+  background-color: #fafaf3;
   ${tw`
-  mx-auto max-w-4xl px-4 pt-40 pb-16
-  grid grid-cols-2
+  flex items-center justify-between
   `}
+`;
+
+const PointContainer = styled.div`
+  ${tw` 
+  mx-auto bg-white h-auto w-auto shadow-lg shadow-gray-400 rounded-md
+  `};
 `;
 
 const Title = styled.h2`
   ${tw`
-  text-left	text-lg font-black text-gray-900 mb-3
+  text-left	text-xl font-black text-gray-900 mb-5 tracking-tight
   `}
-`;
-
-const LeftSide = styled.div`
-  ${tw`
-  row-span-3  flex items-center justify-between pr-20
-`}
 `;
 
 const RightSide = styled.div`
   ${tw`
-  mt-4 row-span-3 lg:mt-0
+  px-10
 `}
 `;
 
@@ -196,21 +191,16 @@ flex items-center justify-between
 `;
 
 const Box = styled.div`
-  ${tw`
-  grid grid-cols-2 bg-slate-100 h-20
+  background-color: rgb(244, 248, 242);
+  ${tw` 
+  grid grid-cols-2 h-24 rounded-md
   flex items-center justify-between 
-`}
-`;
-
-const ImageBox = styled.div`
-  ${tw`
-  m-3
 `}
 `;
 
 const KakaoBox = styled.div`
   ${tw`
-  text-left pl-5
+  text-left pl-5 
   `}
 `;
 
@@ -222,43 +212,47 @@ const PointForm = styled.form`
 
 const GroupButton = styled.div`
   ${tw`
-  grid grid-cols-5 gap-1 mt-5 
+  grid grid-cols-5 gap-1 mt-5 mb-2
   `}
 `;
 
 const PointButton = styled.button`
   ${tw`
-  border hover:bg-sky-500 active:bg-sky-600
+  border border-gray-400 rounded-xl px-1 mx-1
   `}
 `;
 
 const Text = styled.h3`
+  color: rgb(98, 98, 98);
   ${tw`
-  text-sm text-gray-600 font-extralight
+  text-sm font-normal my-2
   `}
 `;
 
 const PointText = styled.h3`
   ${tw`
-  text-sm text-gray-900 font-bold	
+  text-sm text-gray-900 font-black	my-2
 
   `}
 `;
 
 const PayText = styled.h3`
+  color: rgb(160, 200, 70);
   ${tw`
-  text-sm text-indigo-500 font-bold	
+  text-sm font-black	my-2 text-right mr-5
   `}
 `;
 const PayTextBottom = styled.h3`
+  color: rgb(98, 98, 98);
   ${tw`
-  text-sm text-gray-600 font-extralight
+  text-sm font-normal my-2 text-right mr-5
   `}
 `;
 
 const SubmitButton = styled.button`
+  background-color: rgb(160, 200, 70);
   ${tw`
-  bg-sky-600 w-full h-full mt-3 py-3 px-10 font-light text-white
+  w-full h-full mt-10 py-4 px-10 font-normal text-white rounded-lg  mb-7
   `}
 `;
 const Line = styled.hr`

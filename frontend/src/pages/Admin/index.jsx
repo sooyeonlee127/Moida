@@ -85,7 +85,6 @@ const AdminPage = () => {
               if (!boardid) {
                 alert("게시글 id를 입력하세요");
               } else {
-                console.log(boardid);
                 goPage("admin/notice/update", boardid);
               }
             }}
@@ -162,14 +161,15 @@ const Box = styled.div`
 `;
 
 const Btn = styled.button`
+  background-color: rgb(160, 200, 70);
   ${tw`
-	bg-amber-200 rounded px-3 py-1 hover:bg-amber-400 active:bg-amber-500 mx-1
+	rounded px-3 py-1 mx-1 text-white
 	`}
 `;
 
 const Input = styled.input`
   ${tw`
-	border-2 border-gray-200
+	border-2 border-gray-200 mt-6
 	`}
 `;
 export default AdminPage;

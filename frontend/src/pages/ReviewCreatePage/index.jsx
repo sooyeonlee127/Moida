@@ -40,7 +40,8 @@ const ReviewCreatePage = () => {
     difficultyLevel,
   } = state;
 
-  const reviewSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
     let testData = {
       subject: state.subject,
       description: state.description,
@@ -90,7 +91,7 @@ const ReviewCreatePage = () => {
             <Heading>인증후기작성</Heading>
           </div>
 
-          <ReviewForm action="#" method="POST">
+          <ReviewForm method="POST" onSubmit={handleSubmit}>
             <div>
               <Heading>글작성</Heading>
             </div>
@@ -191,16 +192,8 @@ const ReviewCreatePage = () => {
                 }}
               />
             </InputGroup>
-
             <div>
-              <SubmitButton
-                type="submit"
-                onClick={(e) => {
-                  console.log(e);
-                  e.preventDefault();
-                  reviewSubmit();
-                }}
-              >
+              <SubmitButton type="submit">
                 제출하기
               </SubmitButton>
             </div>

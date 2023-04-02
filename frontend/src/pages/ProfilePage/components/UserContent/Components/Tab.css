@@ -1,0 +1,41 @@
+.container {
+    width: 100%;
+}
+.item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #D2D2D2;
+}
+.item:hover {
+    background-color: #E9E9E9;
+}
+.badge {
+    width: 100px;
+    height: 100px;
+}
+.item_sec {
+    display: inline-block;
+    height: 100%;
+    padding: 10px;
+}
+.item_sec.grow_sec {
+    flex-grow: 1;
+    text-align: left;
+    margin-left: 1rem;
+}
+
+.weak {
+    color: #949494;
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+.title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+.strong {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 1rem 0 0.5rem 0;
+}

@@ -27,13 +27,11 @@ const NoticeUpdatePage = () => {
   const { subject, description } = state;
 
   const adminSubmit = () => {
-    console.log(subject, description, boardid);
     let data = {
       id: boardid,
       subject: subject,
       description: description,
     };
-    console.log("formData", data);
     api
       .put("/article/board", data, {
         headers: {
@@ -42,8 +40,9 @@ const NoticeUpdatePage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
-        alert("공지글 수정 완료했습니다.");
+        if (res) {
+          alert("공지글 수정 완료했습니다.");
+        }
       })
       .catch((error) => {
         const response = error.response.data;
@@ -157,9 +156,10 @@ const AdminLargeInput = styled.textarea`
 `;
 
 const SubmitButton = styled.button`
+  background-color: rgb(160, 200, 70);
   ${tw`
-  w-full h-full py-2 px-10 font-normal text-black
-  bg-amber-200 hover:bg-amber-400 active:bg-amber-500 mx-1
+  w-full h-full py-2 px-10 font-normal text-white
+  mx-1
   `}
 `;
 export default NoticeUpdatePage;
