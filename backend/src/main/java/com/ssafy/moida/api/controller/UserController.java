@@ -256,13 +256,14 @@ public class UserController {
             .body(Map.of("volunteerList", userVolunteerList, "length", length));
     }
 
-    @Operation(summary = "사용자 포인트 내역", description = "로그인한 사용자의 포인트 사용 내역을 반환합니다.")
+    @Operation(summary = "사용자 포인트 내역(필터)", description = "로그인한 사용자의 포인트 사용 내역을 ALL, DONATION, CHARGE 로 필터링하여 나타냅니다.")
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping(path = "/me/points")
     public ResponseEntity<?> getUserPointList(
         @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-        @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-            @AuthenticationPrincipal PrincipalDetails principal
+        @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
+        @RequestParam(value = "category") @Schema(description = "카테고리", allowableValues = {"DONATION", "CHARGE", "ALL"}) String category,
+        @AuthenticationPrincipal PrincipalDetails principal
     ) {
         // 로그인한 사용자 토큰 검증
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
@@ -273,7 +274,7 @@ public class UserController {
             throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
         }
 
-        HashMap<String, Object> userPointList = userService.getUsersPoint(loginUser, pageSize, pageNumber);
+        Map<String, Object> userPointList = userService.getPointListFilter(category, loginUser, pageSize, pageNumber);
         return new ResponseEntity<>(userPointList, HttpStatus.OK);
     }
 
@@ -297,29 +298,6 @@ public class UserController {
         return new ResponseEntity<>("포인트 충전 완료", HttpStatus.OK);
     }
 
-    @Operation(summary = "사용자 포인트 내역 필터", description = "사용자의 포인트 사용 내역을 필터링하여 반환합니다.")
-    @SecurityRequirement(name = "bearerAuth")
-    @GetMapping(path = "/me/points/filters")
-    public ResponseEntity<?> pointFilter(
-            @AuthenticationPrincipal PrincipalDetails principal,
-            @RequestParam(value = "category") @Schema(description = "카테고리", allowableValues = {"DONATION", "CHARGE", "ALL"}) String category,
-            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize
-    ) {
-        // 로그인한 사용자 토큰 검증
-        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principal, false);
-
-        // DTO 유효성 검사
-        pageNumber -= 1;
-        if(pageNumber < 0 || pageSize <= 0) {
-            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
-        }
-
-        Map<String, Object> resultMap
-                = userService.getPointListFilter(category, loginUser, pageSize, pageNumber);
-
-        return new ResponseEntity<>(resultMap, HttpStatus.OK);
-    }
 
     @Operation(summary = "비밀번호 찾기", description = "가입된 이메일로 임시 비밀번호를 보냅니다.")
     @PostMapping( "/forgot-password/{email}")
