@@ -62,7 +62,7 @@ const Intro = () => {
 };
 
 const StickyContainer = styled.div`
-  height: 2000px;
+  height: 1900px;
   width: 100%;
   position: relative;
 `;

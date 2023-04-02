@@ -88,7 +88,7 @@ const LoginPage = () => {
       <InnerContainer>
         <div>
           <ImageBox>
-            <Image src={logo} alt="" width="100" />
+            <Image src={logo} alt="" width="90" />
           </ImageBox>
           <Heading>로그인</Heading>
         </div>
@@ -162,9 +162,9 @@ const LoginPage = () => {
 };
 
 const Heading = styled.h2`
-  color: rgb(98, 98, 98);
+  color: rgb(75, 75, 75);
   ${tw`
-  mt-6 text-center text-3xl font-black tracking-tighter
+  mt-6 text-center text-3xl font-black
   `}
 `;
 
@@ -196,16 +196,16 @@ const InputGroup = styled.div`
 `;
 
 const InputText = styled.label`
-  color: rgb(98, 98, 98);
+  color: rgb(75, 75, 75);
   ${tw`
-  px-1 mt-4 flex text-sm font-normal leading-6
+  px-1 mt-4 flex text-sm font-bold leading-6
   `}
 `;
 
 const LoginInput = styled.input`
   background-color: #fafaf3;
   ${tw`
-  relative block w-full px-2 py-1.5 border-b-2 border-gray-500
+  relative block w-full px-2 py-1.5 border-b-2 border-gray-300
   `}
 `;
 
@@ -223,12 +223,12 @@ const RememberMeBox = styled.div`
 
 const RememberMe = styled.input`
   ${tw`
-  h-5 w-5 border-gray-200 
+  h-5 w-5 border-gray-200 text-green-600
   `};
 `;
 
 const RememberMeText = styled.label`
-  color: rgb(98, 98, 98);
+  color: rgb(75, 75, 75);
   ${tw`
   ml-2 block text-sm font-medium
   `}
@@ -236,17 +236,17 @@ const RememberMeText = styled.label`
 
 const SubmitButton = styled.button`
   background-color: rgb(160, 200, 70);
-  color: rgb(98, 98, 98);
+  color: rgb(75, 75, 75);
   ${tw`
-  w-full h-full py-3 px-10 font-medium tracking-tighter
+  w-full h-full py-3 px-10 font-semibold 
   `}
 `;
 
 const PasswordButton = styled.button`
   background-color: rgb(225, 237, 213);
-  color: rgb(98, 98, 98);
+  color: rgb(75, 75, 75);
   ${tw`
-  w-full h-full mt-3 py-3 px-10 font-medium tracking-tighter
+  w-full h-full mt-3 py-3 px-10 font-semibold 
   `}
 `;
 

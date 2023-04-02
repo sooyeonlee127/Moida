@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import useListApi from "./api"
 import styled from 'styled-components';
 
-const MyGallery = () => {
+const MyReviews = () => {
   const [pageNum, setPageNum] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const [pageList, setPageList] = useState([]) // 페이지 번호들을 담을 리스트 생성
@@ -19,26 +19,40 @@ const MyGallery = () => {
     Pagination()
   }, [length])
   return (
-    <>
+    <div className='container'>
       {datas.map((data, index) => { 
             return (
-                <div key={index}>
+                <Review key={index}>
                     <p>프로젝트 분류 : {data.category}</p>
                     <p>난이도 : {data.difficultyLevel}</p>
                     <p>제목 : {data.subject}</p>
                     <p>작성일시 : {data.regDate}</p>
                     <p>내용 : {data.description}</p>
-                </div>
+                </Review>
+
             )
         })}
     <p> 
-      {datas.length === 0 && !loading? "빈 값":""}
-      {loading? "로딩 중":""}
+      {datas.length === 0 && !loading? "빈 값":""}{loading? "로딩 중":""}</p>
+
+
       {pageList?.map((num, index)=>{ return (<PageBtn key={index} onClick={()=> setPageNum(num)}>{num}</PageBtn>) })}
-    </p>
-  </>
+
+    
+  </div>
   )
 }
+// const div = styled.div`
+// width: 100%;
+// min-height: 300px;
+// border-top: 1px solid #838383;
+// `
+
+const Review = styled.div`
+width: 200px;
+height: 200px;
+display: inline-block;
+`
 
 const PageBtn = styled.button`
 margin: 0 10px;
@@ -46,5 +60,4 @@ padding: 5px 10px;
 border: 1px solid black;
 background-color: red;
 `
-
-export default MyGallery;
+export default MyReviews;

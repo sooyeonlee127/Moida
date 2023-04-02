@@ -207,51 +207,56 @@ const Form = () => {
     });
   };
 
-  const checkEmail = async() => {
+  const checkEmail = async () => {
     console.log("checkEmail");
     console.log("formInfo.email", formInfo.email);
     setInputMessage((prevState) => {
-      return { ...prevState, ["email"]: "로딩중" };
+      return { ...prevState, email: "로딩중" };
     });
     try {
       const res = await axios({
         url: "/api/users/exists/email/" + formInfo.email,
         method: "POST",
-      })
-      setInputMessage((prevState) => {
-        return { ...prevState, ["email"]: "이메일로 전송된 인증코드를 입력해주세요" };
       });
-      setCode(res.data)
-    } catch(err) {
-       if (err.response.status === 409) {
-         setInputMessage((prevState) => {
-           return { ...prevState, ["email"]: "이미 존재하는 이메일입니다." };
-         });
+      setInputMessage((prevState) => {
+        return {
+          ...prevState,
+          email: "이메일로 전송된 인증코드를 입력해주세요",
+        };
+      });
+      setCode(res.data);
+    } catch (err) {
+      if (err.response.status === 409) {
+        setInputMessage((prevState) => {
+          return { ...prevState, email: "이미 존재하는 이메일입니다." };
+        });
       } else if (err.response.status === 500) {
         setInputMessage((prevState) => {
-          return { ...prevState, ["email"]: "잘못된 입력입니다"}});
+          return { ...prevState, email: "잘못된 입력입니다" };
+        });
       } else {
         setInputMessage((prevState) => {
-          return { ...prevState, ["email"]: "알 수 없는 오류입니다."}});
+          return { ...prevState, email: "알 수 없는 오류입니다." };
+        });
       }
     }
-  }
-  
+  };
+
   const CheckEmailCode = (value) => {
-    console.log(code, value)
+    console.log(code, value);
     if (value === code) {
       setValidation((prevState) => {
         return { ...prevState, email: "true" };
       });
       setInputMessage((prevState) => {
-        return { ...prevState, ["email"]: "인증이 완료되었습니다." };
+        return { ...prevState, email: "인증이 완료되었습니다." };
       });
     } else {
       setInputMessage((prevState) => {
-        return { ...prevState, ["email"]: "잘못된 인증코드입니다." };
+        return { ...prevState, email: "잘못된 인증코드입니다." };
       });
     }
-  }
+  };
 
   return (
     <MyForm action="#" method="POST" onSubmit={handleSubmit}>
@@ -272,10 +277,16 @@ const Form = () => {
               중복확인
             </Button>
           </InnerDiv>
-          {
-            code ? (<Input style={{marginTop:"10px"}} type="text" onChange={(e)=>CheckEmailCode(e.target.value)}/>):""
-          }
-          
+          {code ? (
+            <Input
+              style={{ marginTop: "10px" }}
+              type="text"
+              onChange={(e) => CheckEmailCode(e.target.value)}
+            />
+          ) : (
+            ""
+          )}
+
           <Message>{inputMessage.email}</Message>
         </Div>
         <Div>
@@ -375,13 +386,15 @@ const InnerDiv = styled.div`
   `}
 `;
 const Label = styled.label`
+  color: rgb(75, 75, 75);
   ${tw`
-  px-1 mt-1 flex text-sm font-light leading-6 text-gray-500
+  px-1 mt-3 flex text-sm font-bold leading-6 
   `}
 `;
 const Input = styled.input`
+  background-color: #fafaf3;
   ${tw`
-  relative block w-full px-2 py-1.5 text-gray-800 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
+  relative block w-full px-2 py-1.5 text-gray-800 border-b-2 border-gray-300
   py-1.5
    `}
   &.growinput {
@@ -394,11 +407,12 @@ const Input = styled.input`
 `;
 const Button = styled.button`
   ${tw`
-  flex-none grow-0 ml-3 py-2.5 px-5 text-sm bg-gray-500 text-white
+  flex-none grow-0 py-2.5 px-5 text-sm text-gray-800 border-b-2 border-gray-300
   `}
   &.submitbtn {
+    background-color: rgb(160, 200, 70);
     ${tw`
-    w-full ml-0 h-full bg-yellow-300 py-4 px-10 font-normal text-gray-600
+    w-full ml-0 h-full py-5 px-10 font-bold border-b-0
     `}
   }
 `;
@@ -410,17 +424,21 @@ const Message = styled.p`
   &.error {
     color: red;
   }
+  ${tw`
+  mt-2
+  `}
 `;
 
 const Select = styled.select`
+  background-color: #fafaf3;
   ${tw`
-  grow h-full py-1.5 pl-2 pr-10
+  grow h-full py-2 pl-2 pr-10 border-b-2 border-gray-300
   `}
 `;
 
 const Hyphen = styled.p`
   ${tw`
-  mx-3
+  px-3 border-b-2 border-gray-300
   `}
 `;
 export default Form;

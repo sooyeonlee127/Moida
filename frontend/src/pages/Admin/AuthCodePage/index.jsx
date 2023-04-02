@@ -147,9 +147,9 @@ const AdminInput = styled.input`
 `;
 
 const SubmitButton = styled.button`
-  background-color: #ca8a04;
+  background-color: rgb(160, 200, 70);
   padding: 0.5rem 2.5rem;
   font-weight: 600;
-  color: black;
+  color: white;
 `;
 export default AuthCordPage;

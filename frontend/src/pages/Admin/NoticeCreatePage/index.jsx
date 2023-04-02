@@ -221,9 +221,10 @@ const AdminLargeInput = styled.textarea`
 `;
 
 const SubmitButton = styled.button`
+  background-color: rgb(160, 200, 70);
   ${tw`
-  w-full h-full py-2 px-10 font-normal text-black
-  bg-amber-200 hover:bg-amber-400 active:bg-amber-500 mx-1
+  w-full h-full py-2 px-10 font-normal text-white
+  mx-1
   `}
 `;
 export default NoticeCreatePage;

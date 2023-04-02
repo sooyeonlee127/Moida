@@ -97,8 +97,9 @@ const Box = styled.div`
 `;
 
 const AdminButton = styled.button`
+  background-color: rgb(160, 200, 70);
   ${tw`
-  bg-amber-200 rounded px-3 py-1 hover:bg-amber-400 active:bg-amber-500 mx-1
+  rounded-sm px-3 py-1 mx-1
   `}
 `;
 
