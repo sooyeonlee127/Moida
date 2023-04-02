@@ -1,21 +1,30 @@
 import { useState, useEffect } from "react";
 import api from "../../../../../api/auth";
 
-const useListApi = (type, pageNumber=1, pageSize=10) => { // 기본값 지정 - 이은혁
+const useListApi = (type, pageNumber=1, pageSize=10, category=null) => { // 기본값 지정 - 이은혁
   const [data, setData] = useState([]);
   const [dataLength, setDataLength] = useState(0);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let params;
+    if (type === 'points') {
+      params = {
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+        category: category
+      } 
+    } else {
+      params = {
+        pageNumber: pageNumber,
+        pageSize: pageSize
+      }
+    }
     const fetchData = async () => {
       try {
         const response = await api.get(`/users/me/${type}`,
-          {params:{
-            pageNumber: pageNumber,
-            pageSize: pageSize
-          }
-          },
+          {params},
           {headers: {
             accept: "*/*",
             Authorization: localStorage.getItem("accessToken"),
