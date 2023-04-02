@@ -16,6 +16,7 @@
     "env-cmd": "^10.1.0",
     "ethers": "^5.4.7",
     "fs": "0.0.1-security",
+    "ipfs-http-client": "^60.0.0",
     "react": "^18.2.0",
     "react-beforeunload": "^2.5.3",
     "react-calendar": "^4.0.0",
