@@ -8,6 +8,8 @@ import com.ssafy.moida.model.nft.NftPicture;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.nft.NftService;
 import com.ssafy.moida.utils.TokenUtils;
+import com.ssafy.moida.utils.error.ErrorCode;
+import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -92,7 +94,6 @@ public class NftController {
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
             @AuthenticationPrincipal PrincipalDetails principalDetails
     ) {
-        log.info("목록");
         // 유저 정보 가져오기
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
         Long userId = loginUser.getId();
@@ -111,6 +112,32 @@ public class NftController {
 
         return ResponseEntity.ok()
                 .body(Map.of("nftList", userNftList, "length", length));
+    }
+
+    @Operation(summary = "사용자 대표 NFT 이미지 변경", description = "사용자의 대표 NFT 이미지를 변경합니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    @PostMapping("/chageImg")
+    public ResponseEntity<?> chageUserMainImg(
+            @RequestParam(name = "nftId") long nftId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        // 유저 정보 가져오기
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+        Long userId = loginUser.getId();
+
+        // 이미지 url 정보
+        String imgUrl = loginUser.getNftUrl();
+
+        // 사용자가 nftId에 해당하는 Nft를 가지고 있는지 확인
+        if(nftService.existNft(userId, nftId)) {
+            // NFT 이미지 변경
+            imgUrl = nftService.chageMainNFT(loginUser, nftId);
+        } else {
+            // 소유하고 있지 않다면 에러
+            throw new CustomException(ErrorCode.NFT_NOT_FOUND);
+        }
+
+        return new ResponseEntity<>("대표 NFT 변경 완료", HttpStatus.OK);
     }
 
 
