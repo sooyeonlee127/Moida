@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
-import point01 from "../../assets/img/point01.png";
-import point02 from "../../assets/img/point02.png";
+
 
 const PointPage = () => {
   const [currentPoint, setCurrentPoint] = useState(0);
@@ -74,11 +73,13 @@ const PointPage = () => {
             <Title>충전할 금액 설정</Title>
             <InnerBox>
               <Text>충전 금액</Text>
-              <PointText>{currentPoint}</PointText>
+              <PointText>{currentPoint.toLocaleString("ko-KR")}</PointText>
             </InnerBox>
             <InnerBox>
               <Text>VAT (10%)</Text>
-              <PointText>{parseInt(currentPoint / 10)}</PointText>
+              <PointText>
+                {parseInt(currentPoint / 10).toLocaleString("ko-KR")}
+              </PointText>
             </InnerBox>
             <GroupButton>
               <PointButton
@@ -96,7 +97,7 @@ const PointPage = () => {
                   donate(50000);
                 }}
               >
-                <Text>+50,000</Text>
+                <Text>+50,000원</Text>
               </PointButton>
 
               <PointButton
@@ -105,7 +106,7 @@ const PointPage = () => {
                   donate(10000);
                 }}
               >
-                <Text>+10,000</Text>
+                <Text>+10,000원</Text>
               </PointButton>
 
               <PointButton
@@ -114,7 +115,7 @@ const PointPage = () => {
                   donate(5000);
                 }}
               >
-                <Text>+5,000</Text>
+                <Text>+5,000원</Text>
               </PointButton>
 
               <PointButton
@@ -123,7 +124,7 @@ const PointPage = () => {
                   donate(1000);
                 }}
               >
-                <Text>+1,000</Text>
+                <Text>+1,000원</Text>
               </PointButton>
             </GroupButton>
             <Line></Line>
@@ -134,7 +135,9 @@ const PointPage = () => {
                 <PointText>카카오페이</PointText>
               </KakaoBox>
               <div>
-                <PayText>{parseInt(currentPoint * 1.1)} 원</PayText>
+                <PayText>
+                  {parseInt(currentPoint * 1.1).toLocaleString("ko-KR")} 원
+                </PayText>
                 <PayTextBottom>(VAT 포함)</PayTextBottom>
               </div>
             </Box>
@@ -164,20 +167,20 @@ const Container = styled.div`
 `;
 
 const PointContainer = styled.div`
-  ${tw`
-  mx-auto bg-white w-2/5 py-10
-  `}
+  ${tw` 
+  mx-auto bg-white h-auto w-auto shadow-lg shadow-gray-400 rounded-md
+  `};
 `;
 
 const Title = styled.h2`
   ${tw`
-  text-left	text-lg font-black text-gray-900 mb-3
+  text-left	text-xl font-black text-gray-900 mb-5 tracking-tight
   `}
 `;
 
 const RightSide = styled.div`
   ${tw`
-  mt-4 row-span-3 px-10
+  px-10
 `}
 `;
 
@@ -188,15 +191,16 @@ flex items-center justify-between
 `;
 
 const Box = styled.div`
-  ${tw`
-  grid grid-cols-2 bg-slate-100 h-20
+  background-color: rgb(244, 248, 242);
+  ${tw` 
+  grid grid-cols-2 h-24 rounded-md
   flex items-center justify-between 
 `}
 `;
 
 const KakaoBox = styled.div`
   ${tw`
-  text-left pl-5
+  text-left pl-5 
   `}
 `;
 
@@ -208,43 +212,47 @@ const PointForm = styled.form`
 
 const GroupButton = styled.div`
   ${tw`
-  grid grid-cols-5 gap-1 mt-5 
+  grid grid-cols-5 gap-1 mt-5 mb-2
   `}
 `;
 
 const PointButton = styled.button`
   ${tw`
-  border hover:bg-sky-500 active:bg-sky-600
+  border border-gray-400 rounded-xl px-1 mx-1
   `}
 `;
 
 const Text = styled.h3`
+  color: rgb(98, 98, 98);
   ${tw`
-  text-sm text-gray-600 font-extralight
+  text-sm font-normal my-2
   `}
 `;
 
 const PointText = styled.h3`
   ${tw`
-  text-sm text-gray-900 font-bold	
+  text-sm text-gray-900 font-black	my-2
 
   `}
 `;
 
 const PayText = styled.h3`
+  color: rgb(160, 200, 70);
   ${tw`
-  text-sm text-indigo-500 font-bold	
+  text-sm font-black	my-2 text-right mr-5
   `}
 `;
 const PayTextBottom = styled.h3`
+  color: rgb(98, 98, 98);
   ${tw`
-  text-sm text-gray-600 font-extralight
+  text-sm font-normal my-2 text-right mr-5
   `}
 `;
 
 const SubmitButton = styled.button`
+  background-color: rgb(160, 200, 70);
   ${tw`
-  bg-sky-600 w-full h-full mt-3 py-3 px-10 font-light text-white
+  w-full h-full mt-10 py-4 px-10 font-normal text-white rounded-lg  mb-7
   `}
 `;
 const Line = styled.hr`

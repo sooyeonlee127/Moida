@@ -162,7 +162,14 @@ const PayResult = () => {
               <Text>기부포인트 {price}P 충전</Text>
               <Text>날짜: {date}</Text>
               <InnerBox>
-                <Button href="/profile">마이페이지</Button>
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/", { replace: true });
+                  }}
+                >
+                  마이페이지
+                </Button>
               </InnerBox>
             </Box>
           </Box>
@@ -234,8 +241,9 @@ const Text = styled.p`
 `;
 
 const Button = styled.a`
+  background-color: rgb(160, 200, 70);
   ${tw`
-  rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600
+  rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
   `}
 `;
 export default PayResult;
