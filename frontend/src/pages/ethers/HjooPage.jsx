@@ -7,8 +7,6 @@ import { injected } from "../../lib/connectors";
 import { TOKENContract } from "./SmartContract";
 
 const HjooPage = () => {
-  console.log(process.env.REACT_APP_SEPOLIA_API_URL);
-    // const web3 = new Web3(window.ethereum);
     const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL)
     const {
         connector,
@@ -20,21 +18,17 @@ const HjooPage = () => {
         deactivate // DApp 월렛 해제 수행함수
       } = useWeb3React();
 
-      // 코인베이스 주소 가져오기
+    // 코인베이스 주소 가져오기
     const getAdminAddress = async () => {
         // const res = process.env.REACT_APP_ADMIN_PUBLIC_KEY // local
-
-        // const res = await web3.eth.getCoinbase();
         const res = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY
         return res;
     };
 
     const connectWallet = useCallback(async () => {
         try {
-        // 메타마스크 설치 된 경우
+          // 메타마스크 설치 된 경우
           if(typeof window.ethereum !== 'undefined') {
-          // todo
-          
             await activate(injected);
             console.log("메타마스크 연결");    
 
@@ -50,7 +44,7 @@ const HjooPage = () => {
     
     const unconnectWallet = async () => {
       try {
-      // 메타마스크 설치 된 경우
+        // 메타마스크 설치 된 경우
         if(typeof window.ethereum !== 'undefined') {
           if(active) 
           {
@@ -68,13 +62,12 @@ const HjooPage = () => {
       }
     };
 
-    // 추후 value
+    // 발표 전에 Eth 크게 해줘야 함
     const chargePoint = useCallback(async () => {
       // await connectWallet();
       const coinbase = await getAdminAddress();
       console.log("chargePoint");
       
-      // const web3 = new Web3("http://127.0.0.1:7545"); // local
       // const web2 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
         // 현재 1ETH당 10000000000 설정 .. 0.000001 -> 10000Token
       
@@ -83,14 +76,11 @@ const HjooPage = () => {
          * 2. value.toString
          * "1" -> value
          */
-        let value = 10000;
-        // value = 10000/10000000000;
-        console.log("?????anjsep");
+
         const Eth = web3.utils.toWei("0.01", "ether");
 
       // 이더 전송
       const gasLimit = 300000; // gas limit를 지정합니다.
-      console.log("??"+account);
       const chargeTx = {
         from: coinbase,
         to: account,
@@ -106,7 +96,7 @@ const HjooPage = () => {
         return "충전 완료 ^_^";
       });
     
-      // 추후 value
+      // data 입력받기 : 닉네임, 기부액, 일시(이건 여기서?), 프로젝트 제목, 프로젝트 차수
       const donatePoint = useCallback(async () => {
         // await connectWallet();
         const coinbase = await getAdminAddress();
@@ -135,23 +125,6 @@ const HjooPage = () => {
         return transaction; // chainId 안나옴
         // return await web3.eth.getTransaction(result.transactionHash);
       });
-    
-        // 이건 무시하세요 !!!
-      const clickHandler = async () => {
-        console.log("clickHandler");
-        const coinbase = await getAdminAddress();
-        const web3 = new Web3(window.ethereum || "http://localhost:7545");
-        const accounts = await web3.eth.requestAccounts(); // 메타마스크에 선택된 지갑으로 트랜잭션 서명을 함
-        // console.log(accounts);
-        const Eth = web3.utils.toWei("1", "ether"); // value를 ether로 
-        const tx = await web3.eth.sendTransaction({
-          from: account,
-          to: "0x838DdA914FF4b0125cFfEBc11e027fEbc9B631C8",
-          // value: web3.utils.toWei("0.1", "ether"),
-          value: Eth
-        });
-        console.log(tx);
-      };
 
     return <>
     <Box></Box>
@@ -167,9 +140,6 @@ const HjooPage = () => {
     </div>
     <div className="Meta">
       <button onClick={donatePoint}>기부</button>
-    </div>
-    <div className="Meta">
-      <button onClick={clickHandler}>클릭</button>
     </div>
     </div>
     </>
