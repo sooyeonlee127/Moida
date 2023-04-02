@@ -56,6 +56,7 @@ const VolunteerList = () => {
       if (res) {
         console.log(res)
         alert("완료되었습니다.")
+        setVisible(!visible);
       }
 
       } catch(error) {
@@ -80,6 +81,7 @@ const VolunteerList = () => {
         {visible && 
           <form >
             <input
+            id = "Atcode"
             value={value}
             onChange={(e)=>setValue(e.target.value)}
             type="text"
@@ -90,6 +92,7 @@ const VolunteerList = () => {
             onClick={(e) => {
               e.preventDefault()
               volunteerDone(value,doneId)
+              setValue("")
             }}
             >확인</button>
           </form>
