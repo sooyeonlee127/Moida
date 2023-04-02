@@ -1,6 +1,10 @@
 .container {
     width: 100%;
 }
+.link:hover {
+    text-decoration : underline;
+    color: #6f8d2b;
+}
 .item {
     display: flex;
     flex-direction: row;
@@ -8,7 +12,7 @@
     border-bottom: 1px solid #D2D2D2;
 }
 .item:hover {
-    background-color: #E9E9E9;
+    background-color: #fafafa;
 }
 .badge {
     width: 100px;
@@ -25,6 +29,19 @@
     margin-left: 1rem;
 }
 
+
+.btn {
+    padding: 3px 10px;
+    border: 1px solid #cdcdcd;
+    border-radius: 5px;
+    background: #f2f2f2;
+}
+.btn.attend {
+    background: #4dd21d;
+    color: white;
+    border-color: #41aa1b;
+}
+
 .weak {
     color: #949494;
     font-size: 0.9rem;
@@ -32,10 +49,60 @@
 }
 .title {
     font-size: 1.2rem;
-    margin-bottom: 1rem;
 }
 .strong {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
-    margin: 1rem 0 0.5rem 0;
+    color: #585858;
 }
+
+.group_pagebtn {
+    margin: 10px 0 20px 0;
+}
+
+.pagebtn {
+    margin: 0 10px;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.pagebtn:hover {
+    background: #e6e6e6;
+}
+.pagebtn:active {
+    background: #d4d4d4;
+}
+.pagebtn.current {
+    color: #5b771b;
+    font-weight: 900;
+}
+
+.mt-1 {
+    margin-top: 0.5rem
+}
+.mt-2 {
+    margin-top: 1rem
+}
+
+.mb-1 {
+    margin-bottom: 0.5rem
+}
+.mb-2 {
+    margin-bottom: 1rem
+}
+
+.w-1 {
+    width: 10%;
+}
+.w-2 {
+    width: 20%;
+}
+.w-3 {
+    width: 30%;
+}
+.w-4 {
+    width: 40%;
+}
+.w-5 {
+    width: 50%;
+}
+

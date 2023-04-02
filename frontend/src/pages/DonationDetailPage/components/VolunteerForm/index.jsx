@@ -40,7 +40,7 @@ const VolunteerForm = (props) => {
     }, [value])
 
     const selectedDay = value?.getDate()
-    const selectedMonth = value?.getMonth()
+    const selectedMonth = value?.getMonth()+1
     const selectedYear = value?.getFullYear()
     
 
@@ -53,14 +53,15 @@ const VolunteerForm = (props) => {
 
 
     function dateFormat(date) { // yyyy-mm-dd로 변환하는 함수 - 이은혁
-        let dateFormat2 = date.getFullYear() +
-            '-' + ( (date.getMonth()+1) < 9 ? "0" + (date.getMonth()+1) : (date.getMonth()+1) )+
-            '-' + ( (date.getDate()) < 9 ? "0" + (date.getDate()) : (date.getDate()) );
-        return dateFormat2;
+        let res = date.getFullYear() +
+            '-' + ( (date.getMonth()+1) < 10 ? "0" + (date.getMonth()+1) : (date.getMonth()+1))+
+            '-' + ( (date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate()) );
+            console.log(data)
+        return res;
     }
 
     const ParticipateApi = () => {  // 기부 API: 기부하기 버튼 클릭 시 작동 - 이은혁
-        console.log("axios 요청")
+        console.log("axios 요청 :"+dateFormat(value))
         const id = String(dateMap[dateFormat(value)].id)
         axios({
             url: "/api/project/volunteer",
