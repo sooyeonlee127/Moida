@@ -17,36 +17,50 @@ const PointWallet = () => {
     }
     useEffect(() => {
       Pagination()
+      console.log("datas", datas)
     }, [length])
     
     return (
         <>
-        <table>
-            <thead>
-                <tr>
-                    <th>분류(기부/적립)</th>
-                    <th>프로젝트 차수</th>
-                    <th>포인트 적립/사용일</th>
-                    <th>포인트</th>
-                    <th>주제</th>
-                    <th>받은 티켓</th>
-                </tr>
-            </thead>
+         {datas?.map((data, index) => { 
+        <div className="item" key={index}>
+            <div className="item_sec">
+                <img className='badge' src="" alt="" />   
+            </div>
+            <div className="item_sec grow_sec">
+                <p className="weak">{data.generation}차 프로젝트</p>
+                <p className="title">프로젝트 명 : {data.projectSubject}</p>
+                {/* <p className="weak">기부한 날짜 : {year+"."+month+"."+day}</p> */}
+            </div>
+            <div className="item_sec">
+                <p className="weak">적립/사용일</p>
+                <p className="strong">{data.pointDate}</p>
+            </div>
+            <div className="item_sec">
+                <p className="strong">{data.points} Point</p>
+            </div>
+            <div className="item_sec">
+                <p className="weak">기부한 모이</p>
+                <p className="strong">{data.moi}개</p>
+            </div>
+        </div>
+        })}
+        {/* <table>
             <tbody>
                 {datas?.map((data, index) => { 
-                    return (
-                        <tr key={index}>
-                            <td>{data.category}</td>
-                            <td>{data.generation}</td>
-                            <td>{data.pointDate}</td>
-                            <td>{data.points}</td>
-                            <td>{data.projectSubject}</td>
-                            <td>{data.ticketCnt}</td>
-                        </tr>
-                    )
+                return (
+                <tr key={index}>
+                <td>분류(기부/적립){data.category}</td>
+                <td>프로젝트 차수{data.generation}</td>
+                <td>포인트 적립/사용일{data.pointDate}</td>
+                <td>포인트{data.points}</td>
+                <td>주제{data.projectSubject}</td>
+                <td>받은 티켓{data.ticketCnt}</td>
+                </tr>
+                )
                 })}
             </tbody>
-        </table>
+        </table> */}
         <p> 
             {datas?.length === 0 && !loading? "빈 값":""}
             {loading? "로딩 중":""}

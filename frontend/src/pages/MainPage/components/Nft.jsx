@@ -66,7 +66,7 @@ const Nft = () => {
 }
 
 const StickyContainer = styled.div`
-  height: 2500px;
+  height: 2700px;
   width: 100%;
   position: relative;
 `;
