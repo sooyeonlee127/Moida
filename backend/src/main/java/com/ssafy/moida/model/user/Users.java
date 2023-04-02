@@ -87,4 +87,6 @@ public class Users {
     public void updateTicket(int ticketCnt){
         this.ticketCnt = ticketCnt;
     }
+
+    public void updateNftUrl(String nftUrl) { this.nftUrl = nftUrl; }
 }
