@@ -1,10 +1,18 @@
 import Web3 from "web3";
 
 const web3 = new Web3();
+
+// // local
+// web3.setProvider(
+//   new Web3.providers.HttpProvider(
+//     "http://127.0.0.1:7545"
+//   )
+// )
+
+// sepolia
 web3.setProvider(
   new Web3.providers.HttpProvider(
-    // `${process.env.NODE}`
-    "http://127.0.0.1:7545"
+    process.env.REACT_APP_SEPOLIA_API_URL
   )
 )
 
@@ -310,6 +318,7 @@ const TOKEN_ABI = [
     "payable": true
   },
 ];
-const TOKEN_CA = "0x7D606d7255434F89cA3c38Ec7bbbe2597c942192"; // localhost
-// const TOKEN_CA = "0x4f223861e0f5139099bC18CacCbBc0019F487E0a"; // sepolia
+// const TOKEN_CA = "0x4e36A2a9Cae8c33b09de8a8BDddDbc81cbb31812"; // localhost
+const TOKEN_CA = process.env.REACT_APP_SEPOLIA_TOKEN_CONTRACT; // sepolia
+// const TOKEN_CA = "0xa8E4eA27Fc5f24991FcAbb3b5669Ff3211A3cCC3"; // sepolia_generator
 export const TOKENContract = new web3.eth.Contract(TOKEN_ABI, TOKEN_CA);

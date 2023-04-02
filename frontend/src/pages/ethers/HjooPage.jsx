@@ -7,14 +7,6 @@ import { injected } from "../../lib/connectors";
 import { TOKENContract } from "./SmartContract";
 
 const HjooPage = () => {
-    // const web3 = new Web3(window.ethereum || "http://localhost:7545");
-    // const web3 = new Web3();
-    // web3.setProvider(
-    //     new Web3.providers.HttpProvider(
-    //       "http://127.0.0.1:7545"
-    //     )
-    //   );
-
     const web3 = new Web3(window.ethereum);
     const {
         connector,
@@ -28,8 +20,10 @@ const HjooPage = () => {
 
       // 코인베이스 주소 가져오기
     const getAdminAddress = async () => {
+        // const res = process.env.REACT_APP_ADMIN_PUBLIC_KEY // local
+
         // const res = await web3.eth.getCoinbase();
-        const res = process.env.REACT_APP_ADMIN_WALLET_ADDRESS
+        const res = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY
         return res;
     };
 
@@ -52,80 +46,139 @@ const HjooPage = () => {
         }
       });
     
-      const unconnectWallet = async () => {
-        try {
-        // 메타마스크 설치 된 경우
-          if(typeof window.ethereum !== 'undefined') {
-            if(active) 
-            {
-              deactivate(injected)
-              console.log("메타마스크 연결 해제");
-            }
-
-          // 메타마스크 설치 안된 경우
-          } else {
-            alert("please install MetaMask")
-            window.open('https://metamask.io/download.html');
+    const unconnectWallet = async () => {
+      try {
+      // 메타마스크 설치 된 경우
+        if(typeof window.ethereum !== 'undefined') {
+          if(active) 
+          {
+            deactivate(injected)
+            console.log("메타마스크 연결 해제");
           }
-        } catch (error) {
-          console.log(error);
+
+        // 메타마스크 설치 안된 경우
+        } else {
+          alert("please install MetaMask")
+          window.open('https://metamask.io/download.html');
         }
-      };
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    // 추후 value
+    const chargePoint = useCallback(async () => {
+      // await connectWallet();
+      const coinbase = await getAdminAddress();
+      console.log("chargePoint");
       
-      // 추후 value
-      const chargePoint = useCallback(async () => {
-        await connectWallet();
-        const coinbase = await getAdminAddress();
-        console.log("chargePoint");
-        
-        const web3 = new Web3("http://127.0.0.1:7545");
-        // 현재 1ETH당 백만토큰 설정 .. 0.01 -> 10000Token
+      // const web3 = new Web3("http://127.0.0.1:7545"); // local
+      // const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
+      web3.setProvider(new web3.providers.HttpProvider(process.env.REACT_APP_SEPOLIA_API_URL));
+      // web3.setProvider(new web3.providers.HttpProvider(process.env.REACT_APP_SEPOLIA_API_URL));
+      // const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
+        // 현재 1ETH당 10000000000 설정 .. 0.000001 -> 10000Token
       
         /* 추후 value 가공
-         * 1. value /= 1000000;
+         * 1. value /= 10000000000;
          * 2. value.toString
          * "1" -> value
          */
-        const Eth = web3.utils.toWei("1", "ether");
-        await web3.eth.personal.unlockAccount(
-          coinbase,
-          '',
-          300
-        );
+        let value = 10000;
+          value = 10000/10000000000;
+        const Eth = web3.utils.toWei(value.toString(), "ether");
+        // const Eth = value;
 
-      await TOKENContract.methods.approve(coinbase, Eth).send({ from: coinbase });
+        // await web3.eth.personal.unlockAccount(
+        //   coinbase,
+        //   process.env.REACT_APP_SEPOLIA_ADMIN_PRIVATE_KEY,
+        //   300
+        // );
+  
+        // console.log("여기!!!! : " + await web3.eth.getCoinbase());
+        // console.log(1111);
+        // await TOKENContract.methods.approve(coinbase, Eth).send({ from: coinbase });
+        // // 허용 한 후 ERC-20 토큰 전송 ( 로그인 시 10 잉크 (10잉크 -> 1피드) )
+        // console.log(2222);
+        // await TOKENContract.methods
+        //   .transferFrom(coinbase, account, value)
+        //   .send({ from: coinbase });
 
-        const tx = {
-          from: coinbase,
-          to: account,
-          value: Eth
-        }
+        //   console.log(3333);
+        await TOKENContract.methods
+          .transfer(account, value)
+          .send({ from: coinbase });
+
+      // // local
+      // await web3.eth.personal.unlockAccount(
+      //   coinbase,
+      //   '',
+      //   300
+      // );
+
+      // sepolia
+      // // unlock 안됨
+      // // await web3.eth.personal.unlockAccount(
+      // //   coinbase,
+      // //   process.env.REACT_APP_SEPOLIA_ADMIN_PRIVATE_KEY,
+      // //   300
+      // // );
+
+      // 이건 그냥 이더 전송
+      // const gasLimit = 300000; // gas limit를 지정합니다.
+      // const chargeTx = {
+      //   from: coinbase,
+      //   to: account,
+      //   value: "1000", // 원하는 이더 양
+      //   gasLimit: web3.utils.toHex(gasLimit),
+      //   // nonce: web3.utils.toHex(nonce),
+      //   gasPrice: web3.utils.toHex(await web3.eth.getGasPrice()),
+      // }; 
+      // const signedTx = await web3.eth.accounts.signTransaction(chargeTx, process.env.REACT_APP_SEPOLIA_ADMIN_PRIVATE_KEY);
+      // // 개인 키로 서명된 트랜잭션을 전송
+      // const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+      
+      // await TOKENContract.methods.approve(coinbase, Eth).send({ from: coinbase });
+
+      // const tx = {
+      //     from: coinbase,
+      //     to: account,
+      //     value: Eth
+      // }
         
-        console.log(await web3.eth.sendTransaction(tx));
+      //   await web3.eth.sendTransaction(tx);
+        console.log("충전완료");
+        return "충전 완료 ^_^";
       });
     
       // 추후 value
       const donatePoint = useCallback(async () => {
-        await connectWallet();
-        console.log("donatePoint : " + account);
-        const web3 = new Web3(window.ethereum);
-        const accounts = await web3.eth.requestAccounts(); // 메타마스크에 선택된 지갑으로 트랜잭션 서명을 함
+        // await connectWallet();
         const coinbase = await getAdminAddress();
-        // 현재 1ETH당 백만토큰 설정 .. 0.01 -> 10000Token
+        console.log("donatePoint : " + account);
+
+        // const web3 = new Web3(window.ethereum);
+        // 현재 1ETH당 10000000000 설정 .. 0.000001 -> 10000Token
       
         /* 추후 value 가공
-         * 1. value /= 1000000;
-         * 2. value.toString]
+         * 1. value /= 10000000000;
+         * 2. value.toString
          * "1" -> value
          */
-        const Eth = web3.utils.toWei("1", "ether");
+        let value = 10000;
+        value = 10000/10000000000;
+        const Eth = web3.utils.toWei(value.toString(), "ether");
         const tx = {
           from: account,
           to: coinbase, // 다른 지갑 하나 필요함
-          value: Eth
+          value: Eth,
         }
-        console.log(tx);
-        web3.eth.sendTransaction(tx);
+
+        const result = await web3.eth.sendTransaction(tx);
+        const transaction = await web3.eth.getTransaction(result.transactionHash);
+        console.log(transaction.hash)
+        return transaction; // chainId 안나옴
+        // return await web3.eth.getTransaction(result.transactionHash);
       });
     
         // 이건 무시하세요 !!!
@@ -144,6 +197,8 @@ const HjooPage = () => {
         });
         console.log(tx);
       };
+
+      console.log(process.env.REACT_APP_ADMIN_WALLET_ADDRESS + " | "  + process.env.REACT_APP_ADMIN_PRIVATE_KEY);
     return <>
     <Box></Box>
     <div>
