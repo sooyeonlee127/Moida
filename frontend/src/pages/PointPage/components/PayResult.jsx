@@ -100,8 +100,6 @@ const PayResult = () => {
 
   // 수연: 포인트 충전 api 호출
   const ChargePoint = (amount) => {
-    console.log("로컬 포인트", localStorage.getItem("point"));
-    console.log("amount:", amount);
     api({
       url: "/users/me/points/charge",
       method: "POST",
@@ -114,7 +112,6 @@ const PayResult = () => {
       },
     })
       .then((res) => {
-        console.log(res);
         // ChargeBlock(amount);
         refetch();
       })
@@ -141,7 +138,6 @@ const PayResult = () => {
       },
     })
       .then((res) => {
-        console.log(res);
         setPrice(res.data.amount.total);
         setDate(res.data.approved_at);
         setFlag(true);

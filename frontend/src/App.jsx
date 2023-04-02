@@ -27,10 +27,14 @@ import PrivateRoute from "./routes/PrivateRoute";
 import HjooPage from "./pages/ethers/HjooPage";
 import ReviewCreatePage from "./pages/ReviewCreatePage";
 import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
+import { useBeforeunload } from "react-beforeunload";
+
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
 
 export default function App() {
+  useBeforeunload((event) => event.preventDefault());
+
   return (
     <Auth>
       <div className="App">
@@ -80,7 +84,7 @@ export default function App() {
 
             <Route path={"/review"} element={<ReviewPage />} />
             <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
-            <Route path={"/notice/:noticeid"} element={<NoticeDetailPage />} />
+            <Route path={"/notice/:category"} element={<NoticeDetailPage />} />
             <Route path={"/hjooo"} element={<HjooPage />} />
           </Routes>
         </Body>

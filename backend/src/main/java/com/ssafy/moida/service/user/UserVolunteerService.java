@@ -120,6 +120,8 @@ public class UserVolunteerService {
     public void updateUserVolunteerStatus(UpdateUserVolunteerStatusReqDto updateDto, UsersVolunteer usersVolunteer){
         if(updateDto.getStatus().equals(Status.CANCEL.toString())){
             usersVolunteer.updateStatus(Status.CANCEL);
+        } else if(updateDto.getStatus().equals(Status.WRITTEN_DELETE.toString())){
+            usersVolunteer.updateStatus(Status.WRITTEN_DELETE);
         } else if(updateDto.getStatus().equals(Status.DONE.toString())){
             if(StringUtils.isBlank(updateDto.getCode())){
                 throw new IllegalArgumentException("봉사 상태 완료 변경 시 인증 코드는 필수값입니다.");
@@ -138,7 +140,12 @@ public class UserVolunteerService {
      * [한선영] 사용자가 작성한 봉사 인증글 목록(GetArticleDetailResDto) 가져오기
      * */
     public HashMap<String, Object> getUsersVolunteerArticle(Long userId, int pageNumber, int pageSize) {
+        System.out.println(">>>>>hahahahh");
         List<GetArticleDetailResDto> results = articleService.findByUsersId(userId);
+
+        System.out.println(">>>>>>>>>>");
+        System.out.println(results);
+        System.out.println(">>>>>>>>>>");
 
         int startIndex = pageSize * pageNumber;
         int endIndex = Math.min(startIndex + pageSize, results.size());

@@ -26,17 +26,13 @@ const MetamaskCheck = () => {
   };
 
   const connectWallet = useCallback(async () => {
-    console.log("connectWallet");
-
     try {
       // 메타마스크 설치 된 경우
       if (typeof window.ethereum !== "undefined") {
         // todorn;
         await activate(injected);
-        console.log("coinbase : " + (await getAdminAddress()));
-        console.log("address : " + account);
+        await getAdminAddress();
         setDone(true);
-        localStorage.setItem("acc", account);
         // 메타마스크 설치 안된 경우
       } else {
         alert("please install MetaMask");
@@ -62,7 +58,6 @@ const MetamaskCheck = () => {
       <div>
         <p>메타 마스크 연결 완료!</p>
         <p>회원가입을 계속 진행해주세요.</p>
-        <p>{account}</p>
       </div>
     );
   }
