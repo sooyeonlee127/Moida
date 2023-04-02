@@ -28,7 +28,7 @@ const Nft = () => {
   
     return (
         <StickyContainer ref={target}>
-            <Sticky className={isShown ? "page show" : "page"}>
+            <Sticky className={inView ? "page show" : "page"}>
                 <div className="nft_page">
                   <Title>NFT GATCHA</Title>
                   <div className="nft_content">
