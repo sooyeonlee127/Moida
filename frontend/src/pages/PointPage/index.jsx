@@ -158,12 +158,14 @@ const PointPage = () => {
 };
 
 const Container = styled.div`
-  height: 100vh;
+  height: calc(100vh - 100px);
   width: 100vw;
-  background-color: #fafaf3;
-  ${tw`
-  flex items-center justify-between
-  `}
+  background-color: rgb(250, 250, 243);
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  align-items: flex-start;
 `;
 
 const PointContainer = styled.div`
