@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -30,4 +31,7 @@ public interface NftRepository extends JpaRepository<Nft, Long>,
 
     @Query("select count(*) from Nft n where n.users.id = :userId")
     Long CountFindNftsByUserId(@Param("userId") Long userId);
+
+    @Query("select count(n.id) > 0 from Nft n where n.users.id = :userId and n.id = :nftId")
+    boolean existsByIdAndUserId(@Param("userId") Long userId, @Param("nftId") Long nftId);
 }
