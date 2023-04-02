@@ -27,7 +27,7 @@ const ReviewCreatePage = () => {
     };
     return [state, onChange];
   };
-  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
   const [state, onChange] = useInputs({
     subject: "",
     description: "",
@@ -50,8 +50,6 @@ const ReviewCreatePage = () => {
       usersVolunteerProjectId: volunteerId,
     };
 
-    console.log(testData)
-
     const formData = new FormData();
     formData.append(
       "article",
@@ -59,8 +57,7 @@ const ReviewCreatePage = () => {
         type: "application/json",
       })
       );
-    formData.append("file", files);
-    // console.log("폼데이터", formData);
+    formData.append("file", file);
     api
       .post("/article", formData, {
         headers: {
@@ -137,60 +134,16 @@ const ReviewCreatePage = () => {
               </div>
               {/* <InputText htmlFor="files">files</InputText> */}
               <ReviewInput
-                id="files"
-                name="files"
+                id="file"
+                name="file"
                 type="file"
                 onChange={(e) => {
-                  if (e.target.files) {
-                    setFiles([...files, e.target.files[0]]);
-                    console.log(files);
+                  if (e.target.files && e.target.files.length !==0) {
+                    setFile(e.target.files[0]);
                   }
                 }}
               />
-              <ReviewInput
-                id="files"
-                name="files"
-                type="file"
-                onChange={(e) => {
-                  if (e.target.files) {
-                    setFiles([...files, e.target.files[0]]);
-                    console.log(files);
-                  }
-                }}
-              />
-              <ReviewInput
-                id="files"
-                name="files"
-                type="file"
-                onChange={(e) => {
-                  if (e.target.files) {
-                    setFiles([...files, e.target.files[0]]);
-                    console.log(files);
-                  }
-                }}
-              />
-              <ReviewInput
-                id="files"
-                name="files"
-                type="file"
-                onChange={(e) => {
-                  if (e.target.files) {
-                    setFiles([...files, e.target.files[0]]);
-                    console.log(files);
-                  }
-                }}
-              />
-              <ReviewInput
-                id="files"
-                name="files"
-                type="file"
-                onChange={(e) => {
-                  if (e.target.files) {
-                    setFiles([...files, e.target.files[0]]);
-                    console.log(files);
-                  }
-                }}
-              />
+             
             </InputGroup>
             <div>
               <SubmitButton type="submit">
