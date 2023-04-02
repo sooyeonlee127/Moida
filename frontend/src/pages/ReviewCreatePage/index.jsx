@@ -91,7 +91,7 @@ const ReviewCreatePage = () => {
             <Heading>인증후기작성</Heading>
           </div>
 
-          <ReviewForm action="#" method="POST" onSubmit={handleSubmit}>
+          <ReviewForm method="POST" onSubmit={handleSubmit}>
             <div>
               <Heading>글작성</Heading>
             </div>

@@ -3,24 +3,15 @@ import Intro from "./components/Intro"
 import Nft from "./components/Nft";
 import Footer from "../../components/Footer/Index"
 import styled from "styled-components";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import useCards from "./components/useCards";
 
 const MainPage = () => {
-  const [cards, setCards] = useState([]);
+  const {cards, isLoading, error} = useCards([]);
   const cardList = cards.map((card, index) => <Projects card={card} index={index} key={index}></Projects>);
   useEffect(() => {
     // 수연: project 받아오기
-    axios({
-      url: "/api/project",
-      method: "GET",
-    })
-      .then((res) => {
-        setCards(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    
   }, []);
 
   return (
