@@ -27,13 +27,13 @@ import PrivateRoute from "./routes/PrivateRoute";
 import HjooPage from "./pages/ethers/HjooPage";
 import ReviewCreatePage from "./pages/ReviewCreatePage";
 import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
-import { useBeforeunload } from "react-beforeunload";
+// import { useBeforeunload } from "react-beforeunload";
 
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
 
 export default function App() {
-  useBeforeunload((event) => event.preventDefault());
+  // useBeforeunload((event) => event.preventDefault()); // 새로고침 막기 보류
 
   return (
     <Auth>
