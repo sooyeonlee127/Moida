@@ -100,7 +100,7 @@ public class NftService {
         }
     }
 
-    // nft 이미지 url 가져오기
+    // nft 이미지 가져오기
     public NftPicture getNftImg(long id) {
         NftPicture nftPicture = nftPictureRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         return nftPicture;
@@ -130,6 +130,20 @@ public class NftService {
     // 사용자가 보유한 nft 개수 반환
     public Long countFindNftsByUserId(Long userId) {
         return nftRepository.CountFindNftsByUserId(userId);
+    }
+
+    // 사용자가 해당 NFT를 가지고 있는지 체크
+    public boolean existNft(Long userId, Long nftId) {
+        return nftRepository.existsByIdAndUserId(userId, nftId);
+    }
+
+    // 대표 nft 변경
+    public String chageMainNFT(Users user, Long nftId) {
+        Nft nft = nftRepository.findById(nftId).orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
+        String newNftUrl = nft.getNftPicture().getUrl();
+
+        user.updateNftUrl(newNftUrl);
+        return newNftUrl;
     }
 
 }
