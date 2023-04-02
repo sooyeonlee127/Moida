@@ -41,10 +41,14 @@
  * https://trufflesuite.com/docs/truffle/getting-started/using-the-truffle-dashboard/
  */
 
-// require('dotenv').config();
+require('dotenv').config();
 // const { MNEMONIC, PROJECT_ID } = process.env;
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const infuraKey = process.env.INFURA_KEY
+
+const fs = require('fs');
+const mnemonic = fs.readFileSync(".secret").toString().trim();
 
 module.exports = {
   /**
@@ -69,11 +73,16 @@ module.exports = {
      port: 8545,            // Standard Ethereum port (default: none)
      network_id: "*",       // Any network (default: none)
     },
-    ganache: {
+    moida: {
       host: "127.0.0.1",     // Localhost (default: none)
       port: 7545,            // Standard Ethereum port (default: none)
-      network_id: "*",       // Any network (default: none)
-      from: "0x525Cd29265048adE18306B07d556c1138C36291D"
+      network_id: "1524",       // Any network (default: none)
+     },
+     sepolia: {
+      provider: () => new HDWalletProvider(mnemonic, process.env.SEPOLIA_API_URL),
+      network_id: "*",
+      from: process.env.SEPOLIA_ADMIN_PUBLIC_LEY,
+      privateKey: process.env.SEPOLIA_ADMIN_PRIVATE_KEY
      },
     //
     // An additional network, but with some advanced options…
