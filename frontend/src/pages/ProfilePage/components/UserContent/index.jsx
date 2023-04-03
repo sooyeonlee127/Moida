@@ -4,7 +4,7 @@ import DonationList from './Components/DonationList'
 import VolunteerList from './Components/VolunteerList'
 import PointWallet from './Components/PointWallet';
 import MyReviews from "./Components/MyReviews";
-
+import "./Components/Tab.css";
 
 const menuArr = [
     { name: '기부내역', content: 'Tab menu ONE' },
