@@ -5,17 +5,20 @@ import { AuthContext } from "../../context/Auth";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/auth";
-import logo_white from '../../assets/img/Logo_white.svg'
-import logo from '../../assets/img/Logo.svg'
+import logo_white from "../../assets/img/Logo_white.svg";
+import logo from "../../assets/img/Logo.svg";
+import MetamaskUncheck from "../MetamaskUncheck";
 
 // 수연: navbar
 const NavBar = () => {
   // 은혁: 네브바 스크롤 css 적용
-  const [scrollValue, setScrollValue] = useState(0)
+  const [scrollValue, setScrollValue] = useState(0);
 
-  useEffect(()=> {
-    window.addEventListener('scroll', () => {setScrollValue(parseInt(window.scrollY))})
-  })
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      setScrollValue(parseInt(window.scrollY));
+    });
+  });
   // console.log(scrollValue)
 
   // 은혁: useQuery
@@ -60,10 +63,12 @@ const NavBar = () => {
   }, [isLogin, refetch]);
   const navigate = useNavigate();
 
+  const [isLogout, setIsLogout] = useState(false); // 로그아웃 시 메타마스크 연결 해제
+
+
   const goPage = (page) => {
     navigate(`${page}`, { replace: false });
   };
-
   const navigation = [
     // 로그아웃 상태의 navbar
     { name: "기부하기", href: "/donation" },
@@ -81,6 +86,7 @@ const NavBar = () => {
   ];
   // 수연: 로그아웃 호출
   const LogoutSubmit = () => {
+    setIsLogout(true);
     api({
       url: "/auth/logout",
       method: "POST",
@@ -104,21 +110,39 @@ const NavBar = () => {
   };
 
   return (
-    <Nav className={scrollValue>0? "scrolled":"unscrolled"}>
+    <Nav className={scrollValue > 0 ? "scrolled" : "unscrolled"}>
       <InnerNav>
-        <Logo onClick={()=>goPage("/")} className={scrollValue>0? "scrolled":"unscrolled"}></Logo>
+        <Logo
+          onClick={() => goPage("/")}
+          className={scrollValue > 0 ? "scrolled" : "unscrolled"}
+        ></Logo>
         <GroupMenu>
-          {isLogin && role === "ROLE_ADMIN" ? (<Menu onClick={()=>goPage("/admin")}>Admin 계정입니다.</Menu>) : ""}
-          {isLogin? 
+          {isLogin && role === "ROLE_ADMIN" ? (
+            <Menu onClick={() => goPage("/admin")}>Admin 계정입니다.</Menu>
+          ) : (
+            ""
+          )}
+          {isLogin ? (
             <>
-              {userNavigation.map((item, index) => (<Link on={item.name} key={index} to={item.href}><Menu>{item.name}</Menu></Link>))}
+              {userNavigation.map((item, index) => (
+                <Link on={item.name} key={index} to={item.href}>
+                  <Menu>{item.name}</Menu>
+                </Link>
+              ))}
               <Menu onClick={LogoutSubmit}>LOGOUT</Menu>
-            </> : <>
-              {navigation.map((item) => (<Link key={item.name} to={item.href}><Menu>{item.name}</Menu></Link>))}
-              <Menu onClick={()=>goPage("/signup")}>SIGNUP</Menu>
-              <Menu onClick={()=>goPage("/login")}>LOGIN</Menu>
             </>
-          }
+          ) : (
+            <>
+              {isLogout ? <MetamaskUncheck /> : <></>}
+              {navigation.map((item) => (
+                <Link key={item.name} to={item.href}>
+                  <Menu>{item.name}</Menu>
+                </Link>
+              ))}
+              <Menu onClick={() => goPage("/signup")}>SIGNUP</Menu>
+              <Menu onClick={() => goPage("/login")}>LOGIN</Menu>
+            </>
+          )}
         </GroupMenu>
       </InnerNav>
     </Nav>
@@ -126,56 +150,56 @@ const NavBar = () => {
 };
 
 const Nav = styled.div`
-position: fixed;
-top: 0px;
-left: 0px;
-width: 100vw;
-z-index: 1;
-padding: 0 50px;
-transition: all 0.3s ease 0s;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-&.scrolled{
-  height: 52px;
-  color: white;
-  background-color: #A0C846;
-  box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 15%);
-}
-&.unscrolled{
-  height: 90px;
-  color: #584E3F;
-  background-color: transparent;
-}
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  z-index: 1;
+  padding: 0 50px;
+  transition: all 0.3s ease 0s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  &.scrolled {
+    height: 52px;
+    color: white;
+    background-color: #a0c846;
+    box-shadow: 0px 0px 10px 5px rgb(0 0 0 / 15%);
+  }
+  &.unscrolled {
+    height: 90px;
+    color: #584e3f;
+    background-color: transparent;
+  }
 `;
 
 const InnerNav = styled.div`
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-width: 100%;
-max-width: 1000px;
-`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+`;
 const GroupMenu = styled.div`
-font-size: 1rem;
-line-height: 1.5rem;
-letter-spacing: -0.05em;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  letter-spacing: -0.05em;
 `;
 
 const Logo = styled.span`
-height: 38px;
-width: 39.5px;
-background-size: cover;
-cursor: pointer;
+  height: 38px;
+  width: 39.5px;
+  background-size: cover;
+  cursor: pointer;
   &.scrolled {
     background-image: url(${logo_white});
   }
   &.unscrolled {
     background-image: url(${logo});
   }
-`
+`;
 const Menu = styled.span`
   padding: 0 16px;
   cursor: pointer;
@@ -184,6 +208,6 @@ const Menu = styled.span`
   &:hover {
     color: red;
   }
-`
+`;
 
 export default NavBar;

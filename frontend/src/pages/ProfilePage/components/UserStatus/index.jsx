@@ -73,8 +73,8 @@ const UserStatus = () => {
   });
 
   // 수연: 포인트 충전 페이지로 이동하기
-  const goPoint = () => {
-    navigate(`/point`, { replace: false });
+  const goPage = (page) => {
+    navigate(`/${page}`, { replace: false });
   };
 
   return (
@@ -109,7 +109,7 @@ const UserStatus = () => {
           <Content>
           <p>
             <span>현재 내 포인트 {data?.info.point || "0"} P</span>
-            <ChargeBtn onClick={(e) => {e.preventDefault();goPoint();}}>충전하기</ChargeBtn>
+            <ChargeBtn onClick={(e) => {e.preventDefault();goPage("point");}}>충전하기</ChargeBtn>
           </p>
           <div className="ticket_sec">
             <p>보유한 티켓 수 {data?.info.ticketCnt || "0"} P</p>
