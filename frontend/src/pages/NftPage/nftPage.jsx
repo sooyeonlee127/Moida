@@ -30,7 +30,8 @@ const NftPage = () => {
   //const userId = localStorage.getItem("id");
   const id = "1";
 
-  const web3 = new Web3(new Web3.providers.HttpProvider("HTTP://127.0.0.1:7545"));
+  // const web3 = new Web3(new Web3.providers.HttpProvider("HTTP://127.0.0.1:7545"));
+  const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const web3Eth = new Web3(window.ethereum);
 
   const {
@@ -111,7 +112,7 @@ const NftPage = () => {
       // ABI
       COMMON_ABI.CONTRACT_ABI.NFT_ABI,
       // Contract Address
-      "0xaFFDe73b03c463f9BdA428d5E3a3d48f8f2d9900"
+      "0x9796b4bfD85FCA4837f24B12f565C25ec00842f3"
     );
 
     console.log("스마트 컨트랙트 인스턴스 생성");
