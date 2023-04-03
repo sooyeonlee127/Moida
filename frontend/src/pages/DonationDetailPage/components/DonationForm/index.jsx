@@ -8,6 +8,8 @@ import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
 import MetamaskCheck from "../../../../components/MetamaskCheck";
 import { AuthContext } from "../../../../context/Auth";
+import Modal from "../../../../components/Modal";
+import loadingspinner from "../../../../assets/img/loadingspinner.svg";
 
 const DonationForm = (props) => {
   // props 정보 - 이은혁 ----------------------------------------
@@ -83,6 +85,9 @@ const DonationForm = (props) => {
         // 기부 금액이 없는 경우 - 이은혁
         return alert("모이는 최소 1개 이상 기부가 가능합니다.");
       }
+      setIsOpen(true);
+      setText("메타마스크 결제가 진행중입니다..");
+      console.log(1);
       donationMutation
         .mutateAsync()
         .then((res) => {
@@ -90,34 +95,32 @@ const DonationForm = (props) => {
             donatePoint(money);
             setMoney(0); // 금액 초기화 - 이은혁
             setMoi(0); // 모이 갯수 초기화 - 이은혁
-            alert("모이 " + moi + "개가 정상적으로 기부되었습니다.");
           }
         })
         .catch((err) => {
           console.log(err);
         });
     } else {
-      alert("로그인한 사용자만 접근 가능합니다.")
+      alert("로그인한 사용자만 접근 가능합니다.");
     }
-   
   };
 
   // 수연: 블록체인 -----------------------------------------------------------
   const { isLogin } = useContext(AuthContext);
+  const [isOpen, setIsOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const {
+    library,
     account, // DApp에 연결된 account address
     active, // DApp 유저가 로그인 된 상태인지 체크
   } = useWeb3React();
 
-
   const donatePoint = useCallback(async (point) => {
-
     const coinbase = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY;
     console.log("donatePoint : " + account);
-
     const web3 = new Web3(window.ethereum);
-
     var today = new Date();
     const tmp = `${localStorage.getItem("nickname")} | ${point} | ${
       data.subject
@@ -130,58 +133,71 @@ const DonationForm = (props) => {
     };
 
     const result = await web3.eth.sendTransaction(tx);
+
     const transaction = await web3.eth.getTransaction(result.transactionHash);
+    setIsLoading(false);
+    setText("모이 " + moi + "개가 정상적으로 기부되었습니다.");
     return transaction;
   });
 
   // ---------------------------------------------------------------------------
   return (
-    <div>
-      <span>D-{dDay}</span>
-      <p>{data.subject}</p>
-      <p>
-        기간 : {data.startDate} ~ {data.endDate}
-      </p>
-      <p>설명 : {data.description}</p>
-      <p>목표 모이량 : {data.targetAmount}개</p>
-      <p>현재 기부 모이량 : {data.amount}개</p>
+    <>
+      <Modal isOpen={isOpen} title={"기부하기"}>
+        <div>
+          <p>{text}</p>
+        </div>
+        <div>
+          {isLoading ? (
+            <ImageBox>
+              <Image src={loadingspinner} alt="" width="200" />
+            </ImageBox>
+          ) : (
+            <ModalBtn onClick={() => setIsOpen(false)}>나가기</ModalBtn>
+          )}
+        </div>
+      </Modal>
       <div>
-        <p>{ratio}%</p>
-        기부 목표금액
-        <br />
-        <progress id="progress" value={ratio} min="0" max="100" />
-        현재 모금액
-      </div>
-      <div>
+        <span>D-{dDay}</span>
+        <p>{data.subject}</p>
         <p>
-          {moi}개 ({money}원)
+          기간 : {data.startDate} ~ {data.endDate}
         </p>
-        <CoinButtonGroup>
-          <CoinButton onClick={() => setMoi(moi + 1)}>1개</CoinButton>
-          <CoinButton onClick={() => setMoi(moi + 5)}>5개</CoinButton>
-          <CoinButton onClick={() => setMoi(moi + 10)}>10개</CoinButton>
-          <CoinButton onClick={() => setMoi(moi + 50)}>50개</CoinButton>
-        </CoinButtonGroup>
+        <p>설명 : {data.description}</p>
+        <p>목표 모이량 : {data.targetAmount}개</p>
+        <p>현재 기부 모이량 : {data.amount}개</p>
+        <div>
+          <p>{ratio}%</p>
+          기부 목표금액
+          <br />
+          <progress id="progress" value={ratio} min="0" max="100" />
+          현재 모금액
+        </div>
+        <div>
+          <p>
+            {moi}개 ({money}원)
+          </p>
+          <CoinButtonGroup>
+            <CoinButton onClick={() => setMoi(moi + 1)}>1개</CoinButton>
+            <CoinButton onClick={() => setMoi(moi + 5)}>5개</CoinButton>
+            <CoinButton onClick={() => setMoi(moi + 10)}>10개</CoinButton>
+            <CoinButton onClick={() => setMoi(moi + 50)}>50개</CoinButton>
+          </CoinButtonGroup>
+        </div>
+        <GroupButton>
+          <Button onClick={() => setMoi(0)}>초기화</Button>
+          <Button
+            onClick={SendMoi}
+            disabled={isDisabled}
+            className={isDisabled ? "disabled" : ""}
+          >
+            기부하기
+          </Button>
+          {/* 마감 기한이 지날 경우 isDisabled true */}
+        </GroupButton>
+        <div>{isLogin === true ? <MetamaskCheck /> : null}</div>
       </div>
-      <GroupButton>
-        <Button onClick={() => setMoi(0)}>초기화</Button>
-        <Button
-          onClick={SendMoi}
-          disabled={isDisabled}
-          className={isDisabled ? "disabled" : ""}
-        >
-          기부하기
-        </Button>
-        {/* 마감 기한이 지날 경우 isDisabled true */}
-      </GroupButton>
-      <div>
-      {
-        isLogin === true
-        ? <MetamaskCheck />
-        : null
-      }
-    </div>
-    </div>
+    </>
   );
 };
 const CoinButtonGroup = styled.div`
@@ -202,4 +218,19 @@ const Button = styled.button`
     opacity: 0.5;
   }
 `;
+
+const ImageBox = styled.div`
+  ${tw`
+  flex justify-center my-10
+  `}
+`;
+
+const Image = styled.img``;
+
+const ModalBtn = styled.button`
+  border: 1px solid #cacaca;
+  padding: 2px 10px;
+  margin: 20px 7px;
+`;
+
 export default DonationForm;

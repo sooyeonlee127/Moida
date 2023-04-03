@@ -2,10 +2,14 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../api/auth";
+import Web3 from "web3";
+import { useWeb3React } from "@web3-react/core";
+import loadingspinner from "../../../assets/img/loadingspinner.svg";
+
 const PayResult = () => {
   const navigate = useNavigate();
   // 수연: param에서 pg_token 가져와서 카카오페이 결제 호출
@@ -13,7 +17,9 @@ const PayResult = () => {
   const queryString = searchParams.get("pg_token");
   const [price, setPrice] = useState(0);
   const [date, setDate] = useState("");
-  const [flag, setFlag] = useState(false);
+  const [flag, setFlag] = useState(true);
+  const [done, setDone] = useState(false);
+
   // 수연: 현재 페이지를 호출한 페이지를 제어
   const parentPage = (page) => {
     if (page) {
@@ -56,7 +62,6 @@ const PayResult = () => {
     refetchOnMount: true,
   });
 
-
   // 수연: 포인트 충전 api 호출
   const ChargePoint = (amount) => {
     api({
@@ -71,6 +76,7 @@ const PayResult = () => {
       },
     })
       .then((res) => {
+        ChargeGasPoint();
         refetch();
       })
       .catch((err) => {
@@ -78,6 +84,37 @@ const PayResult = () => {
       });
   };
 
+  // 가스 충전
+  const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
+
+  const {
+    account, // DApp에 연결된 account address
+  } = useWeb3React();
+
+  const ChargeGasPoint = useCallback(async () => {
+    setFlag(true);
+    const coinbase = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY;
+    const Eth = web3.utils.toWei("0.0001", "ether");
+
+    // 이더 전송
+    const gasLimit = 300000; // gas limit를 지정합니다.
+    const chargeTx = {
+      from: coinbase,
+      to: account || localStorage.getItem("account"),
+      value: Eth, // 원하는 이더 양
+      gasLimit: web3.utils.toHex(gasLimit),
+      gasPrice: web3.utils.toHex(await web3.eth.getGasPrice()),
+    };
+    const signedTx = await web3.eth.accounts.signTransaction(
+      chargeTx,
+      process.env.REACT_APP_SEPOLIA_ADMIN_PRIVATE_KEY
+    );
+    const txReceipt = await web3.eth.sendSignedTransaction(
+      signedTx.rawTransaction
+    );
+    setDone(true);
+    return "충전 완료";
+  });
   // 수연: 카카오페이 api 호출
   useEffect(() => {
     axios({
@@ -106,8 +143,8 @@ const PayResult = () => {
         console.log(error);
       });
   }, []);
-  
-  if (flag) {
+
+  if (flag && done) {
     return (
       <>
         <Container>
@@ -135,6 +172,20 @@ const PayResult = () => {
         </Container>
       </>
     );
+  } else if (flag && !done) {
+    return (
+    <Container>
+      <div>
+        <div>
+          <Heading>거래를 진행중입니다.</Heading>
+          <Text>잠시만 기다려주세요.</Text>
+        </div>
+        <ImageBox>
+          <Image src={loadingspinner} alt="" width="200" />
+        </ImageBox>
+      </div>
+    </Container>
+    )
   } else {
     return (
       <>
@@ -205,4 +256,13 @@ const Button = styled.a`
   rounded-md px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm
   `}
 `;
+
+const ImageBox = styled.div`
+  ${tw`
+  flex justify-center my-10
+  `}
+`;
+
+const Image = styled.img``;
+
 export default PayResult;
