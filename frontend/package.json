@@ -62,5 +62,5 @@
     "prettier": "2.8.5",
     "tailwindcss": "^3.2.7"
   },
-  "proxy": "{REACT_APP_API_URL}"
+  "proxy": "${REACT_APP_API_URL}"
 }
