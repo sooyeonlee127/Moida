@@ -110,7 +110,6 @@ const UserStatus = () => {
           <p>
             <span>현재 내 포인트 {data?.info.point || "0"} P</span>
             <ChargeBtn onClick={(e) => {e.preventDefault();goPage("point");}}>충전하기</ChargeBtn>
-            <ChargeBtn onClick={(e) => {e.preventDefault();goPage("gas");}}>가스 충전하기</ChargeBtn>
           </p>
           <div className="ticket_sec">
             <p>보유한 티켓 수 {data?.info.ticketCnt || "0"} P</p>
