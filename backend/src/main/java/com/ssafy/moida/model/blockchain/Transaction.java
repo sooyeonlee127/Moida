@@ -6,7 +6,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Entity
@@ -49,4 +48,24 @@ public class Transaction {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_donation_id")
     private UsersDonation usersDonation;
+
+    @Builder
+    public Transaction(Long id, String hash, String fromHash, String toHash, String nonce, int gas, String gasPrice, String maxFeePerGas, String maxPriorityFeePerGas, String r, String s, String v, String value, String input, LocalDateTime regTime, UsersDonation usersDonation) {
+        this.id = id;
+        this.hash = hash;
+        this.fromHash = fromHash;
+        this.toHash = toHash;
+        this.nonce = nonce;
+        this.gas = gas;
+        this.gasPrice = gasPrice;
+        this.maxFeePerGas = maxFeePerGas;
+        this.maxPriorityFeePerGas = maxPriorityFeePerGas;
+        this.r = r;
+        this.s = s;
+        this.v = v;
+        this.value = value;
+        this.input = input;
+        this.regTime = regTime;
+        this.usersDonation = usersDonation;
+    }
 }
