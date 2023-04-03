@@ -1,5 +1,6 @@
 package com.ssafy.moida.api.request;
 
+import com.ssafy.moida.api.common.CreateTransactionDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,4 +14,6 @@ public class CreateDonationReqDto {
     private Long projectId;
     @Schema(description = "기부한 모이 수", defaultValue = "5")
     private int moi;
+    @Schema(description = "transaction 객체")
+    private CreateTransactionDto createTransactionDto;
 }

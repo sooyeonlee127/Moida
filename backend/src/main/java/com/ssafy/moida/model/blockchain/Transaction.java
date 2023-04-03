@@ -46,4 +46,7 @@ public class Transaction {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime regTime;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_donation_id")
+    private UsersDonation usersDonation;
 }
