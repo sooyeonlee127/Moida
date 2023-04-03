@@ -31,9 +31,7 @@ import NftPage from "./pages/NftPage/nftPage";
 import NftTestPage from "./pages/NftPage/NftTestPage";
 import BlockChain from "./context/BlockChain";
 // import { useBeforeunload } from "react-beforeunload";
-import Web3 from "web3";
-import { useWeb3React } from "@web3-react/core";
-import GasPoint from "./pages/PointPage/components/GasPoint";
+
 
 export default function App() {
   // useBeforeunload((event) => event.preventDefault()); // 새로고침 막기 보류
@@ -98,7 +96,6 @@ export default function App() {
               <Route path={"/hjooo"} element={<HjooPage />} />
               <Route path={"/sun"} element={<NftPage />} />
               <Route path={"/sunny"} element={<NftTestPage />} />
-              <Route path={"/gas"} element={<GasPoint />} />
             </Routes>
           </Body>
         </div>
