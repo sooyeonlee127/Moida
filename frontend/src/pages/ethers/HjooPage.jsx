@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../lib/connectors";
 import { TOKENContract } from "./SmartContract";
+import { async } from "q";
 
 const HjooPage = () => {
     const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL)
@@ -64,11 +65,9 @@ const HjooPage = () => {
 
     // 발표 전에 Eth 크게 해줘야 함
     const chargePoint = useCallback(async () => {
-      // await connectWallet();
       const coinbase = await getAdminAddress();
       console.log("chargePoint");
       
-      // const web2 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
         // 현재 1ETH당 10000000000 설정 .. 0.000001 -> 10000Token
       
         /* 추후 value 가공
@@ -79,21 +78,29 @@ const HjooPage = () => {
 
         const Eth = web3.utils.toWei("0.01", "ether");
 
-      // 이더 전송
-      const gasLimit = 300000; // gas limit를 지정합니다.
-      const chargeTx = {
-        from: coinbase,
-        to: account,
-        value: Eth, // 원하는 이더 양
-        gasLimit: web3.utils.toHex(gasLimit),
-        // nonce: web3.utils.toHex(nonce),
-        gasPrice: web3.utils.toHex(await web3.eth.getGasPrice()),
-      }; 
-      const signedTx = await web3.eth.accounts.signTransaction(chargeTx, process.env.REACT_APP_SEPOLIA_ADMIN_PRIVATE_KEY);
-      // 개인 키로 서명된 트랜잭션을 전송
-      const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-        
-        return "충전 완료 ^_^";
+        // 계정이 연결된 경우만 전송
+        if(typeof account !== 'undefined'){
+          const gasLimit = 300000; // gas limit를 지정합니다.
+          const chargeTx = {
+            from: coinbase,
+            to: account,
+            value: Eth, // 원하는 이더 양
+            gasLimit: web3.utils.toHex(gasLimit),
+            // nonce: web3.utils.toHex(nonce),
+            gasPrice: web3.utils.toHex(await web3.eth.getGasPrice()),
+          }; 
+          const signedTx = await web3.eth.accounts.signTransaction(chargeTx, process.env.REACT_APP_SEPOLIA_ADMIN_PRIVATE_KEY);
+          // 개인 키로 서명된 트랜잭션을 전송
+          const txReceipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+          return "가스비 충전이 완료됐습니다."
+        } else {
+          console.log(2);
+          await connectWallet()
+          .then ((res) => {
+            console.log(account);
+          })
+          return "가스비를 받을 메타마스크 지갑을 연결해주세요."
+        }
       });
     
       // data 입력받기 : 닉네임, 기부액, 일시(이건 여기서?), 프로젝트 제목, 프로젝트 차수
@@ -103,27 +110,20 @@ const HjooPage = () => {
         console.log("donatePoint : " + account);
 
         const web3 = new Web3(window.ethereum);
-        // 현재 1ETH당 10000000000 설정 .. 0.000001 -> 10000Token
       
-        /* 추후 value 가공
-         * 1. value /= 10000000000;
-         * 2. value.toString
-         * "1" -> value
-         */
-        let value = 10000;
-        value = 10000/10000000000;
-        const Eth = web3.utils.toWei("0.01", "ether");
+        // 이후 기부 정보를 입력받아 data로 보내기
+        // 닉네임, 금액, 프로젝트 소제목, 일시
+        const data = "트랜잭션 낙서 테스트입니다.";
+        const test = web3.utils.stringToHex(data);
         const tx = {
           from: account,
           to: coinbase, // 다른 지갑 하나 필요함
-          value: Eth,
+          data: test
         }
 
         const result = await web3.eth.sendTransaction(tx);
-        const transaction = await web3.eth.getTransaction(result.transactionHash);
-        console.log(transaction.hash)
-        return transaction; // chainId 안나옴
-        // return await web3.eth.getTransaction(result.transactionHash);
+        // const transaction = await web3.eth.getTransaction(result.transactionHash);
+        return result.transactionHash
       });
 
     return <>
