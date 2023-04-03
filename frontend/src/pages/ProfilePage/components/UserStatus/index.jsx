@@ -116,9 +116,9 @@ const UserStatus = () => {
             <Div className="sec1">
               <Title>내가 기부한 모이</Title>
               <Div>
-                  <Moi className="moi"><Circle style={{background:"#bfa15c"}}><GiAcorn size="1.1rem" color="#ffffff"/></Circle>도토리 {data?.info.moiAcorn || "0"} 개</Moi>
-                  <Moi className="moi"><Circle style={{background:"#d4cb00"}}><GiCorn size="1.1rem" color="#ffffff"/></Circle>옥수수 {data?.info.moiCorn || "0"} 개</Moi>
-                  <Moi className="moi"><Circle style={{background:"#aba97d"}}><GiWheat size="1.1rem" color="#ffffff"/></Circle>볍씨 {data?.info.moiSeed || "0"} 개</Moi>
+                  <Moi className="moi"><Circle style={{background:"#9d9d8e"}}><GiAcorn size="1.1rem" color="#ffffff"/></Circle>도토리 {data?.info.moiAcorn || "0"} 개</Moi>
+                  <Moi className="moi"><Circle style={{background:"#9d9d8e"}}><GiCorn size="1.1rem" color="#ffffff"/></Circle>옥수수 {data?.info.moiCorn || "0"} 개</Moi>
+                  <Moi className="moi"><Circle style={{background:"#9d9d8e"}}><GiWheat size="1.1rem" color="#ffffff"/></Circle>볍씨 {data?.info.moiSeed || "0"} 개</Moi>
               </Div>
             </Div>
             <Div className="sec2">
