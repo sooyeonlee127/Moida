@@ -4,8 +4,6 @@ import Web3 from "web3";
 import { useState, useEffect, useCallback } from "react";
 import { useWeb3React } from "@web3-react/core";
 import { injected } from "../../lib/connectors";
-import { TOKENContract } from "./SmartContract";
-import { async } from "q";
 
 const HjooPage = () => {
     const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL)
@@ -122,8 +120,8 @@ const HjooPage = () => {
         }
 
         const result = await web3.eth.sendTransaction(tx);
-        // const transaction = await web3.eth.getTransaction(result.transactionHash);
-        return result.transactionHash
+        const transaction = await web3.eth.getTransaction(result.transactionHash);
+        return transaction;
       });
 
     return <>
