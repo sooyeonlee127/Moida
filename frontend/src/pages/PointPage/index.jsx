@@ -156,7 +156,7 @@ const PointPage = () => {
 };
 
 const Container = styled.div`
-  height: 100vh;
+  height: 86vh;
   width: 100vw;
   background-color: #fafaf3;
   ${tw`
