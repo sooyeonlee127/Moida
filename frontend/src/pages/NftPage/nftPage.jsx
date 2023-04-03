@@ -91,21 +91,36 @@ const NftPage = () => {
     // 사용자 지갑주소
     console.log(account);
 
-    // 파일(이미지) 업로드
-    const ipfsImg = await ipfs.add(file);
-    const ipfsImgUrl = `https://ipfs.io/ipfs/${ipfsImg.path}`;
-    console.log('원본',ipfsImgUrl);
+    // 방법1 - pinata 활용
+    const imgfile = {
+      "img" : file
+    }
+    const resImg = await axios({
+      method: 'post',
+      url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+      data: imgfile,
+      headers: {
+        'Authorization' : `Bearer ${process.env.REACT_APP_PINATA_JWT}`,
+      },
+    });
+    const ipfsImgUrl = `https://gateway.pinata.cloud/ipfs/${resImg.data.IpfsHash}`;
     setImageIPFSUrl(ipfsImgUrl);
 
-    // 메타데이터 업로드
     const metadata = {
-      author: author,
-      title: title,
-      image: ipfsImgUrl
+      "author": author,
+      "title": title,
+      "img" : ipfsImgUrl
     };
-    console.log(metadata);
-    const ipfsMeta = await ipfs.add(JSON.stringify(metadata));
-    const ipfsMetaUrl = `https://ipfs.io/ipfs/${ipfsMeta.path}`
+    const res = await axios({
+      method: 'post',
+      url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+      data: metadata,
+      headers: {
+        'Authorization' : `Bearer ${process.env.REACT_APP_PINATA_JWT}`,
+      },
+    });
+    const ipfsMetaUrl = `https://gateway.pinata.cloud/ipfs/${res.data.IpfsHash}`;
+    console.log(ipfsMetaUrl);
     setMetaIPFSUrl(ipfsMetaUrl);
     console.log("ipfsMetaUrl : ", metaIPFSUrl);
 
@@ -117,15 +132,49 @@ const NftPage = () => {
         "0xaFFDe73b03c463f9BdA428d5E3a3d48f8f2d9900",
     );
 
-    console.log("스마트 컨트랙트 인스턴스 생성");
-
     // 스마트 컨트랙트로 NFT 민팅 (to주소, 데이터)
     const sendData = nftContract.methods.create(account, ipfsMetaUrl).send({ from: account });
     console.log(sendData);
 
     // NFT 저장 요청하기
     console.log("저장요청");
-    // saveNftInfo();
+
+    // 방법2
+    // // 파일(이미지) 업로드
+    // const ipfsImg = await ipfs.add(file);
+    // const ipfsImgUrl = `https://ipfs.io/ipfs/${ipfsImg.path}`;
+    // console.log('원본',ipfsImgUrl);
+    // setImageIPFSUrl(ipfsImgUrl);
+
+    // // 메타데이터 업로드
+    // const metadata = {
+    //   author: author,
+    //   title: title,
+    //   image: ipfsImgUrl
+    // };
+    // console.log(metadata);
+    // const ipfsMeta = await ipfs.add(JSON.stringify(metadata));
+    // const ipfsMetaUrl = `https://ipfs.io/ipfs/${ipfsMeta.path}`
+    // setMetaIPFSUrl(ipfsMetaUrl);
+    // console.log("ipfsMetaUrl : ", metaIPFSUrl);
+
+    // // 스마트 컨트랙트 인스턴스 생성
+    // const nftContract = new web3.eth.Contract(
+    //     // ABI
+    //     COMMON_ABI.CONTRACT_ABI.NFT_ABI,
+    //     // Contract Address
+    //     "0xaFFDe73b03c463f9BdA428d5E3a3d48f8f2d9900",
+    // );
+
+    // console.log("스마트 컨트랙트 인스턴스 생성");
+
+    // // 스마트 컨트랙트로 NFT 민팅 (to주소, 데이터)
+    // const sendData = nftContract.methods.create(account, ipfsMetaUrl).send({ from: account });
+    // console.log(sendData);
+
+    // // NFT 저장 요청하기
+    // console.log("저장요청");
+    // // saveNftInfo();
   };
 
   const getNftInfo = async () => {
@@ -146,8 +195,6 @@ const NftPage = () => {
   }
 
   const saveNftInfo = async () => {
-    console.log("유저 아이디, 이미지 아이디, nft 이름, 메타데이터 주소, 이미지 주소");
-    console.log("metaUrl : " + metaIPFSUrl);
     axios({
       url: "/api/nft",
       method: "POST",
@@ -171,6 +218,14 @@ const NftPage = () => {
   }
 
 
+  // useEffect(() => {
+  //   if (metaIPFSUrl && done === false) {
+  //     setDone(true)
+  //     saveNftInfo();
+  //     console.log("실행")
+  //   }
+  // }, [metaIPFSUrl]);
+
   useEffect(() => {
     if (imageIPFSUrl && imageIPFSUrl && done === false) {
       setDone(true)
@@ -178,7 +233,6 @@ const NftPage = () => {
       console.log("실행")
     }
   }, [metaIPFSUrl]);
-
 
 
   function handleFileInputChange(event) {
