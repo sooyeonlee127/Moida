@@ -11,7 +11,7 @@ import axios from "axios";
 
 // const ipfs = ipfsHttpClient({ host: "ipfsnode", port: 5001, protocol: "http" });
 const ipfs = ipfsHttpClient({
-  url: "http://j8c2071.p.ssafy.io/api/v0",
+  url: "http://j8c2071.p.ssafy.io:5001/api/v0",
 });
 
 const NftPage = () => {
