@@ -73,7 +73,7 @@ const DonationForm = (props) => {
         return response;
       })
       .catch((error) => {
-        console.log(error);
+        setIsOpen(false);
         alert(error.response.data.message);
         return error;
       });
@@ -85,13 +85,12 @@ const DonationForm = (props) => {
         // 기부 금액이 없는 경우 - 이은혁
         return alert("모이는 최소 1개 이상 기부가 가능합니다.");
       }
-      setIsOpen(true);
       setText("메타마스크 결제가 진행중입니다..");
-      console.log(1);
       donationMutation
         .mutateAsync()
         .then((res) => {
           if (res.status === 200) {
+            setIsOpen(true);
             donatePoint(money);
             setMoney(0); // 금액 초기화 - 이은혁
             setMoi(0); // 모이 갯수 초기화 - 이은혁
@@ -131,16 +130,18 @@ const DonationForm = (props) => {
       to: coinbase, // 다른 지갑 하나 필요함
       data: test,
     };
-
-    const result = await web3.eth.sendTransaction(tx);
-
-    const transaction = await web3.eth.getTransaction(result.transactionHash);
-    setIsLoading(false);
-    setText("모이 " + moi + "개가 정상적으로 기부되었습니다.");
-    return transaction;
+    try {
+      const result = await web3.eth.sendTransaction(tx);
+      const transaction = await web3.eth.getTransaction(result.transactionHash);
+      setIsLoading(false);
+      setText("모이 " + moi + "개가 정상적으로 기부되었습니다.");
+      return transaction;
+    } catch {
+      setIsOpen(false);
+      alert("거래가 중지되었습니다.");
+    }
   });
 
-  // ---------------------------------------------------------------------------
   return (
     <>
       <Modal isOpen={isOpen} title={"기부하기"}>
@@ -153,7 +154,16 @@ const DonationForm = (props) => {
               <Image src={loadingspinner} alt="" width="200" />
             </ImageBox>
           ) : (
-            <ModalBtn onClick={() => setIsOpen(false)}>나가기</ModalBtn>
+            <ModalBtn
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpen(false);
+                setText("");
+                setIsLoading(true);
+              }}
+            >
+              나가기
+            </ModalBtn>
           )}
         </div>
       </Modal>
