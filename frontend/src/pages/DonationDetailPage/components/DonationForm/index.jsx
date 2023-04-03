@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../../../api/auth";
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
 import MetamaskCheck from "../../../../components/MetamaskCheck";
+import { AuthContext } from "../../../../context/Auth";
+
 const DonationForm = (props) => {
   // props 정보 - 이은혁 ----------------------------------------
   const data = {
@@ -76,33 +78,41 @@ const DonationForm = (props) => {
   });
 
   const SendMoi = () => {
-    if (money <= 0) {
-      // 기부 금액이 없는 경우 - 이은혁
-      return alert("모이는 최소 1개 이상 기부가 가능합니다.");
+    if (isLogin) {
+      if (money <= 0) {
+        // 기부 금액이 없는 경우 - 이은혁
+        return alert("모이는 최소 1개 이상 기부가 가능합니다.");
+      }
+      donationMutation
+        .mutateAsync()
+        .then((res) => {
+          if (res.status === 200) {
+            donatePoint(money);
+            setMoney(0); // 금액 초기화 - 이은혁
+            setMoi(0); // 모이 갯수 초기화 - 이은혁
+            alert("모이 " + moi + "개가 정상적으로 기부되었습니다.");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      alert("로그인한 사용자만 접근 가능합니다.")
     }
-    donationMutation
-      .mutateAsync()
-      .then((res) => {
-        if (res.status === 200) {
-          donatePoint(money);
-          setMoney(0); // 금액 초기화 - 이은혁
-          setMoi(0); // 모이 갯수 초기화 - 이은혁
-          alert("모이 " + moi + "개가 정상적으로 기부되었습니다.");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+   
   };
 
   // 수연: 블록체인 -----------------------------------------------------------
+  const { isLogin } = useContext(AuthContext);
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const {
     account, // DApp에 연결된 account address
     active, // DApp 유저가 로그인 된 상태인지 체크
   } = useWeb3React();
 
+
   const donatePoint = useCallback(async (point) => {
+
     const coinbase = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY;
     console.log("donatePoint : " + account);
 
@@ -111,7 +121,7 @@ const DonationForm = (props) => {
     var today = new Date();
     const tmp = `${localStorage.getItem("nickname")} | ${point} | ${
       data.subject
-    } | ${today}`;     // 닉네임, 금액, 프로젝트 소제목, 일시
+    } | ${today}`; // 닉네임, 금액, 프로젝트 소제목, 일시
     const test = web3.utils.stringToHex(tmp);
     const tx = {
       from: account,
@@ -120,7 +130,8 @@ const DonationForm = (props) => {
     };
 
     const result = await web3.eth.sendTransaction(tx);
-    return result.transactionHash; //db 저장해야됨
+    const transaction = await web3.eth.getTransaction(result.transactionHash);
+    return transaction;
   });
 
   // ---------------------------------------------------------------------------
@@ -163,7 +174,13 @@ const DonationForm = (props) => {
         </Button>
         {/* 마감 기한이 지날 경우 isDisabled true */}
       </GroupButton>
-      <MetamaskCheck />
+      <div>
+      {
+        isLogin === true
+        ? <MetamaskCheck />
+        : null
+      }
+    </div>
     </div>
   );
 };

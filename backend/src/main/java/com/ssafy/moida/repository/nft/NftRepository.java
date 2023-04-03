@@ -1,6 +1,5 @@
 package com.ssafy.moida.repository.nft;
 
-import com.ssafy.moida.api.response.GetUserDonationResDto;
 import com.ssafy.moida.api.response.GetUserNftResDto;
 import com.ssafy.moida.model.nft.Nft;
 import org.springframework.data.domain.Page;

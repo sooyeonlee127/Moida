@@ -20,6 +20,7 @@ public interface UsersDonationRepository extends JpaRepository<UsersDonation, Lo
         value = "SELECT new com.ssafy.moida.api.response.GetUserDonationResDto("
             + "ud.project.id, "
             + "ud.project.subject, "
+            + "ud.project.category, "
             + "ud.project.generation, "
             + "ud.regDate, "
             + "CAST(ud.amount / ud.project.pointPerMoi AS LONG), "
