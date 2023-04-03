@@ -189,15 +189,17 @@ const GroupMenu = styled.div`
 `;
 
 const Logo = styled.span`
-  height: 38px;
-  width: 39.5px;
   background-size: cover;
   cursor: pointer;
   &.scrolled {
     background-image: url(${logo_white});
+    height: 30px;
+    width: 31.18px;
   }
   &.unscrolled {
     background-image: url(${logo});
+    height: 38px;
+    width: 39.5px;
   }
 `;
 const Menu = styled.span`
