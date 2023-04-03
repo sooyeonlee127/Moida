@@ -11,8 +11,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalLong;
 
 public interface UsersDonationRepository extends JpaRepository<UsersDonation, Long>,
     PagingAndSortingRepository<UsersDonation, Long> {

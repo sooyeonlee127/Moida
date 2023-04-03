@@ -2,14 +2,11 @@ package com.ssafy.moida.api.controller;
 
 import com.ssafy.moida.api.request.CreateNftReqDto;
 import com.ssafy.moida.api.response.GetNftImagesResDto;
-import com.ssafy.moida.api.response.GetUserNftResDto;
 import com.ssafy.moida.auth.PrincipalDetails;
 import com.ssafy.moida.model.nft.NftPicture;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.nft.NftService;
 import com.ssafy.moida.utils.TokenUtils;
-import com.ssafy.moida.utils.error.ErrorCode;
-import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
 
 @Tag(name="NFT")
 @Slf4j
