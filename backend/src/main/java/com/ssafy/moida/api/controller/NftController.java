@@ -39,7 +39,7 @@ public class NftController {
     }
 
     @Operation(summary = "랜덤 이미지 가져오기", description = "DB에 저장된 이미지 중 랜덤으로 뽑아서 링크 형식을 이미지 형식으로 변환하여 전달한다.")
-    @GetMapping("/randomImg")
+    @GetMapping("/image")
     public ResponseEntity<?> getRandomImages(
             @RequestParam(name = "userNickname") String userNickname
     ) {
@@ -65,7 +65,7 @@ public class NftController {
     @Transactional
     @Operation(summary = "NFT 저장", description = "NFT를 저장합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping("/save")
+    @PostMapping()
     public ResponseEntity<?> saveNFT(
             @RequestBody CreateNftReqDto createNftReqDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails
