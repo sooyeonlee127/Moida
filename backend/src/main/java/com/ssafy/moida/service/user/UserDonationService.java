@@ -57,7 +57,7 @@ public class UserDonationService {
      * [세은] 사용자가 기부할 경우 UsersDonation 제이터 저장
      */
     @Transactional
-    public void saveUsersDonation(Long amount, int tickentCnt, int moi, Users users, Project project){
+    public UsersDonation saveUsersDonation(Long amount, int tickentCnt, int moi, Users users, Project project){
         UsersDonation usersDonation = UsersDonation.builder()
                 .amount(amount)
                 .ticketCnt(tickentCnt)
@@ -66,6 +66,7 @@ public class UserDonationService {
                 .project(project)
                 .build();
         usersDonationRepository.save(usersDonation);
+        return usersDonation;
     }
 
     /**
