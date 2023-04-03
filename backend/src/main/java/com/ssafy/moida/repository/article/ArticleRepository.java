@@ -53,7 +53,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long>,
     @Query("SELECT a FROM Article a ORDER BY a.difficultyLevel DESC")
     Page<Article> findAllDifficultyLevelDesc(Pageable pageable);
 
-    @Query("SELECT a FROM Article a ORDER BY a.difficultyLevel DESC")
+    @Query("SELECT a FROM Article a ORDER BY a.difficultyLevel ASC")
     Page<Article> findAllDifficultyLevelAsc(Pageable pageable);
 
     @Query("SELECT a FROM Article a where a.category = :category ORDER BY a.difficultyLevel DESC")
