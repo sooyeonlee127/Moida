@@ -8,8 +8,6 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.service.nft.NftService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.TokenUtils;
-import com.ssafy.moida.utils.error.ErrorCode;
-import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
