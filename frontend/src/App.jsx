@@ -27,10 +27,14 @@ import PrivateRoute from "./routes/PrivateRoute";
 import HjooPage from "./pages/ethers/HjooPage";
 import ReviewCreatePage from "./pages/ReviewCreatePage";
 import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
-import { useBeforeunload } from "react-beforeunload";
+import NftPage from "./pages/NftPage/nftPage";
+import NftTestPage from "./pages/NftPage/NftTestPage";
+// import { useBeforeunload } from "react-beforeunload";
+import Web3 from "web3";
+import { useWeb3React } from "@web3-react/core";
 
 export default function App() {
-  useBeforeunload((event) => event.preventDefault());
+  // useBeforeunload((event) => event.preventDefault()); // 새로고침 막기 보류
 
   return (
     <Auth>
@@ -83,6 +87,8 @@ export default function App() {
             <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
             <Route path={"/notice/:category"} element={<NoticeDetailPage />} />
             <Route path={"/hjooo"} element={<HjooPage />} />
+            <Route path={"/sun"} element={<NftPage />}/>
+            <Route path={"/sunny"} element={<NftTestPage />}/>
           </Routes>
         </Body>
       </div>

@@ -138,10 +138,10 @@ const PayResult = () => {
       },
     })
       .then((res) => {
+        parentPage();
         setPrice(res.data.amount.total);
         setDate(res.data.approved_at);
         setFlag(true);
-        parentPage();
         ChargePoint(res.data.amount.total);
       })
       .catch((error) => {
@@ -165,7 +165,7 @@ const PayResult = () => {
                 <Button
                   onClick={(e) => {
                     e.preventDefault();
-                    navigate("/", { replace: true });
+                    navigate("/profile", { replace: true });
                   }}
                 >
                   마이페이지

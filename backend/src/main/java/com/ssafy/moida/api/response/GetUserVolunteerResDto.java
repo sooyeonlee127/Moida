@@ -3,6 +3,7 @@ package com.ssafy.moida.api.response;
 import com.ssafy.moida.model.project.Project;
 import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.UsersVolunteer;
+import java.time.LocalDate;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class GetUserVolunteerResDto {
     private String projectSubject;
     private int generation;
     private LocalDateTime regDate;
+    private LocalDate volunteerDate;
     private Status status;
 
     public GetUserVolunteerResDto(UsersVolunteer v, Long articleId) {
@@ -32,6 +34,7 @@ public class GetUserVolunteerResDto {
         this.projectSubject = p.getSubject();
         this.generation = p.getGeneration();
         this.regDate = v.getRegDate();
+        this.volunteerDate = v.getVolunteerDateInfo().getVolunteerDate();
         this.status = v.getStatus();
     }
 }

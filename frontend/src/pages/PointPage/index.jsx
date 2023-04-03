@@ -3,7 +3,6 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
 
-
 const PointPage = () => {
   const [currentPoint, setCurrentPoint] = useState(0);
   const donate = async (price) => {
@@ -51,13 +50,12 @@ const PointPage = () => {
     if (kakaoUrl === "") {
       alert("1000원 이상 결제만 가능합니다.");
     } else {
-      SetKakaoUrl("");
-      setCurrentPoint(0);
       window.open(kakaoUrl);
       // 자식창에서 버튼 눌렀을 때 동작
       window.parentCallback = (page) => {
         try {
-          window.open("about:blank", "_self").self.close();
+          window.open("", "_self");
+          window.close();
         } catch {
           console.log("");
         }

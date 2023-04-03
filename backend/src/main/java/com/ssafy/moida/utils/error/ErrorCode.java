@@ -33,6 +33,7 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다"),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
     INVALID_POINT(UNPROCESSABLE_ENTITY, "입력한 포인트가 음수이거나 변수의 범위를 넘었습니다."),
+    NFT_NOT_FOUND(BAD_REQUEST, "사용자가 소유하고 있지 않은 NFT입니다."),
 
     /* [한선영] 404 NOT_FOUND : Resource를 찾을 수 없음 */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),

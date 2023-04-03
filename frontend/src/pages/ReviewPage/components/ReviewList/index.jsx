@@ -16,6 +16,7 @@ const ReviewList = () => {
   const [selected2, setSelected2] = useState("LATEST");
   const category = ["ALL", "흑두루미", "다람쥐", "야생동물"];
   const sort = ["LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"]
+  const [tabIndex, setTabIndex] = useState(0);
 
   const getReviews = async(category, sort) => {
     try {
@@ -49,25 +50,36 @@ const ReviewList = () => {
 
   return (
     <div>
-        <div>
-          <select onChange={(e)=>setSelected1(e.target.value)}>
-            {category.map((element,index) => (
-              <option key={index}>{element}</option>
-            ))}
-          </select>
-
-        </div>
-        {/* 정렬 */}
-        <div>
-          <select onChange={(e)=> setSelected2(e.target.value)}>
-            {sort.map((element,index) => (
-              <option key={index}>{element}</option>
-            ))}
-            </select>
-        </div>
-
       {/* 유저후기 */}
       <Title>Gallery</Title>
+      
+      <Section>
+        <TabGroup>
+            {/* 카테고리 */}
+            <Ul>
+              {category.map((element, index)=>{
+                  return (
+                  <Li key={index} className={tabIndex === index ? "submenu focused" : "submenu"}
+                  onClick={()=> {setTabIndex(index); setSelected1(element);}}>{element}</Li>
+                  )
+              })}
+
+              {/* 정렬 */}
+              <Sort>
+                <select onChange={(e)=> setSelected2(e.target.value)}>
+                  {sort.map((element,index) => (
+                    <option key={index}>{element}</option>
+                  ))}
+                </select>
+              </Sort>
+            </Ul>
+        
+        </TabGroup>
+      </Section>
+
+      
+
+      
       <div>
         {
           data?.map((element,index) => {
@@ -86,8 +98,63 @@ const ReviewList = () => {
 const Title = styled.h2`
 ${tw`text-2xl font-bold tracking-tight text-gray-900`}`
 
+const Section = styled.div`
+min-height: 300px;
+height: 100%;
+display: flex;
+-webkit-box-pack: justify;
+justify-content: flex-start;
+-webkit-box-align: center;
+align-items: center;
+flex-direction: column;
+`
 
+const TabGroup = styled.div`
+width: 100%;
+`
 
+const Ul = styled.ul`
+color: rgba(73, 73, 73, 0.5);
+font-weight: bold;
+display: flex;
+flex-direction: row;
+justify-items: center;
+align-items: center;
+list-style: none;
+cursor : pointer;
+border-bottom: 1px solid #838383;
+
+.submenu {
+    ${'' /* 기본 Tabmenu 에 대한 CSS를 구현합니다. */}
+    display: flex;
+    justify-content: space-between;
+    padding : 10px 25px;
+    font-size : 15px;
+  }
+
+  .focused {
+    ${'' /* 선택된 Tabmenu 에만 적용되는 CSS를 구현합니다.  */}
+    color : black;
+    font-weight: 700;
+    border-bottom: 2px solid #838383;
+  }
+
+  & div.desc {
+    text-align: center;
+  }
+`
+
+const Li = styled.li`
+
+`
+const Desc = styled.div`
+width: 100%;
+`;
+
+const Sort = styled.div`
+  color: black;
+  
+`
 
 
 export default ReviewList;

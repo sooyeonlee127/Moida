@@ -11,4 +11,12 @@ module.exports = {
       ],
     },
   },
+  ganache: {
+    sepolia: {
+      url: "http://127.0.0.1:7545",
+      accounts: [
+        "0x525Cd29265048adE18306B07d556c1138C36291D",
+      ],
+    },
+  },
 };
