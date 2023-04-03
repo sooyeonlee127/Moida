@@ -1,5 +1,3 @@
-import styled from "styled-components";
-import tw from "twin.macro";
 import ResultNft from "./components/ResultNft";
 import CharacterList from "./components/CharacterList";
 import MetamaskCheck from "../../components/MetamaskCheck";

@@ -40,6 +40,7 @@ const ResultNft = () => {
       })
       .catch((error) => {
         console.log(error);
+        setDone(true); // 뽑을 수 있는 티켓 없으면 버튼 일단 가려놓음
       });
   };
 
@@ -140,20 +141,18 @@ const ResultNft = () => {
         </Box>
       </Container>
       <ButtonGroup>
-      { done ?
-        null
-      :
-      <SubmitButton
-      type="submit"
-      onClick={(e) => {
-        e.preventDefault();
-        addItem();
-        setText("로딩중");
-      }}
-    >
-      1회 뽑기
-    </SubmitButton>
-      }
+        {done ? null : (
+          <SubmitButton
+            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              addItem();
+              setText("로딩중");
+            }}
+          >
+            1회 뽑기
+          </SubmitButton>
+        )}
       </ButtonGroup>
     </Page>
   );
