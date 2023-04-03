@@ -9,10 +9,9 @@ import COMMON_ABI from "../../common/ABI";
 import axios from "axios";
 
 const ipfs = ipfsHttpClient({
-  host: "ipfs",
+  host: "localhost",
   port: "5001",
   protocol: "http",
-  apiPath: "/ipfs/api/v0",
 });
 
 const NftPage = () => {
