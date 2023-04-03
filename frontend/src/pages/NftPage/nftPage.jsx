@@ -9,7 +9,7 @@ import COMMON_ABI from "../../common/ABI";
 import axios from "axios";
 
 const ipfs = ipfsHttpClient({
-  host: "localhost",
+  host: "j8c2071.p.ssafy.io/ipfs",
   port: "5001",
   protocol: "http",
 });
