@@ -45,54 +45,102 @@ const DonationDetailPage = () => {
     });
     
     return (
-        <div>
+        <Wrapper>
             <Main>
                 <MainImage />
                 <Aside>
                     <TabGroup>
-                        <Tab onClick={ () => setTabIndex(0) }>기부하기</Tab>
-                        <Tab onClick={ () => setTabIndex(1) }>봉사하기</Tab>
+                        <Tab className={tabIndex===0 ? "active":""} onClick={ () => setTabIndex(0) }>기부하기</Tab>
+                        <Tab className={tabIndex===1 ? "active":""} onClick={ () => setTabIndex(1) }>봉사하기</Tab>
                     </TabGroup>
+                    <Div>
                     { tabIndex===1 ? <VolunteerForm data={projectInfo?.volunteerResDto}/> : <DonationForm data={projectInfo?.donationResDto} pointPerMoi={projectInfo?.projectReqDto.pointPerMoi}/>}
+                    </Div>
                 </Aside>
             </Main>
             <Article>
                 <p>{projectId}번째</p>
                 <Content></Content> 
             </Article>
-        </div>
+        </Wrapper>
     )
 }
-
+const Wrapper = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start;
+`
 const Main = styled.div`
-padding-top: 50px;
-max-width: 1200px;
-${tw`flex flex-row space-x-5 mx-auto`}
+max-width: 1000px;
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: left;
+& > div {
+    display: inline-block;
+}
 `
 
 const MainImage = styled.div`
-height: 500px;
-${tw`basis-3/5 bg-cover bg-[url('https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/')]`}
+height: 400px;
+width: 580px;
+box-shadow: 3px 5px 20px rgba(0,0,0,15%);
+border-radius: 10px;
+${tw`bg-[url('https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/')]`}
 `
 
 const Aside = styled.div`
-${tw`border basis-2/5`}
+background: white;
+box-shadow: 3px 5px 20px rgba(0,0,0,15%);
+border-radius: 10px;
+max-width: 400px;
+width: 100%;
+margin-left: 20px;
 `
 const TabGroup = styled.div`
 border-color: black;
-${tw`flex flex-row ring-1 ring-current divide-x`}
+display: flex;
+flex-direction: row;
+${tw`divide-x`}
 `
 
 const Tab = styled.button`
-${tw`basis-1/2 px-2 py-3 hover:bg-sky-500 active:bg-sky-600`}
+flex-basis: 50%;
+padding: 13px 5px;
+background: #A0C846;
+color: #fff;
+&:first-child {
+    border-top-left-radius: 10px;
+    box-shadow: inset -10px 1px 5px -5px #00000040;
+    border-bottom-right-radius: 20px;
+}
+&:last-child {
+    border-top-right-radius: 10px;
+    box-shadow: inset 10px 1px 5px -5px #00000040;
+    border-bottom-left-radius: 20px;
+}
+&.active {
+    background-color: #ffffff;
+    box-shadow: none;
+    color: #A0C846;
+    font-weight: 600;
+}
+&:hover {
+    background: #a9d34b;
+}
+&.active:hover {
+    background-color: #efefef;
+}
 `
-
-
+const Div = styled.div`
+padding: 15px 30px 30px 30px;
+`
 
 const Article = styled.div`
 margin: 20px 0;
+width: 100%;
 border-top: 1px solid black;
-${tw``}
 `
 
 const Content = styled.div`

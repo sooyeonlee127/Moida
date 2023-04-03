@@ -17,8 +17,9 @@ const ReviewPage = () => {
 const Wrapper = styled.div`
 display: flex;
 flex-direction: column;
-justify-content: center;
+justify-content: flex-start;
 align-items: center;
+height: calc(100vh - 100px);
 `
 const InnerWrapper = styled.div`
 width:100%;

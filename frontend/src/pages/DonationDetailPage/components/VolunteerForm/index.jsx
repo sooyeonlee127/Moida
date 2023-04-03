@@ -3,6 +3,9 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import styled from 'styled-components';
+import { IoPeopleOutline } from "react-icons/io5";
+import { GoLocation } from "react-icons/go"
 
 const VolunteerForm = (props) => {
     const data = {
@@ -85,21 +88,107 @@ const VolunteerForm = (props) => {
 
     return (
         <div>
-            <p>{data.subject}</p>
-            <p>기간 : {data.startDate} ~ {data.endDate}</p>
-            <p>난이도 : {data.difficultyLevel}</p>
-            <p>모집 인원 : {data.capacityPerDate}</p>
-            <p>장소 : {data.location}</p>
-            <p>설명 : {data.description}</p>
-            <p>봉사 희망일 선택</p>
+            {/* <Text className="dday size-4 weight-9 left color-3">디데이</Text> */}
+            <Text className="left weight-2 size-2">난이도 : {data.difficultyLevel}</Text>
+            <Div className="mb-1">
+                <Text className="size-5 weight-6 left color-3">{data.subject}</Text>
+                <Text className="size-1 weight-2 left color-3 period">
+                    {new Date(data.startDate).getFullYear()}년 {new Date(data.startDate).getMonth()}월 {new Date(data.startDate).getDay()}일 ~ 
+                    {new Date(data.endDate).getFullYear()}년 {new Date(data.endDate).getMonth()}월 {new Date(data.endDate).getDay()}일
+                </Text>
+            </Div>
+            <Text className="size-2 weight-2 left color-3">{data.description}</Text>
+            <Div className='mb-2 mt-1'>
+                <Text className="left">
+                    <IoPeopleOutline size="20px" style={{display: "inline-block", marginRight: "8px"}}/>
+                    <Text className="weight-2 size-2 span">모집 인원 <span style={{marginLeft: "5px"}}>{data.capacityPerDate}</span>명</Text>
+                </Text>
+                <Text className="left">
+                    <GoLocation size="20px" style={{display: "inline-block", marginRight: "8px"}}/>
+                    <Text className="weight-2 size-2 location span">위치<a href={`https://maps.naver.com/v5/search/`+data.location} target='blank'>{data.location}</a></Text>
+                </Text>
+            </Div>
+            <Text className="left weight-6 size-3">봉사 희망일 선택</Text>
             <Calendar onChange={onChange} tileDisabled={({date})=> disableTile(date)} value={value}	minDate={new Date(data.startDate)} maxDate={new Date(data.endDate)} disableTile/>
-            <p>봉사 희망일 : {selectedYear}년 {selectedMonth}월 {selectedDay}일</p>
-            <p>capacity : {dateMap[stringValue]?.capacity}</p>
-            <p>maxCapacity : {dateMap[stringValue]?.maxCapacity}</p>
+            <Text className="">봉사 희망일 : {selectedYear}년 {selectedMonth}월 {selectedDay}일</Text>
+            <Text className="">capacity : {dateMap[stringValue]?.capacity}</Text>
+            <Text className="">maxCapacity : {dateMap[stringValue]?.maxCapacity}</Text>
             <button onClick={ParticipateApi}>지원하기</button>
         </div>
     )
 }
-
+const Div = styled.div`
+& > .period {
+    margin: 2px 0 13px 0;
+  }
+&.mt-1{
+    margin-top: 0.7rem;
+}
+&.mt-2{
+    margin-top: 1.3rem;
+}
+&.mb-1{
+    margin-bottom: 0.7rem;
+}
+&.mb-2{
+    margin-bottom: 1.3rem;
+}
+`
+const Text = styled.p`
+color: #594949;
+&.location>a {
+    color: #0093D2;
+    margin-left: 10px;
+    font-weight: 700;
+}
+&.location>a:hover {
+    text-decoration: underline;
+}
+&.dday {
+  color: #DC653F;
+}
+&.center {
+text-align: center; 
+}
+&.left {
+text-align: left;
+}
+&.right {
+text-align: right;
+}
+&.weight-9 {
+font-weight: 900;
+}
+&.weight-6 {
+font-weight: 600;
+}
+&.weight-5 {
+font-weight: 500;
+}
+&.weight-2 {
+font-weight: 200;
+}
+&.size-6 {
+font-size: 1.5rem;
+}
+&.size-5 {
+font-size: 1.35rem;
+}
+&.size-4 {
+font-size: 1.2rem;
+}
+&.size-3 {
+font-size: 1rem;
+}
+&.size-2 {
+font-size: 0.9rem;
+}
+&.size-1 {
+font-size: 0.85rem;
+}
+&.span {
+display: inline-block;
+}
+`
 
 export default VolunteerForm;
