@@ -15,8 +15,8 @@
     background-color: #fafafa;
 }
 .badge {
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
 }
 .item_sec {
     display: inline-block;
@@ -29,29 +29,44 @@
     margin-left: 1rem;
 }
 
-
+.icon {
+    display: inline-block;
+    margin: 5px 7px;
+}
 .btn {
     padding: 3px 10px;
-    border: 1px solid #cdcdcd;
+    border: 1px solid #e5e5e5;
     border-radius: 5px;
     background: #f2f2f2;
+    font-size: 0.9rem;
+}
+.btn:hover {
+    background: #f7f7f7;
+}
+.btn:active {
+    background: #e4e4e4;
 }
 .btn.attend {
     background: #4dd21d;
     color: white;
-    border-color: #41aa1b;
+    border-color: #4ac020;
 }
-
+.btn.attend:hover {
+    background: #53e41f;
+}
+.btn.attend:active {
+    background: #47c11b;
+}
 .weak {
     color: #949494;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 300;
 }
 .title {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 .strong {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #585858;
 }
@@ -105,4 +120,17 @@
 .w-5 {
     width: 50%;
 }
-
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.justify-center {
+    justify-content: center;
+}
+.align-center {
+    align-items: center;
+}

@@ -4,7 +4,11 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Paging from '../../../../../components/Pagination/Paging'
-import "./Tab.css";
+import badge_squirrel  from "../../../../../assets/img/squirrel.png"
+import badge_crane  from "../../../../../assets/img/crane.png"
+import badge_wild_animal  from "../../../../../assets/img/wild_animal.png"
+import { BsTicketPerforatedFill } from 'react-icons/bs';
+
 
 const DonationList = () => {
     const [pageNum, setPageNum] = useState(1)
@@ -28,6 +32,8 @@ const DonationList = () => {
         <>
         <div className='container'>
         {datas?.map((data, index) => { 
+            // const badge 
+
             // 날짜 형식 변경 - 이은혁
             const date = new Date(data.regDate)
             const year = String(date.getFullYear()).slice(2,4)
@@ -40,16 +46,18 @@ const DonationList = () => {
                 <div className="item" key={index}>
                     <p>{datas.length === 0 && !loading? "빈 값":""}</p>
                     <div className="item_sec">
-                        <img className='badge' src="" alt="" />   
+                        {data.projectCategory==="SQUIRREL" ? (<img className='badge' src={badge_squirrel} alt="" />):""}
+                        {data.projectCategory==="CRANE" ? (<img className='badge' src={badge_crane} alt="" />):""}
+                        {data.projectCategory==="WILD_ANIMAL" ? (<img className='badge' src={badge_wild_animal} alt="" />):""}
                     </div>
                     <div className="item_sec grow_sec">
                         <p className="weak">{data.generation}차 프로젝트</p>
                         <p className="title mb-1"><Link className="link" to={`/donation/`+data.projectId}>{data.projectSubject}</Link></p>
                         <p className="weak">기부한 날짜 : {year+"."+month+"."+day}</p>
                     </div>
-                    <div className="item_sec w-2">
+                    <div className="item_sec w-2 flex-column justify-center align-center">
                         <p className="weak">내가 받은 티켓</p>
-                        <p className="strong">{data.ticketCnt}장</p>
+                        <p className="strong flex-row justify-center align-center"><BsTicketPerforatedFill className='icon' color='#c2c2c3' size="1.5rem"/> {data.ticketCnt}</p>
                     </div>
                     <div className="item_sec w-2">
                         <p className="weak">기부한 모이</p>

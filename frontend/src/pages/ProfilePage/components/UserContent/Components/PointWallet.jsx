@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import useListApi from "./api";
-import styled from 'styled-components';
 import Paging from '../../../../../components/Pagination/Paging'
+import { BsTicketPerforatedFill } from 'react-icons/bs';
+import badge_charge from "../../../../../assets/img/badge_charge.png"
+import badge_donation from "../../../../../assets/img/badge_donaition.png"
 
 const PointWallet = () => {
     const [pageNum, setPageNum] = useState(1)
@@ -9,19 +11,6 @@ const PointWallet = () => {
     // const [pageList, setPageList] = useState([]) // 페이지 번호들을 담을 리스트 생성
     const [category, setCategory] = useState("ALL") // 페이지 번호들을 담을 리스트 생성
     const { data: datas, length, error, loading } = useListApi("points", pageNum, pageSize, category) // length는 페이지네이션 활용 용도 - 이은혁
-    
-    // const Pagination = () => {
-    //     const lastPage = parseInt((length+5)/pageSize) || 1 // 데이터 개수가 한 페이지 분량보다 작은경우에도 1이 뜨도록 처리 - 이은혁
-    //     const tmp = []
-    //     for (let i=1; i<=lastPage; i++) { // 데이터 갯수에 맞게 페이지 목록에 번호 추가 - 이은혁
-    //         tmp.push(i)
-    //     }
-    //     setPageList(tmp)
-    // }
-    // useEffect(() => {
-    //   Pagination()
-    //   console.log("datas", datas)
-    // }, [length])
     
     return (
         <>
@@ -35,12 +24,12 @@ const PointWallet = () => {
             const month = tmpM.length===1 ? "0"+tmpM : tmpM;
             const day = tmpD.length===1 ? "0"+tmpD : tmpD;
             
-            console.log(data.regDate, year, month, day)
             return (
             <div className="item" key={index}>
                 <p>{datas.length === 0 && !loading? "빈 값":""}</p>
                 <div className="item_sec">
-                    <img className='badge' src="" alt="" />   
+                    {data.category==="CHARGE" ? (<img className='badge' src={badge_charge} alt="" />):""}
+                    {data.category==="DONATION" ? (<img className='badge' src={badge_donation} alt="" />):""}
                 </div>
                 <div className="item_sec grow_sec">
                     {data.category==='DONATION'? (<p className="weak"><span>[{data.generation}차] {data.projectSubject}</span></p>):""}
@@ -57,7 +46,7 @@ const PointWallet = () => {
                 </div>
                 <div className="item_sec w-2">
                     <p className="weak">받은 티켓</p>
-                    <p className="strong">{data.ticketCnt}개</p>
+                    <p className="strong"><BsTicketPerforatedFill className='icon' color='#c2c2c3' size="1.5rem"/> {data.ticketCnt}개</p>
                 </div>
             </div>
          )})

@@ -28,7 +28,7 @@ const Intro = () => {
 
   return (
       <StickyContainer ref={target} className="page_container">
-        <Sticky className={isShown ? "page show intro" : "page"}>
+        <Sticky className={inView ? "page show intro" : "page"}>
           <div className="inner_page intro">
             <InlineBox>
               <WrapCircle><Circle/><Circle/>
