@@ -9,6 +9,7 @@ import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.user.RefreshRedisRepository;
+import com.ssafy.moida.service.nft.NftService;
 import com.ssafy.moida.service.user.UserDonationService;
 import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.service.user.UserVolunteerService;
@@ -50,19 +51,21 @@ public class UserController {
     private final UserService userService;
     private final UserVolunteerService userVolunteerService;
     private final UserDonationService userDonationService;
+    private final NftService nftService;
     private final TokenUtils tokenUtils;
     private final DtoValidationUtils dtoValidationUtils;
     @Autowired
     private EmailUtils emailUtils;
 
     public UserController(UserService userService, UserVolunteerService userVolunteerService, UserDonationService userDonationService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils,
-        RefreshRedisRepository refreshRedisRepository) {
+                          RefreshRedisRepository refreshRedisRepository, NftService nftService) {
         this.userService = userService;
         this.userVolunteerService = userVolunteerService;
         this.userDonationService = userDonationService;
         this.tokenUtils = tokenUtils;
         this.dtoValidationUtils = dtoValidationUtils;
         this.refreshRedisRepository = refreshRedisRepository;
+        this.nftService = nftService;
     }
 
     @Operation(summary = "회원가입", description = "회원 가입을 합니다.")
@@ -339,6 +342,60 @@ public class UserController {
                 = userVolunteerService.getUsersVolunteerArticle(userId, pageNumber, pageSize);
 
         return new ResponseEntity<>(results, HttpStatus.OK);
+    }
+
+    @Operation(summary = "사용자 NFT 목록", description = "사용자의 NFT 목록을 가져옵니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping("/me/nft")
+    public ResponseEntity<?> getNftList(
+            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        // 유저 정보 가져오기
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+        Long userId = loginUser.getId();
+        log.info("userId : {}", userId);
+
+        // 페이지 검사
+        pageNumber -= 1;
+        if(pageNumber < 0 || pageSize <= 0) {
+            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
+        }
+
+        // 유저의 nft 목록 가져오기
+        List<GetUserNftResDto> userNftList =
+                nftService.getUserNft(userId, pageNumber, pageSize);
+        Long length = nftService.countFindNftsByUserId(userId);
+
+        return ResponseEntity.ok()
+                .body(Map.of("nftList", userNftList, "length", length));
+    }
+
+    @Operation(summary = "사용자 대표 NFT 이미지 변경", description = "사용자의 대표 NFT 이미지를 변경합니다.")
+    @SecurityRequirement(name = "bearerAuth")
+    @PutMapping("/me/image")
+    public ResponseEntity<?> chageUserMainImg(
+            @RequestParam(name = "nftId") long nftId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails
+    ) {
+        // 유저 정보 가져오기
+        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
+        Long userId = loginUser.getId();
+
+        // 이미지 url 정보
+        String imgUrl = loginUser.getNftUrl();
+
+        // 사용자가 nftId에 해당하는 Nft를 가지고 있는지 확인
+        if(nftService.existNft(userId, nftId)) {
+            // NFT 이미지 변경
+            imgUrl = nftService.chageMainNFT(loginUser, nftId);
+        } else {
+            // 소유하고 있지 않다면 에러
+            throw new CustomException(ErrorCode.NFT_NOT_FOUND);
+        }
+
+        return new ResponseEntity<>("대표 NFT 변경 완료", HttpStatus.OK);
     }
 
 }
