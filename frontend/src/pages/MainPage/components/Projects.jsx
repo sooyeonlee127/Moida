@@ -41,7 +41,7 @@ const Projects = (props) => {
 
   return (
     <StickyContainer ref={target}>
-      <Sticky id={"card_" + index} className={isShown ? "page card show" : "page card"}>
+      <Sticky id={"card_" + index} className={inView ? "page card show" : "page card"}>
         <div className="inner_page">
           <Image src="" alt=""/>
           <Subject>{projectReqDto.subject}</Subject>

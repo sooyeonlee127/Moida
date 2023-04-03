@@ -5,14 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Paging from '../../../../../components/Pagination/Paging'
-import "./volunteerList.css";
-
+import Modal from '../../../../../components/Modal';
+import badge_squirrel  from "../../../../../assets/img/squirrel.png"
+import badge_crane  from "../../../../../assets/img/crane.png"
+import badge_wild_animal  from "../../../../../assets/img/wild_animal.png"
 
 const VolunteerList = () => {
+  const [ isOpen, setIsOpen ] = useState(false); // 비밀번호 변경 모달용 - 이은혁
   const [pageNum, setPageNum] = useState(1)
   const [pageSize, setPageSize] = useState(10)
   const { data:datas, length, error, loading } = useListApi("volunteer", pageNum, pageSize)
-  const [visible, setVisible] = useState(false);
   const [value, setValue] = useState('');
   const [doneId, setDoneId] = useState();
   const navigate = useNavigate();
@@ -48,7 +50,7 @@ const VolunteerList = () => {
       volunteerId: doneId,
       status: "DONE",
       code: value,
-    }, {
+    },{
       headers: {
         Authorization: localStorage.getItem("accessToken"),
         refresh: localStorage.getItem("refreshToken"),
@@ -57,7 +59,7 @@ const VolunteerList = () => {
     if (res) {
       console.log(res)
       alert("완료되었습니다.")
-      setVisible(!visible);
+      setIsOpen(false);
     }
 
     } catch(error) {
@@ -65,23 +67,10 @@ const VolunteerList = () => {
       alert("인증코드가 다릅니다.")
     }
   }
-  // const Pagination = () => {
-  //   const lastPage = parseInt((length+5)/pageSize) || 1 // 데이터 개수가 한 페이지 분량보다 작은경우에도 1이 뜨도록 처리 - 이은혁
-  //   const tmp = []
-  //   for (let i=1; i<=lastPage; i++) { // 데이터 갯수에 맞게 페이지 목록에 번호 추가 - 이은혁
-  //       tmp.push(i)
-  //   }
-  //   setPageList(tmp)
-  // }
-  // useEffect(() => {
-  //   Pagination()
-  // }, [length])
-
-  
 
   // 오늘 날짜 얻어오기 - 이은혁
   const today = new Date()
-  const todayYear = String(today.getFullYear())
+  const todayYear = String(today.getFullYear()).slice(2,4)
   const tmpTodayM = String(today.getMonth()+1)
   const tmpTodayD = String(today.getDate())
   const todayMonth = tmpTodayM.length===1 ? "0"+tmpTodayM : tmpTodayM;
@@ -89,16 +78,24 @@ const VolunteerList = () => {
 
   return (
     <>
-      {visible && 
-      <form >
-        <input id="Atcode" value={value} onChange={(e)=>setValue(e.target.value)} type="text" placeholder='코드를 입력하세요'/>
-        <button type="submit" onClick={(e) => {e.preventDefault(); volunteerDone(value,doneId); setValue("");}}>확인</button>
-      </form>}
+    {/* 출석 인증 코드 입력 모달 - 이은혁 */}
+      <Modal isOpen={isOpen} title={"출석 확인"}> 
+        <div style={{minWidth: "280px", maxWidth: "320px"}}>
+          <p style={{marginTop: "2rem"}}></p>
+          <Input id="Atcode" value={value} maxLength="6" onChange={(e)=>setValue(e.target.value)} type="text" placeholder='출석 인증 코드를 입력해주세요.'/>
+          <div style={{display:"flex", flexDirection: "row"}}>
+            <button className="modal_btn positive" type="submit" onClick={(e) => {e.preventDefault(); volunteerDone(value,doneId); setValue("");}}>확인</button>
+            <button className="modal_btn negative" onClick={() => {setIsOpen(false); setValue("")}}>취소</button>
+          </div>
+        </div>
+      </Modal>
+
+      
 
       <div className="container">
         {datas?.map((data, index) => { 
           // 날짜 형식 변경 - 이은혁
-          const date = new Date(data.regDate)
+          const date = new Date(data.volunteerDate)
           const year = String(date.getFullYear()).slice(2,4)
           const tmpM = String(date.getMonth()+1)
           const tmpD = String(date.getDate())
@@ -109,7 +106,9 @@ const VolunteerList = () => {
           <div className="item" key={index}>
               <p>{datas.length === 0 && !loading? "빈 값":""}</p>
               <div className="item_sec">
-                  <img className='badge' src="" alt="" />   
+                {data.projectCategory==="SQUIRREL" ? (<img className='badge' src={badge_squirrel} alt="" />):""}
+                {data.projectCategory==="CRANE" ? (<img className='badge' src={badge_crane} alt="" />):""}
+                {data.projectCategory==="WILD_ANIMAL" ? (<img className='badge' src={badge_wild_animal} alt="" />):""}
               </div>
               <div className="item_sec grow_sec">
                 <p className="weak">{data.generation}차 프로젝트</p>
@@ -121,7 +120,8 @@ const VolunteerList = () => {
               </div>
               <div className="item_sec w-1">
                 <p className="weak">
-                  {data.status==="REGISTER"?"신청 완료":""}
+                  {data.status==="REGISTER" && Number(year+month+day) < Number(todayYear+todayMonth+todayDay) ? "봉사 불참":""}
+                  {data.status==="REGISTER" && Number(year+month+day) >= Number(todayYear+todayMonth+todayDay) ? "신청 완료":""}
                   {data.status==="CANCEL"?"취소됨":""}
                   {data.status==="DONE"?"봉사 완료":""}
                   {data.status==="WRITTEN"?"":""}
@@ -129,10 +129,9 @@ const VolunteerList = () => {
                 </p>
               </div>
               <div className="item_sec w-2">
-                {data.status==="REGISTER"&& year+month+day === todayYear+todayMonth+todayDay ? (
-                  <button onClick={()=>{setVisible(!visible); setDoneId(data.volunteerId)}} className='btn attend'>출석하기</button>
-                ):""}
-                {data.status==="REGISTER"? (<button className='btn' onClick={()=>volunteerCancel(data.volunteerId)}>취소하기</button>):""}
+                {/* 신청한 봉사 날짜가 된 경우, 출석하기 버튼 활성화. 그외에는 취소하기 버튼 활성화 - 이은혁*/}
+                {data.status==="REGISTER" && Number(year+month+day) > Number(todayYear+todayMonth+todayDay) && (<button className='btn' onClick={()=>volunteerCancel(data.volunteerId)}>취소하기</button>)}
+                {data.status==="REGISTER" && year+month+day === todayYear+todayMonth+todayDay && (<button onClick={()=>{setIsOpen(true); setDoneId(data.volunteerId)}} className='btn attend'>출석하기</button>)}
                 {data.status==="CANCEL"?"":""}
                 {data.status==="DONE"? (
                   <button className='btn' onClick={()=>navigate("/review/create")}>리뷰 쓰기</button>
@@ -154,7 +153,15 @@ const VolunteerList = () => {
     </>
   )
 }
-
+const Input = styled.input`
+width: 100%;
+max-width: 300px;
+text-align: center;
+margin-bottom: 7px;
+padding: 20px 10px;
+background: #f7f7f7;
+border-radius: 5px;
+`
 export default React.memo(VolunteerList);
 // React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은혁
 

@@ -1,11 +1,14 @@
-import styled from "styled-components";
-import tw from "twin.macro";
+import styled from "styled-components"
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import api from "../../../../api/auth";
 import useValidator from "../../../../components/Validator";
 import Modal from "../../../../components/Modal/index"
+import acorn  from "../../../../assets/img/acorn.png"
+import corn  from "../../../../assets/img/corn.png"
+import wheat  from "../../../../assets/img/wheat.png"
+import { GiAcorn, GiCorn, GiWheat } from 'react-icons/gi';
 
 const UserStatus = () => {
   const navigate = useNavigate();
@@ -101,29 +104,43 @@ const UserStatus = () => {
           <ModalBtn onClick={() => setIsOpen(false)}>취소</ModalBtn>
         </Form>
       </Modal>
+      {/* -------------------------------------------------------------- */}
       <Wrapper>
         <MyMainNft/>
         <Status>
           <Nickname>{data?.info.nickname || "닉네임"} 님</Nickname>
           <Email>{data?.info.email || "ssafy@ssafy.com"}</Email>
+          <Btn className="transparent" onClick={() => setIsOpen(true)}>비밀번호 변경</Btn>
           <Content>
-          <p>
-            <span>현재 내 포인트 {data?.info.point || "0"} P</span>
-            <ChargeBtn onClick={(e) => {e.preventDefault();goPage("point");}}>충전하기</ChargeBtn>
-          </p>
-          <div className="ticket_sec">
-            <p>보유한 티켓 수 {data?.info.ticketCnt || "0"} P</p>
-            {/* <p>총 기부 포인트 {data?.info.totalPoint || "0"} P</p> */}
-            <p>총 봉사 횟수 {data?.info.volunteerCnt || "0"} 회</p>
-          </div>
-          <div className="moi_sec">
-            <p>내가 기부한 모이</p>
-            <span>도토리 {data?.info.moiAcorn || "0"} 개</span>
-            <span>옥수수 {data?.info.moiCorn || "0"} 개</span>
-            <span>볍씨{data?.info.moiSeed || "0"} 개</span>
-          </div>
-        <Btn onClick={() => setIsOpen(true)}>비밀번호 변경</Btn>
-        <Btn>Collection</Btn>
+            <Div className="half">
+            <Div className="sec1">
+              <Title>내가 기부한 모이</Title>
+              <Div>
+                  <Moi className="moi"><Circle style={{background:"#bfa15c"}}><GiAcorn size="1.1rem" color="#ffffff"/></Circle>도토리 {data?.info.moiAcorn || "0"} 개</Moi>
+                  <Moi className="moi"><Circle style={{background:"#d4cb00"}}><GiCorn size="1.1rem" color="#ffffff"/></Circle>옥수수 {data?.info.moiCorn || "0"} 개</Moi>
+                  <Moi className="moi"><Circle style={{background:"#aba97d"}}><GiWheat size="1.1rem" color="#ffffff"/></Circle>볍씨 {data?.info.moiSeed || "0"} 개</Moi>
+              </Div>
+            </Div>
+            <Div className="sec2">
+            <Title>총 봉사 횟수</Title>
+            <p className="value">{data?.info.volunteerCnt || "0"} 회</p>
+            </Div>
+            </Div>
+            <Div className="half">
+            <Div className="sec3">
+              <div>
+                <Title>현재 내 포인트</Title>
+                <p className="value">{data?.info.point || "0"} P</p>
+                {/* <Btn onClick={(e) => {e.preventDefault();goPoint();}}>충전하기</Btn> */}
+                <Btn onClick={(e) => {e.preventDefault();goPage("point");}}>충전</Btn>
+                {/* <Btn onClick={(e) => {e.preventDefault();goPage("gas");}}>가스 충전하기</Btn> */}
+              </div>
+              <div>
+                <Title>보유한 티켓 수</Title>
+                <p className="value">{data?.info.ticketCnt || "0"} 장</p>
+              </div>
+            </Div>
+            </Div>
           </Content>
         </Status>
       </Wrapper>
@@ -133,14 +150,16 @@ const UserStatus = () => {
 
 const Wrapper = styled.div`
 margin: 0 auto;
-max-width: 1000px;
+max-width: 900px;
 display: flex;
 flex-direction: row;
-padding: 0px 0 40px 0;
+padding: 0px 0 25px 0;
+color: #434343;
 `;
 const MyMainNft = styled.div`
 width: 220px;
 height: 220px;
+border-radius: 20px;
 background-size: 220px;
 background-image: url('https://openseauserdata.com/files/8da1deb8aca62959e0868e867d8f037f.svg')
 `
@@ -149,23 +168,96 @@ flex-grow: 1;
 text-align: left;
 padding-left: 25px;
 `
+const Nickname = styled.span`
+font-size: 1.5rem;
+font-weight: 700;
+`;
+const Email = styled.span`
+font-size: 1rem;
+color: #9c9c9c;
+margin-left: 10px;
+`;
+const Moi = styled.div`
+display: flex;
+flex-direction: row;
+justify-content: flex-start;
+align-items: center;
+margin-top: 5px;
+font-size: 0.9rem;
+`
 const Content = styled.div`
 background-color: #F1F1E4;
 border-radius: 10px;
+display: flex;
+flex-direction: row;
+margin-top: 15px;
+height: 170px;
+padding: 20px 0;
 `
-const Nickname = styled.span`
-  font-size: 1.5rem;
-  font-weight: 700;
-`;
-const Email = styled.span`
-  font-size: 1rem;
-  color: darkblue;
-`;
-const ChargeBtn = styled.button`
-  ${tw`border px-4 py-2 rounded bg-indigo-500 hover:bg-indigo-400 text-white active:bg-indigo-600`}
-`;
+const Div = styled.div`
+&.half {
+  width: 50%;
+  display: flex;
+  flex-direciton: row;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+&.half:first-child {
+  border-right: 1px solid #ADADAD;
+}
+&.sec1 {
+  width: 145px;
+}
+&.sec2, &.sec3 {
+  &.sec2>.value{
+    font-size: 1.4rem;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: 700;
+  }
+  &.sec3>div>.value{
+    font-size: 1.2rem;
+    text-align: center;
+    font-weight: 700;
+  }
+  &.sec3>div>p {
+    display: inline-block;
+  }
+  &.sec3>div>p:first-child {
+    margin-right: 10px;
+    width: 100px;
+  }
+}
+&.sec3>div {
+  margin-bottom: 10px;
+}
+`
+const Title = styled.p`
+font-size: 0.9rem;
+font-weight: 200;
+color: gray;
+text-align: left;
+margin-bottom: .5rem;
+`
+const Circle = styled.div`
+padding: 5px;
+display: inline-block;
+border-radius: 15px;
+margin-right: 20px;
+`
 const Btn = styled.button`
-${tw`bg-sky-500 ring-1 rounded px-3 py-1 hover:bg-sky-400 active:bg-sky-500 mx-1`}
+border-radius: 5px;
+background: #0000000d;
+padding: 1px 7px;
+font-size: 0.9rem;
+color: #747474;
+margin-left: 10px;
+&:hover {
+  background: #c6e286;
+}
+&:active {
+  background: #b8d27d;
+}
 `
 const Form = styled.form`
 width: 100%;
@@ -177,9 +269,7 @@ padding: 2px 5px;
 margin-bottom: 5px;
 display: block;
 width: 100%;
-
 `
-
 const ModalBtn = styled.button`
 border: 1px solid #cacaca;
 padding: 2px 10px;
