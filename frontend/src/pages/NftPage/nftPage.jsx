@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import ResultModal from "./components/ResultModal";
 import Web3 from "web3";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useWeb3React } from "@web3-react/core";
@@ -9,9 +8,10 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 import COMMON_ABI from "../../common/ABI";
 import axios from "axios";
 
-// const ipfs = ipfsHttpClient({ host: "ipfsnode", port: 5001, protocol: "http" });
 const ipfs = ipfsHttpClient({
-  url: "http://j8c2071.p.ssafy.io:5001/api/v0",
+  host: "j8c2071.p.ssafy.io/ipfs",
+  port: "5001",
+  protocol: "http",
 });
 
 const NftPage = () => {
