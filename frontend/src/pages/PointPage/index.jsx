@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
+import MetamaskCheck from "../../components/MetamaskCheck";
 
 const PointPage = () => {
   const [currentPoint, setCurrentPoint] = useState(0);
@@ -62,12 +63,13 @@ const PointPage = () => {
       };
     }
   };
-
   return (
+
     <Container>
       <PointContainer>
         <RightSide>
           <PointForm>
+            <MetamaskCheck />
             <Title>충전할 금액 설정</Title>
             <InnerBox>
               <Text>충전 금액</Text>
