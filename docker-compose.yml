@@ -43,6 +43,7 @@ services:
       - ./ipfs-data:/data/ipfs
     networks:
       - moida
+    hostname: ipfsnode
 
 networks:
   moida:
