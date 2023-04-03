@@ -7,6 +7,7 @@ const ReviewPage = () => {
         <Wrapper>
             <InnerWrapper>
                 <NoticeList/>
+                <Midbox></Midbox>
                 <ReviewList/>
             </InnerWrapper>
         </Wrapper>
@@ -21,7 +22,12 @@ align-items: center;
 `
 const InnerWrapper = styled.div`
 width:100%;
-max-width: 1200px; 
+max-width: 1000px; 
 `
+
+const Midbox = styled.div`
+  height : 150px;
+`
+
 
 export default ReviewPage;
