@@ -39,7 +39,7 @@ public class NftController {
     }
 
     @Operation(summary = "랜덤 이미지 가져오기", description = "DB에 저장된 이미지 중 랜덤으로 뽑아서 링크 형식을 이미지 형식으로 변환하여 전달한다.")
-    @GetMapping("/randomImg")
+    @GetMapping("/image")
     public ResponseEntity<?> getRandomImages(
             @RequestParam(name = "userNickname") String userNickname
     ) {
@@ -65,7 +65,7 @@ public class NftController {
     @Transactional
     @Operation(summary = "NFT 저장", description = "NFT를 저장합니다.")
     @SecurityRequirement(name = "bearerAuth")
-    @PostMapping("/save")
+    @PostMapping()
     public ResponseEntity<?> saveNFT(
             @RequestBody CreateNftReqDto createNftReqDto,
             @AuthenticationPrincipal PrincipalDetails principalDetails
@@ -85,60 +85,5 @@ public class NftController {
 
         return new ResponseEntity<>("nft 저장 완료", HttpStatus.OK);
     }
-
-    @Operation(summary = "사용자 NFT 목록", description = "사용자의 NFT 목록을 가져옵니다.")
-    @SecurityRequirement(name = "bearerAuth")
-    @GetMapping("/nftList")
-    public ResponseEntity<?> getNftList(
-            @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
-            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-            @AuthenticationPrincipal PrincipalDetails principalDetails
-    ) {
-        // 유저 정보 가져오기
-        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
-        Long userId = loginUser.getId();
-        log.info("userId : {}", userId);
-
-        // 페이지 검사
-        pageNumber -= 1;
-        if(pageNumber < 0 || pageSize <= 0) {
-            throw new IllegalArgumentException("요청 범위가 잘못되었습니다. 각 변수는 양수값만 가능합니다.");
-        }
-
-        // 유저의 nft 목록 가져오기
-        List<GetUserNftResDto> userNftList =
-                nftService.getUserNft(userId, pageNumber, pageSize);
-        Long length = nftService.countFindNftsByUserId(userId);
-
-        return ResponseEntity.ok()
-                .body(Map.of("nftList", userNftList, "length", length));
-    }
-
-    @Operation(summary = "사용자 대표 NFT 이미지 변경", description = "사용자의 대표 NFT 이미지를 변경합니다.")
-    @SecurityRequirement(name = "bearerAuth")
-    @PostMapping("/chageImg")
-    public ResponseEntity<?> chageUserMainImg(
-            @RequestParam(name = "nftId") long nftId,
-            @AuthenticationPrincipal PrincipalDetails principalDetails
-    ) {
-        // 유저 정보 가져오기
-        Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
-        Long userId = loginUser.getId();
-
-        // 이미지 url 정보
-        String imgUrl = loginUser.getNftUrl();
-
-        // 사용자가 nftId에 해당하는 Nft를 가지고 있는지 확인
-        if(nftService.existNft(userId, nftId)) {
-            // NFT 이미지 변경
-            imgUrl = nftService.chageMainNFT(loginUser, nftId);
-        } else {
-            // 소유하고 있지 않다면 에러
-            throw new CustomException(ErrorCode.NFT_NOT_FOUND);
-        }
-
-        return new ResponseEntity<>("대표 NFT 변경 완료", HttpStatus.OK);
-    }
-
 
 }
