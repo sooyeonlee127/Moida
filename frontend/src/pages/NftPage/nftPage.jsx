@@ -9,7 +9,10 @@ import { create as ipfsHttpClient } from "ipfs-http-client";
 import COMMON_ABI from "../../common/ABI";
 import axios from "axios";
 
-const ipfs = ipfsHttpClient({ host: "ipfsnode", port: 5001, protocol: "http" });
+// const ipfs = ipfsHttpClient({ host: "ipfsnode", port: 5001, protocol: "http" });
+const ipfs = create({
+  url: "http://j8c2071.p.ssafy.io/api/v0",
+});
 
 const NftPage = () => {
   // [변수] 아이템 (파일, 이름, input 클릭 참조), 작가명, 제목, 아이템 소개, 토큰 ID
