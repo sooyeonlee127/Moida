@@ -234,10 +234,6 @@ const NftPage = () => {
     }
   }, [metaIPFSUrl]);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 17522dc4b9a601b9106b95183ef9fd961b987c3a
   function handleFileInputChange(event) {
     const file = event.target.files[0];
     setFile(file);
