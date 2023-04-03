@@ -29,69 +29,80 @@ import ReviewCreatePage from "./pages/ReviewCreatePage";
 import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
 import NftPage from "./pages/NftPage/nftPage";
 import NftTestPage from "./pages/NftPage/NftTestPage";
+import BlockChain from "./context/BlockChain";
 // import { useBeforeunload } from "react-beforeunload";
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
+import GasPoint from "./pages/PointPage/components/GasPoint";
 
 export default function App() {
   // useBeforeunload((event) => event.preventDefault()); // 새로고침 막기 보류
 
   return (
     <Auth>
-      <div className="App">
-        <NavBar />
-        <Body>
-          <Routes>
-            <Route element={<PublicRoute />}>
-              <Route path={"/login"} element={<LoginPage />} />
-              <Route path={"/signup"} element={<SignupPage />} />
-              <Route path={"/password"} element={<PasswordPage />} />
-            </Route>
-            <Route element={<PrivateRoute />}>
+      <BlockChain>
+        <div className="App">
+          <NavBar />
+          <Body>
+            <Routes>
+              <Route element={<PublicRoute />}>
+                <Route path={"/login"} element={<LoginPage />} />
+                <Route path={"/signup"} element={<SignupPage />} />
+                <Route path={"/password"} element={<PasswordPage />} />
+              </Route>
+              <Route element={<PrivateRoute />}>
+                <Route
+                  path={"/admin/project/create"}
+                  element={<ProjectCreatePage />}
+                />
+                <Route
+                  path={"/admin/notice/:projectid"}
+                  element={<NoticeCreatePage />}
+                />
+                <Route
+                  path={"/admin/notice/update/:boardid"}
+                  element={<NoticeUpdatePage />}
+                />
+                <Route
+                  path={"/review/update/:reviewid"}
+                  element={<ReviewUpdatePage />}
+                />
+                <Route path={"/admin/authcord"} element={<AuthCordPage />} />
+                <Route
+                  path={"/admin/volunteer"}
+                  element={<VolunteerCodePage />}
+                />
+                <Route path={"/admin"} element={<AdminPage />} />
+                <Route path={"/payresult"} element={<PayResult />} />
+                <Route path={"/review/create"} element={<ReviewCreatePage />} />
+                <Route path={"/profile"} element={<ProfilePage />} />
+              </Route>
+              <Route path={"/"} element={<MainPage />} />
+              <Route path={"/donation"} element={<DonationPage />} />
               <Route
-                path={"/admin/project/create"}
-                element={<ProjectCreatePage />}
+                path={"/donation/:projectId"}
+                element={<DonationDetailPage />}
               />
-              <Route
-                path={"/admin/notice/:projectid"}
-                element={<NoticeCreatePage />}
-              />
-              <Route
-                path={"/admin/notice/update/:boardid"}
-                element={<NoticeUpdatePage />}
-              />
-              <Route
-                path={"/review/update/:reviewid"}
-                element={<ReviewUpdatePage />}
-              />
-              <Route path={"/admin/authcord"} element={<AuthCordPage />} />
-              <Route
-                path={"/admin/volunteer"}
-                element={<VolunteerCodePage />}
-              />
-              <Route path={"/admin"} element={<AdminPage />} />
-              <Route path={"/payresult"} element={<PayResult />} />
-              <Route path={"/review/create"} element={<ReviewCreatePage />} />
-              <Route path={"/profile"} element={<ProfilePage />} />
-            </Route>
-            <Route path={"/"} element={<MainPage />} />
-            <Route path={"/donation"} element={<DonationPage />} />
-            <Route
-              path={"/donation/:projectId"}
-              element={<DonationDetailPage />}
-            />
-            <Route path={"/gatcha"} element={<GatchaPage />} />
-            <Route path={"/point"} element={<PointPage />} />
+              <Route path={"/gatcha"} element={<GatchaPage />} />
+              <Route path={"/point"} element={<PointPage />} />
 
-            <Route path={"/review"} element={<ReviewPage />} />
-            <Route path={"/review/:reviewid"} element={<ReviewDetailPage />} />
-            <Route path={"/notice/:category"} element={<NoticeDetailPage />} />
-            <Route path={"/hjooo"} element={<HjooPage />} />
-            <Route path={"/sun"} element={<NftPage />}/>
-            <Route path={"/sunny"} element={<NftTestPage />}/>
-          </Routes>
-        </Body>
-      </div>
+              <Route path={"/review"} element={<ReviewPage />} />
+              <Route
+                path={"/review/:reviewid"}
+                element={<ReviewDetailPage />}
+              />
+              <Route
+                path={"/notice/:category"}
+                element={<NoticeDetailPage />}
+              />
+              <Route path={"/hjooo"} element={<HjooPage />} />
+              <Route path={"/sun"} element={<NftPage />} />
+              <Route path={"/sunny"} element={<NftTestPage />} />
+              <Route path={"/gas"} element={<GasPoint />} />
+            </Routes>
+          </Body>
+        </div>
+      </BlockChain>
     </Auth>
   );
 }

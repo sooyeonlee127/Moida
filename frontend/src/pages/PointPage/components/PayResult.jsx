@@ -2,13 +2,10 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../api/auth";
-// import Web3 from "web3";
-// import { useWeb3React } from "@web3-react/core";
-
 const PayResult = () => {
   const navigate = useNavigate();
   // 수연: param에서 pg_token 가져와서 카카오페이 결제 호출
@@ -59,44 +56,6 @@ const PayResult = () => {
     refetchOnMount: true,
   });
 
-  // 수연: 블록체인 충전 거래 ---------------------------------------------
-  // const web3 = new Web3();
-
-  // web3.setProvider(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
-
-  // const {
-  //   connector,
-  //   library,
-  //   chainId, // DApp에 연결된 account의 chainId
-  //   account, // DApp에 연결된 account address
-  //   active, // DApp 유저가 로그인 된 상태인지 체크
-  //   activate, // DApp 월렛 연결 기능 수행함수
-  //   deactivate, // DApp 월렛 해제 수행함수
-  // } = useWeb3React();
-
-  // // 코인베이스 주소 가져오기
-  // const getAdminAddress = async () => {
-  //   const res = await web3.eth.getCoinbase();
-  //   return res;
-  // };
-
-  // const ChargeBlock = useCallback(async (point) => {
-  //   console.log("chargePoint");
-  //   const coinbase = await getAdminAddress();
-  //   point.toString();
-
-  //   // 이더 부족으로 인해 10으로 하드코딩. 추후 수정
-  //   const Eth = web3.utils.toWei(String(10), "ether"); // value를 ether로
-  //   console.log("acc", account);
-  //   const tx = {
-  //     from: coinbase,
-  //     to: account || localStorage.getItem("acc"),
-  //     value: Eth,
-  //   };
-  //   console.log(tx);
-  //   web3.eth.sendTransaction(tx);
-  // });
-  // -------------------------------------------------------------
 
   // 수연: 포인트 충전 api 호출
   const ChargePoint = (amount) => {
@@ -112,7 +71,6 @@ const PayResult = () => {
       },
     })
       .then((res) => {
-        // ChargeBlock(amount);
         refetch();
       })
       .catch((err) => {

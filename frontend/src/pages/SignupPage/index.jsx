@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import Form from "./components/form";
-// import MetamaskCheck from "./components/MetamaskCheck";
+import MetamaskCheck from "../../components/MetamaskCheck";
 import logo from "../../assets/img/Logo.svg";
 
 const SignupPage = () => {
@@ -13,7 +13,7 @@ const SignupPage = () => {
           <Image src={logo} alt="" width="90" />
         </ImageBox>
         <Heading>회원가입</Heading>
-        {/* <MetamaskCheck /> */}
+        <MetamaskCheck />
         <Form />
       </InnerContainer>
     </Container>

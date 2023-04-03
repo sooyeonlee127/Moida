@@ -1,14 +1,14 @@
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
-import { useCallback, useState, useEffect } from "react";
-import { injected } from "../../../lib/connectors";
+import { useCallback, useState, useEffect, useContext } from "react";
+import { injected } from "../lib/connectors";
+import { BlockContext } from "../context/BlockChain";
 
 const MetamaskCheck = () => {
-  const web3 = new Web3();
-
   const [done, setDone] = useState(false);
+  const { setAcc, setAct, setCoin } = useContext(BlockContext);
 
-  web3.setProvider(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+  const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const {
     connector,
     library,
@@ -21,7 +21,9 @@ const MetamaskCheck = () => {
 
   // 코인베이스 주소 가져오기
   const getAdminAddress = async () => {
-    const res = await web3.eth.getCoinbase();
+    // const res = process.env.REACT_APP_ADMIN_PUBLIC_KEY // local
+    // const res = await web3.eth.getCoinbase();
+    const res = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY;
     return res;
   };
 
@@ -29,10 +31,15 @@ const MetamaskCheck = () => {
     try {
       // 메타마스크 설치 된 경우
       if (typeof window.ethereum !== "undefined") {
-        // todorn;
+        // todo
+        if (account) {
+          localStorage.setItem("account", account);
+          setAcc(account);
+          setAct(active);
+        }
         await activate(injected);
-        await getAdminAddress();
         setDone(true);
+
         // 메타마스크 설치 안된 경우
       } else {
         alert("please install MetaMask");
@@ -41,10 +48,14 @@ const MetamaskCheck = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  });
 
   useEffect(() => {
-    connectWallet();
+    getAdminAddress().then((res) => {
+      connectWallet();
+      setAcc(account);
+      setAct(active);
+    });
   }, []);
 
   if (!done) {
@@ -57,7 +68,6 @@ const MetamaskCheck = () => {
     return (
       <div>
         <p>메타 마스크 연결 완료!</p>
-        <p>회원가입을 계속 진행해주세요.</p>
       </div>
     );
   }

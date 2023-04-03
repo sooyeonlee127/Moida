@@ -4,9 +4,9 @@ import { useState, useCallback } from "react";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../../../api/auth";
-// import Web3 from "web3";
-// import { useWeb3React } from "@web3-react/core";
-
+import Web3 from "web3";
+import { useWeb3React } from "@web3-react/core";
+import MetamaskCheck from "../../../../components/MetamaskCheck";
 const DonationForm = (props) => {
   // props 정보 - 이은혁 ----------------------------------------
   const data = {
@@ -65,13 +65,13 @@ const DonationForm = (props) => {
       },
     })
       .then((response) => {
-        console.log(response)
-        return response
+        console.log(response);
+        return response;
       })
       .catch((error) => {
-        console.log(error)
-        alert(error.response.data.message)
-        return error
+        console.log(error);
+        alert(error.response.data.message);
+        return error;
       });
   });
 
@@ -84,7 +84,7 @@ const DonationForm = (props) => {
       .mutateAsync()
       .then((res) => {
         if (res.status === 200) {
-          // donatePoint(10);
+          donatePoint(money);
           setMoney(0); // 금액 초기화 - 이은혁
           setMoi(0); // 모이 갯수 초기화 - 이은혁
           alert("모이 " + moi + "개가 정상적으로 기부되었습니다.");
@@ -96,37 +96,33 @@ const DonationForm = (props) => {
   };
 
   // 수연: 블록체인 -----------------------------------------------------------
-  // const web3 = new Web3();
+  const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
+  const {
+    account, // DApp에 연결된 account address
+    active, // DApp 유저가 로그인 된 상태인지 체크
+  } = useWeb3React();
 
-  // web3.setProvider(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
-  // const {
-  //   connector,
-  //   library,
-  //   chainId, // DApp에 연결된 account의 chainId
-  //   account, // DApp에 연결된 account address
-  //   active, // DApp 유저가 로그인 된 상태인지 체크
-  //   activate, // DApp 월렛 연결 기능 수행함수
-  //   deactivate, // DApp 월렛 해제 수행함수
-  // } = useWeb3React();
+  const donatePoint = useCallback(async (point) => {
+    const coinbase = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY;
+    console.log("donatePoint : " + account);
 
-  // const getAdminAddress = async () => {
-  //   const res = await web3.eth.getCoinbase();
-  //   return res;
-  // };
+    const web3 = new Web3(window.ethereum);
 
-  // const donatePoint = useCallback(async () => {
-  //   console.log("donatePoint");
-  //   const coinbase = await getAdminAddress();
-  //   // value : 숫자.toString()
-  //   const Eth = web3.utils.toWei("1", "ether"); // value를 ether로
-  //   const tx = {
-  //     from: account || localStorage.getItem("acc"),
-  //     to: coinbase,
-  //     value: Eth,
-  //   };
-  //   console.log(tx);
-  //   web3.eth.sendTransaction(tx);
-  // });
+    var today = new Date();
+    const tmp = `${localStorage.getItem("nickname")} | ${point} | ${
+      data.subject
+    } | ${today}`;     // 닉네임, 금액, 프로젝트 소제목, 일시
+    const test = web3.utils.stringToHex(tmp);
+    const tx = {
+      from: account,
+      to: coinbase, // 다른 지갑 하나 필요함
+      data: test,
+    };
+
+    const result = await web3.eth.sendTransaction(tx);
+    return result.transactionHash; //db 저장해야됨
+  });
+
   // ---------------------------------------------------------------------------
   return (
     <div>
@@ -167,6 +163,7 @@ const DonationForm = (props) => {
         </Button>
         {/* 마감 기한이 지날 경우 isDisabled true */}
       </GroupButton>
+      <MetamaskCheck />
     </div>
   );
 };
