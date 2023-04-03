@@ -21,8 +21,6 @@ const MetamaskCheck = () => {
 
   // 코인베이스 주소 가져오기
   const getAdminAddress = async () => {
-    // const res = process.env.REACT_APP_ADMIN_PUBLIC_KEY // local
-    // const res = await web3.eth.getCoinbase();
     const res = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY;
     return res;
   };
@@ -31,7 +29,6 @@ const MetamaskCheck = () => {
     try {
       // 메타마스크 설치 된 경우
       if (typeof window.ethereum !== "undefined") {
-        // todo
         if (account) {
           localStorage.setItem("account", account);
           setAcc(account);
@@ -39,8 +36,6 @@ const MetamaskCheck = () => {
         }
         await activate(injected);
         setDone(true);
-
-        // 메타마스크 설치 안된 경우
       } else {
         alert("please install MetaMask");
         window.open("https://metamask.io/download.html");
@@ -61,13 +56,13 @@ const MetamaskCheck = () => {
   if (!done) {
     return (
       <div>
-        <h1>메타 마스크 연결중입니다 .... </h1>
+        <p></p>
       </div>
     );
   } else {
     return (
       <div>
-        <p>메타 마스크 연결 완료!</p>
+        <p></p>
       </div>
     );
   }
