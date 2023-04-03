@@ -21,6 +21,7 @@ public class GetUserVolunteerResDto {
     private Long articleId;
     private Long projectId;
     private String projectSubject;
+    private String projectCategory;
     private int generation;
     private LocalDateTime regDate;
     private LocalDate volunteerDate;
@@ -32,6 +33,7 @@ public class GetUserVolunteerResDto {
         this.articleId = articleId;
         this.projectId = p.getId();
         this.projectSubject = p.getSubject();
+        this.projectCategory = p.getCategory();
         this.generation = p.getGeneration();
         this.regDate = v.getRegDate();
         this.volunteerDate = v.getVolunteerDateInfo().getVolunteerDate();

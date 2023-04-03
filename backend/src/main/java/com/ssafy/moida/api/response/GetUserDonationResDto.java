@@ -18,6 +18,7 @@ public class GetUserDonationResDto {
 
     private Long projectId;
     private String projectSubject;
+    private String projectCategory;
     private int generation;
     private LocalDateTime regDate;
     private Long Moi;
