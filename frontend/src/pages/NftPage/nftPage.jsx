@@ -28,6 +28,9 @@ const NftPage = () => {
   const [file, setFile] = useState(null);
   const [img, setImg] = useState(null);
   const [imgId, setImgId] = useState("");
+  const [pageNum, setPageNum] = useState(1); //현재 페이지
+  const [pageSize, setPageSize] = useState(10); // 한 페이지에 보여줄 아이템 수 
+  const [done, setDone] = useState(false);
   // const nickname = localStorage.getItem("nickname");
   const nickname = "babo";
   //const userId = localStorage.getItem("id");
@@ -47,9 +50,7 @@ const NftPage = () => {
     deactivate, // DApp 월렛 해제 수행함수
   } = useWeb3React();
 
-  const [done, setDone] = useState(false);
-  const nftData = {};
-
+  // 메타마스크 연결 여부 확인
   const connectWallet = useCallback(async () => {
     try {
       // 메타마스크 설치 된 경우
@@ -69,6 +70,7 @@ const NftPage = () => {
     }
   });
 
+  // 메타마스크 연결해제
   const unconnectWallet = async () => {
     try {
       // 메타마스크 설치 된 경우
@@ -88,6 +90,7 @@ const NftPage = () => {
     }
   };
 
+  // nft 생성
   const addItem = async () => {
     // 사용자 지갑주소
     console.log(account);
@@ -178,6 +181,7 @@ const NftPage = () => {
     // // saveNftInfo();
   };
 
+  // 랜덤 nft 이미지 가져오기
   const getNftInfo = async () => {
     axios({
       url: "/api/nft/image?userNickname=" + nickname,
@@ -195,6 +199,7 @@ const NftPage = () => {
       });
   };
 
+  // 사용자 nft 저장
   const saveNftInfo = async () => {
     axios({
       url: "/api/nft",
@@ -212,19 +217,12 @@ const NftPage = () => {
     })
       .then((res) => {
         console.log(res);
+        // 짠하고 nft 출력 => file이 이미지 링크임!!
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  // useEffect(() => {
-  //   if (metaIPFSUrl && done === false) {
-  //     setDone(true)
-  //     saveNftInfo();
-  //     console.log("실행")
-  //   }
-  // }, [metaIPFSUrl]);
 
   useEffect(() => {
     if (imageIPFSUrl && imageIPFSUrl && done === false) {
@@ -234,29 +232,40 @@ const NftPage = () => {
     }
   }, [metaIPFSUrl]);
 
-  function handleFileInputChange(event) {
-    const file = event.target.files[0];
-    setFile(file);
+  // 사용자 nft 목록 가져오기
+  const userNftList = async () => {
+    axios({
+      url: "/api/users/me/nft?pageNumber=" + pageNum + "&pageSize=" + pageSize,
+      method: "GET",
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+        refresh: localStorage.getItem("refreshToken"),
+      },
+    })
+      .then((res) => {
+        console.log(res); // 데이터 뿌려주기
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
-  async function fetchRandomImage() {
-    try {
-      //const response = await axios.get('/nft/randomImg');
-      //const imageUrl = response.data;
-      const imageUrl =
-        "https://s3.ap-northeast-2.amazonaws.com/moida.bucket/static/article/e17365b6-2fd9-4f77-8fe5-2e3a79a7ef9b";
-      console.log(imageUrl);
-
-      // 이미지 다운로드
-      const imageResponse = await axios.get(imageUrl, { responseType: "blob" });
-      console.log(imageResponse);
-      const imageBlob = imageResponse.data;
-      const image = URL.createObjectURL(imageBlob);
-
-      setImg(image);
-    } catch (error) {
-      console.error(error);
-    }
+  // 사용자 대표 nft 변경 => 클릭 이벤트로 id 가져오기
+  const changeMainNft = async (id) => { // 카드 id 입력
+    axios({
+      url: "/api/users/me/image?nftId="+id,
+      method: "PUT",
+      headers: {
+        Authorization: localStorage.getItem("accessToken"),
+        refresh: localStorage.getItem("refreshToken"),
+      },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   return (
@@ -273,20 +282,11 @@ const NftPage = () => {
           <button onClick={addItem}>NFT 생성</button>
         </div>
         <div className="Meta">
-          <button onClick={fetchRandomImage}>S3 link to img</button>
-          <div>{img ? <img src={img} alt="Random Image" /> : <p>Loading...</p>}</div>
+          <button onClick={userNftList}>NFT 목록</button>
         </div>
-        {/* <div>
-    <input type="file" onChange={handleFileInputChange} />
-      <button onClick={addItem}>Upload</button>
-
-      {ipfsUrl && (
-        <div>
-          <p>IPFS URL: {ipfsUrl}</p>
-          <img src={ipfsUrl} alt="Uploaded" style={{ maxWidth: '500px' }} />
+        <div className="Meta">
+          <button onClick={changeMainNft}>대표 nft 변경</button>
         </div>
-      )}
-    </div> */}
       </div>
     </>
   );
