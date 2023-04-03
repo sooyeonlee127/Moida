@@ -4,6 +4,7 @@ import tw from "twin.macro";
 import axios from "axios";
 import ReviewCard from './ReviewCard'
 import Paging from "../../../../components/Pagination/Paging";
+import { useNavigate } from "react-router";
 
 
 //혜수: 사용자 리뷰 전체 조회
@@ -11,12 +12,16 @@ const ReviewList = () => {
   const [data, setData] = useState([]); //리스트에 나타낼 아이템들
   const [length, setLength] = useState(0); // 전체 데이터 갯수 저장(페이지네이션) - 이은혁
   const [pageNum, setPageNum] = useState(1); //현재 페이지
-  const [pageSize, setPageSize] = useState(10); // 한 페이지에 보여줄 아이템 수 
+  const [pageSize, setPageSize] = useState(9); // 한 페이지에 보여줄 아이템 수 
+  
   const [selected1, setSelected1] = useState("ALL");
   const [selected2, setSelected2] = useState("LATEST");
   const category = ["ALL", "흑두루미", "다람쥐", "야생동물"];
-  const sort = ["LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"]
+  const categoryName = ["ALL", "CRANE", "SQUIRREL", "WILD_ANIMAL"]
+  const sort = ["LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"] 
   const [tabIndex, setTabIndex] = useState(0);
+
+  const navigate = useNavigate();
 
   const getReviews = async(category, sort) => {
     try {
@@ -47,25 +52,27 @@ const ReviewList = () => {
     getReviews(selected1, selected2)
   }, [selected1, selected2, pageNum])
 
-
   return (
-    <div>
+    <Wrapper>
       {/* 유저후기 */}
-      <Title>Gallery</Title>
+      <SepLine></SepLine>
+      <Title>Storybook</Title>
       
       <Section>
         <TabGroup>
             {/* 카테고리 */}
             <Ul>
-              {category.map((element, index)=>{
-                  return (
-                  <Li key={index} className={tabIndex === index ? "submenu focused" : "submenu"}
-                  onClick={()=> {setTabIndex(index); setSelected1(element);}}>{element}</Li>
-                  )
-              })}
+              <CategoryBox>
+                {category.map((element, index)=>{
+                    return (
+                    <Li key={index} className={tabIndex === index ? "submenu focused" : "submenu"}
+                    onClick={()=> {setTabIndex(index); setSelected1(categoryName[index]);}}>{element}</Li>
+                    )
+                })}
+              </CategoryBox>
 
               {/* 정렬 */}
-              <Sort>
+              <Sort className="select">
                 <select onChange={(e)=> setSelected2(e.target.value)}>
                   {sort.map((element,index) => (
                     <option key={index}>{element}</option>
@@ -77,10 +84,24 @@ const ReviewList = () => {
         </TabGroup>
       </Section>
 
-      
+      {/* 카드 */}
 
-      
-      <div>
+      <Card>
+        {
+            data?.map((element,index) => {
+              return (
+                <Image
+                id = "review" name="review"
+                onClick={() => {navigate(`/review/${element.id}`)}}
+                src={element.url} index={index} key={index} alt="이미지가 없어오" />
+              )
+            })
+        }
+      </Card>
+
+
+      {/* 리뷰카드들 */}
+      {/* <div>
         {
           data?.map((element,index) => {
             return (
@@ -88,18 +109,52 @@ const ReviewList = () => {
             )
           })
         }
-      </div>
-      <Paging page={pageNum} totalItem={length} setPage={(e)=>setPageNum(e)}/> 
+      </div> */}
 
-    </div>
+      {/* 페이징 */}
+      <Paging page={pageNum} totalItem={length} setPage={(e)=>setPageNum(e)}/> 
+    </Wrapper>
   )
 }
 
+
+const Wrapper = styled.div`
+  width: 100%;
+`
+
+const SepLine = styled.div`
+  background-color: rgb(160, 200, 70);
+  height: 3px;
+  width: 80px;
+  margin-bottom: 15px;
+`
+
+const Card = styled.div`
+  display: flex;
+  flex-wrap: wrap; // 이미지가 한 줄을 넘어갈 경우 자동으로 다음 줄로 이동
+  // justify-content: space-between; // 각 이미지들 사이에 공간을 일정하게 두기 위한 속성
+  height: auto%;
+  width: 100%
+  
+`
+
+const Image = styled.img`
+  ${tw`hover:opacity-50 rounded-t-lg bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700`}
+  border-radius: 15px;
+  height: auto; // 이미지의 높이를 자동으로 조절하여 가로 세로 비율을 유지하도록 함
+  width: calc(33.3% - 10px); // 한 줄에 3개의 이미지를 배치하기 위해, 100%를 3으로 나누고 10px을 빼서 각 이미지의 너비를 지정함
+  margin-bottom: 20px; // 각 이미지의 아래쪽에 일정한 간격을 두기 위해 마진 값을 지정함
+  margin : 10px 5px 0px 5px;
+  `
+
+
 const Title = styled.h2`
-${tw`text-2xl font-bold tracking-tight text-gray-900`}`
+  ${tw`text-2xl font-bold tracking-tight text-gray-900`}
+  text-align: left;  
+`
 
 const Section = styled.div`
-min-height: 300px;
+margin-bottom: 40px;
 height: 100%;
 display: flex;
 -webkit-box-pack: justify;
@@ -147,13 +202,16 @@ border-bottom: 1px solid #838383;
 const Li = styled.li`
 
 `
-const Desc = styled.div`
-width: 100%;
-`;
+const CategoryBox = styled.div`
+  display: flex;
+  flex: 1;
+`
 
 const Sort = styled.div`
-  color: black;
-  
+  color: rgb(98, 102, 110);
+  &.select > select {
+    background-color: transparent;
+  }
 `
 
 
