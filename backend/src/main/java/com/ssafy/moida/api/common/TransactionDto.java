@@ -5,7 +5,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateTransactionDto {
+public class TransactionDto {
     private String hash;
     private String fromHash;
     private String toHash;
