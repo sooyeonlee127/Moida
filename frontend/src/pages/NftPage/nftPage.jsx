@@ -130,7 +130,7 @@ const NftPage = () => {
 
   const getNftInfo = async () => {
     axios({
-      url: "/api/nft/randomImg?userNickname="+nickname,
+      url: "/api/nft/image?userNickname="+nickname,
       method: "GET",
     })
       .then((res) => {
@@ -149,7 +149,7 @@ const NftPage = () => {
     console.log("유저 아이디, 이미지 아이디, nft 이름, 메타데이터 주소, 이미지 주소");
     console.log("metaUrl : " + metaIPFSUrl);
     axios({
-      url: "/api/nft/save",
+      url: "/api/nft",
       method: "POST",
       headers: {
         Authorization: localStorage.getItem("accessToken"),
