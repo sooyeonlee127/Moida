@@ -19,14 +19,14 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 200)
+    @Column(length = 2000)
     private String description;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime regDate;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 200)
     private String subject;
 
     @OneToOne(fetch = FetchType.LAZY)

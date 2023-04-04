@@ -23,7 +23,7 @@ public class Article {
     @Column(nullable = false, length = 100)
     private String subject;
 
-    @Column(length = 500)
+    @Column(length = 2000)
     private String description;
 
     @CreatedDate

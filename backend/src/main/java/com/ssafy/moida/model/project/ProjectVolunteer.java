@@ -35,10 +35,10 @@ public class ProjectVolunteer {
     @Column(nullable = false)
     private int capacityPerDate;
 
-    @Column(length = 500, nullable = false)
+    @Column(length = 1000, nullable = false)
     private String subject;
 
-    @Column(length = 500)
+    @Column(length = 2000)
     private String description;
 
     @Builder
