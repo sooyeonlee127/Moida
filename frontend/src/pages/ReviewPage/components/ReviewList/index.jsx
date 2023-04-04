@@ -214,11 +214,9 @@ const Sort = styled.div`
   color: rgb(98, 102, 110);
   &.select > select {
     background-color: transparent;
-<<<<<<< Updated upstream
     font-size: 0.9rem;
-=======
     cursor : pointer;
->>>>>>> Stashed changes
+
   }
 `
 
