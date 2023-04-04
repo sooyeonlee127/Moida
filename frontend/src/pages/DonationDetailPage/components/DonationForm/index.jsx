@@ -206,10 +206,10 @@ const DonationForm = (props) => {
         <Text className="size-2 weight-2 left color-3 period">
           {new Date(data.startDate).getFullYear()}년{" "}
           {new Date(data.startDate).getMonth() + 1}월{" "}
-          {new Date(data.startDate).getDay()}일 ~
+          {new Date(data.startDate).getDate()}일 ~
           {new Date(data.endDate).getFullYear()}년{" "}
           {new Date(data.endDate).getMonth() + 1}월{" "}
-          {new Date(data.endDate).getDay()}일
+          {new Date(data.endDate).getDate()}일
         </Text>
         <Text className="size-2 weight-2 left color-3">{data.description}</Text>
         <div className="progressbar">
