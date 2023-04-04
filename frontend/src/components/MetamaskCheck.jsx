@@ -38,13 +38,13 @@ const MetamaskCheck = () => {
         if (account) {
           localStorage.setItem("account", account);
         }
-        setDone(true);
         await activate(injected);
       } else {
         alert("please install MetaMask");
         window.open("https://metamask.io/download.html");
       }
     } catch (error) {
+      // 연결 실패시 여기로 와야함.
       setError(true);
       console.log(error);
     }
