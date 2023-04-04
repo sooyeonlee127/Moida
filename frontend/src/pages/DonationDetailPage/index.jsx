@@ -59,8 +59,11 @@ const DonationDetailPage = () => {
                 </Aside>
             </Main>
             <Article>
-                <p>{projectId}번째</p>
-                <Content></Content> 
+                <Content>
+                    <InnerContent>
+                        <SectionTab>{projectId}번째</SectionTab>
+                    </InnerContent>
+                </Content> 
             </Article>
         </Wrapper>
     )
@@ -77,6 +80,7 @@ display: flex;
 flex-direction: row;
 justify-content: center;
 align-items: left;
+margin-bottom: 50px;
 & > div {
     display: inline-block;
 }
@@ -140,14 +144,32 @@ padding: 15px 30px 30px 30px;
 const Article = styled.div`
 margin: 20px 0;
 width: 100%;
-border-top: 1px solid black;
+border-top: 1px solid #0000001f;
+display: flex;
+flex-direction: column;
+justify-content: start;
+align-items: center;
 `
 
 const Content = styled.div`
-background-color: grey;
+// background-color: lightgrey;
 min-height: 500px;
 box-sizing: border-box;
-${tw`container mx-auto`}
+width: 100%;
+max-width: 1000px;
+`
+const InnerContent = styled.div`
+position: relative;
+`
+const SectionTab = styled.div`
+position: absolute;
+top: 0px;
+left: 0px;
+padding: 10px 60px;
+border-bottom-right-radius: 10px;
+border-bottom-left-radius: 10px;
+background: #a0c846;
+color: white;
 `
 
 export default DonationDetailPage
