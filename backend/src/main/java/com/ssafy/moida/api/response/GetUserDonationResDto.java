@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class GetUserDonationResDto {
-
     private Long projectId;
     private String projectSubject;
     private String projectCategory;
@@ -23,5 +22,4 @@ public class GetUserDonationResDto {
     private LocalDateTime regDate;
     private Long Moi;
     private int ticketCnt;
-
 }

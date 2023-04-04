@@ -19,10 +19,10 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 1000)
     private String subject;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 2000)
     private String description;
 
     @Column(nullable = false)

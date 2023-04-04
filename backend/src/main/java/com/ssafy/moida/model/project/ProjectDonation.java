@@ -32,10 +32,10 @@ public class ProjectDonation {
     @Column(nullable = false, updatable = false)
     private LocalDateTime endDate;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 1000)
     private String subject;
 
-    @Column(nullable = false, length = 500)
+    @Column(nullable = false, length = 2000)
     private String description;
 
     @Builder
