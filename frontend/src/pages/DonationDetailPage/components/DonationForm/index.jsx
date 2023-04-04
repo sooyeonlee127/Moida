@@ -12,6 +12,7 @@ import Modal from "../../../../components/Modal";
 import loadingspinner from "../../../../assets/img/loadingspinner.svg";
 
 const DonationForm = (props) => {
+  
   // props 정보 - 이은혁 ----------------------------------------
   const data = {
     startDate: props.data?.startDate,
@@ -54,13 +55,32 @@ const DonationForm = (props) => {
     [moi, data.pointPerMoi]
   ); // 1모이-포인트 환율 수정 - 이은혁
 
-  const donationMutation = useMutation(async () => {
+  const donationMutation = useMutation(async (trans) => {
+    let transactionData = {
+      hash: trans.hash,
+      fromHash: trans.from,
+      toHash: trans.to,
+      nonce: trans.nonce,
+      gas: trans.gas,
+      gasPrice: trans.gasPrice,
+      maxFeePerGas: trans.maxFeePerGas,
+      maxPriorityFeePerGas: trans.maxPriorityFeePerGas,
+      r: trans.r,
+      s: trans.s,
+      v: trans.v,
+      value: trans.value,
+      input: trans.input
+    }
+
+    console.log(transactionData)
+
     return api({
       url: "/project/donation",
       method: "POST",
       data: {
         projectId: data.id,
         moi: moi,
+        transactionDto: transactionData
       },
       headers: {
         accept: "*/*",
@@ -79,26 +99,34 @@ const DonationForm = (props) => {
       });
   });
 
-  const SendMoi = () => {
+  const SendMoi = async() => {
     if (isLogin) {
       if (money <= 0) {
         // 기부 금액이 없는 경우 - 이은혁
         return alert("모이는 최소 1개 이상 기부가 가능합니다.");
       }
       setText("메타마스크 결제가 진행중입니다..");
-      donationMutation
-        .mutateAsync()
-        .then((res) => {
-          if (res.status === 200) {
-            setIsOpen(true);
-            donatePoint(money);
-            setMoney(0); // 금액 초기화 - 이은혁
-            setMoi(0); // 모이 갯수 초기화 - 이은혁
-          }
-        })
-        .catch((err) => {
+      console.log("1111");
+      try {
+        const trans = await donatePoint(money);
+        console.log("sendmoi에서 await donatePoint 결과 : " + trans);
+        if (trans) {
+          donationMutation
+            .mutateAsync(trans)
+            .then((res) => {
+              if (res.status === 200) {
+                console.log("2222");
+                setIsOpen(true);
+                setMoney(0); // 금액 초기화 - 이은혁
+                setMoi(0); // 모이 갯수 초기화 - 이은혁
+              }
+            })  
+        }
+
+      } catch(err) {
           console.log(err);
-        });
+      };
+      
     } else {
       alert("로그인한 사용자만 접근 가능합니다.");
     }
@@ -111,7 +139,7 @@ const DonationForm = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const {
-    library,
+    // library,
     account, // DApp에 연결된 account address
     active, // DApp 유저가 로그인 된 상태인지 체크
   } = useWeb3React();
@@ -135,6 +163,7 @@ const DonationForm = (props) => {
       const transaction = await web3.eth.getTransaction(result.transactionHash);
       setIsLoading(false);
       setText("모이 " + moi + "개가 정상적으로 기부되었습니다.");
+      console.log("기부 완료");
       return transaction;
     } catch {
       setIsOpen(false);
