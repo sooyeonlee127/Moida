@@ -9,9 +9,9 @@ const SignupPage = () => {
   return (
     <Container>
       <InnerContainer>
-        <ImageBox>
+        {/* <ImageBox>
           <Image src={logo} alt="" width="90" />
-        </ImageBox>
+        </ImageBox> */}
         <Heading>회원가입</Heading>
         <MetamaskCheck />
         <Form />

@@ -87,9 +87,9 @@ const LoginPage = () => {
     <Container>
       <InnerContainer>
         <div>
-          <ImageBox>
+          {/* <ImageBox>
             <Image src={logo} alt="" width="90" />
-          </ImageBox>
+          </ImageBox> */}
           <MetamaskCheck />
           <Heading>로그인</Heading>
         </div>
