@@ -10,7 +10,7 @@ import { AuthContext } from "../../../../context/Auth";
 import Modal from "../../../../components/Modal";
 import loadingspinner from "../../../../assets/img/loadingspinner.svg";
 import { useNavigate } from "react-router-dom";
-import { injected } from "../../../../lib/connectors";
+
 const DonationForm = (props) => {
   // props 정보 - 이은혁 ----------------------------------------
   const data = {
@@ -108,7 +108,6 @@ const DonationForm = (props) => {
       return alert("보유 포인트가 부족합니다.");
     }
     // 수연: 메타마스크 연결되지 않을 때
-    await activate(injected);
     if (!account) {
       alert(
         "메타마스크가 연결되어있지 않습니다. 메타마스크 연결 페이지로 이동합니다."
@@ -136,7 +135,7 @@ const DonationForm = (props) => {
     }
   };
   // 수연: 블록체인 -----------------------------------------------------------
-  const { isLogin, point } = useContext(AuthContext);
+  const { point } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const [text, setText] = useState("");
