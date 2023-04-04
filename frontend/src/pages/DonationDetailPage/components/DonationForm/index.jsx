@@ -50,8 +50,8 @@ const DonationForm = (props) => {
   const [money, setMoney] = useState(0);
   const [moi, setMoi] = useState(0);
   useEffect(
-    () => setMoney(moi * parseInt(data.pointPerMoi)),
-    [moi, data.pointPerMoi]
+    () => setMoney(moi * parseInt(data?.pointPerMoi)),
+    [moi, data?.pointPerMoi]
   ); // 1모이-포인트 환율 수정 - 이은혁
 
   const donationMutation = useMutation(async (trans) => {
