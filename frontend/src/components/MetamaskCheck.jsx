@@ -6,7 +6,6 @@ import { BlockContext } from "../context/BlockChain";
 
 const MetamaskCheck = () => {
   const [done, setDone] = useState(false);
-  const { setAcc, setAct, setCoin } = useContext(BlockContext);
 
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const {
@@ -26,15 +25,15 @@ const MetamaskCheck = () => {
   };
 
   const connectWallet = useCallback(async () => {
+    console.log("MetamaskCheck connectWallet");
     try {
       // 메타마스크 설치 된 경우
       if (typeof window.ethereum !== "undefined") {
+        await activate(injected);
         if (account) {
           localStorage.setItem("account", account);
-          setAcc(account);
-          setAct(active);
         }
-        await activate(injected);
+        // await activate(injected);
         setDone(true);
       } else {
         alert("please install MetaMask");
@@ -48,8 +47,6 @@ const MetamaskCheck = () => {
   useEffect(() => {
     getAdminAddress().then((res) => {
       connectWallet();
-      setAcc(account);
-      setAct(active);
     });
   }, []);
 

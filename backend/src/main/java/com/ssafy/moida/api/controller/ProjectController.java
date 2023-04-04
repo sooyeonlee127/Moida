@@ -12,6 +12,8 @@ import com.ssafy.moida.model.project.ProjectDonation;
 import com.ssafy.moida.model.project.ProjectVolunteer;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
 import com.ssafy.moida.model.user.Users;
+import com.ssafy.moida.model.user.UsersDonation;
+import com.ssafy.moida.service.blockchain.TransactionService;
 import com.ssafy.moida.service.project.ProjectDonationService;
 import com.ssafy.moida.service.project.ProjectPictureService;
 import com.ssafy.moida.service.project.ProjectService;
@@ -51,12 +53,13 @@ public class ProjectController {
     private final ProjectPictureService projectPictureService;
     private final UserDonationService userDonationService;
     private final UserVolunteerService userVolunteerService;
+    private final TransactionService transactionService;
     private final TokenUtils tokenUtils;
     private final DtoValidationUtils dtoValidationUtils;
 
     public ProjectController(ProjectService projectService, UserService userService,
                              ProjectVolunteerService projectVolunteerService, ProjectDonationService projectDonationService, ProjectPictureService projectPictureService, UserDonationService userDonationService,
-                             UserVolunteerService userVolunteerService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils){
+                             UserVolunteerService userVolunteerService, TransactionService transactionService, TokenUtils tokenUtils, DtoValidationUtils dtoValidationUtils){
         this.projectService = projectService;
         this.userService = userService;
         this.projectVolunteerService = projectVolunteerService;
@@ -64,6 +67,7 @@ public class ProjectController {
         this.projectPictureService = projectPictureService;
         this.userDonationService = userDonationService;
         this.userVolunteerService = userVolunteerService;
+        this.transactionService = transactionService;
         this.tokenUtils = tokenUtils;
         this.dtoValidationUtils = dtoValidationUtils;
     }
@@ -169,7 +173,10 @@ public class ProjectController {
         userDonationService.updateAfterDonation(loginUser, points, tickets);
 
         // UsersDonation 테이블 업데이트
-        userDonationService.saveUsersDonation(points, tickets, createDonationReqDto.getMoi(), loginUser, project);
+        UsersDonation usersDonation = userDonationService.saveUsersDonation(points, tickets, createDonationReqDto.getMoi(), loginUser, project);
+
+        // Transaction 업데이트
+        transactionService.save(createDonationReqDto.getTransactionDto(), usersDonation);
 
         // ProjectDonation 현재 기부 금액 업데이트
         projectDonationService.updateDonationAmount(project.getProjectDonation(), points);

@@ -43,9 +43,6 @@ public class Users {
     @Column(length = 500)
     private String nftUrl;
     //@Column(nullable = false, length = 500)
-    @Column(length = 500)
-    private String walletUrl;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER; //ROLE_USER, ROLE_ADMIN
@@ -62,8 +59,7 @@ public class Users {
     }
 
     @Builder
-
-    public Users(String email, String password, String phone, String nickname, int ticketCnt, Long point, String nftUrl, String walletUrl, Role role) {
+    public Users(String email, String password, String phone, String nickname, int ticketCnt, Long point, String nftUrl, Role role) {
         this.email = email;
         this.password = password;
         this.phone = phone;
@@ -71,7 +67,6 @@ public class Users {
         this.ticketCnt = ticketCnt;
         this.point = point;
         this.nftUrl = nftUrl;
-        this.walletUrl = walletUrl;
         this.role = role;
     }
 

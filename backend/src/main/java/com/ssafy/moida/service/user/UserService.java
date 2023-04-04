@@ -73,7 +73,6 @@ public class UserService {
                 .ticketCnt(0)
                 .point(0L)
                 .nftUrl(userJoinReqDto.getNftUrl())
-                .walletUrl(userJoinReqDto.getWalletUrl())
                 .role(userJoinReqDto.getRole())
                 .build();
 
