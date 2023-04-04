@@ -5,6 +5,7 @@ import axios from "axios";
 import ReviewCard from './ReviewCard'
 import Paging from "../../../../components/Pagination/Paging";
 import { useNavigate } from "react-router";
+import heart from "../../../../assets/img/heart.png"
 
 
 //혜수: 사용자 리뷰 전체 조회
@@ -94,7 +95,7 @@ const ReviewList = () => {
                 <Image
                 id = "review" name="review"
                 onClick={() => {navigate(`/review/${element.id}`)}}
-                src={element.url} index={index} key={index} alt="이미지가 없어오" />
+                src={ element.url ? element.url : heart } index={index} key={index} alt="이미지가 없어요" />
               )
             })
         }
@@ -141,11 +142,13 @@ const Card = styled.div`
 
 const Image = styled.img`
   ${tw`hover:opacity-50 rounded-t-lg bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700`}
+  cursor: pointer;
   border-radius: 15px;
   height: auto; // 이미지의 높이를 자동으로 조절하여 가로 세로 비율을 유지하도록 함
   width: calc(33.3% - 10px); // 한 줄에 3개의 이미지를 배치하기 위해, 100%를 3으로 나누고 10px을 빼서 각 이미지의 너비를 지정함
   margin-bottom: 20px; // 각 이미지의 아래쪽에 일정한 간격을 두기 위해 마진 값을 지정함
   margin : 10px 5px 0px 5px;
+  object-fit: cover;
   `
 
 
@@ -177,7 +180,6 @@ flex-direction: row;
 justify-items: center;
 align-items: center;
 list-style: none;
-cursor : pointer;
 border-bottom: 1px solid #838383;
 
 .submenu {
@@ -201,7 +203,7 @@ border-bottom: 1px solid #838383;
 `
 
 const Li = styled.li`
-
+cursor : pointer;
 `
 const CategoryBox = styled.div`
   display: flex;
@@ -212,7 +214,11 @@ const Sort = styled.div`
   color: rgb(98, 102, 110);
   &.select > select {
     background-color: transparent;
+<<<<<<< Updated upstream
     font-size: 0.9rem;
+=======
+    cursor : pointer;
+>>>>>>> Stashed changes
   }
 `
 

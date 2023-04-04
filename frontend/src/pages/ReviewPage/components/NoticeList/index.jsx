@@ -33,7 +33,7 @@ const NoticeList = () => {
           {
             noticeList.map((notice, index) => {
               return (
-                <Link to={"/notice/"+notice.category}>
+                <Link to={"/notice/"+notice.category} key={index}>
                     <Image src="" alt=""/>
                 </Link>
               )

@@ -1,14 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 
 //혜수: 사용자 리뷰 카드
 const ReviewCard = (props) => {
     const review = props.review;
-    // const navigate = useNavigate();
-    // const onClickDiv = () => {
-    //   navigate(`/review/${review.id}`)
-    // }
 
     return (
       <Review className="group relative">
@@ -20,6 +15,7 @@ const ReviewCard = (props) => {
         </div>
         <ReviewContent>
           <CardName>
+              <span>{review.subject}</span>
               <span>{review.subject}</span>
               <span>{review.difficultyLevel}</span>
           </CardName>

@@ -134,7 +134,7 @@ const VolunteerList = () => {
                 {data.status==="REGISTER" && year+month+day === todayYear+todayMonth+todayDay && (<button onClick={()=>{setIsOpen(true); setDoneId(data.volunteerId)}} className='btn attend'>출석하기</button>)}
                 {data.status==="CANCEL"?"":""}
                 {data.status==="DONE"? (
-                  <button className='btn' onClick={()=>navigate("/review/create")}>리뷰 쓰기</button>
+                  <button className='btn' onClick={()=>navigate("/review/create", {state: {volunteerId: data.volunteerId, projectId:data.projectId}})}>리뷰 쓰기</button>
                 ):""}
                 {data.status==="WRITTEN"? (
                   <button className='btn' onClick={()=>{navigate("/review/"+ data.articleId,{state:{volunteerId: data.volunteerId,projectId : data.projectId}})}}>내가 쓴 리뷰</button>
