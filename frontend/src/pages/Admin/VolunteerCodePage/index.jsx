@@ -2,8 +2,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { useState, useEffect } from "react";
 import api from "../../../api/auth";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import Calendar from "react-calendar";                                                                                                                                                                                                  
 
 // 수연: 봉사 전체 목록 조회
 const VolunteerCodePage = () => {

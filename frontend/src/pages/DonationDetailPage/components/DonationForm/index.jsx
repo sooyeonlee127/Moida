@@ -35,8 +35,8 @@ const DonationForm = (props) => {
     const endDate = new Date(data.endDate);
 
     const now = new Date();
-    if (now > new Date(endDate)) {
-      // 마감기한이 지난 경우 isDisabled true -> 버튼 비활성화 목적 - 이은혁
+    // 마감기한이 지난 경우 isDisabled true -> 버튼 비활성화 목적 - 이은혁
+    if (now > new Date(endDate) || now < new Date(startDate)) {
       setIsDisabled(true);
     } else {
       setIsDisabled(false);
@@ -202,8 +202,8 @@ const DonationForm = (props) => {
         {/* <Text className="dday size-4 weight-9 left color-3">D-{dDay}</Text> */}
         <Text className="size-5 weight-6 left color-3">{data.subject}</Text>
         <Text className="size-2 weight-2 left color-3 period">
-          {new Date(data.startDate).getFullYear()}년 {new Date(data.startDate).getMonth()}월 {new Date(data.startDate).getDay()}일 ~ 
-          {new Date(data.endDate).getFullYear()}년 {new Date(data.endDate).getMonth()}월 {new Date(data.endDate).getDay()}일
+          {new Date(data.startDate).getFullYear()}년 {new Date(data.startDate).getMonth()+1}월 {new Date(data.startDate).getDate()}일 ~ 
+          {new Date(data.endDate).getFullYear()}년 {new Date(data.endDate).getMonth()+1}월 {new Date(data.endDate).getDate()}일
         </Text>
         <Text className="size-2 weight-2 left color-3">{data.description}</Text>
         <div className="progressbar">
@@ -223,7 +223,7 @@ const DonationForm = (props) => {
         </div>
         <GroupButton>
           <Button className="reset" onClick={() => setMoi(0)}>초기화</Button>
-          <Button onClick={SendMoi} disabled={isDisabled} className={isDisabled ? "disabled donation" : "donation"}>기부하기</Button>
+          <Button onClick={SendMoi} disabled={isDisabled} className={isDisabled ? "disabled donation" : "enabled donation"}>기부하기</Button>
           {/* 마감 기한이 지날 경우 isDisabled true */}
         </GroupButton>
         <div>{isLogin === true ? <MetamaskCheck /> : null}</div>
@@ -280,10 +280,10 @@ padding: 10px 3px;
   color: white;
   font-weight: 500;
 }
-&.donation:hover {
+&.donation.enabled:hover {
   background: #a9d34b;
 }
-&.donation:active {
+&.donation.enabled:active {
   background: #9ac240;
 }
 &.reset {
