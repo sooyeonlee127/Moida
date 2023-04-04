@@ -8,6 +8,7 @@ import api from "../../api/auth";
 import logo_white from "../../assets/img/Logo_white.svg";
 import logo from "../../assets/img/Logo.svg";
 import MetamaskUncheck from "../MetamaskUncheck";
+import { BsTicketPerforatedFill } from 'react-icons/bs';
 
 // 수연: navbar
 const NavBar = () => {
@@ -33,6 +34,7 @@ const NavBar = () => {
             Authorization: localStorage.getItem("accessToken"),
           },
         });
+        console.log(response.data)
         setRole(response.data.roles);
         setPoint(response.data.info.point);
         localStorage.setItem("nickname", response.data.info.nickname);
@@ -54,8 +56,7 @@ const NavBar = () => {
   });
 
   // 수연: 로그인 상태에 따라 navbar 변경
-  const { isLogin, setIsLogin, role, setRole, setPoint } =
-    useContext(AuthContext);
+  const { isLogin, setIsLogin, role, setRole, point, setPoint, ticketCnt, setTicketCnt } = useContext(AuthContext);
 
   useEffect(() => {
     if (isLogin) {
@@ -74,16 +75,7 @@ const NavBar = () => {
     // 로그아웃 상태의 navbar
     { name: "기부하기", href: "/donation" },
     { name: "인증하기", href: "/review" },
-    { name: "NFT", href: "/gatcha" },
-  ];
-  const userNavigation = [
-    // 로그인 상태의 navbar
-    { name: "기부하기", href: "/donation" },
-    { name: "인증하기", href: "/review" },
-    { name: "NFT", href: "/gatcha" },
-    // { name: `${data ? data.ticketCnt : "  "}개`, href: "/gatcha" },
-    // { name: `${data ? data.point : "  "} P`, href: "/point" },
-    { name: "MYPAGE", href: "/profile" },
+    { name: "가챠샵", href: "/gatcha" },
   ];
   // 수연: 로그아웃 호출
   const LogoutSubmit = () => {
@@ -113,38 +105,37 @@ const NavBar = () => {
   return (
     <Nav className={scrollValue > 0 ? "scrolled" : "unscrolled"}>
       <InnerNav>
-        <Logo
-          onClick={() => goPage("/")}
-          className={scrollValue > 0 ? "scrolled" : "unscrolled"}
-        ></Logo>
-        <GroupMenu>
+      <MenuLeft>
+        <div style={{ width: "70px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+          <Logo onClick={() => goPage("/")} className={scrollValue > 0 ? "scrolled" : "unscrolled"}/>
+        </div>
+          {navigation.map((item, index) => (
+            <Link on={item.name} key={index} to={item.href}>
+              <Menu>{item.name}</Menu>
+            </Link>
+          ))}
+          </MenuLeft>
+              <MenuRight>
           {isLogin && role === "ROLE_ADMIN" ? (
             <Menu onClick={() => goPage("/admin")}>Admin 계정입니다.</Menu>
-          ) : (
-            ""
-          )}
+            ) : (
+              ""
+              )}
           {isLogin ? (
             <>
-              {userNavigation.map((item, index) => (
-                <Link on={item.name} key={index} to={item.href}>
-                  <Menu>{item.name}</Menu>
-                </Link>
-              ))}
+              <Link to="/gatcha"><Menu><BsTicketPerforatedFill className='icon' color="inherit" size="1.2rem"/>{ticketCnt}</Menu></Link>
+              <Link to="/point"><Menu>{point} P</Menu></Link>
+              <Link to="/profile"><Menu>MYPAGE</Menu></Link>
               <Menu onClick={LogoutSubmit}>LOGOUT</Menu>
             </>
           ) : (
             <>
               {isLogout ? <MetamaskUncheck /> : <></>}
-              {navigation.map((item) => (
-                <Link key={item.name} to={item.href}>
-                  <Menu>{item.name}</Menu>
-                </Link>
-              ))}
               <Menu onClick={() => goPage("/signup")}>SIGNUP</Menu>
               <Menu onClick={() => goPage("/login")}>LOGIN</Menu>
             </>
           )}
-        </GroupMenu>
+          </MenuRight>
       </InnerNav>
     </Nav>
   );
@@ -183,14 +174,21 @@ const InnerNav = styled.div`
   width: 100%;
   max-width: 1000px;
 `;
-const GroupMenu = styled.div`
+const MenuRight = styled.div`
+`
+const MenuLeft = styled.div`
   font-size: 1rem;
   line-height: 1.5rem;
   letter-spacing: -0.05em;
+  display: flex;
+  align-items: center;
+}
 `;
 
-const Logo = styled.span`
+const Logo = styled.p`
   background-size: cover;
+  margin-right: 20px;
+  display: inline-block;
   cursor: pointer;
   &.scrolled {
     background-image: url(${logo_white});
@@ -203,8 +201,9 @@ const Logo = styled.span`
     width: 39.5px;
   }
 `;
-const Menu = styled.span`
+const Menu = styled.p`
   padding: 0 16px;
+  display: inline-block;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
