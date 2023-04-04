@@ -285,4 +285,15 @@ public class UserService {
         }
     }
 
+    /**
+     * [한선영] 티켓 차감
+     * */
+    public void reduceTicket(Users user) {
+        if(user.getTicketCnt() <= 0) {
+            throw new CustomException(ErrorCode.USER_TICKET_LACK);
+        }
+
+        user.updateTicket(user.getTicketCnt() - 1);
+    }
+
 }

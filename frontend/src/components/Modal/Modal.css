@@ -1,0 +1,30 @@
+.modal_btn {
+    border: 1px solid #cacaca;
+    padding: 10px;
+    margin: 20px 7px;
+    width: 50%;
+    border-radius: 25px;
+    width: 100%;
+}
+.modal_btn:first-child {
+    margin-left: 0;
+}
+.modal_btn:last-child {
+    margin-right: 0;
+}
+.modal_btn.positive:hover {
+    background: #4dd21d;
+    color: white;
+}
+.modal_btn.positive:active {
+    background: #47c11b;
+    color: white;
+}
+.modal_btn.negative:hover {
+    background: #f76e6e;
+    color: white;
+}
+.modal_btn.negative:active {
+    background: #47c11b;
+    color: white;
+}

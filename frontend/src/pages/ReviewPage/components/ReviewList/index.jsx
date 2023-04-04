@@ -19,6 +19,7 @@ const ReviewList = () => {
   const category = ["ALL", "흑두루미", "다람쥐", "야생동물"];
   const categoryName = ["ALL", "CRANE", "SQUIRREL", "WILD_ANIMAL"]
   const sort = ["LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"] 
+  const sortName = ["최신순", "난이도 높은 순", "난이도 낮은 순"] 
   const [tabIndex, setTabIndex] = useState(0);
 
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ const ReviewList = () => {
               <Sort className="select">
                 <select onChange={(e)=> setSelected2(e.target.value)}>
                   {sort.map((element,index) => (
-                    <option key={index}>{element}</option>
+                    <option key={index} value={element}>{sortName[index]}</option>
                   ))}
                 </select>
               </Sort>
@@ -211,6 +212,7 @@ const Sort = styled.div`
   color: rgb(98, 102, 110);
   &.select > select {
     background-color: transparent;
+    font-size: 0.9rem;
   }
 `
 

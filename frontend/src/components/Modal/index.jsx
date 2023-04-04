@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
+import "./Modal.css"
 
 
 const Modal = ({ isOpen, title, children }) => { // 작성자 : 이은혁

@@ -112,7 +112,7 @@ public class ArticleController {
             @RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
             @RequestParam(name = "category", defaultValue = "ALL") @Schema(allowableValues = {"ALL", "CRANE", "SQUIRREL", "WILD_ANIMAL"}) String category,
-            @RequestParam(name = "sort", defaultValue = "latest") @Schema(allowableValues = {"LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"}) String sort
+            @RequestParam(name = "sort", defaultValue = "LATEST") @Schema(allowableValues = {"LATEST", "DIFFICULTY_HIGHEST", "DIFFICULTY_LOWEST"}) String sort
     ){
         pageNumber -= 1;
 

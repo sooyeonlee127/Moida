@@ -30,8 +30,9 @@ const DonationForm = (props) => {
   const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
-    const endDate = new Date(data.endDate);
     const startDate = new Date(data.startDate);
+    const endDate = new Date(data.endDate);
+
     const now = new Date();
     if (now > new Date(endDate)) {
       // 마감기한이 지난 경우 isDisabled true -> 버튼 비활성화 목적 - 이은혁
@@ -73,7 +74,7 @@ const DonationForm = (props) => {
         return response;
       })
       .catch((error) => {
-        console.log(error);
+        setIsOpen(false);
         alert(error.response.data.message);
         return error;
       });
@@ -85,13 +86,12 @@ const DonationForm = (props) => {
         // 기부 금액이 없는 경우 - 이은혁
         return alert("모이는 최소 1개 이상 기부가 가능합니다.");
       }
-      setIsOpen(true);
       setText("메타마스크 결제가 진행중입니다..");
-      console.log(1);
       donationMutation
         .mutateAsync()
         .then((res) => {
           if (res.status === 200) {
+            setIsOpen(true);
             donatePoint(money);
             setMoney(0); // 금액 초기화 - 이은혁
             setMoi(0); // 모이 갯수 초기화 - 이은혁
@@ -131,16 +131,18 @@ const DonationForm = (props) => {
       to: coinbase, // 다른 지갑 하나 필요함
       data: test,
     };
-
-    const result = await web3.eth.sendTransaction(tx);
-
-    const transaction = await web3.eth.getTransaction(result.transactionHash);
-    setIsLoading(false);
-    setText("모이 " + moi + "개가 정상적으로 기부되었습니다.");
-    return transaction;
+    try {
+      const result = await web3.eth.sendTransaction(tx);
+      const transaction = await web3.eth.getTransaction(result.transactionHash);
+      setIsLoading(false);
+      setText("모이 " + moi + "개가 정상적으로 기부되었습니다.");
+      return transaction;
+    } catch {
+      setIsOpen(false);
+      alert("거래가 중지되었습니다.");
+    }
   });
 
-  // ---------------------------------------------------------------------------
   return (
     <>
       <Modal isOpen={isOpen} title={"기부하기"}>
@@ -153,72 +155,184 @@ const DonationForm = (props) => {
               <Image src={loadingspinner} alt="" width="200" />
             </ImageBox>
           ) : (
-            <ModalBtn onClick={() => setIsOpen(false)}>나가기</ModalBtn>
+            <ModalBtn
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpen(false);
+                setText("");
+                setIsLoading(true);
+              }}
+            >
+              나가기
+            </ModalBtn>
           )}
         </div>
       </Modal>
-      <div>
-        <span>D-{dDay}</span>
-        <p>{data.subject}</p>
-        <p>
-          기간 : {data.startDate} ~ {data.endDate}
-        </p>
-        <p>설명 : {data.description}</p>
-        <p>목표 모이량 : {data.targetAmount}개</p>
-        <p>현재 기부 모이량 : {data.amount}개</p>
-        <div>
-          <p>{ratio}%</p>
-          기부 목표금액
-          <br />
-          <progress id="progress" value={ratio} min="0" max="100" />
-          현재 모금액
+
+      <Div>
+        {/* <Text className="dday size-4 weight-9 left color-3">D-{dDay}</Text> */}
+        <Text className="size-5 weight-6 left color-3">{data.subject}</Text>
+        <Text className="size-2 weight-2 left color-3 period">
+          {new Date(data.startDate).getFullYear()}년 {new Date(data.startDate).getMonth()}월 {new Date(data.startDate).getDay()}일 ~ 
+          {new Date(data.endDate).getFullYear()}년 {new Date(data.endDate).getMonth()}월 {new Date(data.endDate).getDay()}일
+        </Text>
+        <Text className="size-2 weight-2 left color-3">{data.description}</Text>
+        <div className="progressbar">
+          <Text className="size-4 weight-6 left">{data.targetAmount}개</Text>
+          <ProgressBar value={ratio} min="0" max="100" />
+          <Text className="size-3 weight-6 right">{data.amount}개 ({parseInt(ratio)}%)</Text>
         </div>
         <div>
-          <p>
-            {moi}개 ({money}원)
-          </p>
+          <Text className="size-4 weight-9 right">{moi} 개</Text>
+          <Text className="size-1 weight-2 right">약 {money} 포인트 기부</Text>
           <CoinButtonGroup>
-            <CoinButton onClick={() => setMoi(moi + 1)}>1개</CoinButton>
-            <CoinButton onClick={() => setMoi(moi + 5)}>5개</CoinButton>
-            <CoinButton onClick={() => setMoi(moi + 10)}>10개</CoinButton>
-            <CoinButton onClick={() => setMoi(moi + 50)}>50개</CoinButton>
+            <button onClick={() => setMoi(moi + 1)}>+ 1개</button>
+            <button onClick={() => setMoi(moi + 5)}>+ 5개</button>
+            <button onClick={() => setMoi(moi + 10)}>+ 10개</button>
+            <button onClick={() => setMoi(moi + 50)}>+ 50개</button>
           </CoinButtonGroup>
         </div>
         <GroupButton>
-          <Button onClick={() => setMoi(0)}>초기화</Button>
-          <Button
-            onClick={SendMoi}
-            disabled={isDisabled}
-            className={isDisabled ? "disabled" : ""}
-          >
-            기부하기
-          </Button>
+          <Button className="reset" onClick={() => setMoi(0)}>초기화</Button>
+          <Button onClick={SendMoi} disabled={isDisabled} className={isDisabled ? "disabled donation" : "donation"}>기부하기</Button>
           {/* 마감 기한이 지날 경우 isDisabled true */}
         </GroupButton>
         <div>{isLogin === true ? <MetamaskCheck /> : null}</div>
-      </div>
+      </Div>
     </>
   );
 };
+const Div = styled.div`
+& > .progressbar {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e7e7e7;
+  margin: 20px 0 15px 0;
+  line-height: normal;
+}
+& > .period {
+  margin: 2px 0 13px 0;
+}
+`
 const CoinButtonGroup = styled.div`
-  ${tw`grid grid-cols-4 gap-1 `}
-`;
-
-const CoinButton = styled.button`
-  ${tw`border px-3 py-1 hover:bg-sky-500 active:bg-sky-600`}
-`;
+${tw`grid grid-cols-4 gap-1 `}
+margin-top: 15px;
+& > button {
+  font-size: 0.85rem;
+  border-width: 1px;
+  padding: 0.1rem 0.5rem;
+  border-radius: 10px;
+}
+& > button:hover {
+  background-color: #adda49;
+  color: white;
+}
+& > button:active {
+  background-color: #A0C846;
+}
+`
 
 const GroupButton = styled.div`
-  ${tw`flex space-x-3`}
+${tw`space-x-3`}
+display: flex;
+& > button:first-child {
+  flex-basis: 30%
+}
+& > button:last-child {
+  flex-basis: 70%
+}
 `;
 
 const Button = styled.button`
-  ${tw`border px-2 py-2 hover:bg-sky-500 active:bg-sky-600`}
-  &.disabled {
-    opacity: 0.5;
-  }
+border-radius: 10px;
+margin: 20px 0 0 0;
+padding: 10px 3px;
+&.donation {
+  background: #A0C846;
+  color: white;
+  font-weight: 500;
+}
+&.donation:hover {
+  background: #a9d34b;
+}
+&.donation:active {
+  background: #9ac240;
+}
+&.reset {
+  border: 1px solid #575757;
+}
+&.reset:hover {
+  border-color: #83a634;
+  color: #83a634;
+}
+&.reset:active {
+  background #fafafa;
+}
+&.disabled {
+  opacity: 0.5;
+}
 `;
+const ProgressBar = styled.progress`
+width: 100%;
+height: 6px;
+border-radius: 44px;
+overflow: hidden;
+-webkit-appearance: none;
+appearance: none;
 
+&::-webkit-progress-bar {
+  background-color: #d4d4d4;
+}
+&::-webkit-progress-value {
+  background-color: #67B58B;
+}
+`
+const Text = styled.p`
+color: #594949;
+
+&.dday {
+  color: #DC653F;
+}
+&.center {
+  text-align: center; 
+}
+&.left {
+  text-align: left;
+}
+&.right {
+  text-align: right;
+}
+&.weight-9 {
+  font-weight: 900;
+}
+&.weight-6 {
+  font-weight: 600;
+}
+&.weight-5 {
+  font-weight: 500;
+}
+&.weight-2 {
+  font-weight: 200;
+}
+&.size-6 {
+  font-size: 1.5rem;
+}
+&.size-5 {
+  font-size: 1.35rem;
+}
+&.size-4 {
+  font-size: 1.2rem;
+}
+&.size-3 {
+  font-size: 1rem;
+}
+&.size-2 {
+  font-size: 0.9rem;
+}
+&.size-1 {
+  font-size: 0.85rem;
+}
+
+`
 const ImageBox = styled.div`
   ${tw`
   flex justify-center my-10
