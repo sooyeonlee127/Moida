@@ -25,6 +25,7 @@ import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import io.swagger.v3.oas.annotations.*;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -143,10 +144,15 @@ public class ProjectController {
 
         // 프로젝트 존재 여부 확인
         projectService.existsProjectById(createDonationReqDto.getProjectId());
-
         Project project = projectService.findById(createDonationReqDto.getProjectId());
-        Long points = project.getPointPerMoi() * createDonationReqDto.getMoi();
 
+        // 기부 날짜 사이가 아닌 경우, 오류 반환
+        LocalDateTime current = LocalDateTime.now();
+        if (current.isBefore(project.getProjectDonation().getStartDate()) || current.isAfter(project.getProjectDonation().getEndDate())) {
+            throw new CustomException(ErrorCode.INVALID_DONATION_PERIOD);
+        }
+
+        Long points = project.getPointPerMoi() * createDonationReqDto.getMoi();
         // 기부하려는 금액이 현재 보유 포인트보다 많은 경우 에러 반환
         if(points > loginUser.getPoint()){
             throw new CustomException(ErrorCode.EXCEED_USER_POINT);
