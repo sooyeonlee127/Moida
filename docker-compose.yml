@@ -16,7 +16,6 @@ services:
     ports:
       - 80:80
     depends_on:
-      - ipfs
       - back
     container_name: front
     networks:
@@ -30,18 +29,6 @@ services:
     container_name: back
     depends_on:
       - redis
-    networks:
-      - moida
-  ipfs:
-    container_name: ipfs
-    hostname: ipfs
-    build:
-      context: ./ipfs
-      dockerfile: Dockerfile
-    ports:
-      - 5001:5001
-    volumes:
-      - ./ipfs-data:/data/ipfs
     networks:
       - moida
 
