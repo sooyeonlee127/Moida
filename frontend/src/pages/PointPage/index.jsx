@@ -59,15 +59,16 @@ const PointPage = () => {
     if (kakaoUrl === "") {
       alert("1000원 이상 결제만 가능합니다.");
     } else if (!(account && connector)) {
-      alert("메타마스크가 연결되어있지 않습니다. 메타마스크 연결 페이지로 이동합니다.")
+      alert(
+        "메타마스크가 연결되어있지 않습니다. 메타마스크 연결 페이지로 이동합니다."
+      );
       navigate("/check", { replace: false });
     } else {
       window.open(kakaoUrl);
       // 자식창에서 버튼 눌렀을 때 동작
       window.parentCallback = (page) => {
         try {
-          window.open("", "_self");
-          window.close();
+          window.open("", "_self").close();
         } catch {
           console.log("");
         }
@@ -75,7 +76,6 @@ const PointPage = () => {
     }
   };
   return (
-
     <Container>
       <PointContainer>
         <RightSide>
