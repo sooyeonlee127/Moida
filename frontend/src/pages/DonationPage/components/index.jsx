@@ -43,7 +43,7 @@ const DonationCard = (props) => {
         <CardContent className="card_content">
           <p className="card_title">{donationResDto.subject}</p>
           <p className="card_desc">{donationResDto.description}</p>
-          <p className="card_target_amount">목표금액: {donationResDto.targetAmount}원</p>
+          <p className="card_target_amount">목표금액: {donationResDto.targetAmount.toLocaleString("ko-KR")}원</p>
           {/* <p className="card_start_date">
             시작일: {donationResDto.startDate.slice(0, 4)}년{" "}
             {donationResDto.startDate.slice(5, 7)}월{" "}
