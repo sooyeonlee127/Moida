@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import '../../../../common/style/calendar.css';
 import styled from 'styled-components';
 import { IoPeopleOutline } from "react-icons/io5";
 import { GoLocation } from "react-icons/go"
@@ -41,10 +41,10 @@ const VolunteerForm = (props) => {
         setStringValue(dateFormat(d))
         // console.log(dateMap[dateFormat(d)])
     }, [value])
-
-    const selectedDay = value?.getDate()
-    const selectedMonth = value?.getMonth()+1
-    const selectedYear = value?.getFullYear()
+    const today = new Date()
+    const selectedYear = value?.getFullYear() || today.getFullYear()
+    const selectedMonth = value?.getMonth()+1 || today.getMonth()+1
+    const selectedDay = value?.getDate() || today.getDate()
     
 
     const disableTile = (date)=> { // maxCapacity와 capacity를 이용해 해당 날짜가 사용 가능한지 판별하는 함수 - 이은혁
@@ -82,7 +82,8 @@ const VolunteerForm = (props) => {
             alert("봉사 신청이 완료되었습니다.")
         })
         .catch((err) => {
-            console.log(err)
+            // console.log(err)
+            alert(err.data.response)
         })
     }
 
@@ -93,8 +94,8 @@ const VolunteerForm = (props) => {
             <Div className="mb-1">
                 <Text className="size-5 weight-6 left color-3">{data.subject}</Text>
                 <Text className="size-1 weight-2 left color-3 period">
-                    {new Date(data.startDate).getFullYear()}년 {new Date(data.startDate).getMonth()}월 {new Date(data.startDate).getDay()}일 ~ 
-                    {new Date(data.endDate).getFullYear()}년 {new Date(data.endDate).getMonth()}월 {new Date(data.endDate).getDay()}일
+                    {new Date(data.startDate).getFullYear()}년 {new Date(data.startDate).getMonth()+1}월 {new Date(data.startDate).getDate()}일 ~ 
+                    {new Date(data.endDate).getFullYear()}년 {new Date(data.endDate).getMonth()+1}월 {new Date(data.endDate).getDate()}일
                 </Text>
             </Div>
             <Text className="size-2 weight-2 left color-3">{data.description}</Text>
@@ -110,10 +111,11 @@ const VolunteerForm = (props) => {
             </Div>
             <Text className="left weight-6 size-3">봉사 희망일 선택</Text>
             <Calendar onChange={onChange} tileDisabled={({date})=> disableTile(date)} value={value}	minDate={new Date(data.startDate)} maxDate={new Date(data.endDate)} disableTile/>
-            <Text className="">봉사 희망일 : {selectedYear}년 {selectedMonth}월 {selectedDay}일</Text>
-            <Text className="">capacity : {dateMap[stringValue]?.capacity}</Text>
-            <Text className="">maxCapacity : {dateMap[stringValue]?.maxCapacity}</Text>
-            <button onClick={ParticipateApi}>지원하기</button>
+            <Text className="expected_date">
+                <span><span style={{marginRight:"1.3rem"}}>희망일</span>{selectedYear}년 {selectedMonth}월 {selectedDay}일</span>
+                <span>{dateMap[stringValue]?.capacity}/{dateMap[stringValue]?.maxCapacity} 명</span>
+            </Text>
+            <Button onClick={ParticipateApi}>지원하기</Button>
         </div>
     )
 }
@@ -136,6 +138,20 @@ const Div = styled.div`
 `
 const Text = styled.p`
 color: #594949;
+&.expected_date {
+    border: 1px solid #EDEDED;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 5px 25px;
+    background: #FBEAEA;
+    color: #791F1F;
+    font-weight: 500;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 &.location>a {
     color: #0093D2;
     margin-left: 10px;
@@ -189,6 +205,14 @@ font-size: 0.85rem;
 &.span {
 display: inline-block;
 }
+`
+const Button = styled.button`
+padding: 10px;
+background: rgb(160, 200, 70);
+color: white;
+width: 100%;
+border-radius: 10px;
+margin-top: 25px;
 `
 
 export default VolunteerForm;
