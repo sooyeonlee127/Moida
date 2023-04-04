@@ -170,12 +170,15 @@ const Heading = styled.h2`
 `;
 
 const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: #fafaf3;
-  ${tw`
-  flex min-h-full items-center justify-center py-12 px-4
-  `}
+width: 100vw;
+background-color: rgb(250, 250, 243);
+display: flex;
+min-height: 100%;
+-webkit-box-align: center;
+align-items: flex-start;
+-webkit-box-pack: center;
+justify-content: center;
+padding: 1rem 0;
 `;
 
 const InnerContainer = styled.div`
