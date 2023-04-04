@@ -34,6 +34,7 @@ const NavBar = () => {
           },
         });
         setRole(response.data.roles);
+        setPoint(response.data.info.point);
         localStorage.setItem("nickname", response.data.info.nickname);
         return response.data;
       } catch (error) {
@@ -53,7 +54,8 @@ const NavBar = () => {
   });
 
   // 수연: 로그인 상태에 따라 navbar 변경
-  const { isLogin, setIsLogin, role, setRole } = useContext(AuthContext);
+  const { isLogin, setIsLogin, role, setRole, setPoint } =
+    useContext(AuthContext);
 
   useEffect(() => {
     if (isLogin) {
@@ -64,7 +66,6 @@ const NavBar = () => {
   const navigate = useNavigate();
 
   const [isLogout, setIsLogout] = useState(false); // 로그아웃 시 메타마스크 연결 해제
-
 
   const goPage = (page) => {
     navigate(`${page}`, { replace: false });
