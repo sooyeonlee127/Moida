@@ -86,9 +86,10 @@ const PayResult = () => {
 
   // 가스 충전
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
-
   const {
     account, // DApp에 연결된 account address
+    connector,
+    activate,
   } = useWeb3React();
 
   const ChargeGasPoint = useCallback(async () => {
@@ -141,6 +142,8 @@ const PayResult = () => {
       })
       .catch((error) => {
         console.log(error);
+        setFlag(false);
+        setDone(false);
       });
   }, []);
 
@@ -174,18 +177,18 @@ const PayResult = () => {
     );
   } else if (flag && !done) {
     return (
-    <Container>
-      <div>
+      <Container>
         <div>
-          <Heading>거래를 진행중입니다.</Heading>
-          <Text>잠시만 기다려주세요.</Text>
+          <div>
+            <Heading>거래를 진행중입니다.</Heading>
+            <Text>잠시만 기다려주세요.</Text>
+          </div>
+          <ImageBox>
+            <Image src={loadingspinner} alt="" width="200" />
+          </ImageBox>
         </div>
-        <ImageBox>
-          <Image src={loadingspinner} alt="" width="200" />
-        </ImageBox>
-      </div>
-    </Container>
-    )
+      </Container>
+    );
   } else {
     return (
       <>

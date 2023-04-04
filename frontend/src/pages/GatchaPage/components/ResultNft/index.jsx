@@ -7,8 +7,11 @@ import Web3 from "web3";
 import COMMON_ABI from "../../../../common/ABI";
 import api from "../../../../api/auth";
 import { BlockContext } from "../../../../context/BlockChain";
+import { useNavigate } from "react-router-dom";
+import { injected } from "../../../../lib/connectors";
 
 const ResultNft = () => {
+  const navigate = useNavigate();
   const [author, setAuthor] = useState("");
   const [title, setTitle] = useState("");
   const [imageIPFSUrl, setImageIPFSUrl] = useState("");
@@ -16,13 +19,15 @@ const ResultNft = () => {
   const [file, setFile] = useState(null);
   const [imgId, setImgId] = useState("");
   const nickname = localStorage.getItem("nickname");
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(true);
   const [show, setShow] = useState(false);
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const { nftCnt, setNftCnt } = useContext(BlockContext);
 
   const {
     account, // DApp에 연결된 account address
+    connector,
+    activate,
   } = useWeb3React();
 
   const [text, setText] = useState("?");
@@ -33,62 +38,72 @@ const ResultNft = () => {
       method: "GET",
     })
       .then((res) => {
+        setDone(false); // 뽑을 수 있는 티켓 있으면 버튼 활성화
         setFile(res.data.imgFile);
         setAuthor(nickname);
         setTitle(res.data.ntfName);
         setImgId(res.data.imgId);
       })
       .catch((error) => {
+        setDone(true); // 뽑을 수 있는 티켓 없으면 버튼 비활성화
         console.log(error);
-        setDone(true); // 뽑을 수 있는 티켓 없으면 버튼 일단 가려놓음
       });
   };
 
   const addItem = async () => {
-    // 이미지 IPFS에 저장 후 해시값 가져와서 링크 저장
-    const imgfile = {
-      img: file,
-    };
-    const resImg = await axios({
-      method: "post",
-      url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
-      data: imgfile,
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`,
-      },
-    });
-    const ipfsImgUrl = `https://gateway.pinata.cloud/ipfs/${resImg.data.IpfsHash}`;
-    setImageIPFSUrl(ipfsImgUrl);
+    if (!(account && connector)) {
+      alert(
+        "메타마스크가 연결되어있지 않습니다. 메타마스크 연결 페이지로 이동합니다."
+      );
+      navigate("/check", { replace: false });
+    } else {
+      setText("로딩중");
+      await activate(injected);
+      // 이미지 IPFS에 저장 후 해시값 가져와서 링크 저장
+      const imgfile = {
+        img: file,
+      };
+      const resImg = await axios({
+        method: "post",
+        url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+        data: imgfile,
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`,
+        },
+      });
+      const ipfsImgUrl = `https://gateway.pinata.cloud/ipfs/${resImg.data.IpfsHash}`;
+      setImageIPFSUrl(ipfsImgUrl);
 
-    // 메타데이터 IPFS에 저장 후 해시값 가져와서 링크 저장
-    const metadata = {
-      author: author,
-      title: title,
-      img: ipfsImgUrl,
-    };
-    const res = await axios({
-      method: "post",
-      url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
-      data: metadata,
-      headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`,
-      },
-    });
-    const ipfsMetaUrl = `https://gateway.pinata.cloud/ipfs/${res.data.IpfsHash}`;
-    setMetaIPFSUrl(ipfsMetaUrl);
+      // 메타데이터 IPFS에 저장 후 해시값 가져와서 링크 저장
+      const metadata = {
+        author: author,
+        title: title,
+        img: ipfsImgUrl,
+      };
+      const res = await axios({
+        method: "post",
+        url: "https://api.pinata.cloud/pinning/pinJSONToIPFS",
+        data: metadata,
+        headers: {
+          Authorization: `Bearer ${process.env.REACT_APP_PINATA_JWT}`,
+        },
+      });
+      const ipfsMetaUrl = `https://gateway.pinata.cloud/ipfs/${res.data.IpfsHash}`;
+      setMetaIPFSUrl(ipfsMetaUrl);
 
-    // 스마트 컨트랙트 인스턴스 생성
-    const nftContract = new web3.eth.Contract(
-      // ABI
-      COMMON_ABI.CONTRACT_ABI.NFT_ABI,
-      // Contract Address
-      "0x9796b4bfD85FCA4837f24B12f565C25ec00842f3"
-    );
+      // 스마트 컨트랙트 인스턴스 생성
+      const nftContract = new web3.eth.Contract(
+        // ABI
+        COMMON_ABI.CONTRACT_ABI.NFT_ABI,
+        // Contract Address
+        "0x9796b4bfD85FCA4837f24B12f565C25ec00842f3"
+      );
 
-    // 스마트 컨트랙트로 NFT 민팅 (to주소, 데이터)
-    const sendData = nftContract.methods
-      .create(account, ipfsMetaUrl)
-      .send({ from: account });
+      // 스마트 컨트랙트로 NFT 민팅 (to주소, 데이터)
+      const sendData = nftContract.methods
+        .create(account, ipfsMetaUrl)
+        .send({ from: account });
+    }
   };
 
   // metaIPFSUrl 값에 변화가 생겼을 때 실행
@@ -147,7 +162,6 @@ const ResultNft = () => {
             onClick={(e) => {
               e.preventDefault();
               addItem();
-              setText("로딩중");
             }}
           >
             1회 뽑기
