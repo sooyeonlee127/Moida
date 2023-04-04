@@ -54,7 +54,7 @@ const Projects = (props) => {
                 <p id="target_amount">목표 {donationResDto.targetAmount} 개</p>
               </div>
               <div style={{display: "inline-block"}}>
-                <Button>참여하기</Button>
+                <Button onClick={()=>clickCard(donationResDto.id)}>참여하기</Button>
               </div>
             </div>
             {/* <p>{new Date(donationResDto.endDate).getFullYear()}년 ~ {donationResDto.startDate}</p> */}
