@@ -62,6 +62,11 @@
 ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
 <br/><br/>
 
-### API 설계
-![API_documentation](./images/API_documentation.png)
+### 요구사항 명세서
+![Requirements_document](./images/Requirements_document.jpg)
 <br/><br/>
+
+### API 설계
+![API_document](./images/API_document.png)
+<br/><br/>
+
