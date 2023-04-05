@@ -7,6 +7,7 @@ import { injected } from "../lib/connectors";
 import loadingspinner from "../assets/img/loadingspinner.svg";
 import { useNavigate } from "react-router-dom";
 
+// 수연: 메타마스크 연결 페이지
 const MetamaskCheck = () => {
   const navigate = useNavigate();
   const [done, setDone] = useState(false);
