@@ -44,10 +44,10 @@ public class NftService {
         this.nftRepository = nftRepository;
     }
 
-    // nft 이미지가 사용자가 소유한 nft와 중복인지 체크
-    public boolean isImageDuplicate(int ImgNum) {
-        return nftRepository.existsByNftPictureId(ImgNum);
-    }
+//    // nft 이미지가 사용자가 소유한 nft와 중복인지 체크
+//    public boolean isImageDuplicate(int ImgNum) {
+//        return nftRepository.existsByNftPictureId(ImgNum);
+//    }
 
     // 랜덤으로 nft 번호 뽑기
     public int getRandomNumber() {
