@@ -19,14 +19,12 @@ const MainPage = () => {
       <Intro />
       <div>{cardList}</div>
       <Nft />
-      <Footer/>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   width: 100vw;
-  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;

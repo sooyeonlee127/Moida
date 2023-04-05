@@ -62,8 +62,10 @@ const MetamaskCheck = () => {
     return (
       <Container>
         <InnerContainer>
-          <p>메타마스크 연결에 실패했습니다.</p>
-          <p>블록체인 기반 안전한 거래를 위해 메타마스크를 연결해주세요.</p>
+          <Text>
+            <p>메타마스크 연결에 실패했습니다.</p>
+            <p>블록체인 기반 안전한 거래를 위해 메타마스크를 연결해주세요.</p>
+          </Text>
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -81,8 +83,10 @@ const MetamaskCheck = () => {
     return (
       <Container>
         <InnerContainer>
-          <p>메타마스크 연결 중입니다..</p>
-          <p>블록체인 기반 안전한 거래를 위해 메타마스크를 연결해주세요.</p>
+          <Text>
+            <p>메타마스크 연결 중입니다..</p>
+            <p>블록체인 기반 안전한 거래를 위해 메타마스크를 연결해주세요.</p>
+          </Text>
           <div>
             <ImageBox>
               <Image src={loadingspinner} alt="" width="200" />
@@ -95,8 +99,10 @@ const MetamaskCheck = () => {
     return (
       <Container>
         <InnerContainer>
-          <p>메타마스크 연결이 완료되었습니다.</p>
-          <p>시도하던 동작을 계속해주세요.</p>
+          <Text>
+            <p>메타마스크 연결이 완료되었습니다.</p>
+            <p>시도하던 동작을 계속해주세요.</p>
+          </Text>
           <Button
             onClick={(e) => {
               e.preventDefault();
@@ -126,7 +132,6 @@ const InnerContainer = styled.div`
 `;
 
 const Container = styled.div`
-  height: 100vh;
   width: 100vw;
   background-color: #fafaf3;
   ${tw`
@@ -139,6 +144,13 @@ const Button = styled.button`
   color: rgb(75, 75, 75);
   ${tw`
   w-full h-full py-3 px-10 font-semibold 
+  `}
+`;
+
+const Text = styled.div`
+  ${tw`
+  font-normal tracking-tight
+
   `}
 `;
 

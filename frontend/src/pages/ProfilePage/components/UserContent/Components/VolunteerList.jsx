@@ -110,7 +110,7 @@ const VolunteerList = () => {
                 {data.projectCategory==="CRANE" ? (<img className='badge' src={badge_crane} alt="" />):""}
                 {data.projectCategory==="WILD_ANIMAL" ? (<img className='badge' src={badge_wild_animal} alt="" />):""}
               </div>
-              <div className="item_sec grow_sec">
+              <div className="item_sec main_sec">
                 <p className="weak">{data.generation}차 프로젝트</p>
                 <p className="title mb-1"><Link className="link" to={`/donation/`+data.projectId}>{data.projectSubject}</Link></p>
               </div>

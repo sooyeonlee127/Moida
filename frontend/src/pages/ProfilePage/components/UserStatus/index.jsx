@@ -97,8 +97,10 @@ const UserStatus = () => {
               setConfirmPw(e.target.value);
               newPw!==e.target.value ? setConfirmMsg("비밀번호가 서로 다릅니다."):setConfirmMsg("")}}/>
           <p>{confirmMsg}</p>
-          <ModalBtn type="submit" onClick={(e) => {e.preventDefault(); submit()}}>비밀번호 변경</ModalBtn>
-          <ModalBtn onClick={() => setIsOpen(false)}>취소</ModalBtn>
+          <div style={{display: "flex"}}>
+            <ModalBtn type="submit" onClick={(e) => {e.preventDefault(); submit()}}>비밀번호 변경</ModalBtn>
+            <ModalBtn onClick={() => setIsOpen(false)}>취소</ModalBtn>
+          </div>
         </Form>
       </Modal>
       {/* -------------------------------------------------------------- */}
@@ -259,19 +261,44 @@ margin-left: 10px;
 `
 const Form = styled.form`
 width: 100%;
-padding: 0 30px;
+padding: 15px 30px;
 `
 const Input = styled.input`
-border: 1px solid black;
-padding: 2px 5px;
+border-bottom: 1px solid #d8d8d8;
+padding: 10px 5px;
 margin-bottom: 5px;
 display: block;
 width: 100%;
 `
 const ModalBtn = styled.button`
-border: 1px solid #cacaca;
-padding: 2px 10px;
-margin: 20px 7px;
+border: 1px solid rgb(202, 202, 202);
+padding: 10px;
+margin-top: 50px;
+flex-basis: 50%;
+&:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  border-right: none;
+}
+&:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+&:hover {
+  color: white;
+}
+&:first-child:hover {
+  background-color: #a0c846;
+}
+&:first-child:active {
+  background-color: #92b939;
+}
+&:last-child:hover {
+  background-color: #ff7a7a;
+}
+&:last-child:active {
+  background-color: #ee7070;
+}
 `
 export default React.memo(UserStatus);
 // React.memo() <== 상위 컴포넌트에서 state 사용 시 리렌더링되는 것 방지하기 위함 - 이은혁

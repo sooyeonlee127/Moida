@@ -23,7 +23,7 @@
     flex-direction: column;
 }
 .page_container {
-    animation-delay: calc(var(--scroll) * -1s + 1.2s);
+    animation-delay: calc(var(--scroll) * -1s + 1.6s);
     animation-name: scroll_intro; 
     animation-duration: 1s;
     top: 0px;
@@ -42,6 +42,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: stretch;
+    position: relative;
+    top: -54px;
 }
 .card {
     min-height: calc(100vh - 52px);
@@ -51,13 +53,13 @@
 
 
 #card_0 {
-    animation-delay: calc(var(--scroll) * -1s + 1.85s);
+    animation-delay: calc(var(--scroll) * -1s + 1.9s);
 }
 #card_1 {
-    animation-delay: calc(var(--scroll) * -1s + 3.85s);
+    animation-delay: calc(var(--scroll) * -1s + 3.9s);
 }
 #card_2 {
-    animation-delay: calc(var(--scroll) * -1s + 5.85s);
+    animation-delay: calc(var(--scroll) * -1s + 5.9s);
 }
 
 
