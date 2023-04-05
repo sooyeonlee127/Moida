@@ -82,17 +82,11 @@ const PointWallet = () => {
                     ""
                   )}
                 </div>
-                <div className="item_sec main_sec">
+                <div className="item_sec grow_sec">
                     {data.category==='DONATION'? (<p className="weak"><span>[{data.generation}차] {data.projectSubject}</span></p>):""}
                     <p className="title mb-1">
                         {data.category==='DONATION'? "기부":"충전"}
                     </p>
-                  ) : (
-                    ""
-                  )}
-                  <p className="title mb-1">
-                    {data.category === "DONATION" ? "기부" : "충전"}
-                  </p>
                   <p className="weak">{year + "." + month + "." + day}</p>
                 </div>
                 <div className="item_sec w-2">
