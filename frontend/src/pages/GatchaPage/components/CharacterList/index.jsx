@@ -54,14 +54,14 @@ const CharacterList = () => {
   }, [nftCnt, pageNum]);
 
   return (
-    <Container>
+    <Wrapper>    
+      <Container>
       <TitleBox>
         <Title>My Collection</Title>
-        <Line></Line>
       </TitleBox>
       <CharacterContainer>
         {list.length === 0 ? (
-          <TitleBox>보유 중인 NFT가 없습니다.</TitleBox>
+          <p>보유 중인 NFT가 없습니다.</p>
         ) : (
           <></>
         )}
@@ -103,13 +103,19 @@ const CharacterList = () => {
         </TitleBox>
       </CharacterContainer>
     </Container>
+  </Wrapper>
   );
 };
-
+const Wrapper = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+`
 const Container = styled.div`
   background-color: #fafaf3;
-  height: 90vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
+  max-width: 1000px;
   ${tw`
   items-center justify-center 
   `}
@@ -119,6 +125,9 @@ const CharacterContainer = styled.div`
   ${tw`
   flex items-center justify-center py-4 flex-wrap  
   `}
+  & > p {
+    padding: 30px 0;
+  }
 `;
 
 const CharacterBox = styled.div`
@@ -132,13 +141,11 @@ const Title = styled.h2`
   ${tw`text-2xl font-bold tracking-tight`}
   color: rgb(114, 114, 114);
   text-align: left;
-  margin-left: 20px;
 `;
 
 const TitleBox = styled.div`
-  ${tw`
-  mx-20 mt-5 w-full
-  `}
+padding-bottom: 13px;
+border-bottom: 1px solid #727272;
 `;
 const Line = styled.hr`
   border: 0px;

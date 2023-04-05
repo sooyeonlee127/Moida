@@ -30,6 +30,7 @@ import VolunteerCodePage from "./pages/Admin/VolunteerCodePage";
 import NftPage from "./pages/NftPage/nftPage";
 import NftTestPage from "./pages/NftPage/NftTestPage";
 import BlockChain from "./context/BlockChain";
+import NotFoundPage from "./components/NotFoundPage"
 // import { useBeforeunload } from "react-beforeunload";
 import MetamaskCheck from "./components/MetamaskCheck";
 
@@ -97,6 +98,7 @@ export default function App() {
               <Route path={"/sun"} element={<NftPage />} />
               <Route path={"/sunny"} element={<NftTestPage />} />
               <Route path={"/check"} element={<MetamaskCheck />} />
+              <Route path={"/*"} element={<NotFoundPage/>}/>
             </Routes>
           </Body>
         </div>
@@ -107,5 +109,6 @@ export default function App() {
 // nav와 content 분리용 - 이은혁
 const Body = styled.div`
   width: 100%;
-  padding-top: 100px;
+  min-height: 100vh;
+  padding: 100px 0px;
 `;

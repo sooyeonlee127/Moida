@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
-import ReviewCard from './ReviewCard'
 import Paging from "../../../../components/Pagination/Paging";
 import { useNavigate } from "react-router";
-import heart from "../../../../assets/img/heart.png"
+import defaultImage from "../../../../assets/img/기본_이미지.png"
 
 
 //혜수: 사용자 리뷰 전체 조회
@@ -95,7 +94,7 @@ const ReviewList = () => {
                 <Image
                 id = "review" name="review"
                 onClick={() => {navigate(`/review/${element.id}`)}}
-                src={ element.url ? element.url : heart } index={index} key={index} alt="이미지가 없어요" />
+                src={ element.url ? element.url : defaultImage } index={index} key={index} alt="이미지가 없어요" />
               )
             })
         }

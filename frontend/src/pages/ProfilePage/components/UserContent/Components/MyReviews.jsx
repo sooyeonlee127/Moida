@@ -24,25 +24,26 @@ const MyReviews = () => {
 
   return (
     <div className='container'>
-      {datas.map((data, index) => { 
-            return (
-                <Review key={index}>
-                    <p>프로젝트 분류 : {data.category}</p>
-                    <p>난이도 : {data.difficultyLevel}</p>
-                    <p>제목 : {data.subject}</p>
-                    <p>작성일시 : {data.regDate}</p>
-                    <p>내용 : {data.description}</p>
-                </Review>
+      <InnerContainer>
+        {datas.map((data, index) => { 
+              return (
+                  <Review key={index}>
+                      <p>프로젝트 분류 : {data.category}</p>
+                      <p>난이도 : {data.difficultyLevel}</p>
+                      <p>제목 : {data.subject}</p>
+                      <p>작성일시 : {data.regDate}</p>
+                      <p>내용 : {data.description}</p>
+                  </Review>
 
-            )
-        })}
-    <p> 
-      {datas.length === 0 && !loading? "빈 값":""}{loading? "로딩 중":""}</p>
+              )
+          })}
+      </InnerContainer>
+      <p>{datas.length === 0 && !loading? "빈 값":""}{loading? "로딩 중":""}</p>
 
 
-      {/* {pageList?.map((num, index)=>{ return (<PageBtn key={index} onClick={()=> setPageNum(num)}>{num}</PageBtn>) })} */}
+        {/* {pageList?.map((num, index)=>{ return (<PageBtn key={index} onClick={()=> setPageNum(num)}>{num}</PageBtn>) })} */}
 
-      <Paging page={pageNum} totalItem={length} setPage={(e)=>setPageNum(e)}/>
+        <Paging page={pageNum} totalItem={length} setPage={(e)=>setPageNum(e)}/>
   </div>
   )
 }
@@ -51,17 +52,28 @@ const MyReviews = () => {
 // min-height: 300px;
 // border-top: 1px solid #838383;
 // `
+const InnerContainer = styled.div`
+width: 100%;
+display: flex;
+justify-content: flex-start;
+align-items: flex-start;
+flex-wrap: wrap;
 
+`
 const Review = styled.div`
-width: 200px;
+width: calc(25% - 10px);
+margin: 5px;
 height: 200px;
 display: inline-block;
+background: #f7f7f7;
+border: 1px solid #ebebeb;
+border-radius: 10px;
 `
 
-const PageBtn = styled.button`
-margin: 0 10px;
-padding: 5px 10px;
-border: 1px solid black;
-background-color: red;
-`
+// const PageBtn = styled.button`
+// margin: 0 10px;
+// padding: 5px 10px;
+// border: 1px solid black;
+// background-color: red;
+// `
 export default MyReviews;

@@ -17,9 +17,7 @@ const GatchaPage = () => {
 };
 
 const Container = styled.div`
-  ${tw`
-    my-2
-  `}
+  ${tw`my-2`}
 `;
 
 export default GatchaPage;
