@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
-import MetamaskCheck from "../../components/MetamaskCheck";
+import { useNavigate } from "react-router-dom";
+import { useWeb3React } from "@web3-react/core";
 
 const PointPage = () => {
   const [currentPoint, setCurrentPoint] = useState(0);
+  const navigate = useNavigate();
   const donate = async (price) => {
     setCurrentPoint(currentPoint + price);
   };
@@ -47,16 +49,26 @@ const PointPage = () => {
     }
   }, [currentPoint]);
 
+  const {
+    account, // DApp에 연결된 account address
+    connector,
+    activate,
+  } = useWeb3React();
+
   const kakaoPay = () => {
     if (kakaoUrl === "") {
       alert("1000원 이상 결제만 가능합니다.");
+    } else if (!(account && connector)) {
+      alert(
+        "메타마스크가 연결되어있지 않습니다. 메타마스크 연결 페이지로 이동합니다."
+      );
+      navigate("/check", { replace: false });
     } else {
       window.open(kakaoUrl);
       // 자식창에서 버튼 눌렀을 때 동작
       window.parentCallback = (page) => {
         try {
-          window.open("", "_self");
-          window.close();
+          window.open("", "_self").close();
         } catch {
           console.log("");
         }
@@ -64,12 +76,10 @@ const PointPage = () => {
     }
   };
   return (
-
     <Container>
       <PointContainer>
         <RightSide>
           <PointForm>
-            <MetamaskCheck />
             <Title>충전할 금액 설정</Title>
             <InnerBox>
               <Text>충전 금액</Text>

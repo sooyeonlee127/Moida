@@ -30,9 +30,6 @@ import { AuthContext } from "../../context/Auth";
 
 const DonationPage = () => {
   const [cards, setCards] = useState([]);
-  const cardList = cards.map((card, index) => (
-    <DonationCard card={card} key={index}></DonationCard>
-  ));
   const navigate = useNavigate();
   const { role } = useContext(AuthContext);
   const goCreateProject = () => {
@@ -55,9 +52,9 @@ const DonationPage = () => {
 
   return (
     <WrapPage>
-      <Box>
+      <Container>
         {role === "ROLE_ADMIN" ? (
-          <>
+          <Box>
             <AdminButton
               onClick={(e) => {
                 e.preventDefault();
@@ -66,25 +63,46 @@ const DonationPage = () => {
             >
               프로젝트 생성하기
             </AdminButton>
-          </>
-        ) : (
-          <></>
-        )}
-      </Box>
-      <WrapCard>{cardList}</WrapCard>
+          </Box>
+        ) : ("")}
+        <Title>삼천리 자전거<br/>수완점 062-123-2345<br/><span style={{color:"#83BD00"}}>떙처리</span></Title>
+        <WrapCard>
+          {cards.map((card, index) => (
+            <DonationCard card={card} key={index}></DonationCard>
+          ))}
+        </WrapCard>
+      </Container>
     </WrapPage>
+    
   );
 };
 const WrapPage = styled.div`
-  width: 100%;
-  ${tw`
-  mt-16
-  `}
-`;
-const WrapCard = styled.div`
   display: flex;
-  flex-direction: row;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+`;
+const Container = styled.div`
+width: 100%;
+max-width: 1000px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+`
+const Title = styled.h1`
+font-size: 1.7rem;
+font-weight: 900;
+margin-bottom: 20px;
+text-align: left;
+line-height: 2.2rem;
+`
+const WrapCard = styled.div`
+width: 100%;
+display: flex;
+flex-direction: row;
+justify-content: center;
 `;
 
 const Box = styled.div`

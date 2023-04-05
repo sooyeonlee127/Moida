@@ -9,6 +9,8 @@ const Auth = (props) => {
     }
     return false;
   });
+  const [point, setPoint] = useState(0);
+  const [ticketCnt, setTicketCnt] = useState(0);
   const [role, setRole] = useState(localStorage.getItem("role") || "");
   return (
     <AuthContext.Provider
@@ -17,6 +19,10 @@ const Auth = (props) => {
         setIsLogin,
         role,
         setRole,
+        point,
+        setPoint,
+        ticketCnt,
+        setTicketCnt,
       }}
     >
       {props.children}

@@ -5,7 +5,7 @@ import { useReducer, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/Auth";
 import logo from "../../assets/img/Logo.svg";
-import MetamaskCheck from "../../components/MetamaskCheck";
+
 // 수연: 로그인 페이지
 const LoginPage = () => {
   const { setIsLogin, setRole } = useContext(AuthContext);
@@ -28,6 +28,7 @@ const LoginPage = () => {
     password: "",
     remember: false,
   });
+
   useEffect(() => {
     if (localStorage.getItem("email")) {
       state.remember = true;
@@ -90,7 +91,6 @@ const LoginPage = () => {
           {/* <ImageBox>
             <Image src={logo} alt="" width="90" />
           </ImageBox> */}
-          <MetamaskCheck />
           <Heading>로그인</Heading>
         </div>
         <LoginForm action="#" method="POST">
@@ -170,12 +170,15 @@ const Heading = styled.h2`
 `;
 
 const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-  background-color: #fafaf3;
-  ${tw`
-  flex min-h-full items-center justify-center py-12 px-4
-  `}
+width: 100vw;
+background-color: rgb(250, 250, 243);
+display: flex;
+min-height: 100%;
+-webkit-box-align: center;
+align-items: flex-start;
+-webkit-box-pack: center;
+justify-content: center;
+padding: 1rem 0;
 `;
 
 const InnerContainer = styled.div`
