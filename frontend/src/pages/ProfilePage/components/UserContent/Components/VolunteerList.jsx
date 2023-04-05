@@ -128,13 +128,14 @@ const VolunteerList = () => {
                   {data.status==="WRITTEN_DELETE"?"리뷰 삭제됨":""}
                 </p>
               </div>
+              
               <div className="item_sec w-2">
                 {/* 신청한 봉사 날짜가 된 경우, 출석하기 버튼 활성화. 그외에는 취소하기 버튼 활성화 - 이은혁*/}
                 {data.status==="REGISTER" && Number(year+month+day) > Number(todayYear+todayMonth+todayDay) && (<button className='btn' onClick={()=>volunteerCancel(data.volunteerId)}>취소하기</button>)}
                 {data.status==="REGISTER" && year+month+day === todayYear+todayMonth+todayDay && (<button onClick={()=>{setIsOpen(true); setDoneId(data.volunteerId)}} className='btn attend'>출석하기</button>)}
                 {data.status==="CANCEL"?"":""}
                 {data.status==="DONE"? (
-                  <button className='btn' onClick={()=>navigate("/review/create", {state: {volunteerId: data.volunteerId, projectId:data.projectId}})}>리뷰 쓰기</button>
+                  <button className='btn' onClick={()=>navigate("/review/create", {state: {volunteerId: data.volunteerId, projectId:data.projectId, category: data.projectCategory}})}>리뷰 쓰기</button>
                 ):""}
                 {data.status==="WRITTEN"? (
                   <button className='btn' onClick={()=>{navigate("/review/"+ data.articleId,{state:{volunteerId: data.volunteerId,projectId : data.projectId}})}}>내가 쓴 리뷰</button>
