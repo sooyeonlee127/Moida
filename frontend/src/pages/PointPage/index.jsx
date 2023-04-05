@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useWeb3React } from "@web3-react/core";
 
+// 수연: 포인트 충전 페이지
 const PointPage = () => {
   const [currentPoint, setCurrentPoint] = useState(0);
   const navigate = useNavigate();
