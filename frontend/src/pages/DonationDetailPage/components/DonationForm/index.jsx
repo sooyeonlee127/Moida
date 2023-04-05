@@ -215,10 +215,10 @@ const DonationForm = (props) => {
         </Text>
         <Text className="size-2 weight-2 left color-3">{data.description}</Text>
         <div className="progressbar">
-          <Text className="size-4 weight-6 left">{data.targetAmount?.toLocaleString("ko-KR")}개</Text>
+          <Text className="size-4 weight-6 left">{(data.targetAmount / data.pointPerMoi)?.toLocaleString("ko-KR")}개</Text>
           <ProgressBar value={ratio} min="0" max="100" />
           <Text className="size-3 weight-6 right">
-            {data.amount}개 ({parseInt(ratio)}%)
+          {data.amount / data.pointPerMoi}개 ({parseInt(ratio)}%)
           </Text>
         </div>
         <div>
