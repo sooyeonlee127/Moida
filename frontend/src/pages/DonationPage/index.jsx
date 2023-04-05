@@ -53,7 +53,7 @@ const DonationPage = () => {
   return (
     <WrapPage>
       <Container>
-        <Title>기부가 모이다<br/>마음이 모이다<br/><span style={{color:"#83BD00"}}>모이가 모이다</span></Title>
+        <Title>기부가 <span style={{color:"#f76868"}}>모이다</span></Title>
         <WrapCard>
           {cards.map((card, index) => (
             <DonationCard card={card} key={index}></DonationCard>

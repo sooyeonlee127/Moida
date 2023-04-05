@@ -36,6 +36,7 @@ const NavBar = () => {
         });
         console.log(response.data)
         setRole(response.data.roles);
+        setTicketCnt(response.data.info.ticketCnt);
         setPoint(response.data.info.point);
         localStorage.setItem("nickname", response.data.info.nickname);
         return response.data;
