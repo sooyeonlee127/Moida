@@ -22,7 +22,7 @@ const ReviewUpdatePage = () => {
     return [state, onChange];
   };
 
-  const [cancel,setCancel] = useState(false);
+  const [cancel, setCancel] = useState(false);
   const { reviewid } = useParams(); // 인증글 id로 접근
   const [state, onChange] = useInputs({
     subject: "",
@@ -40,84 +40,80 @@ const ReviewUpdatePage = () => {
     console.log("formData", data);
     api
       .put("/article", data, {
-          headers: {
-            id: reviewid,
-            Authorization: localStorage.getItem("accessToken"),
-            refresh: localStorage.getItem("refreshToken"),
+        headers: {
+          id: reviewid,
+          Authorization: localStorage.getItem("accessToken"),
+          refresh: localStorage.getItem("refreshToken"),
         },
       })
       .then((res) => {
         console.log(res);
         alert("인증글 수정 완료했습니다.");
-        navigate(`/review/${reviewid}`)
-
+        navigate(`/review/${reviewid}`);
       })
       .catch((error) => {
         const response = error.response.data;
         console.log(response);
         if (cancel === false) {
-          alert("등록을 실패하였습니다.")
+          alert("등록을 실패하였습니다.");
         }
       });
   };
 
   const navigate = useNavigate();
   const handleCancel = () => {
-    alert('취소되었습니다')
-    setCancel(!cancel)
-    navigate(`/review/${reviewid}`)
-  }
+    alert("취소되었습니다");
+    setCancel(!cancel);
+    navigate(`/review/${reviewid}`);
+  };
   return (
     <>
       <Container>
         <InnerContainer>
           <div>
-            <Heading>수정 페이지</Heading>
+            <Heading>리뷰 수정하기</Heading>
             <hr></hr>
           </div>
           {/* <AdminForm action="#" method="POST"> */}
-            <InputGroup>
-              <InputDiv>
-                <ReviewInputTitle
-                  id="subject"
-                  name="subject"
-                  type="text"
-                  placeholder="제목"
-                  value={subject}
-                  onChange={onChange}
-                />
-                <ReviewInputDescription
-                  id="description"
-                  name="description"
-                  type="text"
-                  rows="4"
-                  placeholder="내용"
-                  value={description}
-                  onChange={onChange}
-                />
-              </InputDiv>
-            </InputGroup>
-            <ButtonDiv>
-              <SubmitButton
+          <InputGroup>
+            <InputDiv>
+              <ReviewInputTitle
+                id="subject"
+                name="subject"
+                type="text"
+                placeholder="제목"
+                value={subject}
+                onChange={onChange}
+              />
+              <ReviewInputDescription
+                id="description"
+                name="description"
+                type="text"
+                rows="4"
+                placeholder="내용"
+                value={description}
+                onChange={onChange}
+              />
+            </InputDiv>
+          </InputGroup>
+          <ButtonDiv>
+            <SubmitButton
               type="submit"
               onClick={(e) => {
                 e.preventDefault();
                 reviewSubmit();
               }}
-              >
-                제출하기
-              </SubmitButton>
-              <CancelButton
-              onClick={handleCancel}
-              >취소</CancelButton>
-            </ButtonDiv>
+            >
+              제출하기
+            </SubmitButton>
+            <CancelButton onClick={handleCancel}>취소</CancelButton>
+          </ButtonDiv>
           {/* </AdminForm> */}
         </InnerContainer>
       </Container>
     </>
   );
 };
-
 
 const Container = styled.div`
   ${tw`
@@ -133,23 +129,21 @@ const InnerContainer = styled.div`
 
 const Heading = styled.h2`
   ${tw`
-  mt-6 text-center text-3xl font-bold tracking-tight text-gray-900
+  mt-6 text-center text-3xl font-semibold tracking-tighter text-gray-900
   `}
   margin-bottom: 20px;
 `;
-
 
 const ButtonDiv = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
-
-`
+`;
 const SubmitButton = styled.button`
   background-color: rgb(160, 200, 70);
   color: white;
   width: 50%;
-  height: 45px;
+  height: 55px;
   border-radius: 10px;
   margin-right: 10px;
 `;
@@ -158,11 +152,10 @@ const CancelButton = styled.button`
   background-color: rgb(205, 205, 205);
   color: white;
   width: 50%;
-  height: 45px;
+  height: 55px;
   border-radius: 10px;
   margin-left: 10px;
 `;
-
 
 const InputGroup = styled.div`
   ${tw`
@@ -178,25 +171,23 @@ const InputDiv = styled.div`
 
 const ReviewInputTitle = styled.input`
   height: 50px;
-  text-indent: 10px;
   border: 1px solid rgb(220, 220, 220);
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom: none;
+  ${tw`
+    pl-5
+  `}
 `;
 
-const ReviewInputDescription = styled.input`
+const ReviewInputDescription = styled.textarea`
   height: 200px;
   border-bottom: 0;
   border: 1px solid rgb(220, 220, 220);
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-
-  &::placeholder {
-    position: absolute; /* 변경 */
-    top: 13px; 
-    text-indent: 10px;
-    font-size: 15px;
-  }
+  ${tw`
+  pl-5 pt-3
+  `}
 `;
 export default ReviewUpdatePage;
