@@ -195,8 +195,9 @@ const ResultNft = () => {
 
 const Page = styled.div`
   background-color: #fafaf3;
-  height: 89vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
+  padding-bottom: 100px;
 `;
 
 const Container = styled.div`
@@ -221,9 +222,13 @@ const ButtonGroup = styled.div`
 
 const SubmitButton = styled.button`
   background-color: rgb(60, 197, 176);
-  box-shadow: 5px 5px rgb(161, 161, 158);
+  transition: 0.2s;
   ${tw` my-4 py-4 px-10 font-black text-white rounded tracking-tighter
   `};
+  &:hover {
+    background-color: rgb(79 211 190);
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.5);
+  }
 `;
 
 const ImageBox = styled.div`

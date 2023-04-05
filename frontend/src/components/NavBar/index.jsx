@@ -108,7 +108,7 @@ const NavBar = () => {
       <InnerNav>
       <MenuLeft>
         <div style={{ width: "70px", display: "flex", alignItems: "center", justifyContent: "center"}}>
-          <Logo onClick={() => goPage("/")} className={scrollValue > 0 ? "scrolled" : "unscrolled"}/>
+          <Logo onClick={() => {goPage("/"); window.scrollTo({ top: 0, behavior: 'smooth' });}} className={scrollValue > 0 ? "scrolled" : "unscrolled"}/>
         </div>
           {navigation.map((item, index) => (
             <Link on={item.name} key={index} to={item.href}>

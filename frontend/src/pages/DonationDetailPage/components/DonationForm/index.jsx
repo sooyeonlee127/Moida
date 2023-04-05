@@ -204,7 +204,7 @@ const DonationForm = (props) => {
 
       <Div>
         {/* <Text className="dday size-4 weight-9 left color-3">D-{dDay}</Text> */}
-        <Text className="size-5 weight-6 left color-3">{data.subject}</Text>
+        <Text className="size-5 weight-6 left color-3">[{data.id}차] {data.subject}</Text>
         <Text className="size-2 weight-2 left color-3 period">
           {new Date(data.startDate).getFullYear()}년{" "}
           {new Date(data.startDate).getMonth() + 1}월{" "}

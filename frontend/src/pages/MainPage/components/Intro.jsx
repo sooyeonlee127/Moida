@@ -32,12 +32,14 @@ const Intro = () => {
           <div className="inner_page intro">
             <InlineBox>
               <WrapCircle><Circle/><Circle/>
-              <Circle className="wrap_animal">
-                <img className="rabbit" src={rabbit} alt="" />
+                <Circle className="wrap_animal">
+                  <Img className="rabbit">
+                    <img src={rabbit} alt="" />
+                  </Img>
                 </Circle>
               </WrapCircle>
-              <WrapCircle><Circle/><Circle className="wrap_animal"><img className="crane" src={crane} alt="" /></Circle><Circle/></WrapCircle>
-              <WrapCircle><Circle/><Circle/><Circle className="wrap_animal"><img className="squirrel" src={squirrel} alt="" /></Circle></WrapCircle>
+              <WrapCircle><Circle/><Circle className="wrap_animal"><Img className="crane"><img src={crane} alt="" /></Img></Circle><Circle/></WrapCircle>
+              <WrapCircle><Circle/><Circle/><Circle className="wrap_animal"><Img className="squirrel"><img src={squirrel} alt="" /></Img></Circle></WrapCircle>
             </InlineBox>
             <TextBox>
               <Text>
@@ -84,6 +86,9 @@ height: 125px;
 border-radius: 100px;
 background-color: #E1EDD5;
 margin: 10px;
+`
+const Img = styled.div`
+
 `
 const InlineBox = styled.div`
 display: inline-block;

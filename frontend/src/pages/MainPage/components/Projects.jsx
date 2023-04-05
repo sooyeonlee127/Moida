@@ -21,7 +21,7 @@ const Projects = (props) => {
 
 
   // --- 스크롤 이벤트 관련 - 이은혁
-  const { ref: target, inView, isShown } = useScroll();
+  const { ref: target, inView } = useScroll();
   const [scrollY, setScrollY] = useState(); // scrollY: 스크롤량 저장
 
   const onScroll = () => {
