@@ -53,24 +53,24 @@ const DonationPage = () => {
   return (
     <WrapPage>
       <Container>
-        {role === "ROLE_ADMIN" ? (
-          <Box>
-            <AdminButton
-              onClick={(e) => {
-                e.preventDefault();
-                goCreateProject();
-              }}
-            >
-              프로젝트 생성하기
-            </AdminButton>
-          </Box>
-        ) : ("")}
-        <Title>삼천리 자전거<br/>수완점 062-123-2345<br/><span style={{color:"#83BD00"}}>떙처리</span></Title>
+        <Title>기부가 모이다<br/>마음이 모이다<br/><span style={{color:"#83BD00"}}>모이가 모이다</span></Title>
         <WrapCard>
           {cards.map((card, index) => (
             <DonationCard card={card} key={index}></DonationCard>
-          ))}
+            ))}
         </WrapCard>
+            {role === "ROLE_ADMIN" ? (
+              <Box>
+                <AdminButton
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goCreateProject();
+                  }}
+                >
+                  프로젝트 생성하기
+                </AdminButton>
+              </Box>
+            ) : ("")}
       </Container>
     </WrapPage>
     

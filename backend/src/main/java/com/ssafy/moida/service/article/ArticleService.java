@@ -12,7 +12,6 @@ import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
 import com.ssafy.moida.repository.article.ArticleRepository;
 import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
-import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.utils.S3Uploader;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
@@ -31,15 +30,12 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final S3Uploader s3Uploader;
     private final VolunteerDateInfoRepository volunteerDateInfoRepository;
-    private final UsersVolunteerRepository usersVolunteerRepository;
 
     public ArticleService(ArticleRepository articleRepository,S3Uploader s3Uploader,
-        VolunteerDateInfoRepository volunteerDateInfoRepository,
-        UsersVolunteerRepository usersVolunteerRepository) {
+        VolunteerDateInfoRepository volunteerDateInfoRepository) {
         this.articleRepository = articleRepository;
         this.s3Uploader = s3Uploader;
         this.volunteerDateInfoRepository = volunteerDateInfoRepository;
-        this.usersVolunteerRepository = usersVolunteerRepository;
     }
 
     /**

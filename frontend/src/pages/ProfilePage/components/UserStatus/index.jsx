@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom";
 import api from "../../../../api/auth";
 import useValidator from "../../../../components/Validator";
 import Modal from "../../../../components/Modal/index"
-import acorn  from "../../../../assets/img/acorn.png"
-import corn  from "../../../../assets/img/corn.png"
-import wheat  from "../../../../assets/img/wheat.png"
 import { GiAcorn, GiCorn, GiWheat } from 'react-icons/gi';
 
 const UserStatus = () => {
@@ -106,7 +103,7 @@ const UserStatus = () => {
       </Modal>
       {/* -------------------------------------------------------------- */}
       <Wrapper>
-        <MyMainNft/>
+        <MyMainNft src={data?.info.nftUrl}/>
         <Status>
           <Nickname>{data?.info.nickname || "닉네임"} 님</Nickname>
           <Email>{data?.info.email || "ssafy@ssafy.com"}</Email>
@@ -161,7 +158,7 @@ width: 220px;
 height: 220px;
 border-radius: 20px;
 background-size: 220px;
-background-image: url('https://openseauserdata.com/files/8da1deb8aca62959e0868e867d8f037f.svg')
+background-image: url(${(props)=>props.src})
 `
 const Status = styled.div`
 flex-grow: 1;

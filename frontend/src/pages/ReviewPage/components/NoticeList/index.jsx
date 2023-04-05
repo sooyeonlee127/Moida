@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import tw from "twin.macro";
-import NoticeCard from "./NoticeCard"
 import { Link } from "react-router-dom"
+import 다람쥐영상 from "../../../../assets/videos/다람쥐영상.mp4"
+import 다람쥐사진 from "../../../../assets/img/wheat.png"
 
 const NoticeList = () => {
     const noticeList = [
@@ -24,6 +25,7 @@ const NoticeList = () => {
         category: "WILD_ANIMAL"
       }
     ]
+
     return (
         <div>
           <Title>Notice</Title>
@@ -34,7 +36,14 @@ const NoticeList = () => {
             noticeList.map((notice, index) => {
               return (
                 <Link to={"/notice/"+notice.category} key={index}>
-                    <Image src="" alt=""/>
+                    <Video>
+                      <div style={{position: "relative"}}>
+                        <video muted loop onMouseOver={(e)=>e.target.play()} onMouseOut={(e)=>e.target.pause()}>
+                          <source src={다람쥐영상} type="video/mp4"></source>
+                        </video>
+                        <img className="poster" src={다람쥐사진} alt="" />
+                      </div>
+                    </Video>
                 </Link>
               )
             })
@@ -61,6 +70,24 @@ display: flex;
 flex-direction: row;
 justify-content: center;
 margin-top : 5px;
+`
+
+const Video = styled.div`
+& .poster {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  transition: 0.2s;
+  background: white;
+  width: 100%;
+  height: 100%;
+}
+
+&:hover .poster {
+  opacity: 0;
+  z-index: -1;
+}
 `
 const Image= styled.img`
 height: 100px;

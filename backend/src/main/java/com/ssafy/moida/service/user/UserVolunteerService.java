@@ -44,8 +44,11 @@ public class UserVolunteerService {
      * @return
      * */
     public long totalVolunteerCnt(Long userId) {
+        Long done = usersVolunteerRepository.countByUsersIdAndStatus(userId, Status.DONE);
+        Long written = usersVolunteerRepository.countByUsersIdAndStatus(userId, Status.WRITTEN);
+        Long writtenDelete = usersVolunteerRepository.countByUsersIdAndStatus(userId, Status.WRITTEN_DELETE);
         // 봉사 프로젝트 개수 가져오기
-        return usersVolunteerRepository.countByUsersId(userId);
+        return (done + written + writtenDelete);
     }
 
     /**
