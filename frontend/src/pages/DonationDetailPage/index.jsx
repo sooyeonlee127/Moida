@@ -10,6 +10,7 @@ import api from "../../api/auth"
 const DonationDetailPage = () => {
     const { projectId } = useParams(); // const 변수명 = useParams().파라미터명 - 이은혁
     const [ tabIndex, setTabIndex ] = useState(0); // 0: 기부, 1: 봉사 - 이은혁
+    const [isLoading, setIsLoading] = useState(true)
 
     // id: "",         // 프로젝트 id
     // category: "",   // 분류
@@ -23,6 +24,7 @@ const DonationDetailPage = () => {
     
     const GetInfoApi = async () => {
         try{
+            setIsLoading(true)
             const response = await api({
                 url: "/project/"+projectId,
                 method: "GET",
@@ -31,9 +33,11 @@ const DonationDetailPage = () => {
                     Authorization: localStorage.getItem("accessToken")
                 }
             })
+            setIsLoading(false)
             return response.data;
         } 
         catch (error) {
+            setIsLoading(false)
             console.error(error);
             return error;
         }
@@ -47,7 +51,7 @@ const DonationDetailPage = () => {
     return (
         <Wrapper>
             <Main>
-                <MainImage />
+                <MainImage thumbnail={!isLoading? projectInfo?.thumbnail : ""}/>
                 <Aside>
                     <TabGroup>
                         <Tab className={tabIndex===0 ? "active":""} onClick={ () => setTabIndex(0) }>기부하기</Tab>
@@ -91,7 +95,8 @@ height: 400px;
 width: 580px;
 box-shadow: 3px 5px 20px rgba(0,0,0,15%);
 border-radius: 10px;
-${tw`bg-[url('https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/')]`}
+background-image: url(${(props) => props.thumbnail});
+background-size: cover;
 `
 
 const Aside = styled.div`

@@ -107,7 +107,7 @@ filter: grayscale(100%);
 const CardContent = styled.div`
   padding: 20px 25px;
   background: #A1A1A1;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-align: left;
   color: white;
   height: 180px;
@@ -115,7 +115,7 @@ const CardContent = styled.div`
   & > .card_title {
     font-weight: 900;
     margin-bottom: 10px;
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 `;
 export default DonationCard;
