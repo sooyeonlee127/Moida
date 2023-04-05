@@ -74,6 +74,7 @@ public class NftService {
 
         while (nftPicture.getUrl() == null || nftCheck) {
             randomNum = new Random().nextInt(endNum - startNum + 1) + startNum;
+            nftCheck = isImageDuplicate(randomNum, user.getId());
             nftPicture = nftPictureRepository.findById((long) randomNum)
                     .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         }
