@@ -14,97 +14,65 @@ const DonationDetailPage = () => {
   const [tabIndex, setTabIndex] = useState(0); // 0: 기부, 1: 봉사 - 이은혁
   const navigate = useNavigate();
   const { role } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true)
 
-  // id: "",         // 프로젝트 id
-  // category: "",   // 분류
-  // subject: "",    // 주제
-  // generation: "", // 차수
-  // thumbnail: "",  // 썸네일
-  // description: "",// 설명
-  // pictures: "",   // 사진 url
-  // pointPerMoi: "" // 모이 1개 당 포인트
+    // id: "",         // 프로젝트 id
+    // category: "",   // 분류
+    // subject: "",    // 주제
+    // generation: "", // 차수
+    // thumbnail: "",  // 썸네일
+    // description: "",// 설명
+    // pictures: "",   // 사진 url
+    // pointPerMoi: "" // 모이 1개 당 포인트
 
-  const GetInfoApi = async () => {
-    try {
-      const response = await api({
-        url: "/project/" + projectId,
-        method: "GET",
-        headers: {
-          accept: "*/*",
-          Authorization: localStorage.getItem("accessToken"),
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return error;
+    
+    const GetInfoApi = async () => {
+        try{
+            const response = await api({
+                url: "/project/"+projectId,
+                method: "GET",
+                headers: {
+                    accept: "*/*",
+                    Authorization: localStorage.getItem("accessToken")
+                }
+            })
+            return response.data;
+        } 
+        catch (error) {
+            console.error(error);
+            return error;
+        }
     }
-  };
-  const { data: projectInfo, refetch } = useQuery({
-    queryKey: ["GetInfo"],
-    queryFn: GetInfoApi,
-    refetchOnMount: true,
-  });
-
-  const goPage = (page, id) => {
-    navigate(`/${page}/${id}`, { replace: false });
-  };
-
-  return (
-    <Wrapper>
-      <Main>
-        <MainImage />
-        {role === "ROLE_ADMIN" ? (
-          <Box>
-            <AdminButton
-              onClick={(e) => {
-                e.preventDefault();
-                goPage("admin/notice", projectId);
-              }}
-            >
-              공지 생성하기
-            </AdminButton>
-          </Box>
-        ) : (
-          ""
-        )}
-        <Aside>
-          <TabGroup>
-            <Tab
-              className={tabIndex === 0 ? "active" : ""}
-              onClick={() => setTabIndex(0)}
-            >
-              기부하기
-            </Tab>
-            <Tab
-              className={tabIndex === 1 ? "active" : ""}
-              onClick={() => setTabIndex(1)}
-            >
-              봉사하기
-            </Tab>
-          </TabGroup>
-          <Div>
-            {tabIndex === 1 ? (
-              <VolunteerForm data={projectInfo?.volunteerResDto} />
-            ) : (
-              <DonationForm
-                data={projectInfo?.donationResDto}
-                pointPerMoi={projectInfo?.projectReqDto?.pointPerMoi}
-              />
-            )}
-          </Div>
-        </Aside>
-      </Main>
-      <Article>
-        <Content>
-          <InnerContent>
-            <SectionTab>{projectId}번째</SectionTab>
-          </InnerContent>
-        </Content>
-      </Article>
-    </Wrapper>
-  );
-};
+    const { data: projectInfo, refetch } = useQuery({
+        queryKey: ["GetInfo"],
+        queryFn: GetInfoApi,
+        refetchOnMount: true,
+    });
+    
+    return (
+        <Wrapper>
+            <Main>
+                <MainImage />
+                <Aside>
+                    <TabGroup>
+                        <Tab className={tabIndex===0 ? "active":""} onClick={ () => setTabIndex(0) }>기부하기</Tab>
+                        <Tab className={tabIndex===1 ? "active":""} onClick={ () => setTabIndex(1) }>봉사하기</Tab>
+                    </TabGroup>
+                    <Div>
+                    { tabIndex===1 ? <VolunteerForm data={projectInfo?.volunteerResDto}/> : <DonationForm data={projectInfo?.donationResDto} pointPerMoi={projectInfo?.projectReqDto?.pointPerMoi}/>}
+                    </Div>
+                </Aside>
+            </Main>
+            <Article>
+                <Content>
+                    <InnerContent>
+                        <SectionTab>{projectId}번째</SectionTab>
+                    </InnerContent>
+                </Content> 
+            </Article>
+        </Wrapper>
+    )
+}
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -125,12 +93,12 @@ const Main = styled.div`
 `;
 
 const MainImage = styled.div`
-  height: 400px;
-  width: 580px;
-  box-shadow: 3px 5px 20px rgba(0, 0, 0, 15%);
-  border-radius: 10px;
-  ${tw`bg-[url('https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/')]`}
-`;
+height: 400px;
+width: 580px;
+box-shadow: 3px 5px 20px rgba(0,0,0,15%);
+border-radius: 10px;
+${tw`bg-[url('https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/')]`}
+`
 
 const Aside = styled.div`
   background: white;

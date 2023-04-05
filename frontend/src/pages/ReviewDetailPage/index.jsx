@@ -6,7 +6,6 @@ import tw from "twin.macro";
 import axios from "axios";
 import api from "../../api/auth"
 import "./index.css"
-import heart from "../../assets/img/heart.png"
 
 //혜수: 리뷰 상세 페이지 조회
 const ReviewDetailPage = () => {
@@ -143,7 +142,9 @@ const UpperBox = styled.div`
 `
 
 const WDate = styled.h4`
-color: rgb(120, 116, 116);
+  color: rgb(120, 116, 116);
+  font-weight: 100;
+  font-size: 0.9rem;
 `
 
 
@@ -162,35 +163,31 @@ const MidBox = styled.div`
 `
 
 const Difficulty = styled.h4`
-  margin-left: 10px;
-  font-weight: bold;
+  font-weight: 500;
 `
 
 const Writer = styled.h4`
-  margin-right: 10px;
   color: rgb(120, 116, 116);
-
+  font-weight: 100;
+  font-size: 0.9rem;
 `
 const LastBox = styled.div`
   display: flex;
   width: 100%;
-  margin: 30px 30px 20px 30px;
+  padding: 30px 0 50px 0;
 `
 
 const WDesciption = styled.div`
-  font-weight: bold;
-  margin-left: 10px;
+  font-weight: 500;
   margin-right: 10px;
   `
 
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction : row;
+  justify-content: space-between;
   margin-top: 10px;
   width: 100%;
-`
-const LeftDiv = styled.div`
-  margin-right: auto;
 `
 const RightDiv = styled.div`
   margin-left: auto;
@@ -203,9 +200,6 @@ const Button = styled.button`
   border-radius: 5px;
   width : 80px;
   height : 25px;
-  padding: 1px;
-  margin: 3px;
-  margin-left: 10px
   `
 
 const Button2 = styled.button`
@@ -216,9 +210,7 @@ const Button2 = styled.button`
   border-radius: 5px;
   width : 80px;
   height : 25px;
-  padding: 1px;
-  margin: 3px;
-  margin-left: 10px
+  margin: 0 3px;
 `
 
 export default ReviewDetailPage;

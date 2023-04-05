@@ -158,7 +158,8 @@ width: 220px;
 height: 220px;
 border-radius: 20px;
 background-size: 220px;
-background-image: url(${(props)=>props.src})
+background-image: url(${(props)=>props.src});
+border: 1px solid #00000017;
 `
 const Status = styled.div`
 flex-grow: 1;
