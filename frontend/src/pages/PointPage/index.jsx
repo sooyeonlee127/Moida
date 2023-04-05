@@ -83,13 +83,11 @@ const PointPage = () => {
             <Title>충전할 금액 설정</Title>
             <InnerBox>
               <Text>충전 금액</Text>
-              <PointText>{currentPoint.toLocaleString("ko-KR")}</PointText>
+              <PointText>{currentPoint.toLocaleString("ko-KR")} 원</PointText>
             </InnerBox>
             <InnerBox>
               <Text>VAT (10%)</Text>
-              <PointText>
-                {parseInt(currentPoint / 10).toLocaleString("ko-KR")}
-              </PointText>
+              <PointText>{parseInt(currentPoint / 10).toLocaleString("ko-KR")} 원</PointText>
             </InnerBox>
             <GroupButton>
               <PointButton
@@ -107,7 +105,7 @@ const PointPage = () => {
                   donate(50000);
                 }}
               >
-                <Text>+50,000원</Text>
+                <Text>+50,000</Text>
               </PointButton>
 
               <PointButton
@@ -116,7 +114,7 @@ const PointPage = () => {
                   donate(10000);
                 }}
               >
-                <Text>+10,000원</Text>
+                <Text>+10,000</Text>
               </PointButton>
 
               <PointButton
@@ -125,7 +123,7 @@ const PointPage = () => {
                   donate(5000);
                 }}
               >
-                <Text>+5,000원</Text>
+                <Text>+5,000</Text>
               </PointButton>
 
               <PointButton
@@ -134,7 +132,7 @@ const PointPage = () => {
                   donate(1000);
                 }}
               >
-                <Text>+1,000원</Text>
+                <Text>+1,000</Text>
               </PointButton>
             </GroupButton>
             <Line></Line>
@@ -230,7 +228,7 @@ const GroupButton = styled.div`
 
 const PointButton = styled.button`
   ${tw`
-  border border-gray-400 rounded-xl px-1 mx-1
+  border border-gray-400 rounded-xl px-3 mx-1
   `}
 `;
 
