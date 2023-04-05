@@ -63,6 +63,11 @@ public class NftService {
         int startNum = 1;
         int endNum = (int) nftPictureRepository.count(); // nftPicture entity의 총 개수
 
+        // 사용자가 모든 컬렉션을 모았는지 체크
+        if(nftRepository.countByUsersId(user.getId()) >= endNum){
+            throw new CustomException(ErrorCode.ALL_NFT_OWNERSHIP_ERROR);
+        }
+
         int randomNum = new Random().nextInt(endNum - startNum + 1) + startNum;
 
         // 사용자가 소유하고 있는 nft인지 체크
