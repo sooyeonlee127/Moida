@@ -146,4 +146,13 @@ public class NftService {
         return newNftUrl;
     }
 
+    // nft url 저장
+    public void saveImg(String url) {
+        NftPicture nftPicture = NftPicture.builder()
+                .url(url)
+                .build();
+
+        nftPictureRepository.save(nftPicture);
+    }
+
 }
