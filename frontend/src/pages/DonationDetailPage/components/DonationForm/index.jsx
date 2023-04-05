@@ -215,15 +215,15 @@ const DonationForm = (props) => {
         </Text>
         <Text className="size-2 weight-2 left color-3">{data.description}</Text>
         <div className="progressbar">
-          <Text className="size-4 weight-6 left">{data.targetAmount.toLocaleString("ko-KR")}개</Text>
+          <Text className="size-4 weight-6 left">{data.targetAmount?.toLocaleString("ko-KR")}개</Text>
           <ProgressBar value={ratio} min="0" max="100" />
           <Text className="size-3 weight-6 right">
             {data.amount}개 ({parseInt(ratio)}%)
           </Text>
         </div>
         <div>
-          <Text className="size-4 weight-9 right">{moi.toLocaleString("ko-KR")} 개</Text>
-          <Text className="size-1 weight-2 right">약 {money.toLocaleString("ko-KR")} 포인트 기부</Text>
+          <Text className="size-4 weight-9 right">{moi?.toLocaleString("ko-KR")} 개</Text>
+          <Text className="size-1 weight-2 right">약 {money?.toLocaleString("ko-KR")} 포인트 기부</Text>
           <CoinButtonGroup>
             <button onClick={() => setMoi(moi + 1)}>+ 1개</button>
             <button onClick={() => setMoi(moi + 5)}>+ 5개</button>
