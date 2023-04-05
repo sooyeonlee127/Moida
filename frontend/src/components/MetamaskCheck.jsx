@@ -126,7 +126,6 @@ const InnerContainer = styled.div`
 `;
 
 const Container = styled.div`
-  height: 100vh;
   width: 100vw;
   background-color: #fafaf3;
   ${tw`
