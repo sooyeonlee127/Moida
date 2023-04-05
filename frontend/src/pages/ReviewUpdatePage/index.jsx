@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/auth";
+import { useState } from "react";
+
 // 혜수: 사용자 인증글 수정 페이지
 const ReviewUpdatePage = () => {
   const reducer = (state, action) => {
@@ -19,6 +21,8 @@ const ReviewUpdatePage = () => {
     };
     return [state, onChange];
   };
+
+  const [cancel,setCancel] = useState(false);
   const { reviewid } = useParams(); // 인증글 id로 접근
   const [state, onChange] = useInputs({
     subject: "",
@@ -45,121 +49,154 @@ const ReviewUpdatePage = () => {
       .then((res) => {
         console.log(res);
         alert("인증글 수정 완료했습니다.");
+        navigate(`/review/${reviewid}`)
+
       })
       .catch((error) => {
         const response = error.response.data;
         console.log(response);
+        if (cancel === false) {
+          alert("등록을 실패하였습니다.")
+        }
       });
   };
+
+  const navigate = useNavigate();
+  const handleCancel = () => {
+    alert('취소되었습니다')
+    setCancel(!cancel)
+    navigate(`/review/${reviewid}`)
+  }
   return (
     <>
       <Container>
         <InnerContainer>
           <div>
             <Heading>수정 페이지</Heading>
+            <hr></hr>
           </div>
-          <AdminForm action="#" method="POST">
+          {/* <AdminForm action="#" method="POST"> */}
             <InputGroup>
-              <div>
-                <Title>인증후기 수정 페이지</Title>
-              </div>
-              <div>
-                <InputText htmlFor="subject">subject</InputText>
-                <AdminInput
+              <InputDiv>
+                <ReviewInputTitle
                   id="subject"
                   name="subject"
                   type="text"
+                  placeholder="제목"
                   value={subject}
                   onChange={onChange}
                 />
-              </div>
-              <div>
-                <InputText htmlFor="description">description</InputText>
-                <AdminLargeInput
+                <ReviewInputDescription
                   id="description"
                   name="description"
                   type="text"
                   rows="4"
+                  placeholder="내용"
                   value={description}
                   onChange={onChange}
-                ></AdminLargeInput>
-              </div>
+                />
+              </InputDiv>
             </InputGroup>
-            <div>
+            <ButtonDiv>
               <SubmitButton
-                type="submit"
-                onClick={(e) => {
-                  e.preventDefault();
-                  reviewSubmit();
-                }}
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                reviewSubmit();
+              }}
               >
                 제출하기
               </SubmitButton>
-            </div>
-          </AdminForm>
+              <CancelButton
+              onClick={handleCancel}
+              >취소</CancelButton>
+            </ButtonDiv>
+          {/* </AdminForm> */}
         </InnerContainer>
       </Container>
     </>
   );
 };
 
-const Heading = styled.h2`
-  ${tw`
-  mt-6 text-center text-xl font-normal text-indigo-500
-  `}
-`;
-
-const Title = styled.h2`
-  ${tw`
-  text-center text-lg font-normal text-gray-900
-  `}
-`;
 
 const Container = styled.div`
   ${tw`
-  flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 
+  flex min-h-full items-center justify-center sm:px-6 lg:px-8 
   `}
 `;
 
 const InnerContainer = styled.div`
   ${tw`
-  bg-gray-200 w-full max-w-md mt-8 px-5 py-5
+   w-full max-w-md mt-8 px-3 py-3
   `}
 `;
 
-const AdminForm = styled.form`
+const Heading = styled.h2`
   ${tw`
-  mt-8 space-y-6
+  mt-6 text-center text-3xl font-bold tracking-tight text-gray-900
   `}
+  margin-bottom: 20px;
 `;
+
+
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+`
+const SubmitButton = styled.button`
+  background-color: rgb(160, 200, 70);
+  color: white;
+  width: 50%;
+  height: 45px;
+  border-radius: 10px;
+  margin-right: 10px;
+`;
+
+const CancelButton = styled.button`
+  background-color: rgb(205, 205, 205);
+  color: white;
+  width: 50%;
+  height: 45px;
+  border-radius: 10px;
+  margin-left: 10px;
+`;
+
 
 const InputGroup = styled.div`
   ${tw`
-  -space-y-px shadow-sm
+  -space-y-px rounded-lg shadow-sm
   `}
+  margin-top: 30px;
 `;
 
-const InputText = styled.label`
-  ${tw`
-  px-1 mt-4 flex text-sm font-light leading-6 text-gray-500
-  `}
+const InputDiv = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
-const AdminInput = styled.input`
-  ${tw`
-  relative block w-full border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-  
-  `}
+const ReviewInputTitle = styled.input`
+  height: 50px;
+  text-indent: 10px;
+  border: 1px solid rgb(220, 220, 220);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: none;
 `;
 
-const AdminLargeInput = styled.textarea`
-  ${tw`
-  block p-2.5 w-full text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500  `}
-`;
+const ReviewInputDescription = styled.input`
+  height: 200px;
+  border-bottom: 0;
+  border: 1px solid rgb(220, 220, 220);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
-const SubmitButton = styled.button`
-  ${tw`
-  w-full h-full bg-yellow-600 py-2 px-10 font-semibold text-black
-  `}
+  &::placeholder {
+    position: absolute; /* 변경 */
+    top: 13px; 
+    text-indent: 10px;
+    font-size: 15px;
+  }
 `;
 export default ReviewUpdatePage;
