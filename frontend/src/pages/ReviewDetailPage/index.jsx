@@ -69,7 +69,7 @@ const ReviewDetailPage = () => {
     <>
     <MainDiv>
       <Subdiv>
-        <ReviewImg src={ isLoading || review.url ? review.url : heart } alt=""></ReviewImg>
+        <ReviewImg src={ !isLoading && review.url ? review.url : "" } alt=""></ReviewImg>
         <UpperBox>
           <Subject>{review.subject}</Subject>
           <WDate>{year+"."+month+"."+day}</WDate>
@@ -82,16 +82,14 @@ const ReviewDetailPage = () => {
         <LastBox>
           <WDesciption>{review.description}</WDesciption>
         </LastBox>
-        
-      </Subdiv>
-      
       <ButtonWrapper>
-        <LeftDiv>
+        <div>
           <Button
           type="button"
           onClick={() => navigate(-1)}
           >목록</Button>
-        </LeftDiv>
+        </div>
+        <div>
           {
             nickname === review.writer ? (
               <RightDiv>
@@ -100,7 +98,9 @@ const ReviewDetailPage = () => {
               </RightDiv>
               ) : ""
           }
+        </div>
       </ButtonWrapper>
+      </Subdiv>
     </MainDiv>
 
     </>
@@ -112,9 +112,11 @@ const MainDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 100px;
 `
 const Subdiv = styled.div`
-  width: 900px;
+  width: 100%;
+  max-width: 700px;
   display:flex;
   flex-direction: column;
   align-items: center;
@@ -123,7 +125,6 @@ const Subdiv = styled.div`
 const ReviewImg = styled.img`
   display : block;
   border-radius : 15px;
-  width: 900px;
 `
 
 const Subject = styled.h1`
@@ -185,8 +186,8 @@ const WDesciption = styled.div`
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction : row;
-  width: 900px;
   margin-top: 10px;
+  width: 100%;
 `
 const LeftDiv = styled.div`
   margin-right: auto;
