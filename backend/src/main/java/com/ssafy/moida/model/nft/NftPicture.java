@@ -3,6 +3,7 @@ package com.ssafy.moida.model.nft;
 import com.ssafy.moida.model.user.Users;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,8 @@ public class NftPicture {
     @Column(nullable = false, length = 500)
     private String url;
 
+    @Builder
+    public NftPicture(String url) {
+        this.url = url;
+    }
 }
