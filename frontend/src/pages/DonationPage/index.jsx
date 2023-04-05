@@ -53,27 +53,30 @@ const DonationPage = () => {
   return (
     <WrapPage>
       <Container>
-        <Title>기부가 <span style={{color:"#f76868"}}>모이다</span></Title>
+        <Title>
+          기부가 <span style={{ color: "#f76868" }}>모이다</span>
+        </Title>
         <WrapCard>
           {cards.map((card, index) => (
             <DonationCard card={card} key={index}></DonationCard>
-            ))}
+          ))}
         </WrapCard>
-            {role === "ROLE_ADMIN" ? (
-              <Box>
-                <AdminButton
-                  onClick={(e) => {
-                    e.preventDefault();
-                    goCreateProject();
-                  }}
-                >
-                  프로젝트 생성하기
-                </AdminButton>
-              </Box>
-            ) : ("")}
+        {role === "ROLE_ADMIN" ? (
+          <Box>
+            <AdminButton
+              onClick={(e) => {
+                e.preventDefault();
+                goCreateProject();
+              }}
+            >
+              프로젝트 생성하기
+            </AdminButton>
+          </Box>
+        ) : (
+          ""
+        )}
       </Container>
     </WrapPage>
-    
   );
 };
 const WrapPage = styled.div`
@@ -84,25 +87,25 @@ const WrapPage = styled.div`
   height: 100vh;
 `;
 const Container = styled.div`
-width: 100%;
-max-width: 1000px;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-`
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 const Title = styled.h1`
-font-size: 1.7rem;
-font-weight: 900;
-margin-bottom: 20px;
-text-align: left;
-line-height: 2.2rem;
-`
+  font-size: 1.7rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+  text-align: left;
+  line-height: 2.2rem;
+`;
 const WrapCard = styled.div`
-width: 100%;
-display: flex;
-flex-direction: row;
-justify-content: center;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 `;
 
 const Box = styled.div`
