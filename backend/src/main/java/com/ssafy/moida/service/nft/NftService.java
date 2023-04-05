@@ -44,10 +44,10 @@ public class NftService {
         this.nftRepository = nftRepository;
     }
 
-//    // nft 이미지가 사용자가 소유한 nft와 중복인지 체크
-//    public boolean isImageDuplicate(int ImgNum) {
-//        return nftRepository.existsByNftPictureId(ImgNum);
-//    }
+    // nft 이미지가 사용자가 소유한 nft와 중복인지 체크
+    public boolean isImageDuplicate(int ImgNum, Long userId) {
+        return nftRepository.existsByNftPictureId(ImgNum, userId);
+    }
 
     // 랜덤으로 nft 번호 뽑기
     public int getRandomNumber() {
@@ -59,20 +59,20 @@ public class NftService {
     }
 
     // 랜덤 번호에 따른 이미지 제공
-    public NftPicture getRandomImageUrl() {
+    public NftPicture getRandomImageUrl(Users user) {
         int startNum = 1;
         int endNum = (int) nftPictureRepository.count(); // nftPicture entity의 총 개수
 
         int randomNum = new Random().nextInt(endNum - startNum + 1) + startNum;
 
-//        // 사용자가 소유하고 있는 nft인지 체크
-//        boolean nftCheck = isImageDuplicate(randomNum);
-//        log.info("소유여부 : {}", nftCheck);
+        // 사용자가 소유하고 있는 nft인지 체크
+        boolean nftCheck = isImageDuplicate(randomNum, user.getId());
+        log.info("소유여부 : {}", nftCheck);
 
         NftPicture nftPicture = nftPictureRepository.findById((long) randomNum)
                 .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        while (nftPicture.getUrl() == null) {
+        while (nftPicture.getUrl() == null || nftCheck) {
             randomNum = new Random().nextInt(endNum - startNum + 1) + startNum;
             nftPicture = nftPictureRepository.findById((long) randomNum)
                     .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));

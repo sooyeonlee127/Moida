@@ -47,7 +47,7 @@ public class NftController {
         // 유저 정보 가져오기
         log.info("랜덤이미지");
         Users loginUser = tokenUtils.validateAdminTokenAndGetUser(principalDetails, false);
-        log.info("user : {}" , loginUser.getEmail());
+        log.info("user 정보 : {}" , loginUser.getEmail());
 
         // 유저의 남은 티켓 개수 확인
         if(loginUser.getTicketCnt() <= 0) {
@@ -55,10 +55,10 @@ public class NftController {
         }
 
         // 랜덤으로 번호 하나를 뽑기
-        int randomNum = nftService.getRandomNumber();
+        // int randomNum = nftService.getRandomNumber();
 
         // 뽑힌 번호에 해당하는 id를 가진 nft 이미지 링크가져오기
-        NftPicture nftPicture = nftService.getRandomImageUrl();
+        NftPicture nftPicture = nftService.getRandomImageUrl(loginUser);
 
         // 이미지 링크를 이미지 파일로 가져오기
         // File ImgFile = nftService.downloadImage(nftPicture.getUrl());
@@ -90,6 +90,7 @@ public class NftController {
 
         // 이미지 정보 가져오기
         NftPicture nftPicture = nftService.getNftImg(createNftReqDto.getImgId());
+        log.info("이미지 번호 : {}", createNftReqDto.getImgId());
 
         // 티켓 차감
         userService.reduceTicket(loginUser);
