@@ -7,8 +7,10 @@ import { useState } from "react";
 const AdminPage = () => {
   const navigate = useNavigate();
   const [boardid, setBoardid] = useState("");
-  const onChangeBoardid = (e) => setBoardid(e.target.value);
+  const [projectid, setProjectid] = useState("");
 
+  const onChangeBoardid = (e) => setBoardid(e.target.value);
+  const onChangeProjectid = (e) => setProjectid(e.target.value);
   const goPage = (page, id) => {
     if (id) {
       navigate(`/${page}/${id}`, { replace: false });
@@ -37,39 +39,20 @@ const AdminPage = () => {
         </Box>
         <Box>
           <Title>공지글 작성</Title>
-          <InnerBox>
-            <span>흑두루미 공지글 작성하기 </span>
+          <Input
+            type="number"
+            placeholder="프로젝트 id를 입력하세요"
+            value={projectid}
+            onChange={onChangeProjectid}
+          />
             <Btn
               onClick={(e) => {
                 e.preventDefault();
-                goPage("admin/notice", 1);
+                goPage("admin/notice", projectid);
               }}
             >
               go
             </Btn>
-          </InnerBox>
-          <InnerBox>
-            <span>다람쥐 공지글 작성하기 </span>
-            <Btn
-              onClick={(e) => {
-                e.preventDefault();
-                goPage("admin/notice", 2);
-              }}
-            >
-              go
-            </Btn>
-          </InnerBox>
-          <InnerBox>
-            <span>야생동물 공지글 작성하기 </span>
-            <Btn
-              onClick={(e) => {
-                e.preventDefault();
-                goPage("admin/notice", 3);
-              }}
-            >
-              go
-            </Btn>
-          </InnerBox>
         </Box>
         <Box>
           <Title>공지글 수정</Title>
