@@ -65,14 +65,14 @@ public class NftService {
 
         int randomNum = new Random().nextInt(endNum - startNum + 1) + startNum;
 
-        // 사용자가 소유하고 있는 nft인지 체크
-        boolean nftCheck = isImageDuplicate(randomNum);
-        log.info("소유여부 : {}", nftCheck);
+//        // 사용자가 소유하고 있는 nft인지 체크
+//        boolean nftCheck = isImageDuplicate(randomNum);
+//        log.info("소유여부 : {}", nftCheck);
 
         NftPicture nftPicture = nftPictureRepository.findById((long) randomNum)
                 .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        while (nftPicture.getUrl() == null && nftCheck) {
+        while (nftPicture.getUrl() == null) {
             randomNum = new Random().nextInt(endNum - startNum + 1) + startNum;
             nftPicture = nftPictureRepository.findById((long) randomNum)
                     .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
