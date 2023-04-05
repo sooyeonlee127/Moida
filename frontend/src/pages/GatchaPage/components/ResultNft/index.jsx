@@ -13,7 +13,7 @@ import gatcha from "../../../../assets/img/gatcha.svg";
 import Modal from "../../../../components/Modal";
 import loadingspinner from "../../../../assets/img/loadingspinner.svg";
 
-// 수연: 가챠 뽑기
+// 수연: NFT 뽑기 페이지
 const ResultNft = () => {
   const navigate = useNavigate();
   const [author, setAuthor] = useState("");
