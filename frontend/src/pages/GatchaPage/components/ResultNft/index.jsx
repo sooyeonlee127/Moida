@@ -61,7 +61,6 @@ const ResultNft = () => {
       );
       navigate("/check", { replace: false });
     } else {
-      setShow(false); // 로딩 초기화
       setStart(true); // 뽑기 모달 띄우기
       await activate(injected);
       // 이미지 IPFS에 저장 후 해시값 가져와서 링크 저장
@@ -111,10 +110,18 @@ const ResultNft = () => {
     }
   };
 
+  const ClickExit = () => {
+    setStart(false);
+    setImageIPFSUrl("");
+    setMetaIPFSUrl("");
+    setText("NFT를 뽑는 중입니다...");
+    setShow(false); // 로딩 초기화
+  };
+
   // metaIPFSUrl 값에 변화가 생겼을 때 실행
   useEffect(() => {
+    getNftInfo();
     if (imageIPFSUrl && imageIPFSUrl && done === false) {
-      // setDone(true);
       saveNftInfo();
     }
   }, [metaIPFSUrl]);
@@ -144,10 +151,6 @@ const ResultNft = () => {
       });
   };
 
-  useEffect(() => {
-    getNftInfo();
-  }, []);
-
   return (
     <Page>
       <Modal isOpen={start} title={text}>
@@ -156,7 +159,7 @@ const ResultNft = () => {
             <ImageBox>
               <Image src={file} alt="" width="200" />
             </ImageBox>
-            <SubmitButton onClick={(e) => setStart(false)}>닫기</SubmitButton>
+            <SubmitButton onClick={(e) => ClickExit()}>닫기</SubmitButton>
           </>
         ) : (
           <>
@@ -223,12 +226,6 @@ const SubmitButton = styled.button`
   `};
 `;
 
-const Mark = styled.h1`
-  ${tw`
-  text-white
-  text-9xl
-  `}
-`;
 const ImageBox = styled.div`
   ${tw`
   flex justify-center my-10
