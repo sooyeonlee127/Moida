@@ -32,8 +32,8 @@ import NftTestPage from "./pages/NftPage/NftTestPage";
 import BlockChain from "./context/BlockChain";
 import NotFoundPage from "./components/NotFoundPage"
 // import { useBeforeunload } from "react-beforeunload";
+import Footer from "./components/Footer/Index";
 import MetamaskCheck from "./components/MetamaskCheck";
-
 export default function App() {
   // useBeforeunload((event) => event.preventDefault()); // 새로고침 막기 보류
 
@@ -101,6 +101,7 @@ export default function App() {
               <Route path={"/*"} element={<NotFoundPage/>}/>
             </Routes>
           </Body>
+          <Footer/>
         </div>
       </BlockChain>
     </Auth>
@@ -110,5 +111,6 @@ export default function App() {
 const Body = styled.div`
   width: 100%;
   min-height: 100vh;
-  padding: 100px 0px;
+  padding-top: 100px;
+  position: relative;
 `;

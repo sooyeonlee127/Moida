@@ -18,6 +18,7 @@ const GatchaPage = () => {
 
 const Container = styled.div`
   ${tw`my-2`}
+  padding-bottom: 100px;
 `;
 
 export default GatchaPage;

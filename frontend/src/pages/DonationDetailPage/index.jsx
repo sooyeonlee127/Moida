@@ -28,6 +28,7 @@ const DonationDetailPage = () => {
     
     const GetInfoApi = async () => {
         try{
+            setIsLoading(true)
             const response = await api({
                 url: "/project/"+projectId,
                 method: "GET",
@@ -36,9 +37,11 @@ const DonationDetailPage = () => {
                     Authorization: localStorage.getItem("accessToken")
                 }
             })
+            setIsLoading(false)
             return response.data;
         } 
         catch (error) {
+            setIsLoading(false)
             console.error(error);
             return error;
         }
@@ -52,7 +55,7 @@ const DonationDetailPage = () => {
     return (
         <Wrapper>
             <Main>
-                <MainImage />
+              <MainImage thumbnail={!isLoading? projectInfo?.thumbnail : ""}/>
                 <Aside>
                     <TabGroup>
                         <Tab className={tabIndex===0 ? "active":""} onClick={ () => setTabIndex(0) }>기부하기</Tab>
@@ -97,7 +100,8 @@ height: 400px;
 width: 580px;
 box-shadow: 3px 5px 20px rgba(0,0,0,15%);
 border-radius: 10px;
-${tw`bg-[url('https://thumb.mt.co.kr/06/2021/02/2021022514598215872_1.jpg/dims/optimize/')]`}
+background-image: url(${(props) => props.thumbnail});
+background-size: cover;
 `
 
 const Aside = styled.div`
@@ -170,10 +174,12 @@ const InnerContent = styled.div`
 const SectionTab = styled.div`
   top: 0px;
   left: 0px;
+  position: absolute;
+  display: inline-block;
   padding: 10px 60px;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
-  background: #a0c846;
+  background: rgb(160, 200, 70);
   color: white;
 `;
 
