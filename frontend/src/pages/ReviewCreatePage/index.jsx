@@ -2,7 +2,7 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer, useState } from "react";
 import api from "../../api/auth";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // 혜수: 사용자 인증글 생성 페이지
 const ReviewCreatePage = () => {
@@ -11,6 +11,8 @@ const ReviewCreatePage = () => {
   const category = location.state.category;
   const projectId = location.state.projectId;
   console.log(volunteerId, category)
+
+  const [cancel,setCancel] = useState(false);
 
   const reducer = (state, action) => {
     return {
@@ -75,49 +77,30 @@ const ReviewCreatePage = () => {
       .catch((error) => {
         const response = error.response.data;
         console.log(response);
-        alert("등록을 실패하였습니다.")
+        if (cancel === false) {
+          alert("등록을 실패하였습니다.")
+        }
       });
   };
+
+  const navigate = useNavigate();
+  const handleCancel = () => {
+    alert('취소되었습니다')
+    setCancel(!cancel)
+    navigate(-1);
+  }
 
   return (
     <>
       <Container>
         <InnerContainer>
           <div>
-            <Heading>인증후기작성</Heading>
+            <Heading>리뷰 작성하기</Heading>
+            <hr></hr>
           </div>
-
-          <ReviewForm method="POST" onSubmit={handleSubmit}>
-            <div>
-              <Heading>글작성</Heading>
-            </div>
-            <InputGroup>
+          <InputGroup>
               <InputDiv>
-                <InputText htmlFor="subject">제목 : </InputText>
-                <ReviewInput
-                  id="subject"
-                  name="subject"
-                  type="text"
-                  value={subject}
-                  onChange={onChange}
-                />
-              </InputDiv>
-            </InputGroup>
-            <InputGroup>
-              <InputDiv>
-                <InputText htmlFor="description">내용 : </InputText>
-                <ReviewInput
-                  id="description"
-                  name="description"
-                  type="text"
-                  value={description}
-                  onChange={onChange}
-                />
-              </InputDiv>
-            </InputGroup>
-            <InputGroup>
-              <InputDiv>
-                <InputText htmlFor="difficultyLevel">난이도 </InputText>
+                <InputText htmlFor="difficultyLevel"> 봉사는 어떠셨나요? </InputText>
                 <ReviewInput
                   id="difficultyLevel"
                   name="difficultyLevel"
@@ -126,10 +109,40 @@ const ReviewCreatePage = () => {
                   onChange={onChange}
                 />
               </InputDiv>
+          </InputGroup>
+          <ReviewForm method="POST" onSubmit={handleSubmit}>
+            <div>
+              {/* <Heading>글작성</Heading> */}
+            </div>
+            <InputGroup>
+              <InputDiv>
+                {/* <InputText htmlFor="subject">제목 : </InputText> */}
+                <ReviewInputTitle
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  placeholder="제목"
+                  value={subject}
+                  onChange={onChange}
+                />
+              {/* </InputDiv>
+            </InputGroup>
+            <InputGroup>
+              <InputDiv> */}
+                {/* <InputText htmlFor="description">내용 : </InputText> */}
+                <ReviewInputDescription
+                  id="description"
+                  name="description"
+                  type="text"
+                  placeholder="내용"
+                  value={description}
+                  onChange={onChange}
+                />
+              </InputDiv>
             </InputGroup>
             <InputGroup>
               <div>
-                <Heading>파일 첨부</Heading>
+                {/* <Heading>파일 첨부</Heading> */}
               </div>
               {/* <InputText htmlFor="files">files</InputText> */}
               <ReviewInput
@@ -144,11 +157,14 @@ const ReviewCreatePage = () => {
               />
              
             </InputGroup>
-            <div>
+            <ButtonDiv>
               <SubmitButton type="submit">
                 제출하기
               </SubmitButton>
-            </div>
+              <CancelButton
+              onClick={handleCancel}
+              >취소</CancelButton>
+            </ButtonDiv>
           </ReviewForm>
         </InnerContainer>
       </Container>
@@ -162,8 +178,7 @@ export default ReviewCreatePage;
 
 const Container = styled.div`
   ${tw`
-  flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 
-  `}
+  flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 `}
 `;
 
 const InnerContainer = styled.div`
@@ -176,6 +191,7 @@ const Heading = styled.h2`
   ${tw`
   mt-6 text-center text-3xl font-bold tracking-tight text-gray-900
   `}
+  margin-bottom: 20px;
 `;
 
 const ReviewForm = styled.form`
@@ -186,7 +202,7 @@ const ReviewForm = styled.form`
 
 const InputGroup = styled.div`
   ${tw`
-  -space-y-px rounded-md shadow-sm
+  -space-y-px rounded-lg shadow-sm
   `}
 `;
 
@@ -196,20 +212,64 @@ const InputText = styled.label`
   `}
 `;
 
+const ReviewInputTitle = styled.input`
+  height: 50px;
+  text-indent: 10px;
+  border: 1px solid rgb(220, 220, 220);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom: none;
+
+
+`;
+
+const ReviewInputDescription = styled.input`
+  height: 200px;
+  border-bottom: 0;
+  border: 1px solid rgb(220, 220, 220);
+
+
+
+  &::placeholder {
+    position: absolute; /* 변경 */
+    top: 13px; 
+    text-indent: 10px;
+    font-size: 15px;
+  }
+`;
+
 const ReviewInput = styled.input`
   ${tw`
-  relative block w-full rounded-b-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-  
+  relative block w-full rounded-lg border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
   `}
-`;
+`
+
 
 const InputDiv = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 `;
 
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: center;
+
+`
+
 const SubmitButton = styled.button`
-  ${tw`
-  w-full h-full bg-yellow-600 py-2 px-10 font-semibold text-black
-  `}
+  background-color: rgb(160, 200, 70);
+  color: white;
+  width: 40%;
+  height: 45px;
+  border-radius: 10px;
+  margin-right: 10px;
+`;
+
+const CancelButton = styled.button`
+  background-color: rgb(205, 205, 205);
+  color: white;
+  width: 40%;
+  height: 45px;
+  border-radius: 10px;
+  margin-left: 10px;
 `;
