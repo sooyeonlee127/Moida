@@ -232,16 +232,8 @@ const DonationForm = (props) => {
           </CoinButtonGroup>
         </div>
         <GroupButton>
-          <Button className="reset" onClick={() => setMoi(0)}>
-            초기화
-          </Button>
-          <Button
-            onClick={SendMoi}
-            disabled={isDisabled}
-            className={isDisabled ? "disabled donation" : "donation"}
-          >
-            기부하기
-          </Button>
+          <Button className="reset" onClick={() => setMoi(0)}>초기화</Button>
+          <Button onClick={SendMoi} disabled={isDisabled} className={isDisabled ? "disabled donation" : "enabled donation"}>기부하기</Button>
           {/* 마감 기한이 지날 경우 isDisabled true */}
         </GroupButton>
       </Div>
@@ -297,10 +289,10 @@ padding: 10px 3px;
   color: white;
   font-weight: 500;
 }
-&.donation:hover {
+&.donation.enabled:hover {
   background: #a9d34b;
 }
-&.donation:active {
+&.donation.enabled:active {
   background: #9ac240;
 }
 &.reset {

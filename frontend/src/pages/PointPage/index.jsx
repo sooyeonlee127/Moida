@@ -174,6 +174,7 @@ const Container = styled.div`
   -webkit-box-pack: justify;
   justify-content: space-between;
   align-items: flex-start;
+  padding-bottom: 100px;
 `;
 
 const PointContainer = styled.div`

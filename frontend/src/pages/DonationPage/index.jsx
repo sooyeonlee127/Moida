@@ -84,7 +84,6 @@ const WrapPage = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 100vh;
 `;
 const Container = styled.div`
   width: 100%;

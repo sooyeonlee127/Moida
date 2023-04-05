@@ -56,16 +56,20 @@ const VolunteerForm = (props) => {
 
 
     function dateFormat(date) { // yyyy-mm-dd로 변환하는 함수 - 이은혁
-        let res = date.getFullYear() +
-            '-' + ( (date.getMonth()+1) < 10 ? "0" + (date.getMonth()+1) : (date.getMonth()+1))+
-            '-' + ( (date.getDate()) < 10 ? "0" + (date.getDate()) : (date.getDate()) );
+        let res = date?.getFullYear() +
+            '-' + ( (date?.getMonth()+1) < 10 ? "0" + (date?.getMonth()+1) : (date?.getMonth()+1))+
+            '-' + ( (date?.getDate()) < 10 ? "0" + (date?.getDate()) : (date?.getDate()) );
             console.log(data)
         return res;
     }
 
     const ParticipateApi = () => {  // 기부 API: 기부하기 버튼 클릭 시 작동 - 이은혁
         console.log("axios 요청 :"+dateFormat(value))
-        const id = String(dateMap[dateFormat(value)].id)
+        if (!value) {
+            alert("날짜를 선택해주세요.");
+            return
+        }
+        const id = String(dateMap[dateFormat(value)]?.id)
         axios({
             url: "/api/project/volunteer",
             method: "POST",
@@ -78,12 +82,10 @@ const VolunteerForm = (props) => {
             }
         })
         .then((res) => {
-            console.log(res.data)
             alert("봉사 신청이 완료되었습니다.")
         })
         .catch((err) => {
-            // console.log(err)
-            alert(err.data.response)
+            alert(err.response.data.message)
         })
     }
 

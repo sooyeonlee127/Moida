@@ -50,7 +50,7 @@ const DonationList = () => {
                         {data.projectCategory==="CRANE" ? (<img className='badge' src={badge_crane} alt="" />):""}
                         {data.projectCategory==="WILD_ANIMAL" ? (<img className='badge' src={badge_wild_animal} alt="" />):""}
                     </div>
-                    <div className="item_sec grow_sec">
+                    <div className="item_sec main_sec">
                         <p className="weak">{data.generation}차 프로젝트</p>
                         <p className="title mb-1"><Link className="link" to={`/donation/`+data.projectId}>{data.projectSubject}</Link></p>
                         <p className="weak">기부한 날짜 : {year+"."+month+"."+day}</p>
@@ -67,11 +67,8 @@ const DonationList = () => {
             )
         })}
         </div>
-        {/* <div className='group_pagebtn'> 
-          {pageList?.map((num, index)=>{ return (<button className="pagebtn" key={index} onClick={()=> setPageNum(num)}>{num}</button>) })}
-        </div> */}
-           <Paging page={pageNum} totalItem={length} setPage={(e)=>setPageNum(e)}/> 
-        </>
+        <Paging page={pageNum} totalItem={length} setPage={(e)=>setPageNum(e)}/> 
+    </>
     )
 }
 
