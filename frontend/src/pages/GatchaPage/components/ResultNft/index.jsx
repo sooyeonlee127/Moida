@@ -9,28 +9,32 @@ import api from "../../../../api/auth";
 import { BlockContext } from "../../../../context/BlockChain";
 import { useNavigate } from "react-router-dom";
 import { injected } from "../../../../lib/connectors";
+import gatcha from "../../../../assets/img/gatcha.svg";
+import Modal from "../../../../components/Modal";
+import loadingspinner from "../../../../assets/img/loadingspinner.svg";
 
+// 수연: 가챠 뽑기
 const ResultNft = () => {
   const navigate = useNavigate();
   const [author, setAuthor] = useState("");
   const [title, setTitle] = useState("");
   const [imageIPFSUrl, setImageIPFSUrl] = useState("");
   const [metaIPFSUrl, setMetaIPFSUrl] = useState("");
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null); // 뽑기 결과 파일
   const [imgId, setImgId] = useState("");
   const nickname = localStorage.getItem("nickname");
   const [done, setDone] = useState(true);
   const [show, setShow] = useState(false);
+  const [start, setStart] = useState(false);
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const { nftCnt, setNftCnt } = useContext(BlockContext);
+  const [text, setText] = useState("NFT를 뽑는 중입니다...");
 
   const {
     account, // DApp에 연결된 account address
     connector,
     activate,
   } = useWeb3React();
-
-  const [text, setText] = useState("?");
 
   const getNftInfo = async () => {
     api({
@@ -57,7 +61,8 @@ const ResultNft = () => {
       );
       navigate("/check", { replace: false });
     } else {
-      setText("로딩중");
+      setShow(false); // 로딩 초기화
+      setStart(true); // 뽑기 모달 띄우기
       await activate(injected);
       // 이미지 IPFS에 저장 후 해시값 가져와서 링크 저장
       const imgfile = {
@@ -109,7 +114,7 @@ const ResultNft = () => {
   // metaIPFSUrl 값에 변화가 생겼을 때 실행
   useEffect(() => {
     if (imageIPFSUrl && imageIPFSUrl && done === false) {
-      setDone(true);
+      // setDone(true);
       saveNftInfo();
     }
   }, [metaIPFSUrl]);
@@ -131,6 +136,7 @@ const ResultNft = () => {
     })
       .then((res) => {
         setShow(true);
+        setText("NFT를 획득했습니다!");
         setNftCnt(nftCnt + 1);
       })
       .catch((error) => {
@@ -144,15 +150,27 @@ const ResultNft = () => {
 
   return (
     <Page>
-      <Container>
-        <Box>
-          {show ? (
+      <Modal isOpen={start} title={text}>
+        {show ? (
+          <>
             <ImageBox>
               <Image src={file} alt="" width="200" />
             </ImageBox>
-          ) : (
-            <Mark>{text}</Mark>
-          )}
+            <SubmitButton onClick={(e) => setStart(false)}>닫기</SubmitButton>
+          </>
+        ) : (
+          <>
+            <ImageBox>
+              <Image src={loadingspinner} alt="" width="200" />
+            </ImageBox>
+          </>
+        )}
+      </Modal>
+      <Container>
+        <Box>
+          <ImageBox>
+            <Image src={gatcha} alt="" width="800" />
+          </ImageBox>
         </Box>
       </Container>
       <ButtonGroup>
@@ -164,7 +182,7 @@ const ResultNft = () => {
               addItem();
             }}
           >
-            1회 뽑기
+            티켓 1장 사용하기
           </SubmitButton>
         )}
       </ButtonGroup>
@@ -180,14 +198,11 @@ const Page = styled.div`
 
 const Container = styled.div`
   ${tw`
-  flex items-center justify-center 
+  flex items-center justify-center
   `}
 `;
 
 const Box = styled.div`
-  height: 400px;
-  width: 400px;
-  background-color: rgb(225, 237, 213);
   ${tw`
   flex
   items-center justify-center
@@ -202,8 +217,9 @@ const ButtonGroup = styled.div`
 `;
 
 const SubmitButton = styled.button`
-  background-color: rgb(160, 200, 70);
-  ${tw` my-4 py-3 px-10 font-semibold text-black
+  background-color: rgb(60, 197, 176);
+  box-shadow: 5px 5px rgb(161, 161, 158);
+  ${tw` my-4 py-4 px-10 font-black text-white rounded tracking-tighter
   `};
 `;
 
