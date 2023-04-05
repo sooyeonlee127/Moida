@@ -100,4 +100,12 @@ public class NftController {
         return new ResponseEntity<>("nft 저장 완료", HttpStatus.OK);
     }
 
+    @PostMapping("/saveImg")
+    public ResponseEntity<?> saveImg(String url) {
+        // 이미지 저장
+        nftService.saveImg(url);
+
+        return new ResponseEntity<>("저장", HttpStatus.OK);
+    }
+
 }
