@@ -112,11 +112,9 @@ const ReviewCreatePage = () => {
           </InputGroup>
           <ReviewForm method="POST" onSubmit={handleSubmit}>
             <div>
-              {/* <Heading>글작성</Heading> */}
             </div>
             <InputGroup>
               <InputDiv>
-                {/* <InputText htmlFor="subject">제목 : </InputText> */}
                 <ReviewInputTitle
                   id="subject"
                   name="subject"
@@ -125,11 +123,6 @@ const ReviewCreatePage = () => {
                   value={subject}
                   onChange={onChange}
                 />
-              {/* </InputDiv>
-            </InputGroup>
-            <InputGroup>
-              <InputDiv> */}
-                {/* <InputText htmlFor="description">내용 : </InputText> */}
                 <ReviewInputDescription
                   id="description"
                   name="description"
@@ -142,9 +135,7 @@ const ReviewCreatePage = () => {
             </InputGroup>
             <InputGroup>
               <div>
-                {/* <Heading>파일 첨부</Heading> */}
               </div>
-              {/* <InputText htmlFor="files">files</InputText> */}
               <ReviewInput
                 id="file"
                 name="file"
@@ -219,16 +210,14 @@ const ReviewInputTitle = styled.input`
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   border-bottom: none;
-
-
 `;
 
 const ReviewInputDescription = styled.input`
   height: 200px;
   border-bottom: 0;
   border: 1px solid rgb(220, 220, 220);
-
-
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
   &::placeholder {
     position: absolute; /* 변경 */
@@ -259,7 +248,7 @@ const ButtonDiv = styled.div`
 const SubmitButton = styled.button`
   background-color: rgb(160, 200, 70);
   color: white;
-  width: 40%;
+  width: 50%;
   height: 45px;
   border-radius: 10px;
   margin-right: 10px;
@@ -268,7 +257,7 @@ const SubmitButton = styled.button`
 const CancelButton = styled.button`
   background-color: rgb(205, 205, 205);
   color: white;
-  width: 40%;
+  width: 50%;
   height: 45px;
   border-radius: 10px;
   margin-left: 10px;
