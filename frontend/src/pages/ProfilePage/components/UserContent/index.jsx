@@ -50,7 +50,6 @@ flex-direction: column;
 background: white;
 border-top: 1px solid #DFDFDF;
 padding: 40px 0 100px 0;
-box-shadow: 0 0px 20px rgb(0 0 0 / 15%);
 `;
 const InnerContent = styled.div`
 margin: 0px auto;
