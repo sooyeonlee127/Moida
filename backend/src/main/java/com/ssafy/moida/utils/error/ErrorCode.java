@@ -36,6 +36,7 @@ public enum ErrorCode {
     INVALID_POINT(UNPROCESSABLE_ENTITY, "입력한 포인트가 음수이거나 변수의 범위를 넘었습니다."),
     USER_TICKET_LACK(BAD_REQUEST, "사용자가 보유한 티켓이 없습니다."),
     NFT_NOT_FOUND(BAD_REQUEST, "사용자가 소유하고 있지 않은 NFT입니다."),
+    ALL_NFT_OWNERSHIP_ERROR(BAD_REQUEST, "현재 제공되는 이미지의 NFT를 모두 소유하고 있습니다."),
 
     /* [한선영] 404 NOT_FOUND : Resource를 찾을 수 없음 */
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
