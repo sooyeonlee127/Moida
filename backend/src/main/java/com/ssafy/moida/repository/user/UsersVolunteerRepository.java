@@ -1,5 +1,6 @@
 package com.ssafy.moida.repository.user;
 
+import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
@@ -20,7 +21,7 @@ public interface UsersVolunteerRepository extends JpaRepository<UsersVolunteer, 
     boolean existsById(UsersVolunteer usersVolunteer);
     Optional<UsersVolunteer> findById(Long id);
     Page<UsersVolunteer> findByUsersOrderByRegDateDesc(Users users, Pageable pageable);
-    long countByUsersId(Long userId);
+    long countByUsersIdAndStatus(Long userId, Status status);
     @Query("SELECT COUNT(*) FROM UsersVolunteer uv where uv.users.id = :userId")
     Long countUsersOrderByRegDateDesc(@Param("userId") Long userId);
 }
