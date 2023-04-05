@@ -8,10 +8,9 @@ import { useLocation } from "react-router-dom";
 const ReviewCreatePage = () => {
   const location = useLocation();
   const volunteerId = location.state.volunteerId;
+  const category = location.state.category;
   const projectId = location.state.projectId;
-  
-  const categorys = ['CRANE','SQUIRREL','WILD_ANIMAL']
-  const category = categorys[projectId]
+  console.log(volunteerId, category)
 
   const reducer = (state, action) => {
     return {
