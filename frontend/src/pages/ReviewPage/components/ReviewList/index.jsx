@@ -74,7 +74,7 @@ const ReviewList = () => {
               </CategoryBox>
 
               {/* 정렬 */}
-              <Sort className="select">
+              <Sort>
                 <select onChange={(e)=> setSelected2(e.target.value)}>
                   {sort.map((element,index) => (
                     <option key={index} value={element}>{sortName[index]}</option>
@@ -212,11 +212,12 @@ const CategoryBox = styled.div`
 
 const Sort = styled.div`
   color: rgb(98, 102, 110);
-  &.select > select {
+  font-weight: 600;
+
+  & > select {
     background-color: transparent;
     font-size: 0.9rem;
     cursor : pointer;
-
   }
 `
 
