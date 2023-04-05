@@ -116,15 +116,19 @@ const ResultNft = () => {
     setMetaIPFSUrl("");
     setText("NFT를 뽑는 중입니다...");
     setShow(false); // 로딩 초기화
+    getNftInfo();
   };
 
   // metaIPFSUrl 값에 변화가 생겼을 때 실행
   useEffect(() => {
-    getNftInfo();
     if (imageIPFSUrl && imageIPFSUrl && done === false) {
       saveNftInfo();
     }
   }, [metaIPFSUrl]);
+
+  useEffect(() => {
+    getNftInfo(); // 뽑을 NFT 불러옴
+  }, []);
 
   const saveNftInfo = async () => {
     api({
@@ -227,7 +231,7 @@ const SubmitButton = styled.button`
   `};
   &:hover {
     background-color: rgb(79 211 190);
-    box-shadow: 5px 5px 0 rgba(0,0,0,0.5);
+    box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5);
   }
 `;
 
