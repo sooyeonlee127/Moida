@@ -71,54 +71,60 @@ ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
 <br/><br/>
 
 ### 시스템 아키텍처
-</br></br>
+<br/><br/>
 
 ### 상세 디자인
-</br></br>
+
 
 <br/><br/></br>
 # 4. Blockchain & NFT 개념과 적용
 ### Blockchain
 - 간단한 설명
 - 영상
-</br></br>
+<br/><br/>
 
 ### NFT
 - 간단한 설명
-- 영상
-
-</br></br></br>
+- 영상   
+   
+<br/><br/><br/>   
 # 5. 서비스 화면 (프로젝트 결과)
 ### 기능별 or 흐름순 gif 및 설명 추가
-
-</br></br></br>
+   
+<br/><br/><br/>
 # 6. 협업 과정
 ### 협업 툴
 - Git, JIRA, Notion, MatterMost
-</br></br>
+<br/><br/>
 
 ### 컨벤션
 - Git 컨벤션
 - JIRA 컨벤션
-</br></br>
+<br/><br/>
 
 ### Git Flow
 - gif 추가
-</br></br>
+<br/><br/>
 
-### JIRA Burndown Chart
-- 
+### JIRA 번다운 차트
+![JIRA_week1](./images/JIRA_week1.png)
+![JIRA_week2](./images/JIRA_week2.png)
+![JIRA_week3](./images/JIRA_week3.png)
+![JIRA_week4](./images/JIRA_week4.png)
+![JIRA_week5](./images/JIRA_week5.png)
 
-</br></br></br>
+
+<br/><br/><br/> 
 # 7. 지꿈지꿈 팀 소개
 ### 팀원 소개 및 담당 역할
 - 이미지 추가
-</br></br>
+<br/><br/>
 
 ### 프로젝트 회고
 - 회고 받아서 추가하기(테이블)
 
-</br></br></br>
+
+<br/><br/><br/> 
 # 8. 프로젝트 관련 링크 모음
 - 링크 추가하기
 
