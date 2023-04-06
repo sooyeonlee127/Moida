@@ -76,7 +76,11 @@ const DonationDetailPage = () => {
                           <p>"{projectInfo?.projectReqDto.subject}"</p>
                           <p>{projectInfo?.projectReqDto.description}</p>
                           </div>
-                          <img src={projectInfo?.pictures} alt="" />
+                          {
+                            projectInfo?.pictures?.map((picture, index) => {
+                              <img key={index} src={picture} alt="" />
+                            })
+                          }
                         </DetailContent>
                     </InnerContent>
                 </Content> 

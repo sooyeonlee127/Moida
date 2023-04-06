@@ -201,12 +201,6 @@ align-items: center;
   min-height: 500px;
   // background: red;
 }
-& > .filelist {
-  margin: 10px 0;
-  width: 100%;
-  min-height: 100px;
-  background: #eeeeee;
-}
 & > .content_footer {
   width: 100%;
   border-top: 1px solid #c0c0c0;
