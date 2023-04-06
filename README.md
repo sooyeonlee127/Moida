@@ -121,7 +121,17 @@ NFT를 저장하는 외부 저장소로 IPFS를 주로 사용한다.
 <br/><br/><br/>   
 # 5. 서비스 화면 (프로젝트 결과)
 ### 기능별 or 흐름순 gif 및 설명 추가
-   
+### 메인 페이지
+![Page_main](./images/page_main.gif)
+
+### 포인트 충전
+![page_pointCharge1.gif](./images/page_pointCharge1.gif)
+![page_pointCharge2.gif](./images/page_pointCharge2.gif)
+
+### NFT 가챠샵
+![page_gacha](./images/page_gacha.gif)
+
+
 <br/><br/><br/>
 # 6. 협업 과정
 ### 협업 툴
