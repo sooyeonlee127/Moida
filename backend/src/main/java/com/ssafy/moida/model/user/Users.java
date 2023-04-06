@@ -41,7 +41,7 @@ public class Users {
     //nft주소랑 지갑주소가 아직 알 수 없어서 잠시 null 처리함
     //@Column(nullable = false, length = 500)
     @Column(length = 500)
-    private String nftUrl;
+    private String nftUrl = "https://s3.ap-northeast-2.amazonaws.com/moida.bucket/static/nft/basic.png";
     //@Column(nullable = false, length = 500)
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

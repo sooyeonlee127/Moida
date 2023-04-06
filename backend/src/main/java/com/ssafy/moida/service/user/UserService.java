@@ -72,7 +72,7 @@ public class UserService {
                 .nickname(userJoinReqDto.getNickname())
                 .ticketCnt(0)
                 .point(0L)
-                .nftUrl(userJoinReqDto.getNftUrl())
+                .nftUrl("https://s3.ap-northeast-2.amazonaws.com/moida.bucket/static/nft/basic.png")
                 .role(userJoinReqDto.getRole())
                 .build();
 
