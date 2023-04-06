@@ -1,6 +1,6 @@
 # 🐿 야생동물 상생 플랫폼, 모이다 🦩
 
-로고 이미지
+![로고이미지](./images/Logo.png)
 
 # 1. 서비스 소개
 ## 📅 진행 기간
@@ -94,14 +94,30 @@ ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
 
 <br/><br/></br>
 # 4. Blockchain & NFT 개념과 적용
-### Blockchain
+## Blockchain
 - 간단한 설명
-- 영상
+### 서비스 내 Fauset 흐름
+![Fauset_Flow](./images/Faucet_Flow.png)
+### 서비스 내 블록체인 흐름
+![Blockchain_Flow](./images/Blockchain_Flow.png)
+### Blockchain 개념 정리 영상    
+- 동영상 링크
 <br/><br/>
 
-### NFT
-- 간단한 설명
-- 영상   
+## NFT
+- NFT는 대체 불가능 토큰(Non-fungible token), 블록체인 기술을 이용하여 디지털 자산의 소유주를 증명하는 방식이다. 
+블록체인의 트랜젝션 해시와 메타데이터를 통해서 소유주를 증명할 수 있다.
+트랜젝션은 거래에 대한 기록을, 메타데이터는 NFT에 대해 고유한 원본성과 소유권을 나타내는데 사용된다.
+- NFT의 고유한 속성 값을 담고있는 JSON 데이터를 메타데이터라고 한다. 
+보통 블록체인이 가진 저장공간 제약 때문에 이미지를 외부 저장소에 저장하고, URI만 가져다 쓰는 오프체인 방식으로 많이 저장한다.
+이때 저장된 메타데이터를 볼 수 있도록 하는 외부 링크를 token URI라고 말한다.
+NFT를 저장하는 외부 저장소로 IPFS를 주로 사용한다.
+위 서비스는 외부 저장소로 Pinata라는 클라우드 서비스를 사용한다.
+### 서비스 내 NFT 흐름
+![NFT_Flow](./images/NFT_Flow.png)  
+
+### NFT 개념 정리 영상 
+- 동영상 링크     
    
 <br/><br/><br/>   
 # 5. 서비스 화면 (프로젝트 결과)
