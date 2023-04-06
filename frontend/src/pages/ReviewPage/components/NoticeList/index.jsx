@@ -2,29 +2,33 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { Link } from "react-router-dom";
 import 다람쥐영상 from "../../../../assets/videos/다람쥐영상.mp4";
-import 다람쥐사진 from "../../../../assets/img/wheat.png";
+import 흑두루미영상 from "../../../../assets/videos/흑두루미영상.mp4";
+import 토끼영상 from "../../../../assets/videos/토끼영상.mp4";
+import 흑두루미사진 from "../../../../assets/img/wheat.png";
+import 토끼사진 from "../../../../assets/img/corn.png";
+import 다람쥐사진 from "../../../../assets/img/acorn.png";
 
 const NoticeList = () => {
   const noticeList = [
     {
       title: "흑두루미",
       shortDesc: "짧은 소개글",
-      imgUrl:
-        "https://species.nibr.go.kr/UPLOAD/digital/species/120000001652/BIMGAV0000376784_20211105162445204924.jpg",
+      videoUrl: 흑두루미영상,
+      imgUrl: 흑두루미사진,
       category: "CRANE",
     },
     {
       title: "다람쥐",
       shortDesc: "짧은 소개글",
-      imgUrl:
-        "https://www.wonju.go.kr/DATA/bbs/136/202107031124275466AEAEDB644417BBG.jpg",
+      videoUrl: 다람쥐영상,
+      imgUrl: 다람쥐사진,
       category: "SQUIRREL",
     },
     {
       title: "야생동물",
       shortDesc: "짧은 소개글",
-      imgUrl:
-        "https://2.bp.blogspot.com/-Eh8GlQ-IzA8/VtO7GnMR4pI/AAAAAAAAHMI/m4uLeNSqe-M/s640/IMG_8734.JPG",
+      videoUrl: 토끼영상,
+      imgUrl: 토끼사진,
       category: "WILD_ANIMAL",
     },
   ];
@@ -40,14 +44,15 @@ const NoticeList = () => {
               <Video>
                 <div style={{ position: "relative" }}>
                   <video
+                    width="325"
                     muted
                     loop
                     onMouseOver={(e) => e.target.play()}
                     onMouseOut={(e) => e.target.pause()}
                   >
-                    <source src={다람쥐영상} type="video/mp4"></source>
+                    <source src={notice.videoUrl} type="video/mp4"></source>
                   </video>
-                  <Image src={다람쥐사진} alt="" />
+                  <Image src={notice.imgUrl} alt="" />
                 </div>
               </Video>
             </Link>
@@ -87,8 +92,9 @@ const Video = styled.div`
     opacity: 1;
     transition: 0.2s;
     background-color: rgb(225, 237, 213);
-    width: 100%;
+    width: 325px;
     height: 100%;
+    padding: 40px;
   }
 
   &:hover ${Image} {
