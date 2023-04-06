@@ -60,8 +60,8 @@ const Projects = (props) => {
             {/* <p>모이 1개당 {projectReqDto.pointPerMoi} point</p> */}
             <div style={{display:"flex", flexDirection: "row", justifyContent:"space-between", alignItems: "flex-end"}}>
               <div style={{display: "inline-block"}}>
-                <p id="amount">현재 {donationResDto.amount} 개</p>
-                <p id="target_amount">목표 {donationResDto.targetAmount} 개</p>
+                <p id="amount">현재 {(donationResDto.amount).toLocaleString("ko-KR")} 원</p>
+                <p id="target_amount">목표 {(donationResDto.targetAmount).toLocaleString("ko-KR")} 원</p>
               </div>
               <div style={{display: "inline-block"}}>
                 <Button onClick={()=>clickCard(donationResDto.id)}>참여하기</Button>
