@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Paging from '../../../../../components/Pagination/Paging'
 import { useNavigate } from 'react-router-dom';
 import 기본_이미지 from "../../../../../assets/img/기본_이미지.png"
- 
+import DifficultyBar from '../../../../../components/DifficultyBar';
 
 const MyReviews = () => {
   const [pageNum, setPageNum] = useState(1)
@@ -31,7 +31,7 @@ const MyReviews = () => {
                       <p className='short_desc'>{data.description}</p>
                      </div>
                     <div className="item_sec w-1">
-                      난이도 : {data.difficultyLevel}
+                      난이도 <DifficultyBar size="0.9rem" difficulty={data.difficultyLevel}/>
                     </div>
                     <div className="item_sec w-2">
                       <p className='weak'>{data.regDate}</p>

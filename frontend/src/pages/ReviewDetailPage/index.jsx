@@ -6,6 +6,7 @@ import tw from "twin.macro";
 import axios from "axios";
 import api from "../../api/auth"
 import "./index.css"
+import DifficultyBar from "../../components/DifficultyBar";
 
 //혜수: 리뷰 상세 페이지 조회
 const ReviewDetailPage = () => {
@@ -75,7 +76,8 @@ const ReviewDetailPage = () => {
         </UpperBox>
         <Line></Line>
         <MidBox>
-          <Difficulty>체감 난이도 {review.difficultyLevel}</Difficulty>
+        
+          <Difficulty>난이도 <DifficultyBar size="0.9rem" difficulty={review.difficultyLevel}/></Difficulty>
           <Writer>{review.writer}</Writer>
         </MidBox>
         <LastBox>

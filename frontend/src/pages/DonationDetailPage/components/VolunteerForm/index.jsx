@@ -6,6 +6,7 @@ import '../../../../common/style/calendar.css';
 import styled from 'styled-components';
 import { IoPeopleOutline } from "react-icons/io5";
 import { GoLocation } from "react-icons/go"
+import DifficultyBar from '../../../../components/DifficultyBar';
 
 const VolunteerForm = (props) => {
     const data = {
@@ -94,7 +95,7 @@ const VolunteerForm = (props) => {
     return (
         <div>
             {/* <Text className="dday size-4 weight-9 left color-3">디데이</Text> */}
-            <Text className="left weight-2 size-2">난이도 : {data.difficultyLevel}</Text>
+            <Text className="left weight-2 size-2">난이도 <DifficultyBar size="0.9rem" difficulty={data.difficultyLevel}/></Text>
             <Div className="mb-1">
                 <Text className="size-5 weight-6 left color-3">{data.subject}</Text>
                 <Text className="size-1 weight-2 left color-3 period">
@@ -115,11 +116,22 @@ const VolunteerForm = (props) => {
             </Div>
             <Text className="left weight-6 size-3">봉사 희망일 선택</Text>
             <Calendar onChange={onChange} tileDisabled={({date})=> disableTile(date)} value={value}	minDate={new Date(data.startDate)} maxDate={new Date(data.endDate)} disableTile/>
-            <Text className="expected_date">
-                <span><span style={{marginRight:"1.3rem"}}>희망일</span>{selectedYear}년 {selectedMonth}월 {selectedDay}일</span>
-                <span>{dateMap[stringValue]?.capacity}/{dateMap[stringValue]?.maxCapacity} 명</span>
-            </Text>
-            <Button onClick={ParticipateApi}>지원하기</Button>
+            {new Date(data.endDate) < today ? (
+                <>
+                <Text className="expired center">
+                    마감된 봉사 프로젝트입니다.
+                </Text>
+                </>
+            ) : (
+                <>
+                <Text className="expected_date">
+                    <span><span style={{marginRight:"1.3rem"}}>희망일</span>{selectedYear}년 {selectedMonth}월 {selectedDay}일</span>
+                    <span>{dateMap[stringValue]?.capacity}/{dateMap[stringValue]?.maxCapacity} 명</span>
+                </Text>
+                <Button onClick={ParticipateApi}>지원하기</Button>
+                </>
+            )}
+            
         </div>
     )
 }
@@ -155,6 +167,15 @@ color: #594949;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+&.expired {
+    border: 1px solid #a4a4a4;
+    padding: 10px 0;
+    background: #f1f1f1;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
 }
 &.location>a {
     color: #0093D2;
