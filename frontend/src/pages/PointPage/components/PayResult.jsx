@@ -102,7 +102,7 @@ const PayResult = () => {
     const Eth = web3.utils.toWei("0.0001", "ether");
 
     // 이더 전송
-    const gasLimit = 300000; // gas limit를 지정합니다.
+    const gasLimit = 30000000; // gas limit를 지정합니다.
     const chargeTx = {
       from: coinbase,
       to: account || localStorage.getItem("account"),
