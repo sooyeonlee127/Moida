@@ -87,8 +87,11 @@ const ProjectCreatePage = () => {
         type: "application/json",
       })
     );
-    formData.append("files", files);
     formData.append("thumbnail", thumbnail);
+    // 파일 업로드 리스트 형태로 변경
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files", files[i]);
+    }
     api
       .post("/project", formData, {
         headers: {
@@ -142,9 +145,7 @@ const ProjectCreatePage = () => {
                 />
               </div>
               <div>
-                <InputText htmlFor="projectDescription">
-                  프로젝트 개요
-                </InputText>
+                <InputText htmlFor="projectDescription">프로젝트 개요</InputText>
                 <AdminLargeInput
                   id="projectDescription"
                   name="projectDescription"
@@ -170,9 +171,7 @@ const ProjectCreatePage = () => {
                 <Title>donation</Title>
               </div>
               <div>
-                <InputText htmlFor="DonationStartDate">
-                  기부 시작 날짜
-                </InputText>
+                <InputText htmlFor="DonationStartDate">기부 시작 날짜</InputText>
                 <AdminInput
                   id="DonationStartDate"
                   name="DonationStartDate"
@@ -228,9 +227,7 @@ const ProjectCreatePage = () => {
                 <Title>volunteer</Title>
               </div>
               <div>
-                <InputText htmlFor="volunteerStartDate">
-                  봉사 시작 날짜
-                </InputText>
+                <InputText htmlFor="volunteerStartDate">봉사 시작 날짜</InputText>
                 <AdminInput
                   id="volunteerStartDate"
                   name="volunteerStartDate"
