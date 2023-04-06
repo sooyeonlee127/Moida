@@ -57,7 +57,7 @@ const ReviewList = () => {
     <Wrapper>
       {/* 유저후기 */}
       <SepLine></SepLine>
-      <Title>Storybook</Title>
+      <Title>사용자 인증 후기</Title>
       
       <Section>
         <TabGroup>

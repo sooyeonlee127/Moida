@@ -35,7 +35,7 @@ const NoticeList = () => {
 
   return (
     <div>
-      <Title>Notice</Title>
+      <Title>공지사항</Title>
       <H4>기부한 모이를 어떻게 사용했는지 알 수 있어요</H4>
       <Wrapper>
         {noticeList.map((notice, index) => {
