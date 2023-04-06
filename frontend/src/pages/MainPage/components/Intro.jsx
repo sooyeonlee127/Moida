@@ -43,15 +43,12 @@ const Intro = () => {
             </InlineBox>
             <TextBox>
               <Text>
-                <H2 className="animation_h2">LET’S WORK TOGETHER</H2>
-                <H1 className="animation_h1">LOREM IPSUM<br/>DOLOR SIT</H1>
-                <H3 className="animation_h3">
-                  LOREM IPSUM DOLOR SIT AMET. CONSECTETUR ADIPIS ICING ELIT, <br/>
-                  SED DO EIUSMOD TEMPOR INCIDIDUNT UT LABORE ET DOLORE MAGNA <br/>
-                  ALIQUA. UT ENIM AD MINIM VENIAM, QUIS.<br/>
+                <H2 className="animation_h2">기부가, 마음이, 모두가</H2>
+                <H1 className="animation_h1">모이다</H1>
+                <H3 className="animation_h3">함께 하는 지구, 블록체인으로 연결된 야생동물 상생 플랫폼<br/>야생동물의 보호와 함께 지속 가능한 발전을 추구하는<br/>우리의 노력에 함께해주세요<br/>
                 </H3>
               </Text>
-              <Button>hello</Button>
+              <Button>함께하기</Button>
             </TextBox>
           </div>
           <div>
@@ -107,19 +104,21 @@ display: inline-block;
 
 const H2 = styled.h2`
 font-size: 2rem;
-font-weight: 700;
-margin-bottom: 0.5rem;
-color: #584E3F;
+font-weight: 100;
+line-height: 3.5rem;
+color: #584e3f;
 `
 const H1 = styled.h1`
-font-size: 3.5rem;
-font-weight: 900;
-line-height: 3.5rem;
-margin-bottom: 2rem;
-color: #83BD00;
+color: rgb(131, 189, 0);
+font-size: 5rem;
+font-weight: 500;
+margin-top: -1rem;
+margin-bottom: 1.5rem;
+letter-spacing: -6.5px;
 `
 const H3 = styled.h3`
-font-size: 0.7rem;
+font-size: 0.8rem;
+color: #584e3f;
 `
 
 const Button = styled.button`

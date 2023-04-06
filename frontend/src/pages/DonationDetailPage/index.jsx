@@ -38,6 +38,7 @@ const DonationDetailPage = () => {
                 }
             })
             setIsLoading(false)
+            console.log(response.data)
             return response.data;
         } 
         catch (error) {
@@ -62,14 +63,19 @@ const DonationDetailPage = () => {
                         <Tab className={tabIndex===1 ? "active":""} onClick={ () => setTabIndex(1) }>봉사하기</Tab>
                     </TabGroup>
                     <Div>
-                    { tabIndex===1 ? <VolunteerForm data={projectInfo?.volunteerResDto}/> : <DonationForm data={projectInfo?.donationResDto} pointPerMoi={projectInfo?.projectReqDto?.pointPerMoi}/>}
+                    { tabIndex===1 ? <VolunteerForm data={projectInfo?.volunteerResDto}/> : <DonationForm gen={projectInfo?.generation} data={projectInfo?.donationResDto} pointPerMoi={projectInfo?.projectReqDto?.pointPerMoi}/>}
                     </Div>
                 </Aside>
             </Main>
             <Article>
                 <Content>
                     <InnerContent>
-                        <SectionTab>{projectId}번째</SectionTab>
+                        <SectionTab>상세보기</SectionTab>
+                        <DetailContent>
+                          <p>{projectInfo?.projectReqDto.subject}</p>
+                          <p>{projectInfo?.projectReqDto.description}</p>
+                          {projectInfo?.pictures}
+                        </DetailContent>
                     </InnerContent>
                 </Content> 
             </Article>
@@ -182,7 +188,9 @@ const SectionTab = styled.div`
   background: rgb(160, 200, 70);
   color: white;
 `;
+const DetailContent = styled.div`
 
+`
 const Box = styled.div`
   position: absolute;
   top: 10px;
