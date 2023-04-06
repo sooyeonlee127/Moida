@@ -26,7 +26,7 @@ const regExp = {
 
 const Form = () => {
   const [formInfo, setFormInfo] = useState({
-    email: "ssdf@dfgd.cde",
+    email: "",
     nickname: "",
     phone1: "010",
     phone2: "",
