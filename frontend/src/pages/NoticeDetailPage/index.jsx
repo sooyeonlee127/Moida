@@ -106,11 +106,7 @@ const NoticeDetailPage = () => {
           <Writter>관리자</Writter>
           <SelectBox>
             <label htmlFor="generation">차수</label>
-            <select
-              name="generation"
-              id="generation"
-              onChange={(e) => changeOpt(e.target.value)}
-            >
+            <select name="generation" id="generation" onChange={(e) => changeOpt(e.target.value)}>
               {genList?.map((option, index) => {
                 return (
                   <option key={index} value={option?.id}>
@@ -123,13 +119,9 @@ const NoticeDetailPage = () => {
         </Header>
         <Content>
           <div className="main_content">
-            {data?.fileList?.map((file, index) => {
-              <ReviewImg
-                key={index}
-                src={!isLoading && file ? file : ""}
-                alt=""
-              ></ReviewImg>;
-            })}
+            {data?.fileList?.map((file, index) => (
+              <ReviewImg key={index} src={!isLoading && file ? file : ""} alt=""></ReviewImg>
+            ))}
             <div>{data?.description}</div>
           </div>
 
