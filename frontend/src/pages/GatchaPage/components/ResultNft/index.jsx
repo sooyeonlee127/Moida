@@ -12,7 +12,7 @@ import { injected } from "../../../../lib/connectors";
 import gatcha from "../../../../assets/img/gatcha.svg";
 import Modal from "../../../../components/Modal";
 import loadingspinner from "../../../../assets/img/loadingspinner.svg";
-
+import { AuthContext } from "../../../../context/Auth";
 // import { useRef } from 'react'
 // import { Runner, Engine, Render, Bodies, World } from 'matter-js'
 
@@ -184,6 +184,7 @@ const ResultNft = () => {
         .send({ from: account });
     }
   };
+  const { change, setChange } = useContext(AuthContext);
 
   const ClickExit = () => {
     setStart(false);
@@ -192,6 +193,7 @@ const ResultNft = () => {
     setText("NFT를 뽑는 중입니다...");
     setShow(false); // 로딩 초기화
     getNftInfo();
+    setChange(change + 1)
   };
 
   // metaIPFSUrl 값에 변화가 생겼을 때 실행

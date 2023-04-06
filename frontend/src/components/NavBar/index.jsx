@@ -57,14 +57,14 @@ const NavBar = () => {
   });
 
   // 수연: 로그인 상태에 따라 navbar 변경
-  const { isLogin, setIsLogin, role, setRole, point, setPoint, ticketCnt, setTicketCnt } = useContext(AuthContext);
+  const { isLogin, setIsLogin, role, setRole, point, setPoint, ticketCnt, setTicketCnt, change } = useContext(AuthContext);
 
   useEffect(() => {
     if (isLogin) {
       refetch();
     }
     // isLogin 값이 변경될 때마다 쿼리를 다시 실행 - 수연
-  }, [isLogin, refetch]);
+  }, [isLogin, change, refetch]);
   const navigate = useNavigate();
 
   const [isLogout, setIsLogout] = useState(false); // 로그아웃 시 메타마스크 연결 해제

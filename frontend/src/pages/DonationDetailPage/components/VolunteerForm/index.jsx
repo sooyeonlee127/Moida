@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useEffect } from 'react';
 import Calendar from 'react-calendar';
 import '../../../../common/style/calendar.css';
@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { IoPeopleOutline } from "react-icons/io5";
 import { GoLocation } from "react-icons/go"
 import DifficultyBar from '../../../../components/DifficultyBar';
-
+import { AuthContext } from '../../../../context/Auth';
 const VolunteerForm = (props) => {
     const data = {
         startDate: props?.data.startDate,
@@ -65,6 +65,7 @@ const VolunteerForm = (props) => {
             // console.log(data)
         return res;
     }
+    const { change, setChange } = useContext(AuthContext);
 
     const ParticipateApi = () => {  // 기부 API: 기부하기 버튼 클릭 시 작동 - 이은혁
         // console.log("axios 요청 :"+dateFormat(value))
@@ -86,6 +87,7 @@ const VolunteerForm = (props) => {
         })
         .then((res) => {
             alert("봉사 신청이 완료되었습니다.")
+            setChange(change+1)
         })
         .catch((err) => {
             alert(err.response.data.message)

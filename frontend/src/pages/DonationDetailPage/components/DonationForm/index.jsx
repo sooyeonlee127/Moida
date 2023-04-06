@@ -136,7 +136,7 @@ const DonationForm = (props) => {
     }
   };
   // 수연: 블록체인 -----------------------------------------------------------
-  const { point } = useContext(AuthContext);
+  const { point, change, setChange } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const [text, setText] = useState("");
@@ -170,6 +170,7 @@ const DonationForm = (props) => {
       setIsLoading(false);
       setText("모이 " + moi + "개가 정상적으로 기부되었습니다.");
       // console.log("기부 완료");
+      setChange(change+1)
       return transaction;
     } catch {
       setIsOpen(false);

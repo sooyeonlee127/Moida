@@ -2,13 +2,14 @@ import React from "react";
 import axios from "axios";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api from "../../../api/auth";
 import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
 import loadingspinner from "../../../assets/img/loadingspinner.svg";
+import { AuthContext } from "../../../context/Auth";
 
 // 수연: 결제 결과 페이지
 const PayResult = () => {
@@ -20,6 +21,8 @@ const PayResult = () => {
   const [date, setDate] = useState("");
   const [flag, setFlag] = useState(true);
   const [done, setDone] = useState(false);
+  const { change, setChange } = useContext(AuthContext);
+
 
   // 수연: 현재 페이지를 호출한 페이지를 제어
   const parentPage = (page) => {
@@ -114,6 +117,7 @@ const PayResult = () => {
     const txReceipt = await web3.eth.sendSignedTransaction(
       signedTx.rawTransaction
     );
+    setChange(change+1)
     setDone(true);
     return "충전 완료";
   });
