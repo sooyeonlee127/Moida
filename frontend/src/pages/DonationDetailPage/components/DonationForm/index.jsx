@@ -204,7 +204,6 @@ const DonationForm = (props) => {
       </Modal>
 
       <Div>
-        {/* <Text className="dday size-4 weight-9 left color-3">D-{dDay}</Text> */}
         <Text className="size-5 weight-6 left color-3">[{data.generation}차] {data.subject}</Text>
         <Text className="size-2 weight-2 left color-3 period">
           {new Date(data.startDate).getFullYear()}년{" "}
@@ -222,21 +221,33 @@ const DonationForm = (props) => {
           {data.amount / data.pointPerMoi}개 ({parseInt(ratio)}%)
           </Text>
         </div>
-        <div>
+        
+        {new Date(data.endDate) < new Date() ? (
+          <>
+            <Text className="expired center">
+              마감된 기부 프로젝트입니다.
+            </Text>
+          </>
+          ) : (
+          <>
+          <div>
           <Text className="size-4 weight-9 right">{moi?.toLocaleString("ko-KR")} 개</Text>
-          <Text className="size-1 weight-2 right">{money?.toLocaleString("ko-KR")} 포인트 기부</Text>
-          <CoinButtonGroup>
-            <button onClick={() => setMoi(moi + 1)}>+ 1개</button>
-            <button onClick={() => setMoi(moi + 5)}>+ 5개</button>
-            <button onClick={() => setMoi(moi + 10)}>+ 10개</button>
-            <button onClick={() => setMoi(moi + 50)}>+ 50개</button>
-          </CoinButtonGroup>
-        </div>
-        <GroupButton>
-          <Button className="reset" onClick={() => setMoi(0)}>초기화</Button>
-          <Button onClick={SendMoi} disabled={isDisabled} className={isDisabled ? "disabled donation" : "enabled donation"}>기부하기</Button>
-          {/* 마감 기한이 지날 경우 isDisabled true */}
-        </GroupButton>
+            <Text className="size-1 weight-2 right">{money?.toLocaleString("ko-KR")} 포인트 (개당 {data.pointPerMoi.toLocaleString("ko-KR")}포인트)</Text>
+            <CoinButtonGroup>
+              <button onClick={() => setMoi(moi + 1)}>+ 1개</button>
+              <button onClick={() => setMoi(moi + 5)}>+ 5개</button>
+              <button onClick={() => setMoi(moi + 10)}>+ 10개</button>
+              <button onClick={() => setMoi(moi + 50)}>+ 50개</button>
+            </CoinButtonGroup>
+          </div>
+            <GroupButton>
+              <Button className="reset" onClick={() => setMoi(0)}>초기화</Button>
+              <Button onClick={SendMoi} disabled={isDisabled} className={isDisabled ? "disabled donation" : "enabled donation"}>기부하기</Button>
+              {/* 마감 기한이 지날 경우 isDisabled true */}
+            </GroupButton>
+          </>
+        )}
+        
       </Div>
     </>
   );
@@ -331,6 +342,15 @@ const Text = styled.p`
   &.dday {
     color: #dc653f;
   }
+  &.expired {
+    border: 1px solid #a4a4a4;
+    padding: 10px 0;
+    background: #f1f1f1;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
   &.center {
     text-align: center;
   }
