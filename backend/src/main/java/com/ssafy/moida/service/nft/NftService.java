@@ -7,6 +7,7 @@ import com.ssafy.moida.model.nft.NftPicture;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.repository.nft.NftPictureRepository;
 import com.ssafy.moida.repository.nft.NftRepository;
+import com.ssafy.moida.service.user.UserService;
 import com.ssafy.moida.utils.error.ErrorCode;
 import com.ssafy.moida.utils.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,11 @@ public class NftService {
         this.nftRepository = nftRepository;
     }
 
+    // nft 이미지가 사용자가 소유한 nft와 중복인지 체크
+    public boolean isImageDuplicate(int ImgNum, Long userId) {
+        return nftRepository.existsByNftPictureId(ImgNum, userId);
+    }
+
     // 랜덤으로 nft 번호 뽑기
     public int getRandomNumber() {
         int startNum = 1;
@@ -53,17 +59,27 @@ public class NftService {
     }
 
     // 랜덤 번호에 따른 이미지 제공
-    public NftPicture getRandomImageUrl() {
+    public NftPicture getRandomImageUrl(Users user) {
         int startNum = 1;
         int endNum = (int) nftPictureRepository.count(); // nftPicture entity의 총 개수
 
+        // 사용자가 모든 컬렉션을 모았는지 체크
+        if(nftRepository.countByUsersId(user.getId()) >= endNum){
+            throw new CustomException(ErrorCode.ALL_NFT_OWNERSHIP_ERROR);
+        }
+
         int randomNum = new Random().nextInt(endNum - startNum + 1) + startNum;
+
+        // 사용자가 소유하고 있는 nft인지 체크
+        boolean nftCheck = isImageDuplicate(randomNum, user.getId());
+        log.info("소유여부 : {}", nftCheck);
 
         NftPicture nftPicture = nftPictureRepository.findById((long) randomNum)
                 .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
 
-        while (nftPicture.getUrl() == null) {
+        while (nftPicture.getUrl() == null || nftCheck) {
             randomNum = new Random().nextInt(endNum - startNum + 1) + startNum;
+            nftCheck = isImageDuplicate(randomNum, user.getId());
             nftPicture = nftPictureRepository.findById((long) randomNum)
                     .orElseThrow(() -> new CustomException(ErrorCode.DATA_NOT_FOUND));
         }
@@ -144,6 +160,15 @@ public class NftService {
 
         user.updateNftUrl(newNftUrl);
         return newNftUrl;
+    }
+
+    // nft url 저장
+    public void saveImg(String url) {
+        NftPicture nftPicture = NftPicture.builder()
+                .url(url)
+                .build();
+
+        nftPictureRepository.save(nftPicture);
     }
 
 }
