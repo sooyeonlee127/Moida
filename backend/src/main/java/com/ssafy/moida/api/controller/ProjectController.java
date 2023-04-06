@@ -220,7 +220,7 @@ public class ProjectController {
         userVolunteerService.saveUsersVolunteer(loginUser, volunteerDateInfo);
 
         // 해당 봉사일에 인원 수 추가
-        projectVolunteerService.updateCapacity(volunteerDateInfo);
+        projectVolunteerService.updateCapacity(volunteerDateInfo, false);
 
         return new ResponseEntity<>("사용자 봉사 신청 완료", HttpStatus.OK);
     }

@@ -7,6 +7,7 @@ import com.ssafy.moida.model.project.Status;
 import com.ssafy.moida.model.project.VolunteerDateInfo;
 import com.ssafy.moida.model.user.Users;
 import com.ssafy.moida.model.user.UsersVolunteer;
+import com.ssafy.moida.repository.project.VolunteerDateInfoRepository;
 import com.ssafy.moida.repository.user.UsersVolunteerRepository;
 import com.ssafy.moida.service.article.ArticleService;
 import com.ssafy.moida.service.project.ProjectVolunteerService;
@@ -28,15 +29,19 @@ import java.util.List;
 @Transactional
 public class UserVolunteerService {
 
+    private final VolunteerDateInfoRepository volunteerDateInfoRepository;
+
     private final UsersVolunteerRepository usersVolunteerRepository;
     private final ProjectVolunteerService projectVolunteerService;
     private final ArticleService articleService;
 
     public UserVolunteerService(UsersVolunteerRepository usersVolunteerRepository, ProjectVolunteerService projectVolunteerService,
-        ArticleService articleService) {
+        ArticleService articleService,
+        VolunteerDateInfoRepository volunteerDateInfoRepository) {
         this.usersVolunteerRepository = usersVolunteerRepository;
         this.projectVolunteerService = projectVolunteerService;
         this.articleService = articleService;
+        this.volunteerDateInfoRepository = volunteerDateInfoRepository;
     }
 
     /**
@@ -123,6 +128,7 @@ public class UserVolunteerService {
     public void updateUserVolunteerStatus(UpdateUserVolunteerStatusReqDto updateDto, UsersVolunteer usersVolunteer){
         if(updateDto.getStatus().equals(Status.CANCEL.toString())){
             usersVolunteer.updateStatus(Status.CANCEL);
+            projectVolunteerService.updateCapacity(usersVolunteer.getVolunteerDateInfo(), true);
         } else if(updateDto.getStatus().equals(Status.WRITTEN_DELETE.toString())){
             usersVolunteer.updateStatus(Status.WRITTEN_DELETE);
         } else if(updateDto.getStatus().equals(Status.DONE.toString())){
