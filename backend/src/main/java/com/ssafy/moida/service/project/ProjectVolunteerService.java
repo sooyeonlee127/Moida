@@ -141,8 +141,9 @@ public class ProjectVolunteerService {
      * @param volunteerDateInfo
      */
     @Transactional
-    public void updateCapacity(VolunteerDateInfo volunteerDateInfo){
-        volunteerDateInfo.updateCapacity(volunteerDateInfo.getCapacity() + 1);
+    public void updateCapacity(VolunteerDateInfo volunteerDateInfo, boolean minus){
+        if(minus) volunteerDateInfo.updateCapacity(volunteerDateInfo.getCapacity() - 1);
+        else volunteerDateInfo.updateCapacity(volunteerDateInfo.getCapacity() + 1);
     }
 
     /**
