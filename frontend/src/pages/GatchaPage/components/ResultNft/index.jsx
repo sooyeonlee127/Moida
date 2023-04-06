@@ -13,8 +13,81 @@ import gatcha from "../../../../assets/img/gatcha.svg";
 import Modal from "../../../../components/Modal";
 import loadingspinner from "../../../../assets/img/loadingspinner.svg";
 
+import { useRef } from 'react'
+import { Runner, Engine, Render, Bodies, World } from 'matter-js'
+
+
+
 // 수연: 가챠 뽑기
 const ResultNft = () => {
+
+  const ref = useRef()
+  const engine = useRef(Engine.create())
+
+  useEffect(() => {
+    const render = Render.create({
+      element: ref.current,
+      engine: engine.current,
+      options: {
+        width: 427,
+        height: 230,
+        wireframes: false,
+        background: "transparent"
+      }
+    })
+    
+    // const leftwall = Bodies.rectangle(0, 0, 10, 100, { isStatic: true });
+    // var rightwall = Bodies.rectangle(100, 0, 10, 100, { isStatic: true });
+    // var ceiling = Bodies.rectangle(0, 0, 100, 10, { isStatic: true });
+    // var ground = Bodies.rectangle(100, 100, 100, 10, { isStatic: true });
+    // World.add(engine.current.world, [
+    //   leftwall, rightwall, ceiling, ground
+    // ])
+
+    World.add(engine.current.world, [
+      Bodies.rectangle(200, 0, 427, 50, { isStatic: true }),
+      Bodies.rectangle(200, 200, 427, 50, { isStatic: true }),
+      Bodies.rectangle(427, 200, 50, 400, { isStatic: true }),
+      Bodies.rectangle(0, 200, 50, 400, { isStatic: true })
+  ]);
+
+    Runner.run(engine.current)
+    Render.run(render)
+
+    return () => {
+      Render.stop(render)
+      World.clear(engine.current.world)
+      Engine.clear(engine.current)
+      render.canvas.remove()
+      render.canvas = null
+      render.context = null
+      render.textures = {}
+    }
+  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const navigate = useNavigate();
   const [author, setAuthor] = useState("");
   const [title, setTitle] = useState("");
@@ -171,7 +244,7 @@ const ResultNft = () => {
       </Modal>
       <Container>
         <Box>
-          <ImageBox>
+          <ImageBox ref={ref}>
             <Image src={gatcha} alt="" width="800" />
           </ImageBox>
         </Box>
@@ -237,6 +310,8 @@ const ImageBox = styled.div`
   `}
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+
+`;
 
 export default ResultNft;
