@@ -240,6 +240,10 @@ const DonationForm = (props) => {
               <button onClick={() => setMoi(moi + 50)}>+ 50개</button>
             </CoinButtonGroup>
           </div>
+          <div>
+          <Text className="size-1 weight-2 right">10,000포인트 이상 기부시 NFT 티켓 제공</Text>
+          <Text className="size-1 weight-2 right">(티켓 {parseInt((money/10000 *1.1) + 0.5)}개 제공)</Text>
+          </div>
             <GroupButton>
               <Button className="reset" onClick={() => setMoi(0)}>초기화</Button>
               <Button onClick={SendMoi} disabled={isDisabled} className={isDisabled ? "disabled donation" : "enabled donation"}>기부하기</Button>
