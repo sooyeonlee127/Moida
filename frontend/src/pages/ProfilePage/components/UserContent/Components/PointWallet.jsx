@@ -15,9 +15,11 @@ const PointWallet = () => {
   const [length, setLength] = useState(0);
   const sort = ["ALL", "DONATION", "CHARGE"];
   const sortName = ["모두", "기부", "충전"];
+  const [isLoading, setIsLoading] = useState(true)
 
   const getPointData = async () => {
     try {
+      setIsLoading(true)
       // console.log(category, sort);
       const res = await api({
         url: "/users/me/points",
@@ -32,10 +34,12 @@ const PointWallet = () => {
         },
       });
       if (res) {
+        setIsLoading(false)
         setDatas(res.data.pointList);
         setLength(res.data.length);
       }
     } catch (err) {
+      setIsLoading(false)
       console.log(err);
     }
   };
@@ -134,6 +138,7 @@ const PointWallet = () => {
                     <button className={pageNum===num? "pagebtn current":"pagebtn"} key={index} onClick={()=> setPageNum(num)}>{num}</button>) 
             })}
         </div> */}
+      <p className="loading">{datas.length === 0 && !isLoading? "내역이 존재하지 않습니다.":"로딩 중"}</p>
       <Paging
         page={pageNum}
         totalItem={length}
