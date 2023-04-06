@@ -9,9 +9,10 @@ import { useEffect } from "react";
 const NoticeDetailPage = () => {
   const { category } = useParams(); // const 변수명 = useParams().파라미터명;
   const [genList, setGenList] = useState([])
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState({})
   // console.log("category: ", category)
 
-  const [data, setData] = useState({})
   // {
   //   "generationList": [
   //     {
@@ -33,6 +34,7 @@ const NoticeDetailPage = () => {
   // }
   const getNotice = async () => {
     try {
+      setIsLoading(true)
       const res = await axios({
         url: "/api/article/board/category/"+category,
         method: "GET",
@@ -41,11 +43,13 @@ const NoticeDetailPage = () => {
         }
       })
       if(res) {
+        setIsLoading(false)
         setData(res.data.getBoardDetailResDto)
         setGenList(res.data.generationList)
-        // console.log(res.data.getBoardDetailResDto)
+        console.log(res.data)
       }
     } catch(err) {
+      setIsLoading(false)
       console.log(err)
     }
   }
@@ -63,31 +67,65 @@ const NoticeDetailPage = () => {
           accept: "*/*"
         }
       })
-      // console.log(res.data)
+      console.log(res.data)
       setData(res.data)
     } catch(err) {
       console.log(err)
     }
   }
+  
+  // 날짜 형식 변경
+  console.log(data?.regDate)
+  const date = new Date(data?.regDate);
+  const year = String(date.getFullYear()).slice(0,4)
+  const tmpM = String(date.getMonth()+1)
+  const tmpD = String(date.getDate())
+  const month = tmpM.length===1 ? "0"+tmpM : tmpM;
+  const day = tmpD.length===1 ? "0"+tmpD : tmpD;
+
   return (
     <Wrapper>
-      {category}번 공지 페이지 입니다
+      <div>
+      {/* {category}번 공지 페이지 입니다
       <p>{data?.subject}</p>
       <p>{data?.description}</p>
       <p>{data?.adminNickname}</p>
       <p>{data?.regDate}</p>
       <p>{data?.fileList}</p>
       <p>{data?.projectId}</p>
-      <label htmlFor="generation">차수 선택</label>
-      <select name="generation" id="generation" onChange={(e)=>changeOpt(e.target.value)}>
-        {
-          genList?.map((option, index) => {
-            return(
-              <option key={index} value={option?.id}>{option.generation}차</option>
-            )
-          })
-        }
-      </select>
+  <label htmlFor="generation">차수 선택</label>*/}
+      <div className="subject">
+            <Subject>{data?.subject}</Subject>
+            <RegDate>{year+"."+month+"."+day}</RegDate>
+      </div>
+      <Header>
+        <Writter>관리자</Writter>
+        <SelectBox>
+          <label htmlFor="generation">차수</label>
+          <select name="generation" id="generation" onChange={(e)=>changeOpt(e.target.value)}>
+            {
+              genList?.map((option, index) => {
+                return(
+                  <option key={index} value={option?.id}>{option.generation}차 프로젝트</option>
+                  )
+                })
+              }
+          </select>
+        </SelectBox>
+      </Header>
+      <Content>
+        <div className="main_content">
+          <ReviewImg src={ !isLoading && data?.url ? data.url : "" } alt=""></ReviewImg>
+          <p>{data?.description}</p>
+        </div>
+        <div className="filelist">
+        <p>{data?.fileList}</p>
+        </div>
+        <div className="content_footer">
+          <button>목록</button>
+        </div>
+      </Content>
+      </div>
     </Wrapper>
   )
 }
@@ -95,6 +133,83 @@ const NoticeDetailPage = () => {
 const Wrapper = styled.div`
 width: 100%;
 padding-top: 56px;
-`
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
 
+& > div {
+  width: 100%;
+  max-width: 1000px;
+}
+& .subject {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+`
+const Subject = styled.p`
+  font-size: 1.3rem;
+  font-weight: 600;
+  text-align: left;
+`
+const RegDate = styled.p`
+  color: rgb(120, 116, 116);
+  font-weight: 100;
+  font-size: 0.9rem;
+`
+const ReviewImg = styled.img`
+  display : block;
+  border-radius : 15px;
+`
+const SelectBox = styled.div`
+color: #62666e;
+font-weight: 500;
+font-size: 0.95rem;
+& > label { 
+  // margin-right: .5rem;
+}
+& > select {
+  padding: 0 20px;
+  background: transparent;
+  font-weight: 600;
+}
+`
+const Header = styled.div`
+padding: 10px 0;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+border-top: 1px solid #c0c0c0;
+`
+const Writter = styled.p`
+color: rgb(120, 116, 116);
+font-weight: 100;
+font-size: 0.9rem;
+`
+const Content = styled.div`
+display: flex;
+flex-direction: column;
+justify-content: flex-start;
+align-items: center;
+
+& > .main_content {
+  width: 100%;
+  min-height: 500px;
+  // background: red;
+}
+& > .filelist {
+  margin: 10px 0;
+  width: 100%;
+  min-height: 100px;
+  background: #eeeeee;
+}
+& > .content_footer {
+  width: 100%;
+  min-height: 100px;
+  // background: yellow;
+  border-top: 1px solid #c0c0c0;
+}
+`
 export default NoticeDetailPage;
