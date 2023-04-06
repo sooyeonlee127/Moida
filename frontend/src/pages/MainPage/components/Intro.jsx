@@ -5,12 +5,13 @@ import { useState } from "react";
 import rabbit from "../img/토끼.png"
 import squirrel from "../img/다람쥐.png"
 import crane from "../img/흑두루미.png"
+import { useNavigate } from "react-router";
 
 
 const nav_height = "52px"; // 네브바 높이 조정 - 이은혁
 
 const Intro = () => {
-
+  const navigate = useNavigate();
   // --- 스크롤 이벤트 관련 - 이은혁
   const { ref: target, inView, isShown } = useScroll();
   const [scrollY, setScrollY] = useState(); // scrollY: 스크롤량 저장
@@ -48,7 +49,7 @@ const Intro = () => {
                 <H3 className="animation_h3">함께 하는 지구, 블록체인으로 연결된 야생동물 상생 플랫폼<br/>야생동물의 보호와 함께 지속 가능한 발전을 추구하는<br/>우리의 노력에 함께해주세요<br/>
                 </H3>
               </Text>
-              <Button>함께하기</Button>
+              <Button onClick={()=>navigate("/donation")}>함께하기</Button>
             </TextBox>
           </div>
           <div>

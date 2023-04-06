@@ -76,7 +76,7 @@ const DonationDetailPage = () => {
                           <p>"{projectInfo?.projectReqDto.subject}"</p>
                           <p>{projectInfo?.projectReqDto.description}</p>
                           </div>
-                          {projectInfo?.pictures}
+                          <img src={projectInfo?.pictures} alt="" />
                         </DetailContent>
                     </InnerContent>
                 </Content> 
