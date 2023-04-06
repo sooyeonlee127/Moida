@@ -34,9 +34,9 @@ const PointPage = () => {
           total_amount: currentPoint,
           tax_free_amount: 0,
           vat_amount: 200,
-          approval_url: "http://localhost:3000/payresult",
-          fail_url: "http://localhost:3000/payresult",
-          cancel_url: "http://localhost:3000/payresult",
+          approval_url: "http://j8c2071.p.ssafy.io/payresult",
+          fail_url: "http://j8c2071.p.ssafy.io/payresult",
+          cancel_url: "http://j8c2071.p.ssafy.io/payresult",
         },
       })
         .then((res) => {
@@ -88,7 +88,9 @@ const PointPage = () => {
             </InnerBox>
             <InnerBox>
               <Text>VAT (10%)</Text>
-              <PointText>{parseInt(currentPoint / 10).toLocaleString("ko-KR")} 원</PointText>
+              <PointText>
+                {parseInt(currentPoint / 10).toLocaleString("ko-KR")} 원
+              </PointText>
             </InnerBox>
             <GroupButton>
               <PointButton
