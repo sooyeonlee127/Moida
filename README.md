@@ -117,8 +117,7 @@ NFT를 저장하는 외부 저장소로 IPFS를 주로 사용한다.
 ![NFT_Flow](./images/NFT_Flow.png)  
 ### NFT 컬렉션
 ![NFT_collection](./images/NFT_collection.png)
-### NFT 개념 정리 영상 
-- 동영상 링크     
+### 📹 [NFT 개념 정리 영상 바로가기](https://youtu.be/j9X3g9cgIuY)
    
 <br/><br/><br/>   
 # 5. 서비스 화면 (프로젝트 결과)
