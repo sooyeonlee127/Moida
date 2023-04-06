@@ -3,6 +3,7 @@ import { useWeb3React } from "@web3-react/core";
 import { useEffect } from "react";
 import { injected } from "../lib/connectors";
 
+// 수연: 메타마스크 연결 해제 페이지
 const MetamaskUncheck = () => {
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const {

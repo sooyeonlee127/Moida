@@ -33,4 +33,10 @@ public interface NftRepository extends JpaRepository<Nft, Long>,
 
     @Query("select count(n.id) > 0 from Nft n where n.users.id = :userId and n.id = :nftId")
     boolean existsByIdAndUserId(@Param("userId") Long userId, @Param("nftId") Long nftId);
+
+    @Query("select count(n.id) > 0 from Nft n where n.nftPicture.id = :imgNum and n.users.id = :userId")
+    boolean existsByNftPictureId(@Param("imgNum") int imgNum, @Param("userId") Long userId);
+
+    @Query("select count(n.id) from Nft n where n.users.id = :userId")
+    int countByUsersId(@Param("userId") Long userid);
 }
