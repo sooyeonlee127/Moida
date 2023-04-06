@@ -100,8 +100,7 @@ ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
 ![Fauset_Flow](./images/Faucet_Flow.png)
 ### 서비스 내 블록체인 흐름
 ![Blockchain_Flow](./images/Blockchain_Flow.png)
-### Blockchain 개념 정리 영상    
-- 동영상 링크
+### 📹 [Blockchain 개념 정리 영상 바로가기](https://youtu.be/Elj-hhSfy0c)    
 <br/><br/>
 
 ## NFT
