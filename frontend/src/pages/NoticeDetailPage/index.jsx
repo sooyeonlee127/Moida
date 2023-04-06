@@ -9,7 +9,7 @@ import { useEffect } from "react";
 const NoticeDetailPage = () => {
   const { category } = useParams(); // const 변수명 = useParams().파라미터명;
   const [genList, setGenList] = useState([])
-  console.log("category: ", category)
+  // console.log("category: ", category)
 
   const [data, setData] = useState({})
   // {
@@ -43,7 +43,7 @@ const NoticeDetailPage = () => {
       if(res) {
         setData(res.data.getBoardDetailResDto)
         setGenList(res.data.generationList)
-        console.log(res.data.getBoardDetailResDto)
+        // console.log(res.data.getBoardDetailResDto)
       }
     } catch(err) {
       console.log(err)
@@ -63,7 +63,7 @@ const NoticeDetailPage = () => {
           accept: "*/*"
         }
       })
-      console.log(res.data)
+      // console.log(res.data)
       setData(res.data)
     } catch(err) {
       console.log(err)

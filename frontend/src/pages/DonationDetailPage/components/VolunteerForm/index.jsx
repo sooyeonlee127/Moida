@@ -61,12 +61,12 @@ const VolunteerForm = (props) => {
         let res = date?.getFullYear() +
             '-' + ( (date?.getMonth()+1) < 10 ? "0" + (date?.getMonth()+1) : (date?.getMonth()+1))+
             '-' + ( (date?.getDate()) < 10 ? "0" + (date?.getDate()) : (date?.getDate()) );
-            console.log(data)
+            // console.log(data)
         return res;
     }
 
     const ParticipateApi = () => {  // 기부 API: 기부하기 버튼 클릭 시 작동 - 이은혁
-        console.log("axios 요청 :"+dateFormat(value))
+        // console.log("axios 요청 :"+dateFormat(value))
         if (!value) {
             alert("날짜를 선택해주세요.");
             return

@@ -34,7 +34,7 @@ const NavBar = () => {
             Authorization: localStorage.getItem("accessToken"),
           },
         });
-        console.log(response.data)
+        // console.log(response.data)
         setRole(response.data.roles);
         setTicketCnt(response.data.info.ticketCnt);
         setPoint(response.data.info.point);

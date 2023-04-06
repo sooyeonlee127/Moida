@@ -58,7 +58,7 @@ const CharacterList = () => {
     <Wrapper>
       <Container>
         <TitleBox>
-          <Title>My Collection</Title>
+          <Title>My NFT Collection</Title>
         </TitleBox>
         <CharacterContainer>
           {list.length === 0 ? <p>보유 중인 NFT가 없습니다.</p> : <></>}

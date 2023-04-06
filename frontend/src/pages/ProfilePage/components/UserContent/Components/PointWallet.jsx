@@ -18,7 +18,7 @@ const PointWallet = () => {
 
   const getPointData = async () => {
     try {
-      console.log(category, sort);
+      // console.log(category, sort);
       const res = await api({
         url: "/users/me/points",
         method: "GET",

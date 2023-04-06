@@ -7,7 +7,6 @@ import 흑두루미 from "../../../assets/img/흑두루미.png"
 // 수연: 기부 페이지 카드 출력
 const DonationCard = (props) => {
   const navigate = useNavigate();
-  console.log(props)
   const { id, donationResDto, projectReqDto  } = props.card;
   // 수연: 프로젝트별 이미지 하드코딩, 프로젝트 id별로 이미지 입력할 것
   const imageSrc = {
