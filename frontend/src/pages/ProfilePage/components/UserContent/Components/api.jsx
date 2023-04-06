@@ -30,7 +30,7 @@ const useListApi = (type, pageNumber=1, pageSize=10, category=null) => { // 기�
             Authorization: localStorage.getItem("accessToken"),
           }
         });
-        console.log(response.data)
+        // console.log(response.data)
         if(type==="donation") { // type별 데이터 저장 - 이은혁
           setData(response.data.donationList);
 

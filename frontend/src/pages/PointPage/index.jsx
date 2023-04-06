@@ -40,7 +40,7 @@ const PointPage = () => {
         },
       })
         .then((res) => {
-          console.log(res.data.next_redirect_pc_url);
+          // console.log(res.data.next_redirect_pc_url);
           window.localStorage.setItem("tid", res.data.tid);
           SetKakaoUrl(res.data.next_redirect_pc_url);
         })

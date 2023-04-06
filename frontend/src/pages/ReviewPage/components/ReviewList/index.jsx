@@ -26,7 +26,7 @@ const ReviewList = () => {
 
   const getReviews = async(category, sort) => {
     try {
-      console.log(category, sort)
+      // console.log(category, sort)
       const res = await axios({
         url: "/api/article",
         method: "GET",

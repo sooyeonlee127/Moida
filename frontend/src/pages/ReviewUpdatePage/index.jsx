@@ -31,13 +31,13 @@ const ReviewUpdatePage = () => {
   const { subject, description } = state;
 
   const reviewSubmit = () => {
-    console.log(subject, description, reviewid);
+    // console.log(subject, description, reviewid);
     let data = {
       id: reviewid,
       subject: subject,
       description: description,
     };
-    console.log("formData", data);
+    // console.log("formData", data);
     api
       .put("/article", data, {
         headers: {
@@ -47,7 +47,7 @@ const ReviewUpdatePage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         alert("인증글 수정 완료했습니다.");
         navigate(`/review/${reviewid}`);
       })

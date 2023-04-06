@@ -10,7 +10,7 @@ const ReviewCreatePage = () => {
   const volunteerId = location.state.volunteerId;
   const category = location.state.category;
   const projectId = location.state.projectId;
-  console.log(volunteerId, category);
+  // console.log(volunteerId, category);
 
   const [cancel, setCancel] = useState(false);
 
@@ -64,7 +64,7 @@ const ReviewCreatePage = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (window.confirm("작성되었습니다.")) {
           window.location.href = "/profile";
         }
