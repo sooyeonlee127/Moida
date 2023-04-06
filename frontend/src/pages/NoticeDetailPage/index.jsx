@@ -115,15 +115,14 @@ const NoticeDetailPage = () => {
         </SelectBox>
       </Header>
       <Content>
-        <div className="main_content">
-          <ReviewImg src={ !isLoading && data?.url ? data.url : "" } alt=""></ReviewImg>
+        <div className="main_content">{
+          data?.fileList?.map((file, index) => {
+            <ReviewImg key={index} src={ !isLoading && file ? file : "" } alt=""></ReviewImg>
+          })
+        }
           <div>{data?.description}</div>
         </div>
-        {data?.fileList ? ( 
-          <div className="filelist">
-            <p>{data?.fileList}</p>
-          </div>
-        ) : ""}
+        
         <div className="content_footer">
           <Button onClick={()=>navigate("/review")}>목록</Button>
         </div>
@@ -201,12 +200,6 @@ align-items: center;
   width: 100%;
   min-height: 500px;
   // background: red;
-}
-& > .filelist {
-  margin: 10px 0;
-  width: 100%;
-  min-height: 100px;
-  background: #eeeeee;
 }
 & > .content_footer {
   width: 100%;
