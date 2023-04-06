@@ -1,6 +1,6 @@
 # 🐿 야생동물 상생 플랫폼, 모이다 🦩
 
-![로고이미지](./images/Logo.png)
+![moida_logo](./images/moida_logo.png)
 
 # 1. 서비스 소개
 ## 📅 진행 기간
