@@ -2,9 +2,11 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import { useReducer, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // 수연: 비밀번호 찾기 페이지
 const PasswordPage = () => {
+  const navigate = useNavigate()
   const reducer = (state, action) => {
     return {
       ...state,
@@ -98,6 +100,7 @@ const PasswordPage = () => {
             <PasswordForm action="#" method="POST">
               <InputGroup>
                 <PasswordText>{message}</PasswordText>
+                <Button onClick={()=>navigate("/login", { replace: true })}>돌아가기</Button>
               </InputGroup>
             </PasswordForm>
           </InnerContainer>
@@ -106,6 +109,14 @@ const PasswordPage = () => {
     );
   }
 };
+const Button = styled.button`
+background-color: rgb(160, 200, 70);
+    color: rgb(75, 75, 75);
+    height: 100%;
+    width: 100%;
+    padding: 0.75rem 2.5rem;
+    font-weight: 600;
+`
 
 const Heading = styled.h2`
   ${tw`
@@ -114,7 +125,7 @@ const Heading = styled.h2`
 `;
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   ${tw`
   flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8 
@@ -122,9 +133,9 @@ const Container = styled.div`
 `;
 
 const InnerContainer = styled.div`
-  ${tw`
-  bg-gray-100 px-20 py-7 w-full max-w-md space-y-8
-  `}
+width: 100%;
+max-width: 28rem;
+padding: 1.75rem 2.5rem;
 `;
 
 const PasswordForm = styled.form`
@@ -135,7 +146,7 @@ const PasswordForm = styled.form`
 
 const InputGroup = styled.div`
   ${tw`
-  -space-y-px rounded-md shadow-sm
+  -space-y-px rounded-md
   `}
 `;
 
@@ -146,22 +157,28 @@ const InputText = styled.label`
 `;
 
 const LoginInput = styled.input`
-  ${tw`
-  relative block w-full border-0 px-2 py-1.5 text-gray-800 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-  
-  `}
+border-bottom: 1px solid #d8d8d8;
+padding: 10px 5px;
+margin-bottom: 5px;
+display: block;
+width: 100%;
+background: transparent;
 `;
 
 const PasswordText = styled.label`
+margin-bottom: 3rem;
   ${tw`
   ml-2 block text-sm text-gray-900 font-light
   `}
 `;
 
 const SubmitButton = styled.button`
-  ${tw`
-  bg-yellow-300 w-full h-full  py-3 px-10 font-normal text-gray-600
-  `}
+  background-color: rgb(160, 200, 70);
+  color: rgb(75, 75, 75);
+  height: 100%;
+  width: 100%;
+  padding: 0.75rem 2.5rem;
+  font-weight: 600;
 `;
 
 export default PasswordPage;
