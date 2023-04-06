@@ -1,6 +1,6 @@
 // 공지사항. notice. 추후 PDF viewer로 연결. 
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from 'react';
 import styled from "styled-components";
 import { useEffect } from "react";
@@ -11,6 +11,7 @@ const NoticeDetailPage = () => {
   const [genList, setGenList] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState({})
+  const navigate = useNavigate()
   // console.log("category: ", category)
 
   // {
@@ -95,8 +96,8 @@ const NoticeDetailPage = () => {
       <p>{data?.projectId}</p>
   <label htmlFor="generation">차수 선택</label>*/}
       <div className="subject">
-            <Subject>{data?.subject}</Subject>
-            <RegDate>{year+"."+month+"."+day}</RegDate>
+        <Subject>{data?.subject}</Subject>
+        <RegDate>{year+"."+month+"."+day}</RegDate>
       </div>
       <Header>
         <Writter>관리자</Writter>
@@ -116,13 +117,15 @@ const NoticeDetailPage = () => {
       <Content>
         <div className="main_content">
           <ReviewImg src={ !isLoading && data?.url ? data.url : "" } alt=""></ReviewImg>
-          <p>{data?.description}</p>
+          <div>{data?.description}</div>
         </div>
-        <div className="filelist">
-        <p>{data?.fileList}</p>
-        </div>
+        {data?.fileList ? ( 
+          <div className="filelist">
+            <p>{data?.fileList}</p>
+          </div>
+        ) : ""}
         <div className="content_footer">
-          <button>목록</button>
+          <Button onClick={()=>navigate("/review")}>목록</Button>
         </div>
       </Content>
       </div>
@@ -207,9 +210,17 @@ align-items: center;
 }
 & > .content_footer {
   width: 100%;
-  min-height: 100px;
-  // background: yellow;
   border-top: 1px solid #c0c0c0;
+  display: flex;
+  flex-direction: row;
+  padding: 30px 0 100px 0;
 }
+`
+const Button = styled.button`
+color: white;
+background-color: rgb(160, 200, 70);
+border-radius: 5px;
+width: 80px;
+height: 25px;
 `
 export default NoticeDetailPage;
