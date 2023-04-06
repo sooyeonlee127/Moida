@@ -75,7 +75,7 @@ const NavBar = () => {
   const navigation = [
     // 로그아웃 상태의 navbar
     { name: "기부하기", href: "/donation" },
-    { name: "인증하기", href: "/review" },
+    { name: "인증 게시판", href: "/review" },
     { name: "가챠샵", href: "/gatcha" },
   ];
   // 수연: 로그아웃 호출
