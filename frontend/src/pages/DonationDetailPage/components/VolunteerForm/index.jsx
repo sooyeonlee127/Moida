@@ -51,6 +51,8 @@ const VolunteerForm = (props) => {
         const key = dateFormat(date) // yyyy_mm_dd 로 변환 - 이은혁
         const res = dateMap[key]
         if (res && res?.capacity>= res?.maxCapacity) return true
+        if (key < dateFormat(today)) return true
+        if (dates.includes(date)) return true
         return false
     }
 
