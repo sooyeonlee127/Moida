@@ -67,6 +67,7 @@ const DonationList = () => {
             )
         })}
         </div>
+        <p className='loading'>{datas.length === 0 && !loading? "기부한 내역이 없습니다.":""}{loading? "로딩 중":""}</p>
         <Paging page={pageNum} totalItem={length} setPage={(e)=>setPageNum(e)}/> 
     </>
     )

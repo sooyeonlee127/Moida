@@ -40,7 +40,7 @@ const MyReviews = () => {
               </>
             )
           })}
-    <p>{datas.length === 0 && !loading? "빈 값":""}{loading? "로딩 중":""}</p>
+    <p className='loading'>{datas.length === 0 && !loading? "작성한 글이 없습니다":""}{loading? "로딩 중":""}</p>
     <Paging page={pageNum} totalItem={length} setPage={(e)=>setPageNum(e)}/>
   </div>
   )

@@ -254,6 +254,7 @@ const VolunteerList = () => {
       {/* <div className='group_pagebtn'> 
         {pageList?.map((num, index)=>{ return (<button className="pagebtn" key={index} onClick={()=> setPageNum(num)}>{num}</button>) })}
       </div> */}
+      <p className="loading">{datas.length === 0 && !loading? "봉사 신청 내역이 없습니다.":""}{loading? "로딩 중":""}</p>
       <Paging
         page={pageNum}
         totalItem={length}

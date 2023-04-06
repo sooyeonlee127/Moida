@@ -72,9 +72,11 @@ const DonationDetailPage = () => {
                     <InnerContent>
                         <SectionTab>상세보기</SectionTab>
                         <DetailContent>
-                          <p>{projectInfo?.projectReqDto.subject}</p>
+                          <div className="shortinfo">
+                          <p>"{projectInfo?.projectReqDto.subject}"</p>
                           <p>{projectInfo?.projectReqDto.description}</p>
-                          {projectInfo?.pictures}
+                          </div>
+                          <img src={projectInfo?.pictures} alt="" />
                         </DetailContent>
                     </InnerContent>
                 </Content> 
@@ -189,7 +191,24 @@ const SectionTab = styled.div`
   color: white;
 `;
 const DetailContent = styled.div`
-
+  position: absolute;
+  top: 85px;
+  left: 0;
+  width: 100%;
+  & .shortinfo {
+    background: #eaf0de;
+    padding: 5rem;
+  }
+  &>.shortinfo>p:first-child {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #494949;
+    margin-bottom: 1rem;
+  }
+  &>.shortinfo>p:last-child {
+    font-size: 1.5rem;
+    color: #616161;
+  }
 `
 const Box = styled.div`
   position: absolute;
