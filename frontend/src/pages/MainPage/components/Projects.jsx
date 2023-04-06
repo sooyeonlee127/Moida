@@ -44,7 +44,7 @@ const Projects = (props) => {
       <Sticky id={"card_" + index} className={inView ? "page card show" : "page card"}>
         <div className="inner_page">
           <Image src="" alt=""/>
-          <Subject>{projectReqDto.subject}</Subject>
+          <Subject category={projectReqDto.category}>{projectReqDto.subject}</Subject>
           <Content>
             <p id="desc">{projectReqDto.description}</p>
             {/* <p>모이 1개당 {projectReqDto.pointPerMoi} point</p> */}
@@ -91,7 +91,9 @@ const Image = styled.img`
 const Subject = styled.h2`
   font-size: 3rem;
   font-weight: 900;
-  color: #83BD00;
+  color: ${(props)=> props.category==="WILD_ANIMAL" ? "#83BD00" : ""};
+  color: ${(props)=> props.category==="CRANE" ? "rgba(23, 84, 102, 1)" : ""};
+  color: ${(props)=> props.category==="SQUIRREL" ? "rgba(189, 120, 0, 1)" : ""};
 `;
 
 const Content = styled.div`
