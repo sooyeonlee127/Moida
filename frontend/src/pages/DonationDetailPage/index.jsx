@@ -178,6 +178,9 @@ const Content = styled.div`
 `;
 const InnerContent = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 const SectionTab = styled.div`
   top: 0px;
@@ -191,10 +194,11 @@ const SectionTab = styled.div`
   color: white;
 `;
 const DetailContent = styled.div`
-  position: absolute;
-  top: 85px;
+  position: relative;
+  padding-top: 100px;
+  top: 0;
   left: 0;
-  width: 100%;
+  width: 90%;
   & .shortinfo {
     background: #eaf0de;
     padding: 5rem;

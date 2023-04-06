@@ -224,7 +224,7 @@ const DonationForm = (props) => {
         </div>
         <div>
           <Text className="size-4 weight-9 right">{moi?.toLocaleString("ko-KR")} 개</Text>
-          <Text className="size-1 weight-2 right">약 {money?.toLocaleString("ko-KR")} 포인트 기부</Text>
+          <Text className="size-1 weight-2 right">{money?.toLocaleString("ko-KR")} 포인트 기부</Text>
           <CoinButtonGroup>
             <button onClick={() => setMoi(moi + 1)}>+ 1개</button>
             <button onClick={() => setMoi(moi + 5)}>+ 5개</button>

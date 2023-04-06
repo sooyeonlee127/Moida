@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useScroll from "./useScroll";
 import "../main.css";
+import 다람쥐_프로젝트 from "../img/다람쥐 프로젝트.jpeg"
+import 야생동물_프로젝트 from "../img/야생동물 프로젝트.jpg"
+import 두루미_프로젝트 from "../img/두루미 프로젝트.jpg"
 
 const nav_height = "52px"; // 네브바 높이 조정 - 이은혁
 
@@ -18,8 +21,14 @@ const Projects = (props) => {
   };
   // -----------------------------
 
-
-
+  let mainImg;
+  if (projectReqDto.category==="CRANE") {
+    mainImg = 두루미_프로젝트
+  } else if(projectReqDto.category==="SQUIRREL") {
+    mainImg = 다람쥐_프로젝트
+  } else if(projectReqDto.category==="WILD_ANIMAL") {
+    mainImg = 야생동물_프로젝트
+  }
   // --- 스크롤 이벤트 관련 - 이은혁
   const { ref: target, inView } = useScroll();
   const [scrollY, setScrollY] = useState(); // scrollY: 스크롤량 저장
@@ -43,7 +52,8 @@ const Projects = (props) => {
     <StickyContainer ref={target}>
       <Sticky id={"card_" + index} className={inView ? "page card show" : "page card"}>
         <div className="inner_page">
-          <Image src="" alt=""/>
+          
+          <Image src={mainImg} alt=""/>
           <Subject category={projectReqDto.category}>{projectReqDto.subject}</Subject>
           <Content>
             <p id="desc">{projectReqDto.description}</p>
@@ -83,13 +93,16 @@ const Sticky = styled.div`
 `;
 
 const Image = styled.img`
-  width: 100vh;
+  border-radius: 30px;
+  width: 100%;
   height: 300px;
+  object-fit: cover;
   background: #c2c2c2;
+  margin-bottom: 25px;
 `
 
 const Subject = styled.h2`
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 900;
   color: ${(props)=> props.category==="WILD_ANIMAL" ? "#83BD00" : ""};
   color: ${(props)=> props.category==="CRANE" ? "rgba(23, 84, 102, 1)" : ""};
@@ -106,12 +119,12 @@ const Content = styled.div`
     margin-bottom: 20px;
   }
   & #amount {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: #594949;
   }
   & #target_amount {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: #6A6A6A;
   }

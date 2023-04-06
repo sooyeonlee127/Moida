@@ -40,9 +40,9 @@ const NoticeList = () => {
       <Wrapper>
         {noticeList.map((notice, index) => {
           return (
+            <Video>
             <Link to={"/notice/" + notice.category} key={index}>
-              <Video>
-                <div style={{ position: "relative" }}>
+                <Div style={{ position: "relative" }}>
                   <video
                     width="325"
                     muted
@@ -52,10 +52,10 @@ const NoticeList = () => {
                   >
                     <source src={notice.videoUrl} type="video/mp4"></source>
                   </video>
-                  <Image src={notice.imgUrl} alt="" />
-                </div>
-              </Video>
+                  <Image src={notice.imgUrl} alt="" className={notice.category}/>
+                </Div>
             </Link>
+            </Video>
           );
         })}
       </Wrapper>
@@ -85,16 +85,29 @@ const Image = styled.img`
 `;
 
 const Video = styled.div`
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 0 10px;
+  border: 1px solid #bfbfbf;
   ${Image} {
     position: absolute;
     top: 0;
     left: 0;
     opacity: 1;
     transition: 0.2s;
-    background-color: rgb(225, 237, 213);
+    
     width: 325px;
     height: 100%;
     padding: 40px;
+    &.CRANE {
+      background-color: #8d8329b3;
+    }
+    &.WILD_ANIMAL {
+      background-color: #b1b208b3;
+    }
+    &.SQUIRREL {
+      background-color: #ba8a25b3;
+    }
   }
 
   &:hover ${Image} {
@@ -102,5 +115,5 @@ const Video = styled.div`
     z-index: -1;
   }
 `;
-
+const Div = styled.div``
 export default NoticeList;
