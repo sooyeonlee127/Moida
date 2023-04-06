@@ -48,7 +48,7 @@ const ReviewDetailPage = () => {
           refresh: localStorage.getItem("refreshToken"),
         },
     });
-      console.log(response.data, '삭제되었습니다.');
+      // console.log(response.data, '삭제되었습니다.');
       window.history.back()
     } catch (error) {
       console.error(error.response.data.message);

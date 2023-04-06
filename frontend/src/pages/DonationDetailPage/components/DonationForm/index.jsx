@@ -72,7 +72,7 @@ const DonationForm = (props) => {
       input: trans.input,
     };
 
-    console.log("? : " + transactionData);
+    // console.log("? : " + transactionData);
 
     return api({
       url: "/project/donation",
@@ -89,7 +89,7 @@ const DonationForm = (props) => {
       },
     })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         return response;
       })
       .catch((error) => {
@@ -100,7 +100,7 @@ const DonationForm = (props) => {
   });
 
   const SendMoi = async () => {
-    console.log("point:", point);
+    // console.log("point:", point);
     if (money <= 0) {
       // 기부 금액이 없는 경우 - 이은혁
       return alert("모이는 최소 1개 이상 기부가 가능합니다.");
@@ -119,7 +119,7 @@ const DonationForm = (props) => {
       setIsOpen(true);
       try {
         const trans = await donatePoint(money);
-        console.log("sendmoi에서 await donatePoint 결과 : " + trans);
+        // console.log("sendmoi에서 await donatePoint 결과 : " + trans);
         if (trans) {
           donationMutation.mutateAsync(trans).then((res) => {
             if (res.status === 200) {
@@ -151,7 +151,7 @@ const DonationForm = (props) => {
 
   const donatePoint = useCallback(async (point) => {
     const coinbase = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY;
-    console.log("donatePoint : " + account);
+    // console.log("donatePoint : " + account);
     const web3 = new Web3(window.ethereum);
     var today = new Date();
     const tmp = `${localStorage.getItem("nickname")} | ${point} | ${
@@ -168,7 +168,7 @@ const DonationForm = (props) => {
       const transaction = await web3.eth.getTransaction(result.transactionHash);
       setIsLoading(false);
       setText("모이 " + moi + "개가 정상적으로 기부되었습니다.");
-      console.log("기부 완료");
+      // console.log("기부 완료");
       return transaction;
     } catch {
       setIsOpen(false);
