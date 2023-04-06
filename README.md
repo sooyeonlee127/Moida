@@ -1,9 +1,24 @@
 # 🐿 야생동물 상생 플랫폼, 모이다 🦩
 
+로고 이미지
+
 # 1. 서비스 소개
-### 진행 기간
-### 서비스 개요
-### 주요 기능
+## 📅 진행 기간
+    - 2023.02.28 ~ 2023.04.07
+   
+## 🐾 서비스 개요
+### 기획 배경
+   
+   
+## 🖥 주요 기능
+   
+### 블록 체인을 활용한 기부  
+> 1) 내용  
+> 2) 내용
+### 봉사
+> 내용  
+### 보상(NFT)
+> 내용  
 
 
 <br/><br/><br/>
@@ -74,7 +89,7 @@ ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
 <br/><br/>
 
 ### 상세 디자인
-
+![UI_design](./images/UI_design.png)
 
 <br/><br/></br>
 # 4. Blockchain & NFT 개념과 적용
@@ -93,20 +108,39 @@ ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
    
 <br/><br/><br/>
 # 6. 협업 과정
-### 협업 툴
-- Git, JIRA, Notion, MatterMost
+## 협업 툴
+- Git
+- JIRA
+- Notion
+- MatterMost
 <br/><br/>
 
-### 컨벤션
-- Git 컨벤션
-- JIRA 컨벤션
+## 컨벤션
+### - **Git**
+- **Git branch**
+    - main  
+    - develop  
+    - feature     
+- **feature 작성 방법**
+    - feature/업무분야/기능설명  
+    - ex)  
+        `feature/backend/user`  
+        `feature/frontend/user`  
+        `featrue/blockchain/donation`  
+        `feature/nft/meanting`  
+    - <span style='background-color: #fff5b1'>MR 신청자 제외 같은 업무 분야에 있는 다른 사람이 MR 받기</span>
+- **commit message 작성 방법**
+    - 테이블로
+    - ex)   
+        `git commit -m "Feat: 회원가입 기능 추가"`
+### - **JIRA**
 <br/><br/>
 
-### Git Flow
+## Git Flow
 - gif 추가
 <br/><br/>
 
-### JIRA 번다운 차트
+## JIRA 번다운 차트
 ![JIRA_week1](./images/JIRA_week1.png)
 ![JIRA_week2](./images/JIRA_week2.png)
 ![JIRA_week3](./images/JIRA_week3.png)
