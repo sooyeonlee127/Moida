@@ -10,6 +10,7 @@ import Web3 from "web3";
 import { useWeb3React } from "@web3-react/core";
 import loadingspinner from "../../../assets/img/loadingspinner.svg";
 
+// 수연: 결제 결과 페이지
 const PayResult = () => {
   const navigate = useNavigate();
   // 수연: param에서 pg_token 가져와서 카카오페이 결제 호출
@@ -38,7 +39,7 @@ const PayResult = () => {
     }
   };
 
-  // 수연: refetch 위해서 useQuery 가져옴. 리팩토링 필요
+  // 수연: refetch 위해서 useQuery 가져옴.
   const getMe = async () => {
     try {
       const response = await api({
@@ -84,7 +85,7 @@ const PayResult = () => {
       });
   };
 
-  // 가스 충전
+  // 수연: 가스 충전
   const web3 = new Web3(process.env.REACT_APP_SEPOLIA_API_URL);
   const {
     account, // DApp에 연결된 account address
