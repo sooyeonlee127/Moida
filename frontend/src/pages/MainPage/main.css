@@ -235,9 +235,9 @@ body {
     animation-delay: calc(var(--scroll) * -1s + 8.8s);
     z-index: 3;
     position: relative;
-    height: 190px;
-    width: 190px;
-    margin: 30px;
+    height: 220px;
+    width: 220px;
+    margin: 15px;
     animation-name: zoom_in, zoom_out;
     animation-duration: 1s;
 }
@@ -245,9 +245,9 @@ body {
     animation-delay: calc(var(--scroll) * -1s + 8.7s);
     z-index: 2;
     position: relative;
-    height: 170px;
+    height: 220px;
     width: 220px;
-    margin: 40px 15px;
+    margin: 15px;
     animation-name: zoom_in, zoom_out;
     animation-duration: 1s;
 }
@@ -256,6 +256,8 @@ body {
 }
 .outer_nftbox {
     display: inline-block;
+    height: 400px;
+    overflow: hidden;
 }
 .nftbox {
     width: 250px;
@@ -282,13 +284,14 @@ body {
     animation-name: slide_in_btot;
     animation-duration: 1s;
     animation-delay: calc(var(--scroll) * -1s + 8.1s);
-    background-color: #D8E7B0;
+    background-color: #68e3cf;
 }
 .nft_name {
-    font-family: 'Hammersmith One', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     text-align: left;
     margin: 20px 0 0 15px;
+    font-weight: 600;
+    color: #3c3b3b;
     animation-name: slide_in_btot;
     animation-duration: 1s;
     animation-delay: calc(var(--scroll) * -1s + 9.2s);
@@ -297,6 +300,8 @@ body {
 .nft_desc {
     text-align: left;
     margin: 5px 15px;
+    width: 240px;
+    color: #5e5e5e;
     animation-name: slide_in_btot;
     animation-duration: 1s;
     animation-delay: calc(var(--scroll) * -1s + 9.4s);
