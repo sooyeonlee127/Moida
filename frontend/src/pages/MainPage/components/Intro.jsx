@@ -118,7 +118,7 @@ color: #584e3f;
 const H1 = styled.h1`
 color: rgb(131, 189, 0);
 font-size: 5rem;
-font-weight: 500;
+font-weight: 600;
 margin-top: -1rem;
 margin-bottom: 1.5rem;
 letter-spacing: -6.5px;
@@ -133,6 +133,7 @@ padding: 7px 45px;
 border-radius: 5px;
 background-color: #DC653F;
 color: white;
+margin-bottom: 3rem;
 &:hover {
   background-color: #f3825e;
 }
