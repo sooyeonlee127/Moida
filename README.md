@@ -122,7 +122,6 @@ NFT를 저장하는 외부 저장소로 IPFS를 주로 사용한다.
    
 <br/><br/><br/>   
 # 5. 서비스 화면 (프로젝트 결과)
-### 기능별 or 흐름순 gif 및 설명 추가
 ### 메인 페이지
 ![Page_main](./images/page_main.gif)
 
@@ -130,8 +129,45 @@ NFT를 저장하는 외부 저장소로 IPFS를 주로 사용한다.
 ![page_pointCharge1.gif](./images/page_pointCharge1.gif)
 ![page_pointCharge2.gif](./images/page_pointCharge2.gif)
 
+### 프로젝트 상세 조회
+![page_projectDetail](./images/page_projectDetail.gif)
+
+### 프로젝트 기부 신청
+![page_donation](./images/page_donation.gif)
+
+### 프로젝트 봉사 신청
+![page_volunteerRegister](./images/page_volunteerRegister.gif)
+
+### 마이페이지 목록
+![page_userList](./images/page_userList.gif)
+
+### 포인트 충전 내역
+![page_pointFilter](./images/page_pointFilter.gif)
+
+### 봉사 참석 인증
+![page_volunteerConfirm](./images/page_volunteerConfirm.gif)
+
+### 봉사 인증글 작성
+![page_userReviewRegister](./images/page_userReviewRegister.gif)
+
+### 내 인증글 보기
+![page_userReviewButton](./images/page_userReviewButton.gif)
+![page_userReview](./images/page_userReview.gif)
+
+### 인증 게시판 - 사용자 인증 후기 목록
+![page_articleFilter](./images/page_articleFilter.gif)
+
+### 인증 게시판 - 인증글 상세 조회
+![page_articleDetail](./images/page_articleDetail.gif)
+
+### 인증 게시판 - 공지사항
+![page_board](./images/page_board.gif)
+
 ### NFT 가챠샵
 ![page_gacha](./images/page_gacha.gif)
+
+### 대표 NFT 변경
+![page_NFTUpdate](./images/page_NFTUpdate.gif)
 
 
 <br/><br/><br/>
