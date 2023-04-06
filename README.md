@@ -86,6 +86,7 @@ ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
 <br/><br/>
 
 ### 시스템 아키텍처
+![System_architecture](./images/System_architecture.png)
 <br/><br/>
 
 ### 상세 디자인
@@ -108,39 +109,62 @@ ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
    
 <br/><br/><br/>
 # 6. 협업 과정
-## 협업 툴
+### 협업 툴
 - Git
 - JIRA
 - Notion
 - MatterMost
 <br/><br/>
 
-## 컨벤션
-### - **Git**
-- **Git branch**
+### **Git 컨벤션**
+### - Git branch
     - main  
     - develop  
     - feature     
-- **feature 작성 방법**
-    - feature/업무분야/기능설명  
-    - ex)  
-        `feature/backend/user`  
-        `feature/frontend/user`  
-        `featrue/blockchain/donation`  
-        `feature/nft/meanting`  
-    - <span style='background-color: #fff5b1'>MR 신청자 제외 같은 업무 분야에 있는 다른 사람이 MR 받기</span>
-- **commit message 작성 방법**
-    - 테이블로
-    - ex)   
-        `git commit -m "Feat: 회원가입 기능 추가"`
-### - **JIRA**
+### - feature 작성 방법
+- feature/업무분야/기능설명  
+- ex)  
+    `feature/backend/user`  
+    `feature/frontend/user`  
+    `featrue/blockchain/donation`  
+    `feature/nft/meanting`  
+- <span style='background-color: #fff5b1'>MR 신청자 제외 같은 업무 분야에 있는 다른 사람이 MR 받기</span>
+### - commit message 작성 방법   
+ex) `git commit -m "Feat: 회원가입 기능 추가"`   
+   
+|커밋유형|의미|
+|----|---------------|
+|FEAT|새로운 기능 추가|
+|FIX|버그 수정|
+|DOCS|문서 수정|
+|STYLE|코드 포맷 변경, 간단한 수정, 코드 변경이 없는 경우|
+|Design|CSS 등 사용자 UI 디자인 변경|
+|Comment|필요한 주석 추가 및 변경|
+|RENAME|파일 혹은 폴더명 수정 및 이동|
+|REMOVE|파일 삭제|   
+
+<br/><br/>      
+### **JIRA 컨벤션**
+### - 작성 규칙
+- Epic → Story → Task 
+- 월요일 오전까지 그 주에 할 일들을 **백로그**에 **Task**로 모두 등록
+- 매주 동일하게 등록해야할 사항은 **데일리 스크럼**
+- ex)   
+    > Epic : 프로젝트 기획   
+    > Story : [기획]기획회의   
+    > Task : [개인이모티콘][2주차]시장조사   
+    ---
+    > Epic : 프로젝트 개발   
+    > Story : [개발]회원 관리 기능   
+    > Task : [FE][개인이모티콘]로그인 페이지 구현 / [BE][개인이모티콘]로그인 기능 구현   
+
 <br/><br/>
 
-## Git Flow
+### Git Flow
 - gif 추가
 <br/><br/>
 
-## JIRA 번다운 차트
+### JIRA 번다운 차트
 ![JIRA_week1](./images/JIRA_week1.png)
 ![JIRA_week2](./images/JIRA_week2.png)
 ![JIRA_week3](./images/JIRA_week3.png)
