@@ -14,6 +14,9 @@ const Intro = () => {
   const navigate = useNavigate();
   // --- 스크롤 이벤트 관련 - 이은혁
   const { ref: target, inView, isShown } = useScroll();
+  const scrollToPjt = () => {
+
+  }
   const [scrollY, setScrollY] = useState(); // scrollY: 스크롤량 저장
   const onScroll = () => {
     const value = window.scrollY
@@ -56,7 +59,7 @@ const Intro = () => {
             {/* {inView && scrollY - target.current?.offsetTop}
             {inView ? "true" : "false"} */}
           </div>
-          <Arrow>
+          <Arrow onClick={()=> window.scrollTo({ top: 2500, behavior: 'smooth' })}>
             <IoIosArrowDown size="1.5rem" color="#959595"/>
           </Arrow>
         </Sticky>
@@ -142,5 +145,12 @@ color: rgb(149, 149, 149);
 border-radius: 50px;
 border: 3px solid #959595;
 padding: 7px;
+cursor: pointer;
+&:hover{
+  background: #e2ffa2;
+}
+&:active{
+  background: #cde695;
+}
 `
 export default Intro;

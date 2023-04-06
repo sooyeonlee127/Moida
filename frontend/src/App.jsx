@@ -34,7 +34,6 @@ import NotFoundPage from "./components/NotFoundPage"
 // import { useBeforeunload } from "react-beforeunload";
 import Footer from "./components/Footer/Index";
 import MetamaskCheck from "./components/MetamaskCheck";
-import MatterJs from "./pages/MatterJs";
 
 export default function App() {
   // useBeforeunload((event) => event.preventDefault()); // 새로고침 막기 보류
@@ -100,7 +99,6 @@ export default function App() {
               <Route path={"/sun"} element={<NftPage />} />
               <Route path={"/sunny"} element={<NftTestPage />} />
               <Route path={"/check"} element={<MetamaskCheck />} />
-              <Route path={"/matterjs"} element={<MatterJs />} />
               <Route path={"/*"} element={<NotFoundPage/>}/>
             </Routes>
           </Body>
