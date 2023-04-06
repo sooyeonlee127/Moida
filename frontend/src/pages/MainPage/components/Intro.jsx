@@ -6,7 +6,7 @@ import rabbit from "../img/토끼.png"
 import squirrel from "../img/다람쥐.png"
 import crane from "../img/흑두루미.png"
 import { useNavigate } from "react-router";
-
+import {IoIosArrowDown} from "react-icons/io"
 
 const nav_height = "52px"; // 네브바 높이 조정 - 이은혁
 
@@ -56,6 +56,9 @@ const Intro = () => {
             {/* {inView && scrollY - target.current?.offsetTop}
             {inView ? "true" : "false"} */}
           </div>
+          <Arrow>
+            <IoIosArrowDown size="1.5rem" color="#959595"/>
+          </Arrow>
         </Sticky>
       </StickyContainer>
   );
@@ -133,5 +136,11 @@ color: white;
 &:active {
   background-color: #DC653F;
 }
+`
+const Arrow = styled.div`
+color: rgb(149, 149, 149);
+border-radius: 50px;
+border: 3px solid #959595;
+padding: 7px;
 `
 export default Intro;

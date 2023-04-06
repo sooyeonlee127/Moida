@@ -35,18 +35,18 @@ const Nft = () => {
                     <div className="wrap_nftbox">
                       <div className="outer_nftbox">
                         <div className="nftbox" id="nftbox_1"/>
-                        <p className="nft_name">character 1.</p>
-                        <p className="nft_desc">관련 프로젝트 설명 주절주절</p>
+                        <p className="nft_name">썬굴쓰토끼</p>
+                        <p className="nft_desc">흑화한게 아니라 라식수술을 받았을 뿐이다...</p>
                       </div>
                       <div className="outer_nftbox">
                         <div className="nftbox" id="nftbox_2" />
-                        <p className="nft_name">character 1.</p>
-                        <p className="nft_desc">관련 프로젝트 설명 주절주절</p>
+                        <p className="nft_name">두루두루미</p>
+                        <p className="nft_desc">어떤 상황에서도 볍씨를 놓지않는 의지의 새끼두루미. 과체중으로 현재 날 수 없는 상태다.</p>
                       </div>
                       <div className="outer_nftbox">
                         <div className="nftbox" id="nftbox_3" />
-                        <p className="nft_name">character 1.</p>
-                        <p className="nft_desc">관련 프로젝트 설명 주절주절</p>
+                        <p className="nft_name">다라미</p>
+                        <p className="nft_desc">두루미와 BFF. 도토리에게 사랑받아 의도치않게 맨날 머리를 맞는다.</p>
                       </div>
                     </div>
                     <div className="nft">
