@@ -14,80 +14,88 @@ const DonationDetailPage = () => {
   const [tabIndex, setTabIndex] = useState(0); // 0: 기부, 1: 봉사 - 이은혁
   const navigate = useNavigate();
   const { role } = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
-    // id: "",         // 프로젝트 id
-    // category: "",   // 분류
-    // subject: "",    // 주제
-    // generation: "", // 차수
-    // thumbnail: "",  // 썸네일
-    // description: "",// 설명
-    // pictures: "",   // 사진 url
-    // pointPerMoi: "" // 모이 1개 당 포인트
+  // id: "",         // 프로젝트 id
+  // category: "",   // 분류
+  // subject: "",    // 주제
+  // generation: "", // 차수
+  // thumbnail: "",  // 썸네일
+  // description: "",// 설명
+  // pictures: "",   // 사진 url
+  // pointPerMoi: "" // 모이 1개 당 포인트
 
-    
-    const GetInfoApi = async () => {
-        try{
-            setIsLoading(true)
-            const response = await api({
-                url: "/project/"+projectId,
-                method: "GET",
-                headers: {
-                    accept: "*/*",
-                    Authorization: localStorage.getItem("accessToken")
-                }
-            })
-            setIsLoading(false)
-            console.log(response.data)
-            return response.data;
-        } 
-        catch (error) {
-            setIsLoading(false)
-            console.error(error);
-            return error;
-        }
+  const GetInfoApi = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api({
+        url: "/project/" + projectId,
+        method: "GET",
+        headers: {
+          accept: "*/*",
+          Authorization: localStorage.getItem("accessToken"),
+        },
+      });
+      setIsLoading(false);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+      return error;
     }
-    const { data: projectInfo, refetch } = useQuery({
-        queryKey: ["GetInfo"],
-        queryFn: GetInfoApi,
-        refetchOnMount: true,
-    });
-    
-    return (
-        <Wrapper>
-            <Main>
-              <MainImage thumbnail={!isLoading? projectInfo?.thumbnail : ""}/>
-                <Aside>
-                    <TabGroup>
-                        <Tab className={tabIndex===0 ? "active":""} onClick={ () => setTabIndex(0) }>기부하기</Tab>
-                        <Tab className={tabIndex===1 ? "active":""} onClick={ () => setTabIndex(1) }>봉사하기</Tab>
-                    </TabGroup>
-                    <Div>
-                    { tabIndex===1 ? <VolunteerForm data={projectInfo?.volunteerResDto}/> : <DonationForm gen={projectInfo?.generation} data={projectInfo?.donationResDto} pointPerMoi={projectInfo?.projectReqDto?.pointPerMoi}/>}
-                    </Div>
-                </Aside>
-            </Main>
-            <Article>
-                <Content>
-                    <InnerContent>
-                        <SectionTab>상세보기</SectionTab>
-                        <DetailContent>
-                          <div className="shortinfo">
-                          <p>"{projectInfo?.projectReqDto.subject}"</p>
-                          <p>{projectInfo?.projectReqDto.description}</p>
-                          </div>
-                          {
-                            projectInfo?.pictures?.map((picture, index) => {
-                              <img key={index} src={picture} alt="" />
-                            })
-                          }
-                        </DetailContent>
-                    </InnerContent>
-                </Content> 
-            </Article>
-        </Wrapper>
-    )
-}
+  };
+  const { data: projectInfo, refetch } = useQuery({
+    queryKey: ["GetInfo"],
+    queryFn: GetInfoApi,
+    refetchOnMount: true,
+  });
+
+  return (
+    <Wrapper>
+      <Main>
+        <MainImage thumbnail={!isLoading ? projectInfo?.thumbnail : ""} />
+        <Aside>
+          <TabGroup>
+            <Tab className={tabIndex === 0 ? "active" : ""} onClick={() => setTabIndex(0)}>
+              기부하기
+            </Tab>
+            <Tab className={tabIndex === 1 ? "active" : ""} onClick={() => setTabIndex(1)}>
+              봉사하기
+            </Tab>
+          </TabGroup>
+          <Div>
+            {tabIndex === 1 ? (
+              <VolunteerForm data={projectInfo?.volunteerResDto} />
+            ) : (
+              <DonationForm
+                gen={projectInfo?.generation}
+                data={projectInfo?.donationResDto}
+                pointPerMoi={projectInfo?.projectReqDto?.pointPerMoi}
+              />
+            )}
+          </Div>
+        </Aside>
+      </Main>
+      <Article>
+        <Content>
+          <InnerContent>
+            <SectionTab>상세보기</SectionTab>
+            <DetailContent>
+              <div className="shortinfo">
+                <p>"{projectInfo?.projectReqDto.subject}"</p>
+                <p>{projectInfo?.projectReqDto.description}</p>
+              </div>
+              {projectInfo?.pictures?.map((picture, index) => (
+                <img key={index} src={picture} alt="" />
+              ))}
+            </DetailContent>
+          </InnerContent>
+        </Content>
+      </Article>
+    </Wrapper>
+  );
+};
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -108,13 +116,13 @@ const Main = styled.div`
 `;
 
 const MainImage = styled.div`
-height: 400px;
-width: 580px;
-box-shadow: 3px 5px 20px rgba(0,0,0,15%);
-border-radius: 10px;
-background-image: url(${(props) => props.thumbnail});
-background-size: cover;
-`
+  height: 400px;
+  width: 580px;
+  box-shadow: 3px 5px 20px rgba(0, 0, 0, 15%);
+  border-radius: 10px;
+  background-image: url(${(props) => props.thumbnail});
+  background-size: cover;
+`;
 
 const Aside = styled.div`
   background: white;
@@ -207,17 +215,17 @@ const DetailContent = styled.div`
     background: #eaf0de;
     padding: 5rem;
   }
-  &>.shortinfo>p:first-child {
+  & > .shortinfo > p:first-child {
     font-size: 2rem;
     font-weight: 600;
     color: #494949;
     margin-bottom: 1rem;
   }
-  &>.shortinfo>p:last-child {
+  & > .shortinfo > p:last-child {
     font-size: 1.5rem;
     color: #616161;
   }
-`
+`;
 const Box = styled.div`
   position: absolute;
   top: 10px;
