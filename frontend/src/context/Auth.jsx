@@ -12,6 +12,7 @@ const Auth = (props) => {
   const [point, setPoint] = useState(0);
   const [ticketCnt, setTicketCnt] = useState(0);
   const [role, setRole] = useState(localStorage.getItem("role") || "");
+  const [change, setChange] = useState(0)
   return (
     <AuthContext.Provider
       value={{
@@ -23,6 +24,8 @@ const Auth = (props) => {
         setPoint,
         ticketCnt,
         setTicketCnt,
+        change,
+        setChange
       }}
     >
       {props.children}

@@ -34,7 +34,7 @@ const MyReviews = () => {
                       난이도 <DifficultyBar size="0.9rem" difficulty={data.difficultyLevel}/>
                     </div>
                     <div className="item_sec w-2">
-                      <p className='weak'>{data.regDate}</p>
+                      <p className='weak'>{data.regDate.substring(0,4)}년 {data.regDate.substring(5,7)}월 {data.regDate.substring(8,10)}일  </p>
                     </div>
               </div>
               </>
