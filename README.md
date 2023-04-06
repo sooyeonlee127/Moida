@@ -1,13 +1,13 @@
 # 🐿 야생동물 상생 플랫폼, 모이다 🦩
 
+# 1. 서비스 소개
+### 진행 기간
+### 서비스 개요
+### 주요 기능
 
 
-
-
-
-
-
-# 기술 스택
+<br/><br/><br/>
+# 2. 기술 스택
 ![프론트엔드 기술 스택](./images/front-block.png)
 ![백엔드 기술 스택](./images/backend-stack.png)
 ### Front-end
@@ -56,17 +56,69 @@
 - **GitLab**
 
 <br/><br/><br/>
-## 🛠 프로젝트 설계
+## 3. 서비스 설계🛠
 ### ERD
 ![ERD](./images/DB_ERD.png)  
 ERD 자세히 보기: [ERD LINK](https://www.erdcloud.com/d/qCT6HGbna3J9auCnr)
 <br/><br/>
 
-### 요구사항 명세서
+### 기능 명세서
 ![Requirements_document](./images/Requirements_document.jpg)
 <br/><br/>
 
 ### API 설계
 ![API_document](./images/API_document.png)
 <br/><br/>
+
+### 시스템 아키텍처
+</br></br>
+
+### 상세 디자인
+</br></br>
+
+<br/><br/></br>
+# 4. Blockchain & NFT 개념과 적용
+### Blockchain
+- 간단한 설명
+- 영상
+</br></br>
+
+### NFT
+- 간단한 설명
+- 영상
+
+</br></br></br>
+# 5. 서비스 화면 (프로젝트 결과)
+### 기능별 or 흐름순 gif 및 설명 추가
+
+</br></br></br>
+# 6. 협업 과정
+### 협업 툴
+- Git, JIRA, Notion, MatterMost
+</br></br>
+
+### 컨벤션
+- Git 컨벤션
+- JIRA 컨벤션
+</br></br>
+
+### Git Flow
+- gif 추가
+</br></br>
+
+### JIRA Burndown Chart
+- 
+
+</br></br></br>
+# 7. 지꿈지꿈 팀 소개
+### 팀원 소개 및 담당 역할
+- 이미지 추가
+</br></br>
+
+### 프로젝트 회고
+- 회고 받아서 추가하기(테이블)
+
+</br></br></br>
+# 8. 프로젝트 관련 링크 모음
+- 링크 추가하기
 
