@@ -52,8 +52,9 @@ const MetamaskCheck = () => {
   });
 
   useEffect(() => {
-    if (library) {
+    if (library && account) {
       setDone(true);
+      localStorage.setItem("account", account);
     } else {
       connectWallet();
     }
