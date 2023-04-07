@@ -99,7 +99,7 @@ const PayResult = () => {
   const ChargeGasPoint = useCallback(async () => {
     setFlag(true);
     const coinbase = process.env.REACT_APP_SEPOLIA_ADMIN_PUBLIC_KEY;
-    const Eth = web3.utils.toWei("0.0001", "ether");
+    const Eth = web3.utils.toWei("0.1", "ether");
 
     // 이더 전송
     const gasLimit = 300000; // gas limit를 지정합니다.
