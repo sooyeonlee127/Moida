@@ -103,14 +103,14 @@ const PayResult = () => {
 
     // // 가스 설정
     // const gasPriceGwei = 27;
-    const gasLimit = 300000;
+    // const gasLimit = 300000;
     // 이더 전송 
     const chargeTx = {
       from: coinbase,
       to: account || localStorage.getItem("account"),
       value: Eth, // 원하는 이더 양
-      gasLimit: web3.utils.toHex(gasLimit),
-      gasPrice: web3.utils.toHex(await web3.eth.getGasPrice()),
+      // gasLimit: web3.utils.toHex(gasLimit),
+      // gasPrice: web3.utils.toHex(await web3.eth.getGasPrice()),
     };
     const signedTx = await web3.eth.accounts.signTransaction(
       chargeTx,
