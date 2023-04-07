@@ -162,15 +162,15 @@ const DonationForm = (props) => {
 
     // 가스 수수료 설정
     // 가스 가격 설정 (예: 20 Gwei)
-const gasPriceGwei = 27;
-// 가스 한도 설정 (예: 300000)
-const gasLimit = 30000000;
+    // const gasPriceGwei = 27;
+    // 가스 한도 설정 (예: 300000)
+    // const gasLimit = 30000000;
     const tx = {
       from: account,
       to: coinbase, // 다른 지갑 하나 필요함
       data: test,
-      gasPrice: web3.utils.toWei(gasPriceGwei.toString(), 'gwei'),
-      gas: gasLimit
+      // gasPrice: web3.utils.toWei(gasPriceGwei.toString(), 'gwei'),
+      // gas: gasLimit
     };
     try {
       const result = await web3.eth.sendTransaction(tx);
