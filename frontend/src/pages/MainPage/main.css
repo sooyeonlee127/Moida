@@ -1,0 +1,368 @@
+@font-face {
+  font-family: "KyoboHandwriting2020A";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/KyoboHandwriting2020A.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SBAggroB";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Cafe24Ssurround";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GimhaeGayaR";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/GimhaeGayaR.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.nft {
+  height: 2000px;
+  width: 100vw;
+}
+.footer {
+  height: 200px;
+  width: 100vw;
+  background-color: grey;
+}
+.page {
+  top: 0;
+  width: 100%;
+  height: calc(100vh - 52px);
+  top: 52px;
+  position: sticky;
+  display: none;
+  overflow: hidden;
+}
+.page.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.page_container {
+  animation-delay: calc(var(--scroll) * -1s + 1.6s);
+  animation-name: scroll_intro;
+  animation-duration: 1s;
+  top: 0px;
+}
+.inner_page {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+}
+.inner_page.intro {
+  width: 100%;
+  max-width: 1000px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  position: relative;
+  top: -54px;
+}
+.card {
+  min-height: calc(100vh - 52px);
+  animation-name: before_card, next_card;
+  animation-duration: 1s;
+}
+
+#card_0 {
+  animation-delay: calc(var(--scroll) * -1s + 1.9s);
+}
+#card_1 {
+  animation-delay: calc(var(--scroll) * -1s + 3.9s);
+}
+#card_2 {
+  animation-delay: calc(var(--scroll) * -1s + 5.9s);
+}
+
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.animation_h1 {
+  animation: ease_out 2s ease forwards;
+  animation-delay: calc(var(--scroll) * -1s + 0.5s);
+}
+.animation_h2 {
+  animation: ease_out 1.5s ease forwards;
+  animation-delay: calc(var(--scroll) * -1s + 0.3s);
+}
+.animation_h3 {
+  animation: ease_out 2s ease forwards;
+  animation-delay: calc(var(--scroll) * -1s + 0.8s);
+}
+
+.wrap_animal {
+  background-color: #a0c846 !important;
+  overflow: hidden;
+}
+.rabbit {
+  height: 160px;
+  position: relative;
+  top: -5px;
+  left: -10px;
+  width: 150px;
+  animation-name: before_jump_out, jump_out;
+  animation-duration: 2s;
+  animation-delay: calc(var(--scroll) * -1s + 0.3s);
+}
+.squirrel {
+  height: 140px;
+  width: 140px;
+  position: relative;
+  top: 5px;
+  left: -10px;
+  animation-name: before_jump_out, jump_out;
+  animation-duration: 2s;
+  animation-delay: calc(var(--scroll) * -1s + 0.7s);
+}
+.crane {
+  height: 140px;
+  position: relative;
+  top: -5px;
+  border-radius: 70px;
+  animation-name: before_fly_out, fly_out;
+  animation-duration: 3s;
+  animation-delay: calc(var(--scroll) * -1s + 0.4s);
+}
+
+:root * {
+  /* Pause the animation */
+  animation-play-state: paused;
+  /* Bind the animation to scroll */
+  /* animation-delay: calc(var(--scroll) * -1s); */
+  /* These last 2 properites clean up overshoot weirdness */
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+
+/* intro 캐릭터 움직임 - 이은혁 */
+
+@keyframes scroll_intro {
+  from {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-30%);
+    opacity: 0;
+  }
+}
+
+@keyframes ease_in {
+  100% {
+    transform: translateX(0%) translateY(0%);
+    opacity: 1;
+  }
+}
+@keyframes ease_out {
+  100% {
+    transform: translateX(100%) translateY(0%);
+    opacity: 0;
+  }
+}
+
+@keyframes before_card {
+  0% {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+}
+
+@keyframes next_card {
+  100% {
+    transform: translateX(0%) translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes before_fly_out {
+  0% {
+    transform: translateX(0%);
+  }
+}
+@keyframes fly_out {
+  to {
+    transform: translateX(200%);
+  }
+}
+
+@keyframes before_jump_out {
+  to {
+    transform: translateY(0%);
+  }
+}
+@keyframes jump_out {
+  10% {
+    transform: translateY(-10%);
+  }
+  to {
+    transform: translateY(150%);
+  }
+}
+
+/* nft 페이지 */
+.nft_page {
+  top: -70px;
+  position: relative;
+}
+.nft_content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 810px;
+}
+.nft {
+  height: 250px;
+  width: 250px;
+  margin: 0 10px;
+}
+#nft_1 {
+  animation-delay: calc(var(--scroll) * -1s + 8.3s);
+  z-index: 1;
+  position: relative;
+  height: 200px;
+  width: 200px;
+  margin: 32px 33px;
+  animation-name: zoom_in, zoom_out;
+  animation-duration: 1s;
+}
+#nft_2 {
+  animation-delay: calc(var(--scroll) * -1s + 8.8s);
+  z-index: 3;
+  position: relative;
+  height: 220px;
+  width: 220px;
+  margin: 15px;
+  animation-name: zoom_in, zoom_out;
+  animation-duration: 1s;
+}
+#nft_3 {
+  animation-delay: calc(var(--scroll) * -1s + 8.7s);
+  z-index: 2;
+  position: relative;
+  height: 220px;
+  width: 220px;
+  margin: 15px;
+  animation-name: zoom_in, zoom_out;
+  animation-duration: 1s;
+}
+.wrap_nftbox {
+  position: absolute;
+}
+.outer_nftbox {
+  display: inline-block;
+  height: 400px;
+  overflow: hidden;
+}
+.nftbox {
+  width: 250px;
+  height: 250px;
+  border-radius: 10px;
+  margin: 0 10px;
+  z-index: 0;
+  position: relative;
+  box-shadow: 0 16px 20px -8px rgb(0 0 0 / 25%);
+}
+#nftbox_1 {
+  animation-name: slide_in_btot;
+  animation-duration: 1s;
+  animation-delay: calc(var(--scroll) * -1s + 7.7s);
+  background-color: #ff8080;
+}
+#nftbox_2 {
+  animation-name: slide_in_btot;
+  animation-duration: 1s;
+  animation-delay: calc(var(--scroll) * -1s + 7.9s);
+  background-color: #e2e2e2;
+}
+#nftbox_3 {
+  animation-name: slide_in_btot;
+  animation-duration: 1s;
+  animation-delay: calc(var(--scroll) * -1s + 8.1s);
+  background-color: #68e3cf;
+}
+.nft_name {
+  font-size: 1.3rem;
+  text-align: left;
+  margin: 20px 0 0 15px;
+  font-weight: 600;
+  color: #3c3b3b;
+  animation-name: slide_in_btot;
+  animation-duration: 1s;
+  animation-delay: calc(var(--scroll) * -1s + 9.2s);
+}
+
+.nft_desc {
+  text-align: left;
+  margin: 5px 15px;
+  width: 240px;
+  color: #5e5e5e;
+  animation-name: slide_in_btot;
+  animation-duration: 1s;
+  animation-delay: calc(var(--scroll) * -1s + 9.4s);
+}
+
+@keyframes slide_in_btot {
+  from {
+    transform: translateY(30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes zoom_in {
+  0% {
+    transform: scale(1000%) rotate(-20deg);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  70% {
+    transform: scale(150%) rotate(-10deg);
+  }
+  90% {
+    transform: scale(120%) rotate(-5deg);
+  }
+}
+@keyframes zoom_out {
+  to {
+    transform: scale(100%) rotate(0deg);
+  }
+}
+
+@keyframes idle {
+  from {
+    transform: rotate(20deg);
+  }
+  to {
+    transform: rotate(-20deg);
+  }
+}

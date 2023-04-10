@@ -1,0 +1,153 @@
+.container {
+    width: 100%;
+}
+.link:hover {
+    text-decoration : underline;
+    color: #6f8d2b;
+}
+.item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #D2D2D2;
+}
+.item:hover {
+    background-color: #fafafa;
+}
+.badge {
+    width: 60px;
+    height: 60px;
+}
+.item_sec {
+    display: inline-block;
+    height: 100%;
+    min-width: 80px;
+    width: 10%;
+    padding: 10px;
+}
+.item_sec.main_sec {
+    /* flex-grow: 1; */
+    text-align: left;
+    /* margin-left: 1rem; */
+    width: 50%;
+}
+
+.icon {
+    display: inline-block;
+    margin: 5px 7px;
+}
+.btn {
+    padding: 3px 10px;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    background: #f2f2f2;
+    font-size: 0.9rem;
+}
+.btn:hover {
+    background: #f7f7f7;
+}
+.btn:active {
+    background: #e4e4e4;
+}
+.btn.attend {
+    background: #4dd21d;
+    color: white;
+    border-color: #4ac020;
+}
+.btn.attend:hover {
+    background: #53e41f;
+}
+.btn.attend:active {
+    background: #47c11b;
+}
+.weak {
+    color: #949494;
+    font-size: 0.8rem;
+    font-weight: 300;
+}
+.title {
+    font-size: 1.1rem;
+}
+.strong {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #585858;
+}
+.short_desc {
+    font-size: 0.9rem;
+    color: #5c5c5c;
+    max-height: 2.5rem;
+    overflow: hidden;
+}
+.preview_img {
+    width: 100px;
+    height: 100px;
+    border-radius: 15px;
+}
+.group_pagebtn {
+    margin: 10px 0 20px 0;
+}
+
+.pagebtn {
+    margin: 0 10px;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+.pagebtn:hover {
+    background: #e6e6e6;
+}
+.pagebtn:active {
+    background: #d4d4d4;
+}
+.pagebtn.current {
+    color: #5b771b;
+    font-weight: 900;
+}
+
+.mt-1 {
+    margin-top: 0.5rem
+}
+.mt-2 {
+    margin-top: 1rem
+}
+
+.mb-1 {
+    margin-bottom: 0.5rem
+}
+.mb-2 {
+    margin-bottom: 1rem
+}
+
+.w-1 {
+    width: 10%;
+}
+.w-2 {
+    width: 20%;
+}
+.w-3 {
+    width: 30%;
+}
+.w-4 {
+    width: 40%;
+}
+.w-5 {
+    width: 50%;
+}
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.justify-center {
+    justify-content: center;
+}
+.align-center {
+    align-items: center;
+}
+.loading {
+    margin-top: 100px;
+    color: #7f7f7f;
+}
